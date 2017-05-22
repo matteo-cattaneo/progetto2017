@@ -1,13 +1,14 @@
 package it.polimi.ingsw.LM22.model;
 
-public class VentureCard extends DevelopmentCard{
-	
+public class VentureCard extends DevelopmentCard {
+
 	public final Resource cardCost1;
 	public final Resource cardCost2;
 	public final Resource permanentEffect;
-	
-	public VentureCard(String name, Integer period, String immediateType/*, IEffect*/, Resource cardCost1, Resource cardCost2, Resource permanentEffect){
-		super(name, period, immediateType);
+
+	public VentureCard(String name, Integer period, String immediateType, IEffect immediateEffect, Resource cardCost1,
+			Resource cardCost2, Resource permanentEffect) {
+		super(name, period, immediateType, immediateEffect);
 		this.cardCost1 = cardCost1;
 		this.cardCost2 = cardCost2;
 		this.permanentEffect = permanentEffect;
@@ -24,10 +25,9 @@ public class VentureCard extends DevelopmentCard{
 	public Resource getPermanentEffect() {
 		return permanentEffect;
 	}
-	
-	public void selectCardCost(){
-		
+
+	public void selectCardCost() {
+
 	}
-	
 
 }

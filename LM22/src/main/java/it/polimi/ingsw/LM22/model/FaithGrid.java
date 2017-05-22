@@ -6,19 +6,11 @@ public class FaithGrid {
 	private final ExInterface exCommunicationTiles[];
 	private Resource rewards[];
 	
-//	public FaithGrid (ExInterface exTiles[], Resource[] rewards){
-//		this.exCommunicationTiles[] = exTiles[];
-//		this.rewards[] = rewards[];
-//	}
-	
-	
+
 	public ExInterface[] getExCommunicationTiles() {
 		return exCommunicationTiles;
 	}
-	
-//	public void setExCommunicationTiles(ExInterface[] exCommunicationTiles) {
-//		this.exCommunicationTiles = exCommunicationTiles;
-//	}
+
 	
 	public Resource[] getRewards() {
 		return rewards;

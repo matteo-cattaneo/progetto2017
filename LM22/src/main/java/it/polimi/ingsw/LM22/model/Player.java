@@ -4,12 +4,12 @@ import java.util.List;
 
 public class Player {
 	private final Integer NUM_LEADER_CARDS = 4;
-	private String nickname;
-	private String color;
-	private List<FamilyMember> members;
-	private PersonalBoard personalBoard;
-	private List<ExInterface> exCommunications;
-	private LeaderCard leaderCards[];
+	private final String nickname;
+	private final String color;
+	private final List<FamilyMember> members;
+	private final PersonalBoard personalBoard;
+	private final List<ExInterface> exCommunications;
+	private final LeaderCard leaderCards[];
 	
 	public String getNickname() {
 		return nickname;

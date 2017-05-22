@@ -1,21 +1,22 @@
 package it.polimi.ingsw.LM22.model;
 
-public class BuildingCard extends DevelopmentCard{
-	
-	public final Resource cardCost;
-	public final ProductionEffect permanentEffect;
-	
-	public BuildingCard(String name, Integer period, String immediateType/*, IEffect*/, Resource cardCost, ProductionEffect permanentEffect){
-		super(name, period, immediateType);
+public class BuildingCard extends DevelopmentCard {
+
+	private final Resource cardCost;
+	private final ProductionEffect permanentEffect;
+
+	public BuildingCard(String name, Integer period, String immediateType, IEffect immediateEffect, Resource cardCost,
+			ProductionEffect permanentEffect) {
+		super(name, period, immediateType, immediateEffect);
 		this.cardCost = cardCost;
 		this.permanentEffect = permanentEffect;
 	}
-	
-	public Resource getCost(){
+
+	public Resource getCost() {
 		return cardCost;
 	}
-	
-	public ProductionEffect getPermanentEffect(){
+
+	public ProductionEffect getPermanentEffect() {
 		return permanentEffect;
 	}
 }
