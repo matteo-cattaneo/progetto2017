@@ -3,10 +3,16 @@ package it.polimi.ingsw.LM22.model;
 import java.util.List;
 
 public class Tower {
+	
 	private final Integer LEVELS = 4;
-	private final String towerType;	//da inizializzare con il costruttore
+	private final String towerType;	
 	private boolean occupied;
 	private List<FamilyMember> coloredMembersOnIt;
+	
+	public Tower(String towerType) {
+		this.towerType = towerType;
+		occupied = false;
+	}
 	
 	public boolean isOccupied() {
 		return occupied;
