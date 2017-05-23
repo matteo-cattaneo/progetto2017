@@ -1,16 +1,9 @@
 package it.polimi.ingsw.LM22.model;
 
 public class ProductionEffect {
-	HarvestEffect harvestEffect;
-	CardToResourceEffect cardToResourceEffect;
-	ChangeEffect changeEffect;
-
-	public ProductionEffect(HarvestEffect harvestEffect, CardToResourceEffect cardToResourceEffect,
-			ChangeEffect changeEffect) {
-		this.harvestEffect = harvestEffect;
-		this.cardToResourceEffect = cardToResourceEffect;
-		this.changeEffect = changeEffect;
-	}
+	private HarvestEffect harvestEffect;
+	private CardToResourceEffect cardToResourceEffect;
+	private ChangeEffect changeEffect;
 
 	public HarvestEffect getHarvestEffect() {
 		return harvestEffect;

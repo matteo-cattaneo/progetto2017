@@ -1,25 +1,40 @@
 package it.polimi.ingsw.LM22.model;
 
-import java.util.HashMap;
-
 public class Resource {
-	//creare una enum per tutti i tipi di risorsa?
-		/*
-		 * WOOD
-		 * STONE
-		 * SERVANT
-		 * COINS
-		 * FIATH
-		 * MILITARY
-		 * VICTORY
-		 * */
-	private HashMap<String, Integer> resource;
+	private Integer wood;
+	private Integer stone;
+	private Integer servants;
+	private Integer coins;
+	private Integer faith;
+	private Integer military;
+	private Integer victory;
 
-	public HashMap<String, Integer> getResource() {
-		return resource;
+	public Integer getWood() {
+		return wood;
 	}
 
-	public void setResource(HashMap<String, Integer> resource) {
-		this.resource = resource;
+	public Integer getStone() {
+		return stone;
 	}
+
+	public Integer getServants() {
+		return servants;
+	}
+
+	public Integer getCoins() {
+		return coins;
+	}
+
+	public Integer getFaith() {
+		return faith;
+	}
+
+	public Integer getMilitary() {
+		return military;
+	}
+
+	public Integer getVictory() {
+		return victory;
+	}
+
 }

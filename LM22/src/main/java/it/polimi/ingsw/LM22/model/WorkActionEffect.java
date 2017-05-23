@@ -1,17 +1,10 @@
 package it.polimi.ingsw.LM22.model;
 
 public class WorkActionEffect implements IEffect {
-	Integer workActionValue;
-	String typeOfWork;
-	Resource resource;
-	Integer councilPrivilege;
-
-	public WorkActionEffect(Integer workActionValue, String typeOfWork, Resource resource, Integer councilPrivilege) {
-		this.workActionValue = workActionValue;
-		this.typeOfWork = typeOfWork;
-		this.resource = resource;
-		this.councilPrivilege = councilPrivilege;
-	}
+	private Integer workActionValue;
+	private String typeOfWork;
+	private Resource resource;
+	private Integer councilPrivilege;
 
 	public Integer getWorkActionValue() {
 		return workActionValue;

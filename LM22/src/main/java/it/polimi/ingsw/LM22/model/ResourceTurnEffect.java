@@ -2,13 +2,8 @@ package it.polimi.ingsw.LM22.model;
 
 public class ResourceTurnEffect implements TurnEffect{
 	
-	private final Resource reward;
-	private final Integer councilPrivilege;
-	
-	public ResourceTurnEffect(Resource reward, Integer councilPrivilege){
-		this.reward = reward;
-		this.councilPrivilege = councilPrivilege;
-	}
+	private Resource reward;
+	private Integer councilPrivilege;
 
 	public Resource getReward() {
 		return reward;

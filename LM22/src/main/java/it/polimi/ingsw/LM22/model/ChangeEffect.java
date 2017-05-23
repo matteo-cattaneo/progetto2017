@@ -1,15 +1,9 @@
 package it.polimi.ingsw.LM22.model;
 
 public class ChangeEffect {
-	Resource exchangeEffect1[];
-	Resource exchangeEffect2[];
-	Integer requirement;
-
-	public ChangeEffect(Resource exchangeEffect1[], Resource exchangeEffect2[], Integer requirement) {
-		this.exchangeEffect1 = exchangeEffect1;
-		this.exchangeEffect2 = exchangeEffect2;
-		this.requirement = requirement;
-	}
+	private Resource exchangeEffect1[];
+	private Resource exchangeEffect2[];
+	private Integer requirement;
 
 	public Resource[] getExchangeEffect1() {
 		return exchangeEffect1;

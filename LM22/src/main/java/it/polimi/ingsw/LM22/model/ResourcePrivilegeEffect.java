@@ -4,11 +4,6 @@ public class ResourcePrivilegeEffect implements IEffect {
 	private Integer councilPrivilege;
 	private Resource resource;
 
-	public ResourcePrivilegeEffect(Integer councilPrivilege, Resource resource) {
-		this.councilPrivilege = councilPrivilege;
-		this.resource = resource;
-	}
-
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}

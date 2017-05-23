@@ -20,10 +20,6 @@ public class Game {
 		return boardgame;
 	}
 
-//	public void setBoardgame(BoardGame boardgame) {
-//		this.boardgame = boardgame;
-//	}
-
 	public Integer getPeriod() {
 		return period;
 	}
@@ -44,10 +40,6 @@ public class Game {
 		return players;
 	}
 
-//	public void setPlayers(Player[] players) {
-//		this.players = players;
-//	}
-
 	public List<Player> getPlayersOrder() {
 		return playersOrder;
 	}
@@ -60,25 +52,13 @@ public class Game {
 		return developmentCards;
 	}
 
-//	public void setDevelopmentCards(List<DevelopmentCard> developmentCards) {
-//		this.developmentCards = developmentCards;
-//	}
-
 	public List<AbstractLeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 
-//	public void setAbstractLeaderCards(List<AbstractLeaderCard> leaderCards) {
-//		this.leaderCards = leaderCards;
-//	}
-
 	public PersonalBonusTile[] getPersonalBonusTile() {
 		return personalBonusTile;
 	}
-
-//	public void setPersonalBonusTile(PersonalBonusTile[] personalBonusTile) {
-//		this.personalBonusTile = personalBonusTile;
-//	}
 
 	public Integer getNUM_BONUS_TILE() {
 		return NUM_BONUS_TILE;

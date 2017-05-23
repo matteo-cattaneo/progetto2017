@@ -2,13 +2,8 @@ package it.polimi.ingsw.LM22.model;
 
 public class WorkTurnEffect implements TurnEffect{
 	
-	private final String workType;
-	private final Integer valueOfAction;
-	
-	public WorkTurnEffect(String workType, Integer valueOfAction){
-		this.workType = workType;
-		this.valueOfAction = valueOfAction;
-	}
+	private String workType;
+	private Integer valueOfAction;
 
 	public String getWorkType() {
 		return workType;
