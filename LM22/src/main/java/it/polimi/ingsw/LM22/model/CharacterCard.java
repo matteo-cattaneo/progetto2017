@@ -4,8 +4,8 @@ public class CharacterCard extends DevelopmentCard{
 	public final Resource coinsCost;
 	public final CharacterEffect permanentEffect;
 	
-	public CharacterCard(String name, Integer period, String immediateType, IEffect immediateEffect, Resource coinsCost, CharacterEffect permanentEffect){
-		super(name, period, immediateType, immediateEffect);
+	public CharacterCard(String name, Integer period, IEffect immediateEffect, Resource coinsCost, CharacterEffect permanentEffect){
+		super(name, period, immediateEffect);
 		this.coinsCost = coinsCost;
 		this.permanentEffect = permanentEffect;
 	}

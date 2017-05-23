@@ -10,16 +10,19 @@ public class Game {
 	private final Player[] players;
 	private List<Player> playersOrder;
 	private final List<DevelopmentCard> developmentCards;
-	private final List<LeaderCard> leaderCards;
+	private final List<AbstractLeaderCard> leaderCards;
 	private final PersonalBonusTile personalBonusTile[];
 
+	
+	/*durante la creazione della Game dovrò inizializzare tutti 
+	 * gli attributi messi a final (saranno sempre quelli)*/
 	public BoardGame getBoardgame() {
 		return boardgame;
 	}
 
-	public void setBoardgame(BoardGame boardgame) {
-		this.boardgame = boardgame;
-	}
+//	public void setBoardgame(BoardGame boardgame) {
+//		this.boardgame = boardgame;
+//	}
 
 	public Integer getPeriod() {
 		return period;
@@ -41,9 +44,9 @@ public class Game {
 		return players;
 	}
 
-	public void setPlayers(Player[] players) {
-		this.players = players;
-	}
+//	public void setPlayers(Player[] players) {
+//		this.players = players;
+//	}
 
 	public List<Player> getPlayersOrder() {
 		return playersOrder;
@@ -57,25 +60,25 @@ public class Game {
 		return developmentCards;
 	}
 
-	public void setDevelopmentCards(List<DevelopmentCard> developmentCards) {
-		this.developmentCards = developmentCards;
-	}
+//	public void setDevelopmentCards(List<DevelopmentCard> developmentCards) {
+//		this.developmentCards = developmentCards;
+//	}
 
-	public List<LeaderCard> getLeaderCards() {
+	public List<AbstractLeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 
-	public void setLeaderCards(List<LeaderCard> leaderCards) {
-		this.leaderCards = leaderCards;
-	}
+//	public void setAbstractLeaderCards(List<AbstractLeaderCard> leaderCards) {
+//		this.leaderCards = leaderCards;
+//	}
 
 	public PersonalBonusTile[] getPersonalBonusTile() {
 		return personalBonusTile;
 	}
 
-	public void setPersonalBonusTile(PersonalBonusTile[] personalBonusTile) {
-		this.personalBonusTile = personalBonusTile;
-	}
+//	public void setPersonalBonusTile(PersonalBonusTile[] personalBonusTile) {
+//		this.personalBonusTile = personalBonusTile;
+//	}
 
 	public Integer getNUM_BONUS_TILE() {
 		return NUM_BONUS_TILE;

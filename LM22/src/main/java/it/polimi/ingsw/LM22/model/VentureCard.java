@@ -6,9 +6,9 @@ public class VentureCard extends DevelopmentCard {
 	public final Resource cardCost2;
 	public final Resource permanentEffect;
 
-	public VentureCard(String name, Integer period, String immediateType, IEffect immediateEffect, Resource cardCost1,
+	public VentureCard(String name, Integer period, IEffect immediateEffect, Resource cardCost1,
 			Resource cardCost2, Resource permanentEffect) {
-		super(name, period, immediateType, immediateEffect);
+		super(name, period, immediateEffect);
 		this.cardCost1 = cardCost1;
 		this.cardCost2 = cardCost2;
 		this.permanentEffect = permanentEffect;

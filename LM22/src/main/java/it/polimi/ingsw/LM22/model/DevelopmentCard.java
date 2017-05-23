@@ -5,12 +5,11 @@ public abstract class DevelopmentCard {
 	private final String name;
 	private final Integer period;
 	private final IEffect immediateEffect;
-	private final String immediateType;
+	
 
-	public DevelopmentCard(String name, Integer period, String immediateType, IEffect immediateEffect) {
+	public DevelopmentCard(String name, Integer period, IEffect immediateEffect) {
 		this.name = name;
 		this.period = period;
-		this.immediateType = immediateType;
 		/* qui probabilmente ci va il costruttore del tipo */
 		this.immediateEffect = immediateEffect; 
 	}
@@ -25,10 +24,6 @@ public abstract class DevelopmentCard {
 
 	public IEffect getImmediateEffect() {
 		return immediateEffect;
-	}
-
-	public String getImmediateType() {
-		return immediateType;
 	}
 
 }

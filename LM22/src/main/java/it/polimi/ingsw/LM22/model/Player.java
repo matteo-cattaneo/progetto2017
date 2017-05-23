@@ -9,54 +9,53 @@ public class Player {
 	private final List<FamilyMember> members;
 	private final PersonalBoard personalBoard;
 	private final List<ExInterface> exCommunications;
-	private final LeaderCard leaderCards[];
+	private List<AbstractLeaderCard> leaderCards;
 	
 	public String getNickname() {
 		return nickname;
 	}
-	
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+	/*tutti i metodi SET per adesso sono coomentati per decidere 
+	 * poi come verrà inizializzata tutta la partita*/
+//	public void setNickname(String nickname) {
+//		this.nickname = nickname;
+//	}
 	
 	public String getColor() {
 		return color;
 	}
 	
-	public void setColor(String color) {
-		this.color = color;
-	}
+//	public void setColor(String color) {
+//		this.color = color;
+//	}
 	
 	public List<FamilyMember> getMembers() {
 		return members;
 	}
 	
-	public void setMembers(List<FamilyMember> members) {
-		this.members = members;
-	}
+//	public void setMembers(List<FamilyMember> members) {
+//		this.members = members;
+//	}
 	
 	public PersonalBoard getPersonalBoard() {
 		return personalBoard;
 	}
 	
-	public void setPersonalBoard(PersonalBoard personalBoard) {
-		this.personalBoard = personalBoard;
-	}
+//	public void setPersonalBoard(PersonalBoard personalBoard) {
+//		this.personalBoard = personalBoard;
+//	}
 	
 	public List<ExInterface> getExCommunications() {
 		return exCommunications;
 	}
 	
-	public void setExCommunications(List<ExInterface> exCommunications) {
-		this.exCommunications = exCommunications;
-	}
-	
-	public LeaderCard[] getLeaderCards() {
+//	public void setExCommunications(List<ExInterface> exCommunications) {
+//		this.exCommunications = exCommunications;
+//	}
+
+	public List<AbstractLeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
+
 	
-	public void setLeaderCards(LeaderCard[] leaderCards) {
-		this.leaderCards = leaderCards;
-	}
 	
 }

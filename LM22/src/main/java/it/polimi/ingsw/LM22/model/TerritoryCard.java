@@ -4,9 +4,9 @@ public class TerritoryCard extends DevelopmentCard {
 
 	private final HarvestEffect permanentEffect;
 
-	public TerritoryCard(String name, Integer period, String immediateType, IEffect immediateEffect,
+	public TerritoryCard(String name, Integer period, IEffect immediateEffect,
 			HarvestEffect permanentEffect) {
-		super(name, period, immediateType, immediateEffect);
+		super(name, period, immediateEffect);
 		this.permanentEffect = permanentEffect;
 	}
 
