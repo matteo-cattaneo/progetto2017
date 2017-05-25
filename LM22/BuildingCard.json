@@ -1,0 +1,1199 @@
+[{
+        "name": "Cappella",
+        "period": 1,
+        "cardCost": {
+            "wood": 2,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 1,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 1,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+        }
+	}, {
+        "name": "Falegnameria",
+        "period": 1,
+        "cardCost": {
+            "wood": 2,
+            "stone": 0,
+            "coins": 1,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 3
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 1,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 3,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 2,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 5,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+        }
+	}, {
+        "name": "Teatro",
+        "period": 1,
+        "cardCost": {
+            "wood": 2,
+            "stone": 0,
+            "coins": 2,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 6
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "type": "CardToResourceEffect",
+            "cardRequired": "CHARACTER",
+            "reward": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            }
+        }
+	}, {
+        "name": "Arco di Trionfo",
+        "period": 1,
+        "cardCost": {
+            "wood": 0,
+            "stone": 2,
+            "coins": 2,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 6
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "type": "CardToResourceEffect",
+            "cardRequired": "VENTURE",
+            "reward": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            }
+        }
+	}, {
+        "name": "Zecca",
+        "period": 1,
+        "cardCost": {
+            "wood": 1,
+            "stone": 3,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 5
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "type": "CardToResourceEffect",
+            "cardRequired": "BUILDING",
+            "reward": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            }
+        }
+	}, {
+        "name": "Esattoria",
+        "period": 1,
+        "cardCost": {
+            "wood": 3,
+            "stone": 1,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 5
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "type": "CardToResourceEffect",
+            "cardRequired": "TERRITORY",
+            "reward": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            }
+        }
+	}, {
+        "name": "Residenza",
+        "period": 1,
+        "cardCost": {
+            "wood": 0,
+            "stone": 2,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "type": "ChangeToPrivilegeEffect",
+            "exchangedResource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+
+	}, {
+        "name": "Tagliapietre",
+        "period": 1,
+        "cardCost": {
+            "wood": 0,
+            "stone": 2,
+            "coins": 1,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 2
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 1,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 3,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 0,
+                    "stone": 2,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 5,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+        }
+	}, {
+        "name": "Gilda dei Costruttori",
+        "period": 2,
+        "cardCost": {
+            "wood": 1,
+            "stone": 2,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 4
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 1,
+                    "stone": 1,
+                    "coins": 0,
+                    "servants": 1,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 6
+				}
+			]
+        }
+	}, {
+        "name": "Mercato",
+        "period": 2,
+        "cardCost": {
+            "wood": 2,
+            "stone": 1,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 3
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 3,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 2,
+                    "stone": 2,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+
+        }
+	}, {
+        "name": "Caserma",
+        "period": 2,
+        "cardCost": {
+            "wood": 1,
+            "stone": 1,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 3
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 1,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 3,
+                    "victory": 0
+				}
+			]
+
+        }
+	}, {
+        "name": "Fortezza",
+        "period": 2,
+        "cardCost": {
+            "wood": 2,
+            "stone": 2,
+            "coins": 2,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 8
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 2,
+                "victory": 2
+            },
+            "councilPrivilege": 0
+        }
+	},
+    {
+        "name": "Gilda degli Scultori",
+        "period": 2,
+        "cardCost": {
+            "wood": 0,
+            "stone": 4,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 6
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 1,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 3
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 0,
+                    "stone": 3,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 7
+				}
+			]
+        }
+
+	},
+    {
+        "name": "Gilda dei Pittori",
+        "period": 2,
+        "cardCost": {
+            "wood": 4,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 5
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 1,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 3
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 3,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 7
+				}
+			]
+        }
+
+	},
+    {
+        "name": "Tesoreria",
+        "period": 2,
+        "cardCost": {
+            "wood": 3,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 4
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 1,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 3
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 2,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 5
+				}
+			]
+        }
+
+	},
+    {
+        "name": "Battistero",
+        "period": 2,
+        "cardCost": {
+            "wood": 0,
+            "stone": 3,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 2
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 1,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 2,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 2
+				}
+			]
+        }
+	},
+    {
+        "name": "Fiera",
+        "period": 3,
+        "cardCost": {
+            "wood": 3,
+            "stone": 0,
+            "coins": 4,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 8
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 4,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 3,
+                    "stone": 3,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+        }
+	},
+    {
+        "name": "Cattedrale",
+        "period": 3,
+        "cardCost": {
+            "wood": 4,
+            "stone": 4,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 3,
+                "military": 0,
+                "victory": 7
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            },
+            "councilPrivilege": 0
+        }
+
+	},
+    {
+        "name": "Castelletto",
+        "period": 3,
+        "cardCost": {
+            "wood": 2,
+            "stone": 4,
+            "coins": 2,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 9
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 2
+            },
+            "councilPrivilege": 1
+        }
+
+	},
+    {
+        "name": "Accademia Militare",
+        "period": 3,
+        "cardCost": {
+            "wood": 2,
+            "stone": 2,
+            "coins": 0,
+            "servants": 1,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 7
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 1,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 3,
+                    "victory": 1
+				}
+			]
+        }
+	},
+    {
+        "name": "Palazzo",
+        "period": 3,
+        "cardCost": {
+            "wood": 3,
+            "stone": 1,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 9
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "type": "ChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 1,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 2,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 4
+				}
+			]
+
+        }
+	},
+    {
+        "name": "Banca",
+        "period": 3,
+        "cardCost": {
+            "wood": 1,
+            "stone": 3,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 7
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 5,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+	},
+    {
+        "name": "Basilica",
+        "period": 3,
+        "cardCost": {
+            "wood": 1,
+            "stone": 4,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 5
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "type": "DoubleChangeEffect",
+            "exchangeEffect1": [{
+                    "wood": 1,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 2,
+                    "military": 0,
+                    "victory": 0
+				}
+			],
+            "exchangeEffect2": [{
+                    "wood": 0,
+                    "stone": 1,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 0,
+                    "military": 0,
+                    "victory": 0
+				},
+                {
+                    "wood": 0,
+                    "stone": 0,
+                    "coins": 0,
+                    "servants": 0,
+                    "faith": 2,
+                    "military": 0,
+                    "victory": 0
+				}
+			]
+        }
+	},
+    {
+        "name": "Giardino",
+        "period": 3,
+        "cardCost": {
+            "wood": 4,
+            "stone": 2,
+            "coins": 0,
+            "servants": 2,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 10
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 3
+            },
+            "councilPrivilege": 0
+        }
+	}
+]

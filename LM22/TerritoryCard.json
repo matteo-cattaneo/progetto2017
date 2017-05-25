@@ -1,0 +1,664 @@
+[
+    {
+        "name": "Rocca",
+        "period": 1,
+        "immediateEffect": {
+          "type": "NoEffect"  
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 1,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 2,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Borgo",
+        "period": 1,
+        "requirement": 3,
+        "immediateEffect": {
+          "type": "NoEffect"  
+        },
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 1,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Città",
+        "period": 1,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 3,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 1
+        }
+    }, {
+        "name": "Bosco",
+        "period": 1,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+
+        }
+    }, {
+        "name": "Foresta",
+        "period": 1,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "resource": {
+                "wood": 3,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Monastero",
+        "period": 1,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 1,
+                "faith": 0,
+                "militaryPoints": 2,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "reward": {
+                "wood": 0,
+                "stone": 1,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Avamposto Commerciale",
+        "period": 1,
+        "immediateEffect": {
+          "type": "NoEffect"  
+        },
+        "permanentEffect": {
+            "requirement": 1,
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Cava di Ghiaia",
+        "period": 1,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 2,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 2,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Villaggio Minerario",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 1,
+                "coins": 0,
+                "servants": 2,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 2,
+                "coins": 0,
+                "servants": 1,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Villaggio Montano",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "servants": 1,
+                "coins": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "resource": {
+                "wood": 2,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 1,
+                "victory": 0
+            },
+            "concilPrivilege": 0
+        }
+    }, {
+        "name": "Eremo",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+
+    }, {
+        "name": "Ducato",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 4,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "resource": {
+                "wood": 2,
+                "stone": 1,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+
+    }, {
+        "name": "Cava di Pietra",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 3,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+
+    }, {
+        "name": "Miniera d'Oro",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 2,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Maniero",
+        "period": 2,
+        "immediateEffect": {
+          "type": "NoEffect"  
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 2,
+                "faith": 0,
+                "military": 2,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Possedimento",
+        "period": 2,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 2,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "resource": {
+                "wood": 2,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Colonia",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 2,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 5,
+        "permanentEffect": {
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 4
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Città Fortificata",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 1,
+                "faith": 0,
+                "military": 2,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 2,
+                "faith": 0,
+                "military": 1,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Castello",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 2,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 2
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 4,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 1,
+                "faith": 0,
+                "military": 3,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Città Mercantile",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 1,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 3,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Cava di Marmo",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 3
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 2,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 2,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Tenuta",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 1,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 1
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 3,
+        "permanentEffect": {
+            "resource": {
+                "wood": 2,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 2
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Santuario",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 0,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        },
+        "requirement": 1,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 0,
+                "coins": 1,
+                "servants": 0,
+                "faith": 1,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 0
+        }
+    }, {
+        "name": "Provincia",
+        "period": 3,
+        "immediateEffect": {
+            "type": "ResourcePrivilegeEffect",
+            "resource": {
+                "wood": 0,
+                "stone": 1,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 0
+            },
+            "councilPrivilege": 1
+        },
+        "requirement": 6,
+        "permanentEffect": {
+            "resource": {
+                "wood": 0,
+                "stone": 1,
+                "coins": 0,
+                "servants": 0,
+                "faith": 0,
+                "military": 0,
+                "victory": 4
+            },
+            "councilPrivilege": 0
+        }
+    }
+]

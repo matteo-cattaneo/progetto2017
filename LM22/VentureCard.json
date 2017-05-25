@@ -1,0 +1,1240 @@
+[{
+    "name": "Ingaggiatore Reclute",
+    "period": 1,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 4,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 5,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Combattere le Eresie",
+    "period": 1,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 5,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 3,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 2,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Costruire le Mura",
+    "period": 1,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 3,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 2,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 3
+    }
+}, {
+    "name": "Sostegno del Vescovo",
+    "period": 1,
+    "cardCost1": {
+        "wood": 1,
+        "stone": 1,
+        "coins": 2,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 4,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 2,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 3,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 1
+    }
+}, {
+    "name": "Riparare la Chiesa",
+    "period": 1,
+    "cardCost1": {
+        "wood": 1,
+        "stone": 1,
+        "coins": 1,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 1,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Ospitare i Mendicanti",
+    "period": 1,
+    "cardCost1": {
+        "wood": 3,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 4,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Innalzare una Statua",
+    "period": 1,
+    "cardCost1": {
+        "wood": 2,
+        "stone": 2,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 2
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Campagna Militare",
+    "period": 1,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 3,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 2,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Riparare l'Abbazia",
+    "period": 2,
+    "cardCost1": {
+        "wood": 2,
+        "stone": 2,
+        "coins": 2,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 2,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 6
+    }
+}, {
+    "name": "Sostegno al Cardinale",
+    "period": 2,
+    "cardCost1": {
+        "wood": 2,
+        "stone": 2,
+        "coins": 3,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 7,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 4,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 3,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Accogliere gli Stranieri",
+    "period": 2,
+    "cardCost1": {
+        "wood": 4,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 5,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Ingaggiare Soldati",
+    "period": 2,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 6,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 6,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Costruire Bastioni",
+    "period": 2,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 4,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 3,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 2
+    }
+}, {
+    "name": "Scavare Canalizzazioni",
+    "period": 2,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 3,
+        "servants": 2,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "WorkActionEffect",
+        "typeOfWork": "HARVEST",
+        "workActionValue": 4,
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Supporto al Re",
+    "period": 2,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 6,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 3,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 5,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 3
+    }
+}, {
+    "name": "Crociata",
+    "period": 2,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 8,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 4,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 5,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Conquista Militare",
+    "period": 3,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 12,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 6,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 3,
+            "stone": 3,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 7
+    }
+}, {
+    "name": "Sostegno al Papa",
+    "period": 3,
+    "cardCost1": {
+        "wood": 3,
+        "stone": 3,
+        "coins": 4,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 10,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 5,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 2,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 10
+    }
+}, {
+    "name": "Costruire le Torri",
+    "period": 3,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 6,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 4,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 4
+    }
+}, {
+    "name": "Riparare la Cattedrale",
+    "period": 3,
+    "cardCost1": {
+        "wood": 3,
+        "stone": 3,
+        "coins": 3,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "CardActionEffect",
+        "cardType": "ALL",
+        "diceValue": 7,
+        "cardDiscount": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 1,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}, {
+    "name": "Guerra Santa",
+    "period": 3,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 15,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 8,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 4,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 8
+    }
+}, {
+    "name": "Commissionare Arte Sacra",
+    "period": 3,
+    "cardCost1": {
+        "wood": 6,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 3,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 3
+    }
+}, {
+    "name": "Ingaggiare Mercenari",
+    "period": 3,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 8,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "ResourcePrivilegeEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 7,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 6
+    }
+}, {
+    "name": "Migliorare le Strade",
+    "period": 3,
+    "cardCost1": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 4,
+        "servants": 3,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+    },
+    "cardCost2": [{
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}, {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 0
+	}],
+    "immediateEffect": {
+        "type": "WorkActionEffect",
+        "typeOfWork": "PRODUCTION",
+        "workActionValue": 3,
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "permanentEffect": {
+        "wood": 0,
+        "stone": 0,
+        "coins": 0,
+        "servants": 0,
+        "faith": 0,
+        "military": 0,
+        "victory": 5
+    }
+}]
