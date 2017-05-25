@@ -8,6 +8,11 @@ public class CouncilSpace extends AbstractSpace{
 	private final Resource reward;
 	private List<FamilyMember> members;
 		
+	
+	/*
+	 * ATTENZIONE con i costruttori perchè reward va caricato da file
+	 * e probabilmente non servono 
+	 * */
 	public CouncilSpace (Integer requirement, Resource resource){
 		super(requirement);
 		this.reward = resource;

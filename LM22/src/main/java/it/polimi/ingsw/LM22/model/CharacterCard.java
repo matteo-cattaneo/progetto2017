@@ -2,13 +2,13 @@ package it.polimi.ingsw.LM22.model;
 
 public class CharacterCard extends DevelopmentCard {
 	private Resource coinsCost;
-	private CharacterEffect permanentEffect;
+	private PermanentEffect permanentEffect;
 
 	public Resource getCost() {
 		return coinsCost;
 	}
 
-	public CharacterEffect getPermanentEffect() {
+	public PermanentEffect getPermanentEffect() {
 		return permanentEffect;
 	}
 }

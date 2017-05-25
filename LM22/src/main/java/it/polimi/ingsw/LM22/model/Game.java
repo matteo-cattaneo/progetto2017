@@ -9,8 +9,11 @@ public class Game {
 	private Integer round;
 	private final Player[] players;
 	private List<Player> playersOrder;
-	private final List<DevelopmentCard> developmentCards;
-	private final List<AbstractLeaderCard> leaderCards;
+	private final List<TerritoryCard> territoryCards;
+	private final List<CharacterCard> characterCards;
+	private final List<BuildingCard> buildingCards;
+	private final List<VentureCard> ventureCards;
+	private final List<LeaderCard> leaderCards;
 	private final PersonalBonusTile personalBonusTile[];
 
 	
@@ -48,11 +51,23 @@ public class Game {
 		this.playersOrder = playersOrder;
 	}
 
-	public List<DevelopmentCard> getDevelopmentCards() {
-		return developmentCards;
+	public List<TerritoryCard> getTerritoryCards() {
+		return territoryCards;
 	}
 
-	public List<AbstractLeaderCard> getLeaderCards() {
+	public List<CharacterCard> getCharacterCards() {
+		return characterCards;
+	}
+
+	public List<BuildingCard> getBuildingCards() {
+		return buildingCards;
+	}
+
+	public List<VentureCard> getVentureCards() {
+		return ventureCards;
+	}
+
+	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 

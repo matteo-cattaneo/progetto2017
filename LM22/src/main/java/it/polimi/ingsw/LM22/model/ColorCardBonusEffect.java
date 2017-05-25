@@ -1,6 +1,6 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ColorCardBonusEffect {
+public class ColorCardBonusEffect extends PermanentEffect{
 	private String cardType;
 	private Integer diceBonus;
 	private Resource cardDiscount;

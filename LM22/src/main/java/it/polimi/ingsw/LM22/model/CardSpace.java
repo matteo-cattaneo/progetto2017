@@ -6,6 +6,9 @@ public class CardSpace extends AbstractSpace{
 		private final Resource reward;
 		private FamilyMember member;
 		
+		/*
+		 * ATTENZIONE con i costruttori perchè reward va caricato da file
+		 * */
 		public CardSpace (Integer requirement, Integer level, Resource reward){
 			super(requirement);
 			this.level = level;
@@ -19,9 +22,11 @@ public class CardSpace extends AbstractSpace{
 		public FamilyMember getMember() {
 			return member;
 		}
+		
 		public void setMember(FamilyMember member) {
 			this.member = member;
 		}
+		
 		public Resource getReward() {
 			return reward;
 		}

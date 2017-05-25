@@ -7,8 +7,7 @@ public class WorkSpace extends AbstractSpace{
 	private final String workType; 
 	private final Integer MALUS = 3;
 	private List<FamilyMember> members;
-	
-	
+
 	public WorkSpace(Integer requirement, String workType){
 		super(requirement);
 		this.workType = workType;

@@ -3,10 +3,9 @@ package it.polimi.ingsw.LM22.model;
 public class FamilyMember {
 	private final Integer UNCOLORED_PAWN_VALUE = 0;
 	private final Player player;
-	private final String color;
+	private final String color; //"UNCOLORED" means that is uncolored
 	private Integer value;
-	private boolean used;
-	private boolean uncolored;
+	private Boolean used;
 	
 	public FamilyMember (Player player, String color){
 		this.player = player;
@@ -15,7 +14,7 @@ public class FamilyMember {
 	}
 	
 	public Integer getValue() {
-		if (!uncolored)
+		if (color!="UNCOLORED")
 			return value;
 		return UNCOLORED_PAWN_VALUE;
 	}
@@ -24,11 +23,11 @@ public class FamilyMember {
 		this.value = value;
 	}
 	
-	public boolean isUsed() {
+	public Boolean isUsed() {
 		return used;
 	}
 	
-	public void setUsed(boolean used) {
+	public void setUsed(Boolean used) {
 		this.used = used;
 	}
 	

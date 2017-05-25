@@ -1,13 +1,17 @@
 package it.polimi.ingsw.LM22.model;
 
 public class PersonalBonusTile {
-	private final Integer requirement;
+	private final Integer requirement = 1;
 	// costanti da inizializzare con il costruttore
-	private final ProductionEffect productionEffect;
-	private final HarvestEffect harvestEffect;
+	private final ResourcePrivilegeEffect productionEffect;
+	private final ResourcePrivilegeEffect harvestEffect;
 
-	public PersonalBonusTile(Integer requirement, ProductionEffect productionEffect, HarvestEffect harvestEffect) {
-		this.requirement = requirement;
+	
+	/*
+	 * i bonus anche BONUSTILE devono essere caricati di file
+	 * --> ATTENZIONE al costruttore
+	 * */
+	public PersonalBonusTile(ResourcePrivilegeEffect productionEffect, ResourcePrivilegeEffect harvestEffect) {
 		this.productionEffect = productionEffect;
 		this.harvestEffect = harvestEffect;
 	}

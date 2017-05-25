@@ -1,14 +1,14 @@
 package it.polimi.ingsw.LM22.model;
 
-public class CardActionEffect implements IEffect{
-	private String color;
+public class CardActionEffect extends ImmediateEffect{
+	private String cardType;
 	private Integer diceValue;
 	private Resource cardDiscount;
 	private Resource resource;
 	private Integer councilPrivilege;
 
-	public String getColor() {
-		return color;
+	public String getCardType() {
+		return cardType;
 	}
 
 	public Integer getDiceValue() {

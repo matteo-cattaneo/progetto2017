@@ -1,9 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ResourceToResourceEffect implements IEffect{
+public class ResourceToResourceEffect extends ImmediateEffect{
 	private Resource requirement;
 	private Resource reward;
-	private Integer divider;
 
 	public Resource getRequirement() {
 		return requirement;
@@ -13,7 +12,4 @@ public class ResourceToResourceEffect implements IEffect{
 		return reward;
 	}
 
-	public Integer getDivider() {
-		return divider;
-	}
 }

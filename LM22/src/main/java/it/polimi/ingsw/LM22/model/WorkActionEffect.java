@@ -1,6 +1,6 @@
 package it.polimi.ingsw.LM22.model;
 
-public class WorkActionEffect implements IEffect {
+public class WorkActionEffect extends ImmediateEffect {
 	private Integer workActionValue;
 	private String typeOfWork;
 	private Resource resource;

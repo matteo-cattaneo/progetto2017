@@ -28,7 +28,11 @@ public class FileParser {
 		}.getType();
 
 		RuntimeTypeAdapterFactory<IEffect> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
-				.of(IEffect.class, "type").registerSubtype(ResourcePrivilegeEffect.class);
+				.of(ImmediateEffect.class, "type").registerSubtype(ResourcePrivilegeEffect.class);
+		/*
+		 * ho modificato anche questa riga di codice per il Parser
+		 * in base alla nuova struttura concordata
+		 *  */
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
 		Collection<TerritoryCard> tCards = gson.fromJson(text, collectionType);
 

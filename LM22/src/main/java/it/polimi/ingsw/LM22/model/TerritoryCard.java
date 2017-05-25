@@ -2,9 +2,10 @@ package it.polimi.ingsw.LM22.model;
 
 public class TerritoryCard extends DevelopmentCard {
 
-	private HarvestEffect permanentEffect;
+	private Integer requirement;
+	private ImmediateEffect permanentEffect;
 
-	public HarvestEffect getPermanentEffect() {
+	public ImmediateEffect getPermanentEffect() {
 		return permanentEffect;
 	}
 

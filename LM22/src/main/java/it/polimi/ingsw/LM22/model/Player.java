@@ -2,19 +2,21 @@ package it.polimi.ingsw.LM22.model;
 
 import java.util.List;
 
+import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
+
 public class Player {
 	private final Integer NUM_LEADER_CARDS = 4;
 	private final String nickname;
 	private final String color;
 	private final List<FamilyMember> members;
 	private final PersonalBoard personalBoard;
-	private final List<ExInterface> exCommunications;
-	private List<AbstractLeaderCard> leaderCards;
+	private List<ExCommunication> exCommunications;
+	private List<LeaderCard> leaderCards;
 	
 	public String getNickname() {
 		return nickname;
 	}
-	/*tutti i metodi SET per adesso sono coomentati per decidere 
+	/*tutti i metodi SET per adesso sono commentati per decidere 
 	 * poi come verrà inizializzata tutta la partita*/
 //	public void setNickname(String nickname) {
 //		this.nickname = nickname;
@@ -44,7 +46,7 @@ public class Player {
 //		this.personalBoard = personalBoard;
 //	}
 	
-	public List<ExInterface> getExCommunications() {
+	public List<ExCommunication> getExCommunications() {
 		return exCommunications;
 	}
 	
@@ -52,7 +54,7 @@ public class Player {
 //		this.exCommunications = exCommunications;
 //	}
 
-	public List<AbstractLeaderCard> getLeaderCards() {
+	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 

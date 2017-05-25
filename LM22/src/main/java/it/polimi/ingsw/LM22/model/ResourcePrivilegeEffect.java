@@ -1,6 +1,6 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ResourcePrivilegeEffect implements IEffect {
+public class ResourcePrivilegeEffect extends ImmediateEffect {
 	private Integer councilPrivilege;
 	private Resource resource;
 

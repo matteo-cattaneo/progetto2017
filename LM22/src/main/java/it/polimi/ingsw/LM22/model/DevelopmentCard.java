@@ -4,7 +4,7 @@ public abstract class DevelopmentCard {
 
 	private String name;
 	private Integer period;
-	private IEffect immediateEffect;
+	private ImmediateEffect immediateEffect;
 
 	public String getName() {
 		return name;
@@ -14,7 +14,7 @@ public abstract class DevelopmentCard {
 		return period;
 	}
 
-	public IEffect getImmediateEffect() {
+	public ImmediateEffect getImmediateEffect() {
 		return immediateEffect;
 	}
 
