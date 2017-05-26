@@ -3,10 +3,13 @@ package it.polimi.ingsw.LM22.model;
 public class TerritoryCard extends DevelopmentCard {
 
 	private Integer requirement;
-	private ImmediateEffect permanentEffect;
+	private ResourcePrivilegeEffect permanentEffect;
 
-	public ImmediateEffect getPermanentEffect() {
+	public ResourcePrivilegeEffect getPermanentEffect() {
 		return permanentEffect;
 	}
 
+	public Integer getRequirement() {
+		return requirement;
+	}
 }
