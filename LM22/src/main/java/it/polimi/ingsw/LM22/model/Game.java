@@ -2,6 +2,8 @@ package it.polimi.ingsw.LM22.model;
 
 import java.util.List;
 
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
+
 public class Game {
 	private final Integer NUM_BONUS_TILE = 4;
 	private final BoardGame boardgame;
