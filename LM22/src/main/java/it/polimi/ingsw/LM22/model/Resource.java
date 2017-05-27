@@ -9,6 +9,18 @@ public class Resource {
 	private Integer military;
 	private Integer victory;
 
+	public Resource(Integer wood, Integer stone, Integer servants, Integer coins, Integer faith, Integer military,
+			Integer victory) {
+		super();
+		this.wood = wood;
+		this.stone = stone;
+		this.servants = servants;
+		this.coins = coins;
+		this.faith = faith;
+		this.military = military;
+		this.victory = victory;
+	}
+
 	public Integer getWood() {
 		return wood;
 	}

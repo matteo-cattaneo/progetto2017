@@ -15,29 +15,65 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 public class FileParser {
 
 	public static void main(String[] args) {
-		String text = null;
-		String path = System.getProperty("user.home") + "\\Desktop\\";
-
+		FileParser f = new FileParser();
+		String path = null;
+		Type type;
+		// default JSON location
+		String desktop = System.getProperty("user.home") + "\\Desktop\\";
+		// define subtypes for Immediate and Permament effect
 		RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm = RuntimeTypeAdapterFactory
 				.of(ImmediateEffect.class, "type").registerSubtype(ResourcePrivilegeEffect.class)
 				.registerSubtype(WorkActionEffect.class).registerSubtype(ResourceToResourceEffect.class)
 				.registerSubtype(CardToResourceEffect.class).registerSubtype(NoEffect.class)
-				.registerSubtype(ChangeEffect.class).registerSubtype(CardActionEffect.class);
+				.registerSubtype(ChangeEffect.class).registerSubtype(CardActionEffect.class)
+				.registerSubtype(DoubleChangeEffect.class).registerSubtype(ChangeToPrivilegeEffect.class);
 		RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm = RuntimeTypeAdapterFactory
 				.of(PermanentEffect.class, "type").registerSubtype(NoPermanentEffect.class)
 				.registerSubtype(NoBoardBonusEffect.class).registerSubtype(WorkBonusEffect.class)
 				.registerSubtype(ColorCardBonusEffect.class).registerSubtype(NoCardSpaceBonusEffect.class);
 
 		try {
-			text = new String(Files.readAllBytes(Paths.get(path + "TerritoryCard.json")), StandardCharsets.UTF_8);
-			Type tType = new TypeToken<Collection<TerritoryCard>>() {
+			// JSON file path
+			path = desktop + "TerritoryCard.json";
+			// card type for GSON
+			type = new TypeToken<Collection<TerritoryCard>>() {
 			}.getType();
+			// specific card collection
+			Collection<TerritoryCard> tCards = f.<TerritoryCard>loadCards(path, AdapterImm, AdapterPerm, type);
 
-			Gson tGson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).create();
-			Collection<TerritoryCard> tCards = tGson.fromJson(text, tType);
+			path = desktop + "CharacterCard.json";
+			type = new TypeToken<Collection<CharacterCard>>() {
+			}.getType();
+			Collection<CharacterCard> cCards = f.<CharacterCard>loadCards(path, AdapterImm, AdapterPerm, type);
+
+			path = desktop + "BuildingCard.json";
+			type = new TypeToken<Collection<BuildingCard>>() {
+			}.getType();
+			Collection<BuildingCard> bCards = f.<BuildingCard>loadCards(path, AdapterImm, AdapterPerm, type);
+
+			path = desktop + "VentureCard.json";
+			type = new TypeToken<Collection<VentureCard>>() {
+			}.getType();
+			Collection<VentureCard> vCards = f.<VentureCard>loadCards(path, AdapterImm, AdapterPerm, type);
 		} catch (IOException e) {
-			System.err.println("Errore nell'apertura del file JSON TerritoryCard.json");
+			System.err.println("Errore nell'apertura del file JSON " + path);
 		}
+
+		// try {
+		// String text = new
+		// String(Files.readAllBytes(Paths.get(path)),StandardCharsets.UTF_8);
+		// Type tType = new TypeToken<Collection<TerritoryCard>>() {
+		// }.getType();
+		// System.out.println(tType);
+		// Gson tGson = new
+		// GsonBuilder().registerTypeAdapterFactory(AdapterImm).create();
+		// System.out.println(tGson);
+		// Collection<TerritoryCard> tCards = tGson.fromJson(text, tType);
+		// System.out.println(tCards);
+		// } catch (IOException e) {
+		// System.err.println("Errore nell'apertura del file JSON
+		// TerritoryCard.json");
+		// }
 
 		// for (TerritoryCard c : tCards) {
 		// try {
@@ -46,57 +82,21 @@ public class FileParser {
 		// c.getImmediateEffect()).getResource().getStone());
 		// System.out.println(" " +
 		// c.getPermanentEffect().getResource().getStone());
-		//
 		// } catch (Exception e) {
 		// }
 		// }
-		//
-		// System.out.println();
+	}
 
-		try {
-			text = new String(Files.readAllBytes(Paths.get(path + "CharacterCard.json")), StandardCharsets.UTF_8);
-			Type cType = new TypeToken<Collection<CharacterCard>>() {
-			}.getType();
-
-			Gson cGson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm)
-					.registerTypeAdapterFactory(AdapterPerm).create();
-			Collection<CharacterCard> cCards = cGson.fromJson(text, cType);
-		} catch (IOException e) {
-			System.err.println("Errore nell'apertura del file JSON CharacterCard.json");
-		}
-
-		// for (CharacterCard c : cCards) {
-		// try {
-		// System.out.println(c.getName() + " "// + ((NoEffect)
-		// // c.getImmediateEffect())
-		// + " " + ((ColorCardBonusEffect)
-		// c.getPermanentEffect()).getCardType());
-		//
-		// } catch (Exception e) {
-		// }
-		// }
-
-		try {
-			text = new String(Files.readAllBytes(Paths.get(path + "BuildingCard.json")), StandardCharsets.UTF_8);
-			Type bType = new TypeToken<Collection<BuildingCard>>() {
-			}.getType();
-
-			Gson bGson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).create();
-			Collection<BuildingCard> bCards = bGson.fromJson(text, bType);
-		} catch (IOException e) {
-			System.err.println("Errore nell'apertura del file JSON BuildingCard.json");
-		}
-
-		try {
-			text = new String(Files.readAllBytes(Paths.get(path + "VentureCard.json")), StandardCharsets.UTF_8);
-			Type bType = new TypeToken<Collection<VentureCard>>() {
-			}.getType();
-
-			Gson bGson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).create();
-			Collection<VentureCard> bCards = bGson.fromJson(text, bType);
-		} catch (IOException e) {
-			System.err.println("Errore nell'apertura del file JSON VentureCard.json");
-		}
+	private <T> Collection<T> loadCards(String path, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
+			RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm, Type type) throws IOException {
+		// get file content
+		String text = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+		// generate the serializer GSON object
+		Gson gson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).registerTypeAdapterFactory(AdapterPerm)
+				.create();
+		// obtain the cards structure using the T generic type
+		Collection<T> cards = gson.fromJson(text, type);
+		return cards;
 	}
 
 }

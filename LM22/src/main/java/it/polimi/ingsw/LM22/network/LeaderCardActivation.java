@@ -1,11 +1,15 @@
 package it.polimi.ingsw.LM22.network;
 
-import it.polimi.ingsw.LM22.model.AbstractLeaderCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class LeaderCardActivation extends AbstractMove {
-	private AbstractLeaderCard leaderCard;
+	private LeaderCard leaderCard;
 
-	public AbstractLeaderCard getLeaderCard() {
+	public LeaderCardActivation(LeaderCard leaderCard) {
+		this.leaderCard = leaderCard;
+	}
+	
+	public LeaderCard getLeaderCard() {
 		return leaderCard;
 	}
 

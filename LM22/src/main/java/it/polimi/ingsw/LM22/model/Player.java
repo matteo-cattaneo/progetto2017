@@ -3,6 +3,7 @@ package it.polimi.ingsw.LM22.model;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class Player {
 	private final Integer NUM_LEADER_CARDS = 4;
