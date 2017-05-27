@@ -1,22 +1,23 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class Game {
 	private final Integer NUM_BONUS_TILE = 4;
-	private final BoardGame boardgame;
+	private BoardGame boardgame;
 	private Integer period;
 	private Integer round;
-	private final Player[] players;
+	private Player[] players;
 	private List<Player> playersOrder;
-	private final List<TerritoryCard> territoryCards;
-	private final List<CharacterCard> characterCards;
-	private final List<BuildingCard> buildingCards;
-	private final List<VentureCard> ventureCards;
-	private final List<LeaderCard> leaderCards;
-	private final PersonalBonusTile personalBonusTile[];
+	private Collection<TerritoryCard> territoryCards;
+	private Collection<CharacterCard> characterCards;
+	private Collection<BuildingCard> buildingCards;
+	private Collection<VentureCard> ventureCards;
+	private Collection<LeaderCard> leaderCards;
+	private PersonalBonusTile personalBonusTile[];
 
 	
 	/*durante la creazione della Game dovrò inizializzare tutti 
@@ -41,6 +42,26 @@ public class Game {
 		this.round = round;
 	}
 
+	public void setTerritoryCards(Collection<TerritoryCard> territoryCards) {
+		this.territoryCards = territoryCards;
+	}
+
+	public void setCharacterCards(Collection<CharacterCard> characterCards) {
+		this.characterCards = characterCards;
+	}
+
+	public void setBuildingCards(Collection<BuildingCard> buildingCards) {
+		this.buildingCards = buildingCards;
+	}
+
+	public void setVentureCards(Collection<VentureCard> ventureCards) {
+		this.ventureCards = ventureCards;
+	}
+
+	public void setLeaderCards(Collection<LeaderCard> leaderCards) {
+		this.leaderCards = leaderCards;
+	}
+
 	public Player[] getPlayers() {
 		return players;
 	}
@@ -53,23 +74,23 @@ public class Game {
 		this.playersOrder = playersOrder;
 	}
 
-	public List<TerritoryCard> getTerritoryCards() {
+	public Collection<TerritoryCard> getTerritoryCards() {
 		return territoryCards;
 	}
 
-	public List<CharacterCard> getCharacterCards() {
+	public Collection<CharacterCard> getCharacterCards() {
 		return characterCards;
 	}
 
-	public List<BuildingCard> getBuildingCards() {
+	public Collection<BuildingCard> getBuildingCards() {
 		return buildingCards;
 	}
 
-	public List<VentureCard> getVentureCards() {
+	public Collection<VentureCard> getVentureCards() {
 		return ventureCards;
 	}
 
-	public List<LeaderCard> getLeaderCards() {
+	public Collection<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 

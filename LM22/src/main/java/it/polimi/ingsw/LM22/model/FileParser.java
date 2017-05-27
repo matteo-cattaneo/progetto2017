@@ -15,11 +15,13 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 public class FileParser {
 
 	public static void main(String[] args) {
+		Game game = new Game();
 		FileParser f = new FileParser();
-		String path = null;
-		Type type;
-		// default JSON location
-		String desktop = System.getProperty("user.home") + "\\Desktop\\";
+		f.getDevCards(game);
+	}
+
+	public void getDevCards(Game game) {
+		FileParser f = new FileParser();
 		// define subtypes for Immediate and Permament effect
 		RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm = RuntimeTypeAdapterFactory
 				.of(ImmediateEffect.class, "type").registerSubtype(ResourcePrivilegeEffect.class)
@@ -32,31 +34,34 @@ public class FileParser {
 				.registerSubtype(NoBoardBonusEffect.class).registerSubtype(WorkBonusEffect.class)
 				.registerSubtype(ColorCardBonusEffect.class).registerSubtype(NoCardSpaceBonusEffect.class);
 
+		Collection<BuildingCard> bCards = null;
+		Collection<CharacterCard> cCards = null;
+		Collection<TerritoryCard> tCards = null;
+		Collection<VentureCard> vCards = null;
+
+		// card type for GSON method
+		Type bType = new TypeToken<Collection<BuildingCard>>() {
+		}.getType();
+		Type cType = new TypeToken<Collection<CharacterCard>>() {
+		}.getType();
+		Type tType = new TypeToken<Collection<TerritoryCard>>() {
+		}.getType();
+		Type vType = new TypeToken<Collection<VentureCard>>() {
+		}.getType();
+
 		try {
-			// JSON file path
-			path = desktop + "TerritoryCard.json";
-			// card type for GSON
-			type = new TypeToken<Collection<TerritoryCard>>() {
-			}.getType();
-			// specific card collection
-			Collection<TerritoryCard> tCards = f.<TerritoryCard>loadCards(path, AdapterImm, AdapterPerm, type);
-
-			path = desktop + "CharacterCard.json";
-			type = new TypeToken<Collection<CharacterCard>>() {
-			}.getType();
-			Collection<CharacterCard> cCards = f.<CharacterCard>loadCards(path, AdapterImm, AdapterPerm, type);
-
-			path = desktop + "BuildingCard.json";
-			type = new TypeToken<Collection<BuildingCard>>() {
-			}.getType();
-			Collection<BuildingCard> bCards = f.<BuildingCard>loadCards(path, AdapterImm, AdapterPerm, type);
-
-			path = desktop + "VentureCard.json";
-			type = new TypeToken<Collection<VentureCard>>() {
-			}.getType();
-			Collection<VentureCard> vCards = f.<VentureCard>loadCards(path, AdapterImm, AdapterPerm, type);
+			// call loadCards function that return specific card collection
+			bCards = f.<Collection<BuildingCard>>loadCards("BuildingCard", AdapterImm, AdapterPerm, bType);
+			cCards = f.<Collection<CharacterCard>>loadCards("CharacterCard", AdapterImm, AdapterPerm, cType);
+			tCards = f.<Collection<TerritoryCard>>loadCards("TerritoryCard", AdapterImm, AdapterPerm, tType);
+			vCards = f.<Collection<VentureCard>>loadCards("VentureCard", AdapterImm, AdapterPerm, vType);
+			// set cards into game object
+			game.setBuildingCards(bCards);
+			game.setCharacterCards(cCards);
+			game.setTerritoryCards(tCards);
+			game.setVentureCards(vCards);
 		} catch (IOException e) {
-			System.err.println("Errore nell'apertura del file JSON " + path);
+			System.err.println("Errore nel caricamento dei file JSON");
 		}
 
 		// try {
@@ -75,27 +80,27 @@ public class FileParser {
 		// TerritoryCard.json");
 		// }
 
-		// for (TerritoryCard c : tCards) {
-		// try {
-		// System.out.print(c.getName() + " "
-		// + ((ResourcePrivilegeEffect)
-		// c.getImmediateEffect()).getResource().getStone());
-		// System.out.println(" " +
-		// c.getPermanentEffect().getResource().getStone());
-		// } catch (Exception e) {
-		// }
-		// }
+		for (TerritoryCard c : tCards) {
+			try {
+				System.out.println(
+						c.getName() + " " + ((ResourcePrivilegeEffect) c.getImmediateEffect()).getResource().getStone()
+								+ " " + c.getPermanentEffect().getResource().getStone());
+			} catch (Exception e) {
+			}
+		}
 	}
 
-	private <T> Collection<T> loadCards(String path, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
+	private <T> T loadCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
 			RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm, Type type) throws IOException {
+		// default JSON location
+		String desktop = System.getProperty("user.home") + "\\Desktop\\";
 		// get file content
-		String text = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(desktop + fileName + ".json")), StandardCharsets.UTF_8);
 		// generate the serializer GSON object
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).registerTypeAdapterFactory(AdapterPerm)
 				.create();
 		// obtain the cards structure using the T generic type
-		Collection<T> cards = gson.fromJson(text, type);
+		T cards = gson.fromJson(text, type);
 		return cards;
 	}
 

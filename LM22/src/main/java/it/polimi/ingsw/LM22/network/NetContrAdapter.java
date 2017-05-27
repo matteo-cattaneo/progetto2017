@@ -1,5 +1,12 @@
 package it.polimi.ingsw.LM22.network;
 
+import it.polimi.ingsw.LM22.controller.AbstractMove;
+import it.polimi.ingsw.LM22.controller.CardMove;
+import it.polimi.ingsw.LM22.controller.CouncilMove;
+import it.polimi.ingsw.LM22.controller.LeaderCardActivation;
+import it.polimi.ingsw.LM22.controller.LeaderCardSelling;
+import it.polimi.ingsw.LM22.controller.MarketMove;
+import it.polimi.ingsw.LM22.controller.WorkMove;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
@@ -31,6 +38,9 @@ public class NetContrAdapter {
 			objMove = new CardMove(getFamilyMember(param[1]), getServantsAdded(param[2]), param[3],
 					Integer.parseInt(param[4]));
 			break;
+		case "Council":
+			objMove = new CouncilMove(getFamilyMember(param[1]), getServantsAdded(param[2]));
+			break;
 		}
 		return objMove;
 	}
@@ -44,9 +54,12 @@ public class NetContrAdapter {
 	}
 
 	private FamilyMember getFamilyMember(String param) {
-		Integer famN = Integer.parseInt(param);
-		FamilyMember fm = player.getMembers().get(famN);
-		return fm;
+	    for (FamilyMember fm : player.getMembers()) {
+	        if (fm.getColor().equals(param)) {
+	    		return fm;
+	        }
+	    }
+		return null;
 	}
 
 	private Resource getServantsAdded(String param) {

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.LM22.network;
+package it.polimi.ingsw.LM22.controller;
 
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Resource;
