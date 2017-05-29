@@ -4,15 +4,19 @@ import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 
 public class VaticanReportManager {
-
-	private final Integer PERIOD_END_DEFINER = 2;
+	
+	private final Integer[] goal = {3, 4, 5};
 	
 	/*
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti
 	 * del periodo corrente per la Chiesa
 	 * */
-	public boolean canGiveSupport(Player player){
-		//TO-DO
+	public boolean canGiveSupport(Player p, Integer period){
+		boolean result = false;
+		if (p.getPersonalBoard().getResources().getFaith() >= goal[period-1]){
+			result = true;
+		}
+		return result;
 	}
 	
 	/*
@@ -28,6 +32,8 @@ public class VaticanReportManager {
 	/*
 	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
 	 * se desidera dare o no il sostegno alla Chiesa
+	 * --> se si allora invochiamo il metodo che toglie i punti fede del giocatore 
+	 * e gli dà i corrispettivi punti vittoria
 	 * */
 	public void askPlayer(Player player){
 		//TO-DO
@@ -41,12 +47,21 @@ public class VaticanReportManager {
 		//TO-DO
 	}
 	
+	public void giveVictoryPointsDueToChurchSubstain(){
+		
+	}
+	
 	/*
 	 * metodo che gestisce tutta la fase di VaticanReport controllando volta 
 	 * per volta tutti i giocatori
 	 * */
-	public void manageVaticanReport(){
-
+	public void manageVaticanReport(Game game){
+		for (Player p: game.getPlayersOrder()){
+			if (canGiveSupport(p, game.getPeriod())){
+				askPlayer(p);
+			}
+			else exCommunicate(p);
+		}
 	}
 	
 	

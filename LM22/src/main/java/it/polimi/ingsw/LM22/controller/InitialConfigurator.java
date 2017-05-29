@@ -1,13 +1,49 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
+
 public class InitialConfigurator extends TurnInizializator{
 
+	private final Integer BASE_WOOD_STONE = 2;
+	private final Integer BASE_SERVANTS = 3;
+	private final Integer BASE_COINS = 5;
+	private final Integer NO_RESOURCE = 0;
 	/*
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati
 	 * che sono dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(){
+	public InitialConfigurator(Game game){
+		giveInitialResources(game);
+	}
+	
+	/*
+	 * metodo in override perchè la prima volta quando viene istanziata la partita
+	 * devo fare cose diverse rispetto a TurnInizializator
+	 * */
+	@Override
+	public void initializeTurn(Game game) {
+		
+	}
 
+	/*
+	 * setta il primo ordine da seguire senza osservare il CouncilSpace
+	 * --> prende l'array dei Player in game e setta la lista del turno (che è vuota inizialmente)
+	 */
+	@Override
+	protected void setNewPlayersOrder(Game game) {
+		Random random = new Random();
+		List<Player> p = new ArrayList<Player>(); 
+		for (Player player: game.getPlayers()){
+			//i put the new item in the list randomly
+			p.add(random.nextInt(p.size()+1), player);
+		}
+		game.setPlayersOrder(p);
 	}
 	
 	/*
@@ -48,14 +84,11 @@ public class InitialConfigurator extends TurnInizializator{
 	 * le risorse con cui i player iniziano la partita in base all'ordine random generato 
 	 * nella creazione della partita stessa
 	 * */
-	private void giveInitialResources(){
-		/*
-		 * potrebbe avere già le risorse memorizzate al suo interno 
-		 * Integer FIVE_PLAYERS = 5;
-		 * Resource[] initialResources = new Resource(FIVE_PLAYERS)
-		 * --> modificare il costruttore in Resource in modo tale da avere anche un costruttore
-		 * personalizzato nella classe permettendo di istanziare le risorse standard iniziali 
-		 * direttamente in questa classe
-		 */
+	private void giveInitialResources(Game game){
+		int cont = 0;
+		for	(Player p: game.getPlayersOrder()) {
+			p.getPersonalBoard().setResources(new Resource(BASE_WOOD_STONE,BASE_WOOD_STONE,BASE_SERVANTS,BASE_COINS+cont,NO_RESOURCE,NO_RESOURCE,NO_RESOURCE));
+			cont++;
+		}
 	}
 }

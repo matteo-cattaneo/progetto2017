@@ -11,6 +11,8 @@ public class BoardGame {
 	private final String CHARACTER = "CHARACTER";
 	private final String BUILDING = "BUILDING";
 	private final String VENTURE = "VENTURE";
+	private final String PRODUCTION = "PRODUCTION";
+	private final String HARVEST = "HARVEST";
 	private final Integer NUM_TOWERS = 4;
 	private Tower towers[];
 	private MarketSpace market[];
@@ -39,6 +41,14 @@ public class BoardGame {
 	
 	public void setMarket(MarketSpace[] market) {
 		this.market = market;
+	}
+	
+	public WorkSpace getWorkSpace(String workType){
+		if (workType==PRODUCTION){
+			return productionSpace;
+		}
+		else 
+			return harvestSpace;
 	}
 	
 	public WorkSpace getProductionSpace() {
@@ -73,12 +83,23 @@ public class BoardGame {
 		this.councilPalace = councilPalace;
 	}
 	
-	public HashMap<String, Integer> getDices() {
-		return dices;
-	}
+//	public HashMap<String, Integer> getDices() {
+//		return dices;
+//	}
 	
 	public void setDices(HashMap<String, Integer> dices) {
 		this.dices = dices;
+	}
+	
+	public void setDice(String color, Integer value){
+		dices.replace(color, value);
+	}
+	
+	/*
+	 * metodo che ritorna il valore del dado del colore passato come parametro
+	 */
+	public Integer getDice(String color){
+		return dices.get(color);
 	}
 	
 }
