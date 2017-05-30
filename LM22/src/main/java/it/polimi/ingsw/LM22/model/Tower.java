@@ -1,13 +1,12 @@
 package it.polimi.ingsw.LM22.model;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Tower {
 	
 	private final Integer LEVELS = 4;
 	private final String towerType;	
-	private HashMap<CardSpace, DevelopmentCard> cards;
+	private Floor floor[];
 	private boolean occupied;
 	private List<FamilyMember> coloredMembersOnIt;
 	
@@ -15,13 +14,13 @@ public class Tower {
 		this.towerType = towerType;
 		occupied = false;
 	}
-	
-	public HashMap<CardSpace, DevelopmentCard> getCards() {
-		return cards;
+
+	public Floor[] getFloor() {
+		return floor;
 	}
 
-	public void setCards(HashMap<CardSpace, DevelopmentCard> cards) {
-		this.cards = cards;
+	public void setFloor(Floor[] floor) {
+		this.floor = floor;
 	}
 
 	public boolean isOccupied() {

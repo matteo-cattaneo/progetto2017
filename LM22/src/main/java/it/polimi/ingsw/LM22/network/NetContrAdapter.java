@@ -23,23 +23,24 @@ public class NetContrAdapter {
 		// select the right move type and initialize with the right dynamic type
 		switch (param[0]) {
 		case "LeaderAct":
-			objMove = new LeaderCardActivation(getLeaderCard(param[1]));
+			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]));
 			break;
 		case "LeaderSell":
-			objMove = new LeaderCardSelling(getLeaderCard(param[1]));
+			objMove = new LeaderCardSelling(p, getLeaderCard(param[1]));
 			break;
 		case "Market":
-			objMove = new MarketMove(getFamilyMember(param[1]), getServantsAdded(param[2]), Integer.parseInt(param[3]));
+			objMove = new MarketMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]),
+					Integer.parseInt(param[3]));
 			break;
 		case "Work":
-			objMove = new WorkMove(getFamilyMember(param[1]), getServantsAdded(param[2]), param[3]);
+			objMove = new WorkMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]), param[3]);
 			break;
 		case "Card":
-			objMove = new CardMove(getFamilyMember(param[1]), getServantsAdded(param[2]), param[3],
+			objMove = new CardMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]), param[3],
 					Integer.parseInt(param[4]));
 			break;
 		case "Council":
-			objMove = new CouncilMove(getFamilyMember(param[1]), getServantsAdded(param[2]));
+			objMove = new CouncilMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]));
 			break;
 		}
 		return objMove;
@@ -54,11 +55,11 @@ public class NetContrAdapter {
 	}
 
 	private FamilyMember getFamilyMember(String param) {
-	    for (FamilyMember fm : player.getMembers()) {
-	        if (fm.getColor().equals(param)) {
-	    		return fm;
-	        }
-	    }
+		for (FamilyMember fm : player.getMembers()) {
+			if (fm.getColor().equals(param)) {
+				return fm;
+			}
+		}
 		return null;
 	}
 
