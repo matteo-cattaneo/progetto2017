@@ -6,6 +6,8 @@ import java.rmi.server.UnicastRemoteObject;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
+	private static final long serialVersionUID = 1L;
+	IClient client = null;
 
 	protected RMIPlayer() throws RemoteException {
 
@@ -13,19 +15,24 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 
 	@Override
 	public String yourTurn() throws RemoteException {
-		return null;
+		client.play();
+		return client.getMove();
 	}
 
 	@Override
 	public void showBoard(String move) throws RemoteException {
-		
+		client.print("_________________________");
+		client.print("| TABELLONE \t \t |");
+		client.print("| \t \t \t |");
+		client.print("|________________________|");
+		client.print("Ultima mossa: " + move);
 	}
 
 	public void login(IClient client) throws RemoteException {
-		
+		this.client = client;
 	}
 
 	public IClient getClient() throws RemoteException {
-		return null;
+		return client; // server ottiene il client
 	}
 }

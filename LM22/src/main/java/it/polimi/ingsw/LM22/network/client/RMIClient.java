@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
-import server.IPlayer;
+import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
 

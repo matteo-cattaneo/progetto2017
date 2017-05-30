@@ -7,14 +7,12 @@ import it.polimi.ingsw.LM22.model.Resource;
 public class CardMove extends MemberMove {
 	private Integer towerSelected;
 	private Integer levelSelected;
-//	private EffectManager effectManager;
 
-	public CardMove(Player p, FamilyMember memberUsed, Resource servantsAdded, Integer towerSelected, Integer levelSelected/*,
-			EffectManager effectManager*/) {
+	public CardMove(Player p, FamilyMember memberUsed, Resource servantsAdded, Integer towerSelected,
+			Integer levelSelected) {
 		super(p, memberUsed, servantsAdded);
 		this.towerSelected = towerSelected;
 		this.levelSelected = levelSelected;
-//		this.effectManager = effectManager;
 	}
 
 	public Integer getTowerSelected() {
@@ -24,8 +22,4 @@ public class CardMove extends MemberMove {
 	public Integer getLevelSelected() {
 		return levelSelected;
 	}
-
-//	public EffectManager getEffectManager() {
-//		return effectManager;
-//	}
 }

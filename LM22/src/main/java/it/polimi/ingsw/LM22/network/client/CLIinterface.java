@@ -155,16 +155,10 @@ public class CLIinterface extends AbstractUI {
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
-			setMove(TERRITORY);
-			break;
 		case 2:
-			setMove(CHARACTER);
-			break;
 		case 3:
-			setMove(BUILDING);
-			break;
 		case 4:
-			setMove(VENTURE);
+			setMove(String.valueOf(option - 1));
 			break;
 		default:
 			printInvalidInput();

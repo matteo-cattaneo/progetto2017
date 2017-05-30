@@ -25,6 +25,7 @@ public class MainGameController {
 	private InitialConfigurator initialConfigurator;
 	private MoveManager moveManager;
 	
+	
 	public MainGameController(){
 		this.initialConfigurator = new InitialConfigurator(game);
 	}

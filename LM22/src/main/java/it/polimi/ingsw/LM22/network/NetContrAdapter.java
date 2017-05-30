@@ -36,7 +36,7 @@ public class NetContrAdapter {
 			objMove = new WorkMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]), param[3]);
 			break;
 		case "Card":
-			objMove = new CardMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]), param[3],
+			objMove = new CardMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]), Integer.parseInt(param[3]),
 					Integer.parseInt(param[4]));
 			break;
 		case "Council":
