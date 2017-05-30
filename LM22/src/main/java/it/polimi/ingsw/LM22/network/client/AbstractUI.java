@@ -2,6 +2,8 @@ package it.polimi.ingsw.LM22.network.client;
 
 public abstract class AbstractUI {
 
+	// public UIController controller;
+
 	public abstract void printMoveMenu();
 
 	public abstract void printMemberMoveMenu();
@@ -33,6 +35,8 @@ public abstract class AbstractUI {
 	public abstract String getName();
 
 	public abstract String getIP();
+
+	public abstract void connectionOK();
 
 	public abstract String getMove();
 

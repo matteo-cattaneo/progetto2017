@@ -1,10 +1,14 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
+import server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
+
+	private static final long serialVersionUID = 1L;
 	private String move;
 	private String name;
 	private AbstractUI UI;
@@ -13,29 +17,27 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 		this.UI = UI;
 	}
 
-	@Override
-	public void connect(String name, String ip) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void play() throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void print(String move) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String getMove() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return move;
 	}
 
-	
+	public void connect(String name, String ip) throws RemoteException {
+		try {
+			this.name = name;
+			IPlayer server = (IPlayer) Naming.lookup("rmi://" + ip + "/MSG");
+			server.login(this);
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
+			UI.showMsg("RMI connection error!");
+		}
+		UI.connectionOK();
+	}
+
+	public void play() throws RemoteException {
+		UI.printMoveMenu();
+		move = UI.getMove();
+	}
+
+	public void print(String move) throws RemoteException {
+		UI.showMsg(move);
+	}
 }

@@ -82,8 +82,10 @@ public class GUIinterface extends AbstractUI {
 
 	@Override
 	public int showConnectionSelection() {
-		// TODO Auto-generated method stub
 		return 0;
+		
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -96,6 +98,12 @@ public class GUIinterface extends AbstractUI {
 	public String getIP() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void connectionOK() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

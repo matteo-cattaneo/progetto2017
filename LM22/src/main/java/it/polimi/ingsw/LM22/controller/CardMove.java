@@ -1,22 +1,23 @@
 package it.polimi.ingsw.LM22.controller;
 
 import it.polimi.ingsw.LM22.model.FamilyMember;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 
 public class CardMove extends MemberMove {
-	private String towerSelected;
+	private Integer towerSelected;
 	private Integer levelSelected;
 //	private EffectManager effectManager;
 
-	public CardMove(FamilyMember memberUsed, Resource servantsAdded, String towerSelected, Integer levelSelected/*,
+	public CardMove(Player p, FamilyMember memberUsed, Resource servantsAdded, Integer towerSelected, Integer levelSelected/*,
 			EffectManager effectManager*/) {
-		super(memberUsed, servantsAdded);
+		super(p, memberUsed, servantsAdded);
 		this.towerSelected = towerSelected;
 		this.levelSelected = levelSelected;
 //		this.effectManager = effectManager;
 	}
 
-	public String getTowerSelected() {
+	public Integer getTowerSelected() {
 		return towerSelected;
 	}
 

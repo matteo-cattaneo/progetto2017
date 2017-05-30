@@ -1,7 +1,10 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.rmi.RemoteException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class SocketClient implements IClient {
 	private final int SOCKET_PORT = 1337;
@@ -13,30 +16,44 @@ public class SocketClient implements IClient {
 		this.UI = UI;
 	}
 
-	@Override
-	public void connect(String name, String ip) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	@SuppressWarnings("resource")
+	public void connect(String name, String ip) {
+		this.name = name;
+		try {
+			socket = new Socket(ip, SOCKET_PORT);
+		} catch (IOException e) {
+			UI.showMsg("Socket connection error!");
+		}
+		UI.connectionOK();
+		try {
+			Scanner socketIn = new Scanner(socket.getInputStream());
+			PrintWriter socketOut = new PrintWriter(socket.getOutputStream(), true);
+			while (true) {
+				String socketLine = socketIn.nextLine();
+				if (socketLine.equals("start")) {
+					UI.printMoveMenu();
+					socketOut.println(UI.getMove());
+				} else
+					UI.showMsg(socketLine);
+			}
+		} catch (NoSuchElementException | IOException e) {
+			UI.showMsg("Connessione chiusa");
+		}
+
 	}
 
-	@Override
-	public void play() throws RemoteException {
-		// TODO Auto-generated method stub
-		
+	public void play() {
+
 	}
 
-	@Override
-	public void print(String move) throws RemoteException {
+	public void print(String move) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	@Override
-	public String getMove() throws RemoteException {
+	public String getMove() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }

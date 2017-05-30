@@ -101,7 +101,6 @@ public class TurnInizializator {
 	 */
 	protected void setNewPlayersOrder(Game game){
 		List<FamilyMember> members= game.getBoardgame().getCouncilPalace().getMembers();
-		List<Player> players = game.getPlayersOrder();
 		List<Player> newOrder = new ArrayList<Player>();
 		for (FamilyMember m: members){
 			if (!newOrder.contains(m.getPlayer()))
@@ -110,7 +109,7 @@ public class TurnInizializator {
 		}
 			
 		game.getBoardgame().getCouncilPalace().setMembers(null);
-		for (Player p: players){
+		for (Player p: game.getPlayersOrder()){
 			if (!newOrder.contains(p)){
 				newOrder.add(p);
 			}
@@ -121,7 +120,7 @@ public class TurnInizializator {
 	/*
 	 * metodo che si occupa di riportare tutti i familiari al Player
 	 * e settare il loro flag used a false 
-	 * pulendo tutti i vari Abstract
+	 * pulendo tutti i vari AbstractSpace
 	 */
 	private void retireMembers(Game game){
 		for (Player p: game.getPlayers()){
