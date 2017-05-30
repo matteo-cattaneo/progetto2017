@@ -16,11 +16,11 @@ public class PersonalBonusTile {
 		this.harvestEffect = harvestEffect;
 	}
 
-	public ProductionEffect getProductionEffect() {
+	public ResourcePrivilegeEffect getProductionEffect() {
 		return productionEffect;
 	}
 
-	public HarvestEffect getHarvestEffect() {
+	public ResourcePrivilegeEffect getHarvestEffect() {
 		return harvestEffect;
 	}
 

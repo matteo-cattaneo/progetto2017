@@ -67,7 +67,7 @@ public class PersonalBoard {
 		this.venturesCards = venturesCards;
 	}
 	
-	public List<ExCommunications> getExCommunications() {
+	public List<ExCommunication> getExCommunications() {
 		return exCommunications;
 	}
 	

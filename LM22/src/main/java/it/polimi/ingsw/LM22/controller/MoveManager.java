@@ -3,31 +3,44 @@ package it.polimi.ingsw.LM22.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import it.polimi.ingsw.LM22.model.TerritoryCard;
+import it.polimi.ingsw.LM22.model.Tower;
+import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardSpace;
+import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Resource;
 
 public class MoveManager {
 
-	private final String[] TOWERS = {"TERRITORY", "CHARACTER", "BUILDING", "VENTURE"};
+	private final Integer TERRITORY = 0;
+	private final Integer CHARACTER = 1;
+	private final Integer BUILDING = 2;
+	private final Integer VENTURE = 3;
 	private Game game = null;
-	
-	public MoveManager(Game game){
-		this.game = game;
-	}
-	
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	public EffectManager effectManager;
+
+	public MoveManager(Game game) {
+		this.game = game;
+	}
 
 	public void manageMove(AbstractMove move) {
 		boolean checkResult = false;
 		String name;
 		Method method;
+		if (move instanceof MemberMove){
+			if (((MemberMove)move).getMemberUsed().isUsed())
+				//dobbiamo segnalare al giocatore che la mossa non è valida
+				//--> InvalidMoveException ?
+				return;
+		}
 		try {
 			name = move.getClass().getSimpleName().toLowerCase() + "Allowed";
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
-		} catch (NoSuchMethodException | IllegalAccessException	| InvocationTargetException e1) {
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -41,21 +54,69 @@ public class MoveManager {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	/*
-	 * gestisce lo spostamento del familiare, il settaggio degli spazi, torri
-	 * etc
-	 */
-	private void moveMember() {
-
+		else 
+			// throw new InvalidMoveException
+			return;
 	}
 
 	/*
 	 * controlla se una mossa del tipo CardMove è ammessa o no
 	 */
 	private boolean cardmoveAllowed(CardMove cardMove) {
+		if (!checkCardSpace(cardMove))
+			return false;
+		// check se la torre è già occupata da un familiare dello stesso player
+		if (game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
+				.contains(cardMove.getPlayer().getColor()))
+			return false;
+		if (!checkCardCost(cardMove))
+			return false;
+		return false;
+	}
 
+	private boolean checkCardCost(CardMove cardMove) {
+		int tower = cardMove.getTowerSelected();
+		Tower t = game.getBoardgame().getTowers()[tower];
+		int floor = cardMove.getLevelSelected();
+		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
+		//dobbiamo controllare se ill player non ha la carta Leader delle 3 monete in più
+		// ATTENZIONE
+		if (t.isOccupied()) {
+			switch (tower) {
+			// case 3: if
+			// (game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getFloor().)
+			case 2: if (!resourceHandler.enoughResources((BuildingCard)card, t)) {
+					return false;
+				}
+			case 1: if (!resourceHandler.enoughResources((CharacterCard)card,t)) {
+					return false;
+				}
+			case 0: if (!resourceHandler.enoughResources((TerritoryCard)card,t)) {
+					return false;
+				}
+			}
+
+		}
+	}
+
+	private boolean checkCardSpace(CardMove cardMove) {
+		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
+		if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
+				+ cardMove.getServantsAdded().getServants()))
+			return false;
+		/*
+		 * questo controllo deve essere evitato se il Player ha la carta
+		 * LUDOVICO ARIOSTO ATTIVATO
+		 */
+		if (space.getMember() != null)
+			return false;
+		Resource bonus = space.getReward();
+		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
+		return true;
+	}
+
+	private CardSpace searchCardSpace(Integer towerSelected, Integer levelSelected) {
+		return game.getBoardgame().getTowers()[towerSelected].getFloor()[levelSelected].getSpace();
 	}
 
 	/*
@@ -65,25 +126,39 @@ public class MoveManager {
 
 	}
 
+
 	/*
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
-	private boolean marketMoveAllowed(MarketMove marketMove) {
-
+	private boolean marketmoveAllowed(MarketMove marketMove) {
+		//check per controllare se ho scomunica del tipo NoMarkeEx
+		int pos = marketMove.getMarketSpaceSelected();
+		if (game.getBoardgame().getMarket()[pos].getMember() != null)
+			return false;
+		if (marketMove.getMemberUsed().getValue() < game.getBoardgame().getMarket()[pos].getSpaceRequirement())
+			return false;
+		return true;
 	}
 
 	/*
 	 * gestisce una mossa del tipo MarketMove
 	 */
-	private void marketMoveHandle(MarketMove marketMove) {
-
+	private void marketmoveHandle(MarketMove marketMove) {
+		int opt = marketMove.getMarketSpaceSelected();
+		game.getBoardgame().getMarket()[opt].setMember(marketMove.getMemberUsed());
+		marketMove.getMemberUsed().setUsed(true);
+		/*
+		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
+		 */
+		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), game.getBoardgame().getMarket()[opt].getReward());
+		resourceHandler.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege());
 	}
 
 	/*
 	 * controlla se una mossa del tipo WorkMove è ammessa o no
 	 */
 	private boolean workMoveAllowed(WorkMove workMove) {
-
+		
 	}
 
 	/*
@@ -96,15 +171,23 @@ public class MoveManager {
 	/*
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
-	private boolean councilMoveAllowed(CouncilMove councilMove) {
-
+	private boolean councilmoveAllowed(CouncilMove councilMove) {
+		if (councilMove.getMemberUsed().getValue() < game.getBoardgame().getCouncilPalace().getSpaceRequirement())
+			return false;
+		return true;
 	}
 
 	/*
 	 * gestisce una mossa del tipo CouncilMove
 	 */
 	private void councilMoveHandle(CouncilMove councilMove) {
-
+		councilMove.getMemberUsed().setUsed(true);
+		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
+		/*
+		 * prendo le varie risorse (moneta oppure privilegi del consiglio)
+		 */
+		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(), game.getBoardgame().getMarket()[opt].getReward());
+		resourceHandler.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
 	}
 
 	/*
@@ -130,45 +213,8 @@ public class MoveManager {
 	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
 	 * requisito relativo allo spazio azione selezionato per la mossa
 	 */
-	private boolean checkCardSpace(CardMove cardMove) {
-		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
-		if (space.getSpaceRequirement()>(cardMove.getMemberUsed().getValue()+cardMove.getServantsAdded().getServants()))
-			return false;
-		/*
-		 * questo controllo deve essere evitato se il Player ha la carta LUDOVICO ARIOSTO ATTIVATO
-		 */
-		if (space.getMember() != null)
-			return false;
-		Resource bonus = space.getReward();
-		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
-		return true;
-	}
-
-	private CardSpace searchCardSpace(Integer towerSelected, Integer levelSelected) {
-		return game.getBoardgame().getTowers()[towerSelected].getFloor()[levelSelected].getSpace();
-	}
-
-	private boolean checkMarketSpace() {
-
-	}
 
 	private boolean checkWorkSpace() {
-
-	}
-
-	private boolean checkCouncilSpace() {
-
-	}
-
-	/*
-	 * controlla se la torre è occupata e aggiunge il costo delle 3 monete
-	 * all'ipotetico costo della carta che il player vuole prendere -->
-	 * controlla se il giocatore ha attivato la Carta Leader specifica per
-	 * questa regola --> deve essere controllato prima di ricevere il bonus
-	 * perchè le monete che ricevo dagli spazi azione non possono essere
-	 * utilizzati per pagare questo costo aggiuntivo
-	 */
-	private void manageOccupiedTower() {
 
 	}
 

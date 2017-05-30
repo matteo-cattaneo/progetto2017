@@ -8,7 +8,7 @@ public class Tower {
 	private final String towerType;	
 	private Floor floor[];
 	private boolean occupied;
-	private List<FamilyMember> coloredMembersOnIt;
+	private List<String> coloredMembersOnIt;
 	
 	public Tower(String towerType) {
 		this.towerType = towerType;
@@ -31,11 +31,11 @@ public class Tower {
 		this.occupied = occupied;
 	}
 	
-	public List<FamilyMember> getColoredMembersOnIt() {
+	public List<String> getColoredMembersOnIt() {
 		return coloredMembersOnIt;
 	}
 	
-	public void setColoredMembersOnIt(List<FamilyMember> coloredMembersOnIt) {
+	public void setColoredMembersOnIt(List<String> coloredMembersOnIt) {
 		this.coloredMembersOnIt = coloredMembersOnIt;
 	}
 	
