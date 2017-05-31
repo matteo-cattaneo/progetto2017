@@ -40,7 +40,8 @@ public class MainGameController implements Runnable {
 		this.n = n;
 		this.player = player;
 		this.ordine = ordine;
-		this.initialConfigurator = new InitialConfigurator(game);
+		// commentato per provare la parte network
+		// this.initialConfigurator = new InitialConfigurator(game);
 	}
 
 	@Override

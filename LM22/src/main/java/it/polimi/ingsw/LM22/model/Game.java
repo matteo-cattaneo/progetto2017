@@ -1,11 +1,13 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
-public class Game {
+public class Game implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private final Integer NUM_BONUS_TILE = 4;
 	private BoardGame boardgame;
 	private Integer period;
@@ -19,9 +21,10 @@ public class Game {
 	private Collection<LeaderCard> leaderCards;
 	private PersonalBonusTile personalBonusTile[];
 
-	
-	/*durante la creazione della Game dovrò inizializzare tutti 
-	 * gli attributi messi a final (saranno sempre quelli)*/
+	/*
+	 * durante la creazione della Game dovrò inizializzare tutti gli attributi
+	 * messi a final (saranno sempre quelli)
+	 */
 	public BoardGame getBoardgame() {
 		return boardgame;
 	}

@@ -18,7 +18,6 @@ public class SocketClient implements IClient {
 		this.UI = UI;
 	}
 
-	@SuppressWarnings("resource")
 	public void connect(String name, String ip) {
 		this.name = name;
 		try {
@@ -28,16 +27,17 @@ public class SocketClient implements IClient {
 		}
 		UI.connectionOK();
 		try {
-			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 			ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 			while (true) {
-				String socketLine = socketIn.readLine();
+				String socketLine = socketIn.readObject().toString();
+				UI.showMsg(socketLine);
 				if (socketLine.equals("start")) {
-					UI.showBoard((Game) socketIn.readObject());
 					UI.printMoveMenu();
-					socketOut.writeObject(UI.getMove());
+					socketOut.writeChars(UI.getMove());
 				} else
-					UI.showMsg(socketLine);
+					UI.showBoard((Game) socketIn.readObject());
+					
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			UI.showMsg("Connessione chiusa");
@@ -45,16 +45,20 @@ public class SocketClient implements IClient {
 
 	}
 
-	public void play() {
-
-	}
-
-	public void print(String move) {
+	@Override
+	public void play() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public String getMove() {
+	@Override
+	public void print(String move) throws RemoteException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getMove() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -62,6 +66,7 @@ public class SocketClient implements IClient {
 	@Override
 	public void showBoard(Game game) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 }

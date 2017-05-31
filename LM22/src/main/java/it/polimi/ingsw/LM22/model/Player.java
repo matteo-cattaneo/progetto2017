@@ -10,51 +10,59 @@ public class Player {
 	private final String nickname;
 	private final String color;
 	private final List<FamilyMember> members;
-	private final PersonalBoard personalBoard;
+	private final PersonalBoard personalBoard = new PersonalBoard();
 	private List<ExCommunication> exCommunications;
 	private List<LeaderCard> leaderCards;
 	private List<Effect> effects;
-	
+
+	public Player(String nickname, String color, List<FamilyMember> members) {
+		this.nickname = nickname;
+		this.color = color;
+		this.members = members;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}
-	/*tutti i metodi SET per adesso sono commentati per decidere 
-	 * poi come verrà inizializzata tutta la partita*/
-//	public void setNickname(String nickname) {
-//		this.nickname = nickname;
-//	}
-	
+	/*
+	 * tutti i metodi SET per adesso sono commentati per decidere poi come verrà
+	 * inizializzata tutta la partita
+	 */
+	// public void setNickname(String nickname) {
+	// this.nickname = nickname;
+	// }
+
 	public String getColor() {
 		return color;
 	}
-	
-//	public void setColor(String color) {
-//		this.color = color;
-//	}
-	
+
+	// public void setColor(String color) {
+	// this.color = color;
+	// }
+
 	public List<FamilyMember> getMembers() {
 		return members;
 	}
-	
-//	public void setMembers(List<FamilyMember> members) {
-//		this.members = members;
-//	}
-	
+
+	// public void setMembers(List<FamilyMember> members) {
+	// this.members = members;
+	// }
+
 	public PersonalBoard getPersonalBoard() {
 		return personalBoard;
 	}
-	
-//	public void setPersonalBoard(PersonalBoard personalBoard) {
-//		this.personalBoard = personalBoard;
-//	}
-	
+
+	// public void setPersonalBoard(PersonalBoard personalBoard) {
+	// this.personalBoard = personalBoard;
+	// }
+
 	public List<ExCommunication> getExCommunications() {
 		return exCommunications;
 	}
-	
-//	public void setExCommunications(List<ExInterface> exCommunications) {
-//		this.exCommunications = exCommunications;
-//	}
+
+	// public void setExCommunications(List<ExInterface> exCommunications) {
+	// this.exCommunications = exCommunications;
+	// }
 
 	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
@@ -64,6 +72,4 @@ public class Player {
 		return effects;
 	}
 
-	
-	
 }

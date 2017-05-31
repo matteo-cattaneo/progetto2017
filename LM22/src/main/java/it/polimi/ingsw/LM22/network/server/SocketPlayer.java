@@ -18,25 +18,19 @@ public class SocketPlayer implements IPlayer {
 	}
 
 	@Override
-	public String yourTurn() throws IOException {
-		out.writeObject("start");
-		return in.readLine();
+	public String yourTurn() throws ClassNotFoundException, IOException {
+		out.writeChars("start");
+		return in.readObject().toString();
 	}
 
 	@Override
 	public void showBoard(Game game) throws IOException {
 		out.writeObject(game);
-		// out.println("_________________________");
-		// out.println("| TABELLONE \t \t |");
-		// out.println("| \t \t \t |");
-		// out.println("|________________________|");
-		// out.println("Ultima mossa: " + msg);
 	}
 
 	@Override
 	public void login(IClient client) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

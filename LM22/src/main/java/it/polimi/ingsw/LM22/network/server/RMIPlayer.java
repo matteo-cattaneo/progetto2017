@@ -22,11 +22,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 
 	@Override
 	public void showBoard(Game game) throws RemoteException {
-//		client.print("_________________________");
-//		client.print("| TABELLONE \t \t |");
-//		client.print("| \t \t \t |");
-//		client.print("|________________________|");
-//		client.print("Ultima mossa: " + move);
+		client.showBoard(game);
 	}
 
 	public void login(IClient client) throws RemoteException {
@@ -34,6 +30,6 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	}
 
 	public IClient getClient() throws RemoteException {
-		return client; // server ottiene il client
+		return client;
 	}
 }

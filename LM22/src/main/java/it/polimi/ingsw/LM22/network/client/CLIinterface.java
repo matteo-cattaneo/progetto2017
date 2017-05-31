@@ -29,10 +29,6 @@ public class CLIinterface extends AbstractUI {
 	private Scanner in = new Scanner(System.in);
 	String move = new String();
 
-	public CLIinterface() {
-		// printMoveMenu();
-	}
-
 	public void setMove(String add) {
 		move = move + add + "$";
 	}
@@ -301,5 +297,9 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) {
 		// game object deserialization
+		showMsg("_________________________");
+		showMsg("| " + game + " \t \t |");
+		showMsg("| \t \t \t |");
+		showMsg("|________________________|");
 	}
 }

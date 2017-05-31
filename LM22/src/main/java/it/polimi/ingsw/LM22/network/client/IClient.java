@@ -15,5 +15,5 @@ public interface IClient extends Remote {
 
 	public String getMove() throws RemoteException;
 
-	public void showBoard(Game game);
+	public void showBoard(Game game) throws RemoteException;
 }

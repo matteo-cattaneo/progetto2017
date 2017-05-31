@@ -7,21 +7,26 @@ public class FaithGrid {
 	private final Integer EXNUMBER = 3;
 	private final ExCommunication exCommunicationTiles[];
 	private Resource rewards[];
-	
+
 	/*
 	 * I reward devono essere caricati da file --> ATTENZIONE ai costruttori
-	 * */
+	 */
+
 	public ExCommunication[] getExCommunicationTiles() {
 		return exCommunicationTiles;
 	}
 
-	
+	public FaithGrid(ExCommunication[] exCommunicationTiles, Resource[] rewards) {
+		this.exCommunicationTiles = exCommunicationTiles;
+		this.rewards = rewards;
+	}
+
 	public Resource[] getRewards() {
 		return rewards;
 	}
-	
+
 	public void setRewards(Resource[] rewards) {
 		this.rewards = rewards;
 	}
-	
+
 }

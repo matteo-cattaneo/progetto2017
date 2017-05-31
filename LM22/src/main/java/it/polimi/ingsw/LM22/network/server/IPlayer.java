@@ -9,7 +9,7 @@ import it.polimi.ingsw.LM22.network.client.IClient;
 
 public interface IPlayer extends Remote {
 
-	public String yourTurn() throws RemoteException, IOException;
+	public String yourTurn() throws RemoteException, ClassNotFoundException, IOException;
 
 	public void showBoard(Game game) throws RemoteException, IOException;
 

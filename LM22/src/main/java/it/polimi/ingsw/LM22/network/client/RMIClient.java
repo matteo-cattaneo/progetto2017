@@ -43,7 +43,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	}
 
 	@Override
-	public void showBoard(Game game) {
+	public void showBoard(Game game) throws RemoteException {
 		UI.showBoard(game);
 	}
 }
