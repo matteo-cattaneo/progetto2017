@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import it.polimi.ingsw.LM22.model.Game;
+
 public class GUIinterface extends AbstractUI {
 
 	@Override
@@ -114,6 +116,12 @@ public class GUIinterface extends AbstractUI {
 
 	@Override
 	public void showMsg(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showBoard(Game game) {
 		// TODO Auto-generated method stub
 		
 	}

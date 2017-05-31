@@ -2,6 +2,8 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.util.Scanner;
 
+import it.polimi.ingsw.LM22.model.Game;
+
 public class CLIinterface extends AbstractUI {
 
 	private final String ORANGE = "Orange";
@@ -294,5 +296,10 @@ public class CLIinterface extends AbstractUI {
 	public void connectionOK() {
 		showMsg("Connessione stabilita!");
 		showMsg("Attendi il tuo turno...");
+	}
+
+	@Override
+	public void showBoard(Game game) {
+		// game object deserialization
 	}
 }

@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import it.polimi.ingsw.LM22.controller.MainGameController;
+
 public class StartServer {
 	private final static int SOCKET_PORT = 1337;
 	static ServerSocket serverSocket;
@@ -71,7 +73,7 @@ public class StartServer {
 			i++;
 		}
 		System.out.println("Inizio partita");
-		executor.submit(new Room(player, ordine, i));
+		executor.submit(new MainGameController(player, ordine, i));
 	}
 
 	public Integer attesaLogin(Integer t, SocketConnection conn) throws RemoteException, InterruptedException {
@@ -85,7 +87,6 @@ public class StartServer {
 		}
 		return t;
 	}
-
 }
 
 class SocketConnection implements Runnable {

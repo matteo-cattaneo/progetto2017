@@ -3,6 +3,7 @@ package it.polimi.ingsw.LM22.network.server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
@@ -20,12 +21,12 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	}
 
 	@Override
-	public void showBoard(String move) throws RemoteException {
-		client.print("_________________________");
-		client.print("| TABELLONE \t \t |");
-		client.print("| \t \t \t |");
-		client.print("|________________________|");
-		client.print("Ultima mossa: " + move);
+	public void showBoard(Game game) throws RemoteException {
+//		client.print("_________________________");
+//		client.print("| TABELLONE \t \t |");
+//		client.print("| \t \t \t |");
+//		client.print("|________________________|");
+//		client.print("Ultima mossa: " + move);
 	}
 
 	public void login(IClient client) throws RemoteException {

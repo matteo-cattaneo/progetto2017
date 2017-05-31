@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import it.polimi.ingsw.LM22.model.Game;
+
 public abstract class AbstractUI {
 
 	// public UIController controller;
@@ -41,4 +43,6 @@ public abstract class AbstractUI {
 	public abstract String getMove();
 
 	public abstract void showMsg(String s);
+	
+	public abstract void showBoard(Game game);
 }

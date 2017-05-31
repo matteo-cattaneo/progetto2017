@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
+import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
@@ -39,5 +40,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 
 	public void print(String move) throws RemoteException {
 		UI.showMsg(move);
+	}
+
+	@Override
+	public void showBoard(Game game) {
+		UI.showBoard(game);
 	}
 }

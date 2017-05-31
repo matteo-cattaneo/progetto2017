@@ -1,10 +1,12 @@
 package it.polimi.ingsw.LM22.network.client;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.rmi.RemoteException;
+
+import it.polimi.ingsw.LM22.model.Game;
 
 public class SocketClient implements IClient {
 	private final int SOCKET_PORT = 1337;
@@ -26,17 +28,18 @@ public class SocketClient implements IClient {
 		}
 		UI.connectionOK();
 		try {
-			Scanner socketIn = new Scanner(socket.getInputStream());
-			PrintWriter socketOut = new PrintWriter(socket.getOutputStream(), true);
+			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+			ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
 			while (true) {
-				String socketLine = socketIn.nextLine();
+				String socketLine = socketIn.readLine();
 				if (socketLine.equals("start")) {
+					UI.showBoard((Game) socketIn.readObject());
 					UI.printMoveMenu();
-					socketOut.println(UI.getMove());
+					socketOut.writeObject(UI.getMove());
 				} else
 					UI.showMsg(socketLine);
 			}
-		} catch (NoSuchElementException | IOException e) {
+		} catch (ClassNotFoundException | IOException e) {
 			UI.showMsg("Connessione chiusa");
 		}
 
@@ -56,4 +59,9 @@ public class SocketClient implements IClient {
 		return null;
 	}
 
+	@Override
+	public void showBoard(Game game) {
+		// TODO Auto-generated method stub
+		
+	}
 }

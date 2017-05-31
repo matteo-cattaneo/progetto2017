@@ -1,34 +1,36 @@
 package it.polimi.ingsw.LM22.network.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
+import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class SocketPlayer implements IPlayer {
-	PrintWriter out;
-	Scanner in;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 
 	public SocketPlayer(Socket socket) throws IOException {
-		out = new PrintWriter(socket.getOutputStream(), true);
-		in = new Scanner(socket.getInputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());
+		in = new ObjectInputStream(socket.getInputStream());
 	}
 
 	@Override
-	public String yourTurn() {
-		out.println("start");
-		return in.nextLine();
+	public String yourTurn() throws IOException {
+		out.writeObject("start");
+		return in.readLine();
 	}
 
 	@Override
-	public void showBoard(String msg) {
-		out.println("_________________________");
-		out.println("| TABELLONE \t \t |");
-		out.println("| \t \t \t |");
-		out.println("|________________________|");
-		out.println("Ultima mossa: " + msg);
+	public void showBoard(Game game) throws IOException {
+		out.writeObject(game);
+		// out.println("_________________________");
+		// out.println("| TABELLONE \t \t |");
+		// out.println("| \t \t \t |");
+		// out.println("|________________________|");
+		// out.println("Ultima mossa: " + msg);
 	}
 
 	@Override
