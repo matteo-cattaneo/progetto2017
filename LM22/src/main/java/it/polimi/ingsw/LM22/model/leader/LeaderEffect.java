@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public abstract class LeaderEffect {
+import it.polimi.ingsw.LM22.model.Effect;
+
+public abstract class LeaderEffect extends Effect{
 
 }

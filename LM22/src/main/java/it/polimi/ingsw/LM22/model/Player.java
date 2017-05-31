@@ -13,6 +13,7 @@ public class Player {
 	private final PersonalBoard personalBoard;
 	private List<ExCommunication> exCommunications;
 	private List<LeaderCard> leaderCards;
+	private List<Effect> effects;
 	
 	public String getNickname() {
 		return nickname;
@@ -57,6 +58,10 @@ public class Player {
 
 	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
+	}
+
+	public List<Effect> getEffects() {
+		return effects;
 	}
 
 	

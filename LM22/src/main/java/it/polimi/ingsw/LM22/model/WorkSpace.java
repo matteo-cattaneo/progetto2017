@@ -7,6 +7,7 @@ public class WorkSpace extends AbstractSpace{
 	private final String workType; 
 	private final Integer MALUS = 3;
 	private List<FamilyMember> members;
+	private List<String> coloredMemberOnIt;
 
 	public WorkSpace(Integer requirement, String workType){
 		super(requirement);
@@ -22,5 +23,11 @@ public class WorkSpace extends AbstractSpace{
 	public String getWorkType() {
 		return workType;
 	}
+
+	public List<String> getColoredMemberOnIt() {
+		return coloredMemberOnIt;
+	}
+	
+	
 		
 }
