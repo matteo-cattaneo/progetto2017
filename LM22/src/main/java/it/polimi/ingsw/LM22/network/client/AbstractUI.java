@@ -2,9 +2,8 @@ package it.polimi.ingsw.LM22.network.client;
 
 import it.polimi.ingsw.LM22.model.Game;
 
+//Classe astratta estesa da CLI e GUI interface
 public abstract class AbstractUI {
-
-	// public UIController controller;
 
 	public abstract void printMoveMenu();
 

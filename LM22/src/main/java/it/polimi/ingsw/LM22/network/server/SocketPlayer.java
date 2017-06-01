@@ -7,25 +7,36 @@ import java.net.Socket;
 
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.network.client.IClient;
+/*
+ * classe utilizzata per gestire la comunicazione socket con il client 
+ */
 
 public class SocketPlayer implements IPlayer {
 	ObjectOutputStream out;
 	ObjectInputStream in;
 
+	// inizializzo gli stream di comunicazione
 	public SocketPlayer(Socket socket) throws IOException {
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 	}
 
+	// indica al client quando è il suo turno e restituisce la mossa da lui
+	// effettuata
 	@Override
 	public String yourTurn() throws ClassNotFoundException, IOException {
-		out.writeChars("start");
-		return in.readObject().toString();
+		out.writeUTF("start");
+		out.flush();
+
+		String move = in.readUTF();
+		return move;
 	}
 
+	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
 		out.writeObject(game);
+		out.flush();
 	}
 
 	@Override

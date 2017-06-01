@@ -4,6 +4,10 @@ import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.Game;
 
+/*
+ * Classe che contiene tutti i metodi che permettono all'utente 
+di interfacciarsi con la CLI
+*/
 public class CLIinterface extends AbstractUI {
 
 	private final String ORANGE = "Orange";
@@ -29,15 +33,24 @@ public class CLIinterface extends AbstractUI {
 	private Scanner in = new Scanner(System.in);
 	String move = new String();
 
+	/*
+	 * costruisco la stringa mossa per poi poterla inviare al server
+	 */
 	public void setMove(String add) {
 		move = move + add + "$";
 	}
 
+	/*
+	 * restituisce al chiamante la mossa creata in precedenza tramite il menu
+	 */
 	@Override
 	public String getMove() {
 		return move;
 	}
 
+	/*
+	 * menu principale da cui parte la costruzione guidata della mossa
+	 */
 	@Override
 	public void printMoveMenu() {
 		showMsg("Choose your Move:");
@@ -131,7 +144,6 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printServantsAddictionMenu() {
-		// String useless = in.nextLine();
 		showMsg("Insert how many servants you want to use");
 		showMsg("Please insert a positive number or zero");
 		Integer servants = in.nextInt();
@@ -253,6 +265,9 @@ public class CLIinterface extends AbstractUI {
 
 	}
 
+	/*
+	 * permette di selezionare la connessione desiderata
+	 */
 	@Override
 	public int showConnectionSelection() {
 		int connType;
@@ -263,6 +278,9 @@ public class CLIinterface extends AbstractUI {
 		return connType;
 	}
 
+	/*
+	 * richiede il nome del giocatore e lo restituisce al chiamante
+	 */
 	@Override
 	public String getName() {
 		String name;
@@ -273,6 +291,9 @@ public class CLIinterface extends AbstractUI {
 		return name;
 	}
 
+	/*
+	 * richiede l'IP del server a cui connettersi e lo restituisce al chiamante
+	 */
 	@Override
 	public String getIP() {
 		String ip;
@@ -283,6 +304,9 @@ public class CLIinterface extends AbstractUI {
 		return ip;
 	}
 
+	/*
+	 * metodo che semplicemente permette di visualizzare messaggi all'utente
+	 */
 	@Override
 	public void showMsg(String s) {
 		System.out.println(s);
@@ -294,11 +318,17 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Attendi il tuo turno...");
 	}
 
+	/*
+	 * ricevuto il model lo analizza e visualizza il tabellone e le informazioni
+	 * necessarie all'utente per poter giocare
+	 * 
+	 * WIP
+	 */
 	@Override
 	public void showBoard(Game game) {
 		// game object deserialization
 		showMsg("_________________________");
-		showMsg("| " + game + " \t \t |");
+		showMsg("| Periodo:" + game.getPeriod() + " \t \t |");
 		showMsg("| \t \t \t |");
 		showMsg("|________________________|");
 	}

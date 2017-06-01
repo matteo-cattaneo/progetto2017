@@ -26,7 +26,7 @@ public class MainGameController implements Runnable {
 	private final Integer PERIOD_END_DEFINER = 2;
 
 	private Integer TIMER_PER_MOVE; // caricabile da file
-	private Game game;
+	private Game game = new Game();
 	private IPlayer player[];
 	private int[] ordine;
 	private int n;
@@ -40,6 +40,7 @@ public class MainGameController implements Runnable {
 		this.n = n;
 		this.player = player;
 		this.ordine = ordine;
+		game.setPeriod(1);
 		// commentato per provare la parte network
 		// this.initialConfigurator = new InitialConfigurator(game);
 	}

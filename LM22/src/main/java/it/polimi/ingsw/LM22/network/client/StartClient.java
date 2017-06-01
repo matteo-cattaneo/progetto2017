@@ -10,11 +10,17 @@ public class StartClient {
 
 	public static void main(String[] args) {
 		StartClient start = new StartClient();
+		// avvio il setup del client
 		start.setup();
 	}
 
 	public void setup() {
+		// stampo la selezione dell'intefaccia
 		printUISelection();
+		/*
+		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
+		 * e inizializzo con il giusto tipo dinamico
+		 */
 		switch (UI.showConnectionSelection()) {
 		case 1:
 			try {
@@ -27,12 +33,21 @@ public class StartClient {
 			client = new SocketClient(UI);
 			break;
 		}
+		/*
+		 * con i metodi relativi alla prpria connessione e UI effettuo la
+		 * connessione
+		 */
+
 		try {
 			client.connect(UI.getName(), UI.getIP());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 	}
+	/*
+	 * permette la scelta dell' interfaccia da utilizzare durante la partita e
+	 * inizializza con il giusto tipo dinamico
+	 */
 
 	public void printUISelection() {
 		Scanner stdin = new Scanner(new FilterInputStream(System.in) {
