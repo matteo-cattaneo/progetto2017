@@ -8,50 +8,61 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class MainGameController implements Runnable {
+	// Colori giocatori
+	private final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
+	// Colori familiari
+	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
 	private final Integer PERIOD_END_DEFINER = 2;
 
 	private Integer TIMER_PER_MOVE; // caricabile da file
 	private Game game = new Game();
-	private IPlayer player[];
+	private IPlayer iplayer[];
 	private int[] ordine;
 	private int n;
 	private VaticanReportManager vaticanReportManager;
 	private TurnInizializator turnInizializator;
 	private InitialConfigurator initialConfigurator;
-	private MoveManager moveManager;
-	String move;
+	private MoveManager moveManager = new MoveManager(game);
+	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
-	public MainGameController(IPlayer player[], int[] ordine, int n) {
+	public MainGameController(IPlayer iplayer[], int[] ordine, int n) throws RemoteException {
 		this.n = n;
-		this.player = player;
+		this.iplayer = iplayer;
 		this.ordine = ordine;
-		this.initialConfigurator = new InitialConfigurator(game, n);
+		setupPlayers();
+		this.initialConfigurator = new InitialConfigurator(game);
 	}
 
 	@Override
 	public void run() {
+		String sMove;
+		AbstractMove aMove;
 		int i = 0;
 		try {
-			player[ordine[i]].showBoard(game);
+			iplayer[ordine[i]].showBoard(game);
 			while (true) {
-				move = player[ordine[i]].yourTurn();
-				// invio la move all adapter
-				// uso il move manager
+				System.out.println("Player " + ordine[i] + " name: " + iplayer[ordine[i]].getName());
+				sMove = iplayer[ordine[i]].yourTurn();
+				aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
+				// moveManager.manageMove(aMove);
 
 				sendAll();// invio a tutti il nuovo model
 				if (ordine[i + 1] == 4) {
@@ -66,9 +77,39 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	public void sendAll() throws IOException {
+	/*
+	 * inizializzo i giocatori con i dati forniti dal network
+	 */
+	private void setupPlayers() throws RemoteException {
+		Player players[] = new Player[n];
+		game.setPlayers(players);
+		int i = 0;
+		for (Player p : game.getPlayers()) {
+			List<FamilyMember> members = new ArrayList<FamilyMember>();
+			for (int j = 0; j < 4; j++) {
+				FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
+				// personalBoard: personal tile & dev cards
+				members.add(fm);
+			}
+			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i], members);
+			i++;
+		}
+	}
+
+	/*
+	 * fornisco il giocatore corrispondente al client fornito
+	 */
+	private Player getPlayer(IPlayer ip) throws RemoteException {
+		for (Player p : game.getPlayers()) {
+			if (p.getNickname().equals(ip.getName()))
+				return p;
+		}
+		return null;
+	}
+
+	private void sendAll() throws IOException {
 		for (int j = 0; j < n; j++) {
-			player[j].showBoard(game);
+			iplayer[j].showBoard(game);
 		}
 	}
 

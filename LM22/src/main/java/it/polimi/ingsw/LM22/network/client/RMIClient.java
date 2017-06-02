@@ -18,6 +18,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 		this.UI = UI;
 	}
 
+	public String getName() throws RemoteException {
+		return name;
+	}
+
 	public String getMove() throws RemoteException {
 		return move;
 	}
@@ -47,10 +51,6 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 		move = UI.getMove();
 	}
 
-	// public void print(String move) throws RemoteException {
-	// UI.showMsg(move);
-	// }
-	
 	/*
 	 * metodo invocato da remoto per visualizzre la board
 	 */

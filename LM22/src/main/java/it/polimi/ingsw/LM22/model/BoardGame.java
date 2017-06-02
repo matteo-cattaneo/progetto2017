@@ -54,10 +54,6 @@ public class BoardGame implements Serializable {
 		return faithGrid;
 	}
 
-	public void setFaithGrid(FaithGrid faithGrid) {
-		this.faithGrid = faithGrid;
-	}
-
 	public CouncilSpace getCouncilPalace() {
 		return councilPalace;
 	}

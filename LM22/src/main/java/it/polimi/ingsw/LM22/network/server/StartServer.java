@@ -46,6 +46,7 @@ public class StartServer {
 			}
 		} catch (IOException | InterruptedException e) {
 			System.out.println("Server terminato!");
+			e.printStackTrace();
 		}
 	}
 
@@ -65,7 +66,7 @@ public class StartServer {
 				if (t == 0)
 					break;
 			} else {
-				// verifico se si è connesso un client su una delle sdue
+				// verifico se si è connesso un client su una delle due
 				// connessioni
 				while (serverRMI.getClient() == null && !conn.getSocket().isConnected()) {
 					System.out.print("");

@@ -7,7 +7,7 @@ public class Tower  implements Serializable {
 	
 	private final Integer LEVELS = 4;
 	private final String towerType;	
-	private Floor floor[];
+	private final Floor floor[] = new Floor[LEVELS];
 	private boolean occupied;
 	private List<String> coloredMembersOnIt;
 	
@@ -18,10 +18,6 @@ public class Tower  implements Serializable {
 
 	public Floor[] getFloor() {
 		return floor;
-	}
-
-	public void setFloor(Floor[] floor) {
-		this.floor = floor;
 	}
 
 	public boolean isOccupied() {

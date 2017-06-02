@@ -14,6 +14,10 @@ public class SocketClient implements IClient {
 	private AbstractUI UI;
 	private String name;
 
+	public String getName() {
+		return name;
+	}
+
 	public SocketClient(AbstractUI UI) {
 		this.UI = UI;
 	}
@@ -35,6 +39,8 @@ public class SocketClient implements IClient {
 			// inizializzo gli stream di input e output
 			ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+			socketOut.writeUTF(getName());
+			socketOut.flush();
 			while (true) {
 				// ricevo il comando dal server
 				String socketLine = socketIn.readUTF();
@@ -62,7 +68,6 @@ public class SocketClient implements IClient {
 
 	@Override
 	public String getMove() throws RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -8,28 +8,23 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class Player implements Serializable {
 	private final Integer NUM_LEADER_CARDS = 4;
-	private String nickname;
-	private String color;
-	private List<FamilyMember> members;
+	private final String nickname;
+	private final String color;
+	private final List<FamilyMember> members;
 	private final PersonalBoard personalBoard = new PersonalBoard();
 	private List<ExCommunication> exCommunications;
 	private List<LeaderCard> leaderCards;
 	private List<Effect> effects;
 
+	public Player(String nickname, String color, List<FamilyMember> members) {
+		super();
+		this.nickname = nickname;
+		this.color = color;
+		this.members = members;
+	}
+
 	public String getNickname() {
 		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public void setMembers(List<FamilyMember> members) {
-		this.members = members;
 	}
 
 	public void setExCommunications(List<ExCommunication> exCommunications) {

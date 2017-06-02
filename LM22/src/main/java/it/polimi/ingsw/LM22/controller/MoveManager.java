@@ -164,27 +164,32 @@ public class MoveManager {
 			resourceHandler.manageVentureCost(cardMove);
 			break;
 		case 2:
-			//aggiungere controlli su effetti permanenti per riduzione costo carte
+			// aggiungere controlli su effetti permanenti per riduzione costo
+			// carte
 			ColorCardBonusEffect e = new ColorCardBonusEffect();
-			if (cardMove.getPlayer().getEffects().contains(e.getCardType()=="BUILDING" && e.getCardDiscount()!= null))
-			cardCost = ((BuildingCard) card).getCost();
+			if (cardMove.getPlayer().getEffects()
+					.contains(e.getCardType() == "BUILDING" && e.getCardDiscount() != null))
+				cardCost = ((BuildingCard) card).getCost();
 			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		case 1:
-			//aggiungere controlli su effetti permanenti per riduzione costo carte
+			// aggiungere controlli su effetti permanenti per riduzione costo
+			// carte
 			cardCost = ((CharacterCard) card).getCost();
 			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		case 0:
 			cardCost = NOTHING;
-			if (!militaryPointsAvailable(cardMove) || !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
+			if (!militaryPointsAvailable(cardMove)
+					|| !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		}
-//		ISTRUZIONE DA ESEGUIRE NELL'HANDLE
-//		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
+		// ISTRUZIONE DA ESEGUIRE NELL'HANDLE
+		// resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(),
+		// bonus);
 		return true;
 	}
 

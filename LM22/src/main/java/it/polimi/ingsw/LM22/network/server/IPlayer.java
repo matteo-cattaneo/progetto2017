@@ -18,4 +18,6 @@ public interface IPlayer extends Remote {
 	public void showBoard(Game game) throws RemoteException, IOException;
 
 	public void login(IClient client) throws RemoteException;
+
+	public String getName() throws RemoteException;
 }

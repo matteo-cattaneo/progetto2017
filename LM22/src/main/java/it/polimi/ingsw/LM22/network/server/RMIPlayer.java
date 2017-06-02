@@ -12,8 +12,9 @@ import it.polimi.ingsw.LM22.network.client.IClient;
 public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	private static final long serialVersionUID = 1L;
 	IClient client = null;
+	String name;
 
-	protected RMIPlayer() throws RemoteException {
+	public RMIPlayer() throws RemoteException {
 
 	}
 
@@ -37,10 +38,16 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	// riceve l'oggetto remoto del client
 	public void login(IClient client) throws RemoteException {
 		this.client = client;
+		this.name = client.getName();
+		// TODO verificare se ha gia iniziato un altra partita
 	}
 
 	// restituisce l'oggetto remoto del client
 	public IClient getClient() throws RemoteException {
 		return client;
+	}
+
+	public String getName() throws RemoteException {
+		return name;
 	}
 }

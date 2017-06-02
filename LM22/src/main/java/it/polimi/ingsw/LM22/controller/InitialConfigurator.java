@@ -8,8 +8,6 @@ import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.TerritoryCard;
-import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 
 public class InitialConfigurator extends TurnInizializator {
 	FileParser fileParser = new FileParser();
@@ -22,21 +20,11 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, int n) {
-		game.setPlayers(new Player[n]);
+	public InitialConfigurator(Game game) {
 		initializeTurn(game);
 		loadConfiguration(game);
 		setNewPlayersOrder(game);
 		giveInitialResources(game);
-		// for (TerritoryCard c : game.getTerritoryCards()) {
-		// try {
-		// System.out.println(
-		// c.getName() + " " + ((ResourcePrivilegeEffect)
-		// c.getImmediateEffect()).getResource().getStone()
-		// + " " + c.getPermanentEffect().getResource().getStone());
-		// } catch (Exception e) {
-		// }
-		// }
 	}
 
 	/*
@@ -47,7 +35,7 @@ public class InitialConfigurator extends TurnInizializator {
 	public void initializeTurn(Game game) {
 		game.setPeriod(1);
 		game.setRound(1);
-
+		// altri parametri?
 	}
 
 	/*
@@ -61,7 +49,6 @@ public class InitialConfigurator extends TurnInizializator {
 		List<Player> p = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
 			// i put the new item in the list randomly
-			player = new Player();
 			p.add(random.nextInt(p.size() + 1), player);
 		}
 		game.setPlayersOrder(p);
