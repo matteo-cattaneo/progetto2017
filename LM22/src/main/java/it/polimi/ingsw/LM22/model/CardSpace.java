@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class CardSpace extends AbstractSpace{
+import java.io.Serializable;
+
+public class CardSpace extends AbstractSpace implements Serializable {
 
 		private final Integer level;
 		private final Resource reward;

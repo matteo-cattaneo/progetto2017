@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ResourcePrivilegeEffect extends ImmediateEffect {
+import java.io.Serializable;
+
+public class ResourcePrivilegeEffect extends ImmediateEffect  implements Serializable {
 	private Integer councilPrivilege;
 	private Resource resource;
 

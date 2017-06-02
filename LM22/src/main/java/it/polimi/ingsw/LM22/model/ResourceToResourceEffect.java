@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ResourceToResourceEffect extends ImmediateEffect{
+import java.io.Serializable;
+
+public class ResourceToResourceEffect extends ImmediateEffect implements Serializable {
 	private Resource requirement;
 	private Resource reward;
 

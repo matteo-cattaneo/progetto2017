@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class WorkActionEffect extends ImmediateEffect {
+import java.io.Serializable;
+
+public class WorkActionEffect extends ImmediateEffect  implements Serializable {
 	private Integer workActionValue;
 	private String typeOfWork;
 	private Resource resource;

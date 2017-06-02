@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class CardToResourceEffect extends ImmediateEffect{
+import java.io.Serializable;
+
+public class CardToResourceEffect extends ImmediateEffect implements Serializable {
 	private String cardRequired;
 	private Resource reward;
 

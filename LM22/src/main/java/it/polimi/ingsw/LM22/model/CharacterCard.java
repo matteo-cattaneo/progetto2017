@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class CharacterCard extends DevelopmentCard {
+import java.io.Serializable;
+
+public class CharacterCard extends DevelopmentCard  implements Serializable {
 	private Resource coinsCost;
 	private PermanentEffect permanentEffect;
 

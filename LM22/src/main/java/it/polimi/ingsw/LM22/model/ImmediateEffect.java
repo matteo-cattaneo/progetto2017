@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
-public abstract class ImmediateEffect extends Effect{
+import java.io.Serializable;
+
+public abstract class ImmediateEffect extends Effect implements Serializable {
 
 }

@@ -1,7 +1,10 @@
 package it.polimi.ingsw.LM22.model;
 
-public class Floor {
-	private CardSpace space;
+import java.io.Serializable;
+
+public class Floor  implements Serializable {
+	//inizializzare (valutare il caricamento da file)
+	private CardSpace space; 
 	private DevelopmentCard card;
 
 	public CardSpace getSpace() {

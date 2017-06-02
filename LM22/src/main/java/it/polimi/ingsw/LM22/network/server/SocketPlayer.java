@@ -28,13 +28,15 @@ public class SocketPlayer implements IPlayer {
 		out.writeUTF("start");
 		out.flush();
 
-		String move = in.readUTF();
-		return move;
+		return in.readUTF();
 	}
 
 	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
+		out.writeUTF("board");
+		out.flush();
+		
 		out.writeObject(game);
 		out.flush();
 	}

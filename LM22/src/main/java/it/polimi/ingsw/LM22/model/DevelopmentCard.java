@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public abstract class DevelopmentCard {
+import java.io.Serializable;
+
+public abstract class DevelopmentCard  implements Serializable {
 
 	private String name;
 	private Integer period;

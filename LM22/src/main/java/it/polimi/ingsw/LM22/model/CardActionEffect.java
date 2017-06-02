@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class CardActionEffect extends ImmediateEffect{
+import java.io.Serializable;
+
+public class CardActionEffect extends ImmediateEffect implements Serializable {
 	private String cardType;
 	private Integer diceValue;
 	private Resource cardDiscount;

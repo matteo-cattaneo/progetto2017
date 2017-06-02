@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class MarketSpace extends AbstractSpace{
+import java.io.Serializable;
+
+public class MarketSpace extends AbstractSpace implements Serializable {
 	
 		/*
 		 * i bonus del marketSpace devono essere instanziati da File

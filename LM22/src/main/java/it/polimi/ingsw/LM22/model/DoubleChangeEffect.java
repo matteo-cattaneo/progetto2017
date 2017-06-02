@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class DoubleChangeEffect extends ChangeEffect{
+import java.io.Serializable;
+
+public class DoubleChangeEffect extends ChangeEffect implements Serializable {
 	private Resource exchangeEffect2[];
 	
 	public Resource[] getExchangeEffect2() {

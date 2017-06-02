@@ -36,17 +36,17 @@ public class SocketClient implements IClient {
 			ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 			while (true) {
-				// ricevo e visualizzo la board
-				UI.showBoard((Game) socketIn.readObject());
-				// ricevo il comando dal server ###
+				// ricevo il comando dal server
 				String socketLine = socketIn.readUTF();
 				if (socketLine.equals("start")) {
 					// se è start inizio il mio turno
 					UI.printMoveMenu();
 					socketOut.writeUTF(UI.getMove());
 					socketOut.flush();
+				} else if (socketLine.equals("board")) {
+					// ricevo e visualizzo la board
+					UI.showBoard((Game) socketIn.readObject());
 				}
-
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			UI.showMsg("Connessione chiusa");

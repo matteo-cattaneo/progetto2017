@@ -1,8 +1,9 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Tower {
+public class Tower  implements Serializable {
 	
 	private final Integer LEVELS = 4;
 	private final String towerType;	

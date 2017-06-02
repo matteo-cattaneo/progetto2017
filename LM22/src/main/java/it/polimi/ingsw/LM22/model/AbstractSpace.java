@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public abstract class AbstractSpace {
+import java.io.Serializable;
+
+public abstract class AbstractSpace  implements Serializable {
 	protected final Integer spaceRequirement;
 	
 	/*

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class WorkSpace extends AbstractSpace{
+public class WorkSpace extends AbstractSpace implements Serializable {
 	
 	private final String workType; 
 	private final Integer MALUS = 3;

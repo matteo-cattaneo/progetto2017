@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
-public class NoPermanentEffect extends PermanentEffect{
+import java.io.Serializable;
+
+public class NoPermanentEffect extends PermanentEffect implements Serializable {
 
 }

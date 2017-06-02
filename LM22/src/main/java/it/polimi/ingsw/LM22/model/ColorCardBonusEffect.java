@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class ColorCardBonusEffect extends PermanentEffect{
+import java.io.Serializable;
+
+public class ColorCardBonusEffect extends PermanentEffect implements Serializable {
 	private String cardType;
 	private Integer diceBonus;
 	private Resource cardDiscount;

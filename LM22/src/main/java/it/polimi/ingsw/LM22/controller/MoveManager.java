@@ -60,8 +60,7 @@ public class MoveManager {
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			
 		}
 		if (checkResult) {
 			try {
@@ -69,8 +68,7 @@ public class MoveManager {
 				method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 				method.invoke(this, new Object[] { move });
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		} else
 			// throw new InvalidMoveException

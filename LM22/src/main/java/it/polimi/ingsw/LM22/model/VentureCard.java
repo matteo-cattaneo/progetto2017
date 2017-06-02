@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class VentureCard extends DevelopmentCard {
+import java.io.Serializable;
+
+public class VentureCard extends DevelopmentCard  implements Serializable {
 
 	private Resource cardCost1;
 	private Resource[] cardCost2;

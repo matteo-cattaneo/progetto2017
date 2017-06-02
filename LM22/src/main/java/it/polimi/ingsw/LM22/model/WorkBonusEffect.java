@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class WorkBonusEffect extends PermanentEffect{
+import java.io.Serializable;
+
+public class WorkBonusEffect extends PermanentEffect implements Serializable {
 	private String typeOfWork;
 	private Integer workBonusValue;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
@@ -9,17 +9,17 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 public class Game implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final Integer NUM_BONUS_TILE = 4;
-	private BoardGame boardgame;
+	private final BoardGame boardgame = new BoardGame();
 	private Integer period;
 	private Integer round;
 	private Player[] players;
 	private List<Player> playersOrder;
-	private Collection<TerritoryCard> territoryCards;
-	private Collection<CharacterCard> characterCards;
-	private Collection<BuildingCard> buildingCards;
-	private Collection<VentureCard> ventureCards;
-	private Collection<LeaderCard> leaderCards;
-	private PersonalBonusTile personalBonusTile[];
+	private ArrayList<TerritoryCard> territoryCards;
+	private ArrayList<CharacterCard> characterCards;
+	private ArrayList<BuildingCard> buildingCards;
+	private ArrayList<VentureCard> ventureCards;
+	private ArrayList<LeaderCard> leaderCards;
+	private final PersonalBonusTile personalBonusTile[] = new PersonalBonusTile[NUM_BONUS_TILE];
 
 	/*
 	 * durante la creazione della Game dovrò inizializzare tutti gli attributi
@@ -27,6 +27,10 @@ public class Game implements Serializable {
 	 */
 	public BoardGame getBoardgame() {
 		return boardgame;
+	}
+
+	public void setPlayers(Player[] players) {
+		this.players = players;
 	}
 
 	public Integer getPeriod() {
@@ -45,23 +49,23 @@ public class Game implements Serializable {
 		this.round = round;
 	}
 
-	public void setTerritoryCards(Collection<TerritoryCard> territoryCards) {
+	public void setTerritoryCards(ArrayList<TerritoryCard> territoryCards) {
 		this.territoryCards = territoryCards;
 	}
 
-	public void setCharacterCards(Collection<CharacterCard> characterCards) {
+	public void setCharacterCards(ArrayList<CharacterCard> characterCards) {
 		this.characterCards = characterCards;
 	}
 
-	public void setBuildingCards(Collection<BuildingCard> buildingCards) {
+	public void setBuildingCards(ArrayList<BuildingCard> buildingCards) {
 		this.buildingCards = buildingCards;
 	}
 
-	public void setVentureCards(Collection<VentureCard> ventureCards) {
+	public void setVentureCards(ArrayList<VentureCard> ventureCards) {
 		this.ventureCards = ventureCards;
 	}
 
-	public void setLeaderCards(Collection<LeaderCard> leaderCards) {
+	public void setLeaderCards(ArrayList<LeaderCard> leaderCards) {
 		this.leaderCards = leaderCards;
 	}
 
@@ -77,32 +81,28 @@ public class Game implements Serializable {
 		this.playersOrder = playersOrder;
 	}
 
-	public Collection<TerritoryCard> getTerritoryCards() {
+	public ArrayList<TerritoryCard> getTerritoryCards() {
 		return territoryCards;
 	}
 
-	public Collection<CharacterCard> getCharacterCards() {
+	public ArrayList<CharacterCard> getCharacterCards() {
 		return characterCards;
 	}
 
-	public Collection<BuildingCard> getBuildingCards() {
+	public ArrayList<BuildingCard> getBuildingCards() {
 		return buildingCards;
 	}
 
-	public Collection<VentureCard> getVentureCards() {
+	public ArrayList<VentureCard> getVentureCards() {
 		return ventureCards;
 	}
 
-	public Collection<LeaderCard> getLeaderCards() {
+	public ArrayList<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 
 	public PersonalBonusTile[] getPersonalBonusTile() {
 		return personalBonusTile;
-	}
-
-	public Integer getNUM_BONUS_TILE() {
-		return NUM_BONUS_TILE;
 	}
 
 }

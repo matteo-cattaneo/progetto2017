@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class FamilyMember {
+import java.io.Serializable;
+
+public class FamilyMember  implements Serializable {
 	private final Integer UNCOLORED_PAWN_VALUE = 0;
 	private final Player player;
 	private final String color; //"UNCOLORED" means that is uncolored

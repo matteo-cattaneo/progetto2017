@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class TerritoryCard extends DevelopmentCard {
+import java.io.Serializable;
+
+public class TerritoryCard extends DevelopmentCard  implements Serializable {
 
 	private Integer requirement;
 	private ResourcePrivilegeEffect permanentEffect;

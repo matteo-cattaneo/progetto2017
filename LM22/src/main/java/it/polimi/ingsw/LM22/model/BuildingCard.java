@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class BuildingCard extends DevelopmentCard {
+import java.io.Serializable;
+
+public class BuildingCard extends DevelopmentCard  implements Serializable {
 
 	private Resource cardCost;
 	private Integer requirement;

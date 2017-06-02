@@ -1,8 +1,9 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CouncilSpace extends AbstractSpace{
+public class CouncilSpace extends AbstractSpace implements Serializable {
 
 	private final Integer councilPrivilege = 1;
 	private final Resource reward;

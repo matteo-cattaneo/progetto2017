@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class PersonalBonusTile {
+import java.io.Serializable;
+
+public class PersonalBonusTile  implements Serializable {
 	private final Integer requirement = 1;
 	// costanti da inizializzare con il costruttore
 	private final ResourcePrivilegeEffect productionEffect;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model;
 
-public class Resource {
+import java.io.Serializable;
+
+public class Resource  implements Serializable {
 	private Integer wood;
 	private Integer stone;
 	private Integer servants;
