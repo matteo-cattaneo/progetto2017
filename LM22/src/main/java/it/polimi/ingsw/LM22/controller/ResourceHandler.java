@@ -26,6 +26,18 @@ public class ResourceHandler {
 	 * tolgono risorse...
 	 * 
 	 */
+	
+	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
+		return true;
+	}
+	
+	/*
+	 * metodo che gestisce il controllo delle carte Venture, 
+	 * sia con doppio costo che con costo singolo normale o con costo in punti militari
+	 */
+	public boolean manageVentureCost(CardMove move){
+		
+	}
 
 	/*
 	 * metodo che controlla se il Player ha sufficienti risorse per comprare una
@@ -69,15 +81,37 @@ public class ResourceHandler {
 		}
 		return true;
 	}
-
-	public boolean enoughResources(BuildingCard card, CardMove cardMove, Resource additionalCost, Resource bonus) {
-
-	}
-
-	public boolean enoughResources(VentureCard card, CardMove cardMove, Resource additionalCost, Resource bonus) {
-
-	}
-
+	
+	/*
+	 * DA FARE
+	 * controllo per i bonus permanenti della carte Personaggio
+	 * che hanno l'effetto di diminuire il costo della carta
+	 */
+	public Resource cardDiscounted(Resource s1, Resource s2) {
+		Integer wood = 0;
+		Integer stone = 0;
+		Integer coins = 0;
+		Integer servants = 0;
+		Integer faith = 0;
+		Integer military = 0;
+		Integer victory = 0;
+		if (s1.getWood() - s2.getWood() > 0)
+			wood = s1.getWood() - s2.getWood();
+		if (s1.getStone() - s2.getStone() > 0)
+			stone = s1.getStone() - s2.getStone();
+		if (s1.getCoins() - s2.getCoins() > 0)
+			coins = s1.getCoins() - s2.getCoins();
+		if (s1.getServants() - s2.getServants() > 0)
+			servants = s1.getServants() - s2.getServants();
+		if (s1.getFaith() - s2.getFaith() > 0)
+			faith = s1.getFaith() - s2.getFaith();
+		if (s1.getMilitary() - s2.getMilitary() > 0)	
+			military = s1.getMilitary() - s2.getMilitary();
+		if (s1.getVictory() - s2.getVictory() > 0)	
+			victory = s1.getVictory() - s2.getVictory();
+		return new Resource(wood, stone, servants, coins, faith, military, victory);
+}
+	
 	/*
 	 * metodo in grado di controllare se la prima risorsa è >= della seconda
 	 * (true)
@@ -105,7 +139,7 @@ public class ResourceHandler {
 	 * come primo parametro
 	 */
 	public void addResource(Resource playerResource, Resource addingResource) {
-		// TO-DO
+		playerResource = sumResource(playerResource, addingResource);
 	}
 
 	/*
@@ -133,27 +167,6 @@ public class ResourceHandler {
 		victory = s1.getVictory() + s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
-
-//	public Resource diffResource(Resource s1, Resource s2) {
-//		if (enoughResources(s1, s2)) {
-//			Integer wood = 0;
-//			Integer stone = 0;
-//			Integer coins = 0;
-//			Integer servants = 0;
-//			Integer faith = 0;
-//			Integer military = 0;
-//			Integer victory = 0;
-//			wood = s1.getWood() - s2.getWood();
-//			wood = s1.getStone() - s2.getStone();
-//			wood = s1.getCoins() - s2.getCoins();
-//			wood = s1.getServants() - s2.getServants();
-//			wood = s1.getFaith() - s2.getFaith();
-//			wood = s1.getMilitary() - s2.getMilitary();
-//			wood = s1.getVictory() - s2.getVictory();
-//			return new Resource(wood, stone, servants, coins, faith, military, victory);
-//		}
-//		else return s1;
-//	}
 
 	/*
 	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente

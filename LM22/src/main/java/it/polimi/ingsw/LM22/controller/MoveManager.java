@@ -11,6 +11,7 @@ import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardSpace;
 import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Resource;
@@ -18,8 +19,8 @@ import it.polimi.ingsw.LM22.model.Resource;
 public class MoveManager {
 
 	private final Integer SINGLE_PRIVILEGE = 1;
-	private final Resource NOTHING = new Resource(0,0,0,0,0,0,0);
-	private final Resource THREE_COINS = new Resource(0,0,0,3,0,0,0);
+	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
+	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
 	private final String PRODUCTION = "PRODUCTION";
 	private final String HARVEST = "HARVEST";
 	private final Integer WORK_MALUS = 3;
@@ -41,7 +42,7 @@ public class MoveManager {
 	}
 
 	/*
-	 * metodo che utilizzando la reflection chiama il metodo di check giusto e 
+	 * metodo che utilizzando la reflection chiama il metodo di check giusto e
 	 * successivamente (se il check dà esito positivo) anche il metodo di manage
 	 * della mossa giusto
 	 */
@@ -60,7 +61,7 @@ public class MoveManager {
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e1) {
-			
+
 		}
 		if (checkResult) {
 			try {
@@ -68,7 +69,7 @@ public class MoveManager {
 				method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 				method.invoke(this, new Object[] { move });
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				
+
 			}
 		} else
 			// throw new InvalidMoveException
@@ -147,37 +148,43 @@ public class MoveManager {
 		// dobbiamo controllare se il player non ha
 		// la carta Leader delle 3 monete in più
 		// ATTENZIONE
-		Resource additionalResource = new Resource(0, 0, 0, 0, 0, 0, 0);
+		Resource additionalCost = NOTHING;
 		boolean occupied = t.isOccupied();
 		boolean hasBrunelleschi = hasFilippoBrunelleschiActivated(cardMove);
 		if (occupied && !hasBrunelleschi)
-			additionalResource = THREE_COINS;
+			additionalCost = THREE_COINS;
 		else if (!occupied || hasBrunelleschi)
-			additionalResource = NOTHING;
+			additionalCost = NOTHING;
+		Resource cardCost = NOTHING;
 		switch (tower) {
-		/*
-		 * qui sarebbe ottimo avere un enoughResources a cui passiamo il costo
-		 * della carta, il bonus ottenuto, il costo addizionale senza
-		 * distinguere di che tipo di carta di tratta
-		 */
 		case 3:
-			if (!resourceHandler.enoughResources((VentureCard) card, cardMove, additionalResource, bonus)) {
-				return false;
-			}
+			// problema sarebbe gestire il doppio costo
+			// --> se valido solo 1 faccio comunque la mossa
+			// se invece doppio devo chiedere al'utente quale vuole utilizzare
+			resourceHandler.manageVentureCost(cardMove);
+			break;
 		case 2:
-			if (!resourceHandler.enoughResources((BuildingCard) card, cardMove, additionalResource, bonus)) {
+			//aggiungere controlli su effetti permanenti per riduzione costo carte
+			ColorCardBonusEffect e = new ColorCardBonusEffect();
+			if (cardMove.getPlayer().getEffects().contains(e.getCardType()=="BUILDING" && e.getCardDiscount()!= null))
+			cardCost = ((BuildingCard) card).getCost();
+			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
-			}
+			break;
 		case 1:
-			if (!resourceHandler.enoughResources((CharacterCard) card, cardMove, additionalResource, bonus)) {
+			//aggiungere controlli su effetti permanenti per riduzione costo carte
+			cardCost = ((CharacterCard) card).getCost();
+			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
-			}
+			break;
 		case 0:
-			if (!militaryPointsAvailable(cardMove) || !resourceHandler.enoughResources(cardMove, additionalResource)) {
+			cardCost = NOTHING;
+			if (!militaryPointsAvailable(cardMove) || !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
-			}
-			resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
+			break;
 		}
+//		ISTRUZIONE DA ESEGUIRE NELL'HANDLE
+//		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
 		return true;
 	}
 
@@ -264,8 +271,8 @@ public class MoveManager {
 
 	/*
 	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
-	 * requisito relativo allo spazio azione selezionato per la mossa 
-	 * + se il primo spazio è già occupato effettua una diminuzione del valore
+	 * requisito relativo allo spazio azione selezionato per la mossa + se il
+	 * primo spazio è già occupato effettua una diminuzione del valore
 	 * dell'azione in base al Malus specificato nelle regole
 	 */
 	private boolean checkWorkSpace(WorkMove workMove) {
@@ -288,14 +295,14 @@ public class MoveManager {
 							.contains(workMove.getPlayer().getColor()))
 						return false;
 					if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty())
-						workMove.getMemberUsed().setValue(workMove.getMemberUsed().getValue()-WORK_MALUS);
+						workMove.getMemberUsed().setValue(workMove.getMemberUsed().getValue() - WORK_MALUS);
 					break;
 				} else {
 					if (game.getBoardgame().getHarvestSpace().getColoredMemberOnIt()
 							.contains(workMove.getPlayer().getColor()))
 						return false;
 					if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty())
-						workMove.getMemberUsed().setValue(workMove.getMemberUsed().getValue()-WORK_MALUS);
+						workMove.getMemberUsed().setValue(workMove.getMemberUsed().getValue() - WORK_MALUS);
 					break;
 				}
 			default:
@@ -309,7 +316,7 @@ public class MoveManager {
 	 * gestisce una mossa del tipo WorkMove
 	 */
 	private void workMoveHandle(WorkMove workMove) {
-		
+
 	}
 
 	/*
@@ -361,8 +368,9 @@ public class MoveManager {
 	 * suo effetto dalla lista degli effetti attualmente attivi
 	 */
 	private void sellLeaderCard() {
-		//controllo se la carta è già stata venduta o meno
-		//+ cancello il suo effetto dalla lista degli effetti attivi (se presente)
+		// controllo se la carta è già stata venduta o meno
+		// + cancello il suo effetto dalla lista degli effetti attivi (se
+		// presente)
 		resourceHandler.selectCouncilPrivilege(SINGLE_PRIVILEGE);
 	}
 
@@ -383,7 +391,7 @@ public class MoveManager {
 	 * questa classe
 	 */
 	private boolean leaderCardActivationAllowed(LeaderCardActivation move) {
-		return true;//TODO
+		return true;// TODO
 	}
 
 	/*
@@ -417,7 +425,7 @@ public class MoveManager {
 	}
 
 	private boolean hasFilippoBrunelleschiActivated(CardMove move) {
-		return true; //TODO
+		return true; // TODO
 	}
 
 }
