@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class WorkMalusEx extends ExEffect{
+import java.io.Serializable;
+
+public class WorkMalusEx extends ExEffect implements Serializable{
 
 	private String typeOfWork;
 	private Integer valueOfMalus;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class ExCommunication {
+import java.io.Serializable;
+
+public class ExCommunication implements Serializable{
 	
 	private Integer period;
 	private ExEffect effect;

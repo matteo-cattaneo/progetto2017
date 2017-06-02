@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public abstract class LeaderCardRequest {
+import java.io.Serializable;
+
+public abstract class LeaderCardRequest implements Serializable{
 	
 }

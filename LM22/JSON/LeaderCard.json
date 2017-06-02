@@ -1,0 +1,386 @@
+[{
+    "name": "Francesco Sforza",
+    "effect": {
+        "type": "WorkAction",
+        "typeOfWork": "HARVEST",
+        "valueOfWork": 1
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 0,
+        "characterCards": 0,
+        "buildingCards": 0,
+        "ventureCards": 5
+    }
+}, {
+    "name": "Ludovico Ariosto",
+    "effect": {
+        "type": "InOccupiedSpaceEffect"
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 0,
+        "characterCards": 5,
+        "buildingCards": 0,
+        "ventureCards": 0
+
+    }
+}, {
+    "name": "Filippo Brunelleschi",
+    "effect": {
+        "type": "NoOccupiedTowerEffect"
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 0,
+        "characterCards": 0,
+        "buildingCards": 5,
+        "ventureCards": 0
+    }
+}, {
+    "name": "Federico da Montefeltro",
+    "effect": {
+        "type": "MemberChangeEffect",
+        "typeOfMember": "COLORED",
+        "newValueOfMember": 6
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 5,
+        "characterCards": 0,
+        "buildingCards": 0,
+        "ventureCards": 0
+    }
+}, {
+    "name": "Girolamo Savonarola",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 1,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 18,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Giovanni dalle Bande Nere",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 1,
+            "stone": 1,
+            "coins": 1,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 12,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Sandro Botticelli",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 2,
+            "victory": 1
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 10,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Michelangelo Buonarroti",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 10,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Ludovico III Gonzaga",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 1
+
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 15,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Leonardo da Vinci",
+    "effect": {
+        "type": "WorkAction",
+        "typeOfWork": "PRODUCTION",
+        "valueOfWork": 0
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 2,
+        "characterCards": 4,
+        "buildingCards": 0,
+        "ventureCards": 0
+    }
+}, {
+    "name": "Sisto IV",
+    "effect": {
+        "type": "ChurchSubstainEffect",
+        "reward": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 5,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 6,
+            "stone": 6,
+            "coins": 6,
+            "servants": 6,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Lucrezia Borgia",
+    "effect": {
+        "type": "MemberBonusEffect",
+        "typeOfMember": "ALL",
+        "valueOfBonus": 2
+    },
+    "request": {
+        // questa è da vedere a parte
+        "type": "CardRequest",
+        "territoryCards": 6,
+        "characterCards": 6,
+        "buildingCards": 6,
+        "ventureCards": 6
+    }
+}, {
+    "name": "Sigismondo Malatesta",
+    "effect": {
+        "type": "MemberChangeEffect",
+        "typeOfMember": "UNCOLORED",
+        "newValueOfMember": 3
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 3,
+            "military": 7,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Lorenzo de Medici",
+    "effect": {
+        "type": "CopyEffect"
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 35
+        }
+    }
+}, {
+    "name": "Ludovico il Moro",
+    "effect": {
+        "type": "MemberChangeEffect",
+        "typeOfMember": "ALL",
+        "newValueOfMember": 5
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 2,
+        "characterCards": 2,
+        "buildingCards": 2,
+        "ventureCards": 2
+    }
+}, {
+    "name": "Cesare Borgia",
+    "effect": {
+        "type": "NoMilitaryRequestEffect"
+    },
+    "request": {
+        "type": "ResourceCardRequest",
+        "territoryCards": 0,
+        "characterCards": 0,
+        "buildingCards": 3,
+        "ventureCards": 0,
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 12,
+            "servants": 0,
+            "faith": 2,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Santa Rita",
+    "effect": {
+        "type": "DoubleResourceEffect",
+        "resourceMoltiplicator": {
+            "wood": 2,
+            "stone": 2,
+            "coins": 2,
+            "servants": 2,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
+    },
+    "request": {
+        "type": "ResourceRequest",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 8,
+            "military": 0,
+            "victory": 0
+        }
+    }
+}, {
+    "name": "Cosimo de Medici",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 3,
+            "faith": 0,
+            "military": 0,
+            "victory": 1
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 0,
+        "characterCards": 2,
+        "buildingCards": 4,
+        "ventureCards": 0
+    }
+}, {
+    "name": "Bartolomeo Colleoni",
+    "effect": {
+        "type": "LeaderResourceEffect",
+        "resource": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 4
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 4,
+        "characterCards": 0,
+        "buildingCards": 0,
+        "ventureCards": 2
+    }
+}]

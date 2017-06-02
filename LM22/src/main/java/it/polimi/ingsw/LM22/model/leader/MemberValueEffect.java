@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public abstract class MemberValueEffect extends LeaderEffect{
+import java.io.Serializable;
+
+public abstract class MemberValueEffect extends LeaderEffect implements Serializable{
 
 }

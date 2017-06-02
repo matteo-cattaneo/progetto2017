@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public class NoOccupiedTowerEffect extends LeaderEffect{
+import java.io.Serializable;
+
+public class NoOccupiedTowerEffect extends LeaderEffect implements Serializable{
 
 }

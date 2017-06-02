@@ -1,14 +1,27 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-import java.util.HashMap;
+import java.io.Serializable;
 
-public class CardRequest extends LeaderCardRequest{
+public class CardRequest extends LeaderCardRequest implements Serializable{
 	
-	private HashMap<String, Integer> cardRequested;
-
-	public HashMap<String, Integer> getCardRequested() {
-		return cardRequested;
+	private Integer territoryCards; 
+	private Integer characterCards;
+	private Integer buildingCards;
+	private Integer ventureCards;
+	
+	public Integer getTerritoryCards() {
+		return territoryCards;
 	}
+	public Integer getCharacterCards() {
+		return characterCards;
+	}
+	public Integer getBuildingCards() {
+		return buildingCards;
+	}
+	public Integer getVentureCards() {
+		return ventureCards;
+	}
+	
 	
 	
 }

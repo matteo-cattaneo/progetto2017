@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class DiceMalusEx extends ExEffect{
+import java.io.Serializable;
+
+public class DiceMalusEx extends ExEffect implements Serializable{
 
 	private Integer malus;
 

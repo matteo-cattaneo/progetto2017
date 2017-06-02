@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public class WorkAction extends LeaderEffect{
+import java.io.Serializable;
+
+public class WorkAction extends LeaderEffect implements Serializable{
 
 	private String typeOfWork;
 	private Integer valueOfWork;

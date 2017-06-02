@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public class MemberBonusEffect extends MemberValueEffect{
+import java.io.Serializable;
+
+public class MemberBonusEffect extends MemberValueEffect implements Serializable{
 
 	private String typeOfMember;
 	private Integer valueOfBonus;

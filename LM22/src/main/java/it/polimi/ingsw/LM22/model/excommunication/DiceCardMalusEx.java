@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class DiceCardMalusEx extends DiceMalusEx{
+import java.io.Serializable;
+
+public class DiceCardMalusEx extends DiceMalusEx implements Serializable{
 
 	private String cardType;
 

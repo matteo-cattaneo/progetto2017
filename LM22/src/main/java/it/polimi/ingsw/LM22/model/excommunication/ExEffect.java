@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public abstract class ExEffect {
+import java.io.Serializable;
+
+public abstract class ExEffect implements Serializable{
 
 }

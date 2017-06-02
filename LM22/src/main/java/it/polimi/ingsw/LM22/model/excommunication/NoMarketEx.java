@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class NoMarketEx extends ExEffect{
+import java.io.Serializable;
+
+public class NoMarketEx extends ExEffect implements Serializable{
 
 }

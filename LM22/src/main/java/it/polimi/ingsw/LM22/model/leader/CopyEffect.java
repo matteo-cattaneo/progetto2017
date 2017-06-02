@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.leader;
 
-public class CopyEffect extends LeaderEffect{
+import java.io.Serializable;
+
+public class CopyEffect extends LeaderEffect implements Serializable{
 
 }

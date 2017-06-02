@@ -383,7 +383,7 @@ public class MoveManager {
 	 * questa classe
 	 */
 	private boolean leaderCardActivationAllowed(LeaderCardActivation move) {
-		return//TODO
+		return true;//TODO
 	}
 
 	/*
@@ -417,7 +417,7 @@ public class MoveManager {
 	}
 
 	private boolean hasFilippoBrunelleschiActivated(CardMove move) {
-
+		return true; //TODO
 	}
 
 }

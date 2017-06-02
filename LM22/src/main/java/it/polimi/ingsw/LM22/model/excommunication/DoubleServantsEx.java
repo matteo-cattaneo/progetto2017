@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class DoubleServantsEx extends ExEffect{
+import java.io.Serializable;
+
+public class DoubleServantsEx extends ExEffect implements Serializable{
 
 }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.model.excommunication;
 
-public class FinalCardCostMalusEx extends FinalResourceMalusEx{
+import java.io.Serializable;
+
+public class FinalCardCostMalusEx extends FinalResourceMalusEx implements Serializable{
 
 	private String cardType;
 
