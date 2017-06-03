@@ -1,25 +1,28 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.rmi.RemoteException;
+
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 
 //Classe astratta estesa da CLI e GUI interface
 public abstract class AbstractUI {
 
-	public abstract void printMoveMenu();
+	public abstract void printMoveMenu() throws RemoteException;
 
-	public abstract void printMemberMoveMenu();
+	public abstract void printMemberMoveMenu() throws RemoteException;
 
-	public abstract void printCardMoveMenu();
+	public abstract void printCardMoveMenu() throws RemoteException;
 
 	public abstract void printFamilyMemberMenu();
 
-	public abstract void printServantsAddictionMenu();
+	public abstract void printServantsAddictionMenu() throws RemoteException;
 
 	public abstract void printTowersMenu();
 
 	public abstract void printLevelsMenu();
 
-	public abstract void printMarketMoveMenu();
+	public abstract void printMarketMoveMenu() throws RemoteException;
 
 	public abstract void printWorkMoveMenu();
 
@@ -42,6 +45,18 @@ public abstract class AbstractUI {
 	public abstract String getMove();
 
 	public abstract void showMsg(String s);
-	
-	public abstract void showBoard(Game game);
+
+	public abstract void showBoard(Game game) throws RemoteException;
+
+	protected Player getPlayer(String name, Game game) throws RemoteException {
+		for (Player p : game.getPlayers()) {
+			if (p.getNickname().equals(name))
+				return p;
+		}
+		return null;
+	}
+
+	public abstract void printMarketSelection() throws RemoteException;
+
+	public abstract void printInvalidInput();
 }

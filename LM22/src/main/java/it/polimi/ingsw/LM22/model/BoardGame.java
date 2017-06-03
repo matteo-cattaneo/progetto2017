@@ -15,7 +15,7 @@ public class BoardGame implements Serializable {
 	private final String HARVEST = "HARVEST";
 	private final Integer NUM_TOWERS = 4;
 	private Tower towers[] = new Tower[NUM_TOWERS];
-	private MarketSpace market[];
+	private MarketSpace market[] = new MarketSpace[4];
 	private WorkSpace productionSpace = new WorkSpace(1, PRODUCTION);
 	private WorkSpace harvestSpace = new WorkSpace(1, HARVEST);
 	private FaithGrid faithGrid = new FaithGrid();

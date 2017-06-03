@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.Game;
@@ -31,7 +32,9 @@ public class CLIinterface extends AbstractUI {
 	private final String LEVEL_4 = "4";
 
 	private Scanner in = new Scanner(System.in);
-	String move = new String();
+	private String move = new String();
+	private Game game;
+	private String name;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -52,7 +55,7 @@ public class CLIinterface extends AbstractUI {
 	 * menu principale da cui parte la costruzione guidata della mossa
 	 */
 	@Override
-	public void printMoveMenu() {
+	public void printMoveMenu() throws RemoteException {
 		showMsg("Choose your Move:");
 		showMsg("1: Move a Member");
 		showMsg("2: Sell a LeaderCard");
@@ -76,7 +79,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printMemberMoveMenu() {
+	public void printMemberMoveMenu() throws RemoteException {
 		showMsg("Choose your move:");
 		showMsg("1: Card");
 		showMsg("2: Market");
@@ -106,7 +109,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printCardMoveMenu() {
+	public void printCardMoveMenu() throws RemoteException {
 		printFamilyMemberMenu();
 		printServantsAddictionMenu();
 		printTowersMenu();
@@ -116,7 +119,6 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printFamilyMemberMenu() {
 		showMsg("Choose your Family Member you want to move:");
-		// println("0: Restart your move");
 		showMsg("1: " + ORANGE);
 		showMsg("2: " + BLACK);
 		showMsg("3: " + WHITE);
@@ -143,14 +145,14 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printServantsAddictionMenu() {
+	public void printServantsAddictionMenu() throws RemoteException {
 		showMsg("Insert how many servants you want to use");
 		showMsg("Please insert a positive number or zero");
 		Integer servants = in.nextInt();
-		if (servants >= 0) {
+		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
 			setMove(servants.toString());
 		} else {
-			showMsg("Negative Number :(");
+			printInvalidInput();
 			printServantsAddictionMenu();
 		}
 	}
@@ -201,29 +203,33 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printMarketMoveMenu() {
-		showMsg("Choose the Tower:");
-		// showMsg("1: "+ FIRSTSPACE);
-		// showMsg("2: "+ SECONDSPACE);
-		// showMsg("3: "+ );
-		// showMsg("4: "+ );
+	public void printMarketMoveMenu() throws RemoteException {
+		printFamilyMemberMenu();
+		printServantsAddictionMenu();
+		printMarketSelection();
+	}
+
+	@Override
+	public void printMarketSelection() throws RemoteException {
+		showMsg("Choose the Market space:");
+		showMsg("1: Five coins");
+		showMsg("2: Five servants");
+		if (game.getPlayers().length == 4) {
+			showMsg("3: Three military points + two coins");
+			showMsg("4: Two different counsil privilege");
+		}
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
-			setMove(TERRITORY);
-			printCardMoveMenu();
-			break;
 		case 2:
-			setMove(CHARACTER);
-			printMarketMoveMenu();
+			setMove(String.valueOf(option - 1));
 			break;
 		case 3:
-			setMove(BUILDING);
-			printWorkMoveMenu();
-			break;
 		case 4:
-			setMove(VENTURE);
-			break;
+			if (game.getPlayers().length == 4) {
+				setMove(String.valueOf(option - 1));
+				break;
+			}
 		default:
 			printInvalidInput();
 			printMarketMoveMenu();
@@ -288,6 +294,7 @@ public class CLIinterface extends AbstractUI {
 		name = in.nextLine();
 		if (name.equals(""))
 			name = "Matteo";
+		this.name = name;
 		return name;
 	}
 
@@ -325,11 +332,17 @@ public class CLIinterface extends AbstractUI {
 	 * WIP
 	 */
 	@Override
-	public void showBoard(Game game) {
+	public void showBoard(Game game) throws RemoteException {
+		this.game = game;
 		// game object deserialization
 		showMsg("_________________________");
 		showMsg("| Periodo:" + game.getPeriod() + " \t \t |");
+		showMsg("| Round:" + game.getRound() + " \t \t |");
 		showMsg("| \t \t \t |");
+		showMsg("| Name:" + getPlayer(name, game).getNickname() + " \t \t |");
+		showMsg("| Color:" + getPlayer(name, game).getColor() + " \t \t |");
+		showMsg("| Coins:" + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + " \t \t |");
+		showMsg("| Servants:" + getPlayer(name, game).getPersonalBoard().getResources().getServants() + " \t \t |");
 		showMsg("|________________________|");
 	}
 }

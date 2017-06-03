@@ -67,7 +67,7 @@ public class StartClient {
 			this.UI = new CLIinterface();
 			break;
 		default:
-			System.out.println("Invalid input");
+			UI.printInvalidInput();
 			printUISelection();
 			break;
 		}

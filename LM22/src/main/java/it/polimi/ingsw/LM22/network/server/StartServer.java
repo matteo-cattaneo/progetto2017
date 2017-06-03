@@ -55,15 +55,15 @@ public class StartServer {
 
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
-		Integer t = TIMER;
+		Integer[] t = { TIMER };
 		int[] ordine = { 4, 4, 4, 4, 4 };
 		player = new IPlayer[4];
 		System.out.println("Attesa client...");
 		while (i < 4) {
 			if (i == THIRDPLAYER || i == FOURTHPLAYER) {
 				// avvio il timer di connessione
-				t = attesaLogin(t, conn);
-				if (t == 0)
+				attesaLogin(t, conn);
+				if (t[0] == 0)
 					break;
 			} else {
 				// verifico se si è connesso un client su una delle due
@@ -99,16 +99,15 @@ public class StartServer {
 	}
 
 	// verifica la connessione di un client con timeout
-	public Integer attesaLogin(Integer t, SocketConnection conn) throws RemoteException, InterruptedException {
-		for (; t > 0; t--) {
-			System.out.println("Mancano " + t + " secondi");
+	public void attesaLogin(Integer[] t, SocketConnection conn) throws RemoteException, InterruptedException {
+		for (; t[0] > 0; t[0]--) {
+			System.out.println("Mancano " + t[0] + " secondi");
 			TimeUnit.SECONDS.sleep(1);
 			if (serverRMI.getClient() != null || conn.getSocket().isConnected()) {
-				t--;
+				t[0]--;
 				break;
 			}
 		}
-		return t;
 	}
 }
 

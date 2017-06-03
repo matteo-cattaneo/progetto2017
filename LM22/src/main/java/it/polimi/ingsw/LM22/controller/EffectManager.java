@@ -17,9 +17,11 @@ import it.polimi.ingsw.LM22.model.WorkActionEffect;
 
 public class EffectManager {
 	Player player;
+	MainGameController mainGC;
 
-	public void manageEffect(Effect effect, Player player) {
+	public void manageEffect(Effect effect, Player player, MainGameController mainGC) {
 		this.player = player;
+		this.mainGC = mainGC;
 		try {
 			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
 			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass() });
@@ -34,7 +36,7 @@ public class EffectManager {
 		// rivedere ResourceHandler
 		ResourceHandler r = new ResourceHandler();
 		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
-		r.selectCouncilPrivilege(effect.getCouncilPrivilege());
+		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
 	}
 
 	private void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {

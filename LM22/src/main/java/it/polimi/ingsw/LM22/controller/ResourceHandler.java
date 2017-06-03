@@ -167,15 +167,4 @@ public class ResourceHandler {
 		victory = s1.getVictory() + s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
-
-	/*
-	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente
-	 * x councilPrivilege e permette di scegliere x councilPrivilege diversi, si
-	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
-	 * ciclo dopo si toglie il tipo di risorsa già scelto
-	 */
-	public void selectCouncilPrivilege(Integer councilNumber) {
-		// TO-DO
-	}
-
 }

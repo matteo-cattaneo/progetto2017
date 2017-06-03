@@ -36,15 +36,15 @@ public class MainGameController implements Runnable {
 	private Game game = new Game();
 	private IPlayer iplayer[];
 	private int[] ordine;
-	private int n;
+	private int nPlayers;
 	private VaticanReportManager vaticanReportManager;
 	private TurnInizializator turnInizializator;
 	private InitialConfigurator initialConfigurator;
 	private MoveManager moveManager = new MoveManager(game);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
-	public MainGameController(IPlayer iplayer[], int[] ordine, int n) throws RemoteException {
-		this.n = n;
+	public MainGameController(IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
+		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
 		this.ordine = ordine;
 		setupPlayers();
@@ -59,7 +59,6 @@ public class MainGameController implements Runnable {
 		try {
 			iplayer[ordine[i]].showBoard(game);
 			while (true) {
-				System.out.println("Player " + ordine[i] + " name: " + iplayer[ordine[i]].getName());
 				sMove = iplayer[ordine[i]].yourTurn();
 				aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
 				// moveManager.manageMove(aMove);
@@ -67,9 +66,11 @@ public class MainGameController implements Runnable {
 				sendAll();// invio a tutti il nuovo model
 				if (ordine[i + 1] == 4) {
 					i = 0;
+					// vaticano
 				} else {
 					i++;
 				}
+				// turn initializzator
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +82,7 @@ public class MainGameController implements Runnable {
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
 	private void setupPlayers() throws RemoteException {
-		Player players[] = new Player[n];
+		Player players[] = new Player[nPlayers];
 		game.setPlayers(players);
 		int i = 0;
 		for (Player p : game.getPlayers()) {
@@ -108,7 +109,7 @@ public class MainGameController implements Runnable {
 	}
 
 	private void sendAll() throws IOException {
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < nPlayers; j++) {
 			iplayer[j].showBoard(game);
 		}
 	}
@@ -182,66 +183,13 @@ public class MainGameController implements Runnable {
 	}
 
 	/*
-	 * metodo che controlla se il Player ha sufficienti risorse per comprare una
-	 * carta invocato da MoveManager per controllare l'acquistabilità
-	 * 
-	 * --> sarebbe ottimo avere questo metodo in overload per le varie tipologie
-	 * di carte
-	 * 
-	 */
-	public boolean enoughResources(TerritoryCard card, CardMove cardMove) {
-		return true;
-
-	}
-
-	public boolean enoughResources(CharacterCard card, CardMove cardMove) {
-		return true;
-
-	}
-
-	public boolean enoughResources(BuildingCard card, CardMove cardMove) {
-		return true;
-
-	}
-
-	public boolean enoughResources(VentureCard card, CardMove cardMove) {
-		return true;
-
-	}
-
-	/*
-	 * metodo in grado di controllare se la prima risorsa è >= della seconda
-	 * (true)
-	 */
-	public boolean compareResources(Resource playerResource, Resource resource) {
-		return true;
-		// TO-DO
-	}
-
-	/*
-	 * aggiunge la risorsa ricevuta come secondo parametro alla risorsa ricevuta
-	 * come primo parametro
-	 */
-	public void addResource(Resource playerResource, Resource addingResource) {
-		// TO-DO
-	}
-
-	/*
-	 * toglie la risorsa ricevuta come secondo parametro alla risorsa ricevuta
-	 * come primo parametro
-	 */
-	public void subResource(Resource playerResource, Resource addingResource) {
-		// TO-DO
-	}
-
-	/*
 	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente
 	 * x councilPrivilege e permette di scegliere x councilPrivilege diversi, si
 	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
 	 * ciclo dopo si toglie il tipo di risorsa già scelto
 	 */
 	public void selectCouncilPrivilege(Integer councilNumber) {
-		// TO-DO
+
 	}
 
 	/*

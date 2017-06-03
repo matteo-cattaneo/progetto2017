@@ -35,6 +35,7 @@ public class InitialConfigurator extends TurnInizializator {
 	public void initializeTurn(Game game) {
 		game.setPeriod(1);
 		game.setRound(1);
+		// boardgame
 		// altri parametri?
 	}
 
@@ -75,7 +76,7 @@ public class InitialConfigurator extends TurnInizializator {
 		// faithGrid
 		// market
 		// torri
-		// plancia
+		// plancia : selezionare personalTile
 		// consiglio
 	}
 

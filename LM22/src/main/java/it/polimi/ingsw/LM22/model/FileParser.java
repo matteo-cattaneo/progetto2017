@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,12 +13,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
 public class FileParser {
-
-	public static void main(String[] args) {
-		Game game = new Game();
-		FileParser f = new FileParser();
-		f.getDevCards(game);
-	}
 
 	public void getDevCards(Game game) {
 		FileParser f = new FileParser();
@@ -36,25 +29,25 @@ public class FileParser {
 				.registerSubtype(ColorCardBonusEffect.class).registerSubtype(NoCardSpaceBonusEffect.class);
 
 		// tipi di carte per l'oggetto GSON
-		Type bType = new TypeToken<Collection<BuildingCard>>() {
+		Type bType = new TypeToken<ArrayList<BuildingCard>>() {
 		}.getType();
-		Type cType = new TypeToken<Collection<CharacterCard>>() {
+		Type cType = new TypeToken<ArrayList<CharacterCard>>() {
 		}.getType();
-		Type tType = new TypeToken<Collection<TerritoryCard>>() {
+		Type tType = new TypeToken<ArrayList<TerritoryCard>>() {
 		}.getType();
-		Type vType = new TypeToken<Collection<VentureCard>>() {
+		Type vType = new TypeToken<ArrayList<VentureCard>>() {
 		}.getType();
 
 		try {
 			// chiamo la funzione loadCards che restituisce
-			ArrayList<BuildingCard> bCards = f.<ArrayList<BuildingCard>>loadCards("BuildingCard", AdapterImm,
+			ArrayList<BuildingCard> bCards = f.<ArrayList<BuildingCard>>loadDevCards("BuildingCard", AdapterImm,
 					AdapterPerm, bType);
-			ArrayList<CharacterCard> cCards = f.<ArrayList<CharacterCard>>loadCards("CharacterCard", AdapterImm,
+			ArrayList<CharacterCard> cCards = f.<ArrayList<CharacterCard>>loadDevCards("CharacterCard", AdapterImm,
 					AdapterPerm, cType);
-			ArrayList<TerritoryCard> tCards = f.<ArrayList<TerritoryCard>>loadCards("TerritoryCard", AdapterImm,
+			ArrayList<TerritoryCard> tCards = f.<ArrayList<TerritoryCard>>loadDevCards("TerritoryCard", AdapterImm,
 					AdapterPerm, tType);
-			ArrayList<VentureCard> vCards = f.<ArrayList<VentureCard>>loadCards("VentureCard", AdapterImm, AdapterPerm,
-					vType);
+			ArrayList<VentureCard> vCards = f.<ArrayList<VentureCard>>loadDevCards("VentureCard", AdapterImm,
+					AdapterPerm, vType);
 			// importo le carte nell'oggetto game
 			game.setBuildingCards(bCards);
 			game.setCharacterCards(cCards);
@@ -91,13 +84,13 @@ public class FileParser {
 		// }
 	}
 
-	private <T> T loadCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
+	private <T> T loadDevCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
 			RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm, Type type) throws IOException {
 		// desktop come impostazione predefinita ###
 		String desktop = System.getProperty("user.home") + "\\Desktop\\";
 		// ottengo il contenuto del file
 		String text = new String(Files.readAllBytes(Paths.get(desktop + fileName + ".json")), StandardCharsets.UTF_8);
-		//genero l'oggetto deserializzatore GSON
+		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).registerTypeAdapterFactory(AdapterPerm)
 				.create();
 		// ritorno le carte con il tipo generico T (specificato alla chiamata)
