@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class DiceCardMalusEx extends DiceMalusEx implements Serializable{
 
-	private String cardType;
+	private Integer cardType;
 
-	public String getCardType() {
+	public Integer getCardType() {
 		return cardType;
 	}
 	

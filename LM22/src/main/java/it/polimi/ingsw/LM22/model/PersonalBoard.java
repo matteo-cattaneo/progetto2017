@@ -18,7 +18,6 @@ public class PersonalBoard implements Serializable {
 	 * controllo mentre viene effettuata una azione
 	 */
 	private List<PermanentEffect> permanentEffects;
-	private List<ExCommunication> exCommunications;
 
 	public Resource getResources() {
 		return resources;
@@ -66,14 +65,6 @@ public class PersonalBoard implements Serializable {
 
 	public void setVenturesCards(List<VentureCard> venturesCards) {
 		this.venturesCards = venturesCards;
-	}
-
-	public List<ExCommunication> getExCommunications() {
-		return exCommunications;
-	}
-
-	public void setExCommunications(List<ExCommunication> exCommunications) {
-		this.exCommunications = exCommunications;
 	}
 
 }

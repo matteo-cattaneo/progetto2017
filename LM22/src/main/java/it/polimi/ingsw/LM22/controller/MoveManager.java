@@ -2,23 +2,30 @@ package it.polimi.ingsw.LM22.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
-import it.polimi.ingsw.LM22.model.TerritoryCard;
-import it.polimi.ingsw.LM22.model.Tower;
-import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
+import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
+import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
 import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
+import it.polimi.ingsw.LM22.model.leader.NoOccupiedTowerEffect;
+import it.polimi.ingsw.LM22.model.leader.ResourceCardRequest;
+import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardSpace;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
+import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.Tower;
 
 public class MoveManager {
 
-	private final Integer SINGLE_PRIVILEGE = 1;
+	private final Integer SINGLE_PRIVILEGE = 0;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
 	private final String PRODUCTION = "PRODUCTION";
@@ -33,12 +40,14 @@ public class MoveManager {
 	// private final Integer CHARACTER = 1;
 	// private final Integer BUILDING = 2;
 	// private final Integer VENTURE = 3;
-	private Game game = null;
+	private Game game;
+	private MainGameController mainGame;
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	public EffectManager effectManager;
 
-	public MoveManager(Game game) {
+	public MoveManager(Game game, MainGameController mainGame) {
 		this.game = game;
+		this.mainGame = mainGame;
 	}
 
 	/*
@@ -84,7 +93,6 @@ public class MoveManager {
 			return false;
 		if (!checkCardSpace(cardMove))
 			return false;
-		// se sono qui HO GIA' RICEVUTO IL BONUS DELLO SPAZIO AZIONE
 		// check se la torre è già occupata da un familiare dello stesso player
 		if (game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
 				.contains(cardMove.getPlayer().getColor()))
@@ -126,17 +134,31 @@ public class MoveManager {
 	 */
 	private boolean checkCardSpace(CardMove cardMove) {
 		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
+		if (space.getMember() != null)
+			if (!containsClass(cardMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
+				return false;
 		if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
 				+ cardMove.getServantsAdded().getServants()))
 			return false;
-		if (space.getMember() != null)
-			if (!hasLudovicoAriostoActivated(cardMove))
-				return false;
-		Resource bonus = space.getReward();
-		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
+		if(containsClass(cardMove.getPlayer().getEffects(), DiceCardMalusEx.class)){
+			for (Effect e: cardMove.getPlayer().getEffects()){
+				if (e instanceof DiceCardMalusEx){
+					if (((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())){
+						if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue() 
+								+ cardMove.getServantsAdded().getServants() - ((DiceCardMalusEx) e).getMalus()))
+							return false;
+					}
+					break;
+				}
+			}
+		}
 		return true;
 	}
 
+	/*
+	 * metodo che gestisce il controllo del costo di una carta, gestendo anche tutti i relativi effetti
+	 * che possono essere applicati ad una mossa di tipo CardMove
+	 */
 	private boolean checkCardCost(CardMove cardMove) {
 		int tower = cardMove.getTowerSelected();
 		Tower t = game.getBoardgame().getTowers()[tower];
@@ -150,7 +172,7 @@ public class MoveManager {
 		// ATTENZIONE
 		Resource additionalCost = NOTHING;
 		boolean occupied = t.isOccupied();
-		boolean hasBrunelleschi = hasFilippoBrunelleschiActivated(cardMove);
+		boolean hasBrunelleschi = containsClass(cardMove.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
 		if (occupied && !hasBrunelleschi)
 			additionalCost = THREE_COINS;
 		else if (!occupied || hasBrunelleschi)
@@ -167,8 +189,9 @@ public class MoveManager {
 			// aggiungere controlli su effetti permanenti per riduzione costo
 			// carte
 			ColorCardBonusEffect e = new ColorCardBonusEffect();
-			if (cardMove.getPlayer().getEffects()
-					.contains(e.getCardType() == "BUILDING" && e.getCardDiscount() != null))
+//			CONTROLLO SE HO EFFETTI DI QUALSIASI TIPO SU QUELLA TORRE
+//			if (cardMove.getPlayer().getEffects()
+//					.contains(e.getCardType() == "BUILDING" && e.getCardDiscount() != null))
 				cardCost = ((BuildingCard) card).getCost();
 			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
@@ -181,9 +204,8 @@ public class MoveManager {
 				return false;
 			break;
 		case 0:
-			cardCost = NOTHING;
-			if (!militaryPointsAvailable(cardMove)
-					|| !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
+			if (!militaryPointsAvailable(cardMove) || 
+					!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		}
@@ -199,7 +221,7 @@ public class MoveManager {
 	 * attivata la carta Leader che annulla questo controllo
 	 */
 	private boolean militaryPointsAvailable(CardMove cardMove) {
-		if (!hasCesareBorgiaActivated(cardMove)) {
+		if (!containsClass(cardMove.getPlayer().getEffects(), NoMilitaryRequestEffect.class)) {
 			switch (cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().size()) {
 			case 0:
 			case 1:
@@ -243,9 +265,11 @@ public class MoveManager {
 	 */
 	private boolean marketmoveAllowed(MarketMove marketMove) {
 		// check per controllare se ho scomunica del tipo NoMarkeEx
+		if (containsClass(marketMove.getPlayer().getEffects(), NoMarketEx.class))
+			return false;
 		int pos = marketMove.getMarketSpaceSelected();
 		if (game.getBoardgame().getMarket()[pos].getMember() != null)
-			if (!hasLudovicoAriostoActivated(marketMove))
+			if (!containsClass(marketMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 				return false;
 		if (marketMove.getMemberUsed().getValue() < game.getBoardgame().getMarket()[pos].getSpaceRequirement())
 			return false;
@@ -281,7 +305,7 @@ public class MoveManager {
 	 * dell'azione in base al Malus specificato nelle regole
 	 */
 	private boolean checkWorkSpace(WorkMove workMove) {
-		if (!hasLudovicoAriostoActivated(workMove)) {
+		if (!containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)) {
 			switch (game.getPlayers().length) {
 			case 2:
 				if (workMove.getWorkType() == "PRODUCTION") {
@@ -355,10 +379,9 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo CouncilMove
 	 */
-	private void councilMoveHandle(CouncilMove councilMove) {
+	private void councilmoveHandle(CouncilMove councilMove) {
 		councilMove.getMemberUsed().setUsed(true);
-		game.getBoardgame().getCouncilPalace().getMembers()
-				.set(game.getBoardgame().getCouncilPalace().getMembers().size(), councilMove.getMemberUsed());
+		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
 		/*
 		 * prendo le varie risorse (moneta oppure privilegi del consiglio)
 		 */
@@ -367,26 +390,23 @@ public class MoveManager {
 		resourceHandler.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
 	}
 
+	private boolean leadercardsellingAllowed(LeaderCardSelling move){
+		return true;
+	}
+	
 	/*
 	 * gestisce la vendita di una carta leader e consentirà la scelta del
 	 * privilegio del consiglio + se la carta era attiva devo anche togliere il
 	 * suo effetto dalla lista degli effetti attualmente attivi
 	 */
-	private void sellLeaderCard() {
-		// controllo se la carta è già stata venduta o meno
-		// + cancello il suo effetto dalla lista degli effetti attivi (se
-		// presente)
+	private void leadercardsellingHandle(LeaderCardSelling move) {
+		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
+			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
+		else{
+			move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
+			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
+		}
 		resourceHandler.selectCouncilPrivilege(SINGLE_PRIVILEGE);
-	}
-
-	/*
-	 * indica una carta leader come attivata nel caso i suoi requisiti siano
-	 * soddisfatti --> aggiunge il relativo effetto alla lista degli effetti
-	 * presente nel Player
-	 */
-	private void activateLeaderCard(LeaderCardActivation move) {
-		if (leaderCardActivationAllowed(move))
-			move.getPlayer().getEffects().set(move.getPlayer().getEffects().size(), move.getLeaderCard().getEffect());
 	}
 
 	/*
@@ -395,42 +415,53 @@ public class MoveManager {
 	 * attivata --> sarà poi gestita dai vari controlli comunque interni a
 	 * questa classe
 	 */
-	private boolean leaderCardActivationAllowed(LeaderCardActivation move) {
-		return true;// TODO
+	private boolean leadercardactivationAllowed(LeaderCardActivation move) {
+		LeaderCardRequest req = move.getLeaderCard().getRequest();
+		if (req instanceof CardRequest){
+			CardRequest r = ((CardRequest)move.getLeaderCard().getRequest());
+			if (r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size() || 
+					r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size() ||
+					r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size() ||
+					r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size())
+				return false;
+		}
+		else if (req instanceof ResourceRequest){
+			ResourceRequest r = ((ResourceRequest)move.getLeaderCard().getRequest());
+			if (!resourceHandler.enoughResources(move.getPlayer().getPersonalBoard().getResources(), r.getResource()))
+				return false;
+		}
+		else if (req instanceof ResourceCardRequest){
+			ResourceCardRequest r = ((ResourceCardRequest)move.getLeaderCard().getRequest());
+			if ((r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size() || 
+					r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size() ||
+					r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size() ||
+					r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size()) ||
+					!resourceHandler.enoughResources(move.getPlayer().getPersonalBoard().getResources(), r.getResource()))
+				return false;
+		}
+		return true;
+	}
+	
+	/*
+	 * metodo che gestisce la procedura di attivazione di una carta
+	 */
+	private void leadercardactivationHandle(LeaderCardActivation move){
+//		move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
 	}
 
 	/*
-	 * scorre la lista degli effetti attualmente attivi e cerca Ludovico Ariosto
-	 * (attivo)
+	 * metodo che dice se la lista di effetti di un player contiene un elemento di quella classe
 	 */
-	private boolean hasLudovicoAriostoActivated(AbstractMove move) {
-		InOccupiedSpaceEffect e = new InOccupiedSpaceEffect();
-		/*
-		 * qui vorrei avere una istruzione che mi cerca se ho un elemento di
-		 * tipo InOccupiedSpaceEffect TODO
-		 */
-		boolean res = move.getPlayer().getEffects().contains(e.getClass());
-		res = move.getPlayer().getEffects().contains(InOccupiedSpaceEffect.class);
-		return res;
+	private boolean containsClass(List<Effect> list, Object o){
+		for (Effect e : list){
+			if (e.getClass().equals(o.getClass())){
+				return true;
+			}
+		}
+		return false;
 	}
-
-	/*
-	 * scorre la lista degli effetti attualmente attivi e cerca Cesare Borgia
-	 * (attivo)
-	 */
-	private boolean hasCesareBorgiaActivated(CardMove move) {
-		NoMilitaryRequestEffect e = new NoMilitaryRequestEffect();
-		/*
-		 * qui vorrei avere una istruzione che mi cerca se ho un elemento di
-		 * tipo NoMilitaryRequestEffect TODO
-		 */
-		boolean res = move.getPlayer().getEffects().contains(e.getClass());
-		res = move.getPlayer().getEffects().contains(NoMilitaryRequestEffect.class);
-		return res;
-	}
-
-	private boolean hasFilippoBrunelleschiActivated(CardMove move) {
-		return true; // TODO
-	}
-
+	
+//	private Effect giveIfContainedClass(List<Effect> list, Object o){
+//		
+//	}
 }
