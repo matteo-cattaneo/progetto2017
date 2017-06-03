@@ -21,6 +21,7 @@ import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 
 public class MoveManager {
@@ -271,7 +272,7 @@ public class MoveManager {
 		if (game.getBoardgame().getMarket()[pos].getMember() != null)
 			if (!containsClass(marketMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 				return false;
-		if (marketMove.getMemberUsed().getValue() < game.getBoardgame().getMarket()[pos].getSpaceRequirement())
+		if (marketMove.getMemberUsed().getValue() + marketMove.getServantsAdded().getServants() < game.getBoardgame().getMarket()[pos].getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -288,7 +289,8 @@ public class MoveManager {
 		 */
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				game.getBoardgame().getMarket()[opt].getReward());
-		resourceHandler.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege());
+		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(), marketMove.getServantsAdded());
+		mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege());
 	}
 
 	/*
@@ -345,7 +347,8 @@ public class MoveManager {
 	 * gestisce una mossa del tipo WorkMove
 	 */
 	private void workMoveHandle(WorkMove workMove) {
-
+		if (workMove.getWorkType() == PRODUCTION)
+			productionHandle();
 	}
 
 	/*
@@ -363,15 +366,23 @@ public class MoveManager {
 	/*
 	 * gestisce la fase di Raccolto
 	 */
-	private void harvestHandle() {
-
+	private void harvestHandle(WorkMove move) {
+		Integer valueOfAction = move.getMemberUsed().getValue() + move.getServantsAdded().getServants();
+		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
+		Resource total = NOTHING;
+		for (TerritoryCard card: move.getPlayer().getPersonalBoard().getTerritoriesCards()){
+			if (valueOfAction >= card.getRequirement())
+				effectManager.workHandle(card.getPermanentEffect(), total);
+		}
+		effectManager.workHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total);
+		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
 	/*
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
 	private boolean councilmoveAllowed(CouncilMove councilMove) {
-		if (councilMove.getMemberUsed().getValue() < game.getBoardgame().getCouncilPalace().getSpaceRequirement())
+		if (councilMove.getMemberUsed().getValue() + councilMove.getServantsAdded().getServants() < game.getBoardgame().getCouncilPalace().getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -387,7 +398,7 @@ public class MoveManager {
 		 */
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				game.getBoardgame().getCouncilPalace().getReward());
-		resourceHandler.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
+		mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
 	}
 
 	private boolean leadercardsellingAllowed(LeaderCardSelling move){
@@ -406,7 +417,7 @@ public class MoveManager {
 			move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
 			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
 		}
-		resourceHandler.selectCouncilPrivilege(SINGLE_PRIVILEGE);
+		mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE);
 	}
 
 	/*

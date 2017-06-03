@@ -11,6 +11,7 @@ import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.NoEffect;
 import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
@@ -18,6 +19,7 @@ import it.polimi.ingsw.LM22.model.WorkActionEffect;
 public class EffectManager {
 	Player player;
 	MainGameController mainGC;
+	ResourceHandler r = new ResourceHandler();
 
 	public void manageEffect(Effect effect, Player player, MainGameController mainGC) {
 		this.player = player;
@@ -34,9 +36,14 @@ public class EffectManager {
 
 	private void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) {
 		// rivedere ResourceHandler
-		ResourceHandler r = new ResourceHandler();
 		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
 		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
+	}
+	
+	public void workHandle(ResourcePrivilegeEffect effect, Resource resource){
+		r.addResource(resource, effect.getResource());
+		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
+		//manca la somma del privilegio del consiglio scelto
 	}
 
 	private void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {

@@ -1,23 +1,7 @@
 package it.polimi.ingsw.LM22.controller;
 
-import it.polimi.ingsw.LM22.model.BuildingCard;
-import it.polimi.ingsw.LM22.model.CardSpace;
 import it.polimi.ingsw.LM22.model.CharacterCard;
-import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.TerritoryCard;
-import it.polimi.ingsw.LM22.model.Tower;
-import it.polimi.ingsw.LM22.model.VentureCard;
-
-/*
- * tutta questa classe dovrebbe essere rivista in base al tipo di 
- * struttura che vogliamo dare alla classe Resource del Model
- * - 7 attributi
- * - array di 7 interi 
- * - Set di risorse singole?
- * - altre opzioni?
- * 
- * */
 
 public class ResourceHandler {
 	/*
@@ -146,8 +130,22 @@ public class ResourceHandler {
 	 * toglie la risorsa ricevuta come secondo parametro alla risorsa ricevuta
 	 * come primo parametro
 	 */
-	public void subResource(Resource playerResource, Resource addingResource) {
-		// TO-DO
+	public void subResource(Resource s1, Resource s2) {
+		Integer wood = 0;
+		Integer stone = 0;
+		Integer coins = 0;
+		Integer servants = 0;
+		Integer faith = 0;
+		Integer military = 0;
+		Integer victory = 0;
+		wood = s1.getWood() - s2.getWood();
+		stone= s1.getStone() - s2.getStone();
+		coins= s1.getCoins() - s2.getCoins();
+	    servants = s1.getServants() - s2.getServants();
+		faith = s1.getFaith() - s2.getFaith();
+		military = s1.getMilitary() - s2.getMilitary();
+		victory = s1.getVictory() - s2.getVictory();
+		s1 = new Resource (wood, stone, servants, coins, faith, military, victory);		
 	}
 
 	public Resource sumResource(Resource s1, Resource s2) {
