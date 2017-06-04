@@ -6,6 +6,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 
 public class ResourceCardRequest extends LeaderCardRequest implements Serializable{
 
+	private static final long serialVersionUID = 1616137976175717083L;
 	private Resource resource;
 	private Integer territoryCards; 
 	private Integer characterCards;

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class LeaderCard implements Serializable{
 	
+	private static final long serialVersionUID = -3480796713023783579L;
 	private String name;
 	private LeaderCardRequest request;
 	private LeaderEffect effect;

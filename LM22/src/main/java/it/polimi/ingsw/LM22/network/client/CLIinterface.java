@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
  * Classe che contiene tutti i metodi che permettono all'utente 

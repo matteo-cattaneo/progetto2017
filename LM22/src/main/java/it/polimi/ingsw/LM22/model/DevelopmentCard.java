@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public abstract class DevelopmentCard  implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private Integer period;
 	private ImmediateEffect immediateEffect;

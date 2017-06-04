@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class BoardGame implements Serializable {
+
+	private static final long serialVersionUID = 3178699533089217722L;
 	/*
 	 * costanti da mettere forse nel controller?
 	 */

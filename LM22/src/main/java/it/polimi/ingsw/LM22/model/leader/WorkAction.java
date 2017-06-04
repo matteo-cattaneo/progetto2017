@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class WorkAction extends LeaderEffect implements Serializable{
 
+	private static final long serialVersionUID = 648377154947587601L;
 	private String typeOfWork;
 	private Integer valueOfWork;
 	

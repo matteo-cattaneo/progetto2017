@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class CardSpace extends AbstractSpace implements Serializable {
 
+	private static final long serialVersionUID = 8590533407219552800L;
 		private final Integer level;
 		private final Resource reward;
 		private FamilyMember member;

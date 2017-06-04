@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class WorkMalusEx extends ExEffect implements Serializable{
 
+	private static final long serialVersionUID = 4944033841150657858L;
 	private String typeOfWork;
 	private Integer valueOfMalus;
 	

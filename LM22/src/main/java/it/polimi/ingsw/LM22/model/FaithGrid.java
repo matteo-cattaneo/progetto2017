@@ -5,6 +5,8 @@ import java.io.Serializable;
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
 
 public class FaithGrid  implements Serializable {
+	
+	private static final long serialVersionUID = -1137579846689196478L;
 	private final Integer GRIDLENGTH = 16;
 	private final Integer EXNUMBER = 3;
 	private final ExCommunication exCommunicationTiles[] = new ExCommunication[EXNUMBER];

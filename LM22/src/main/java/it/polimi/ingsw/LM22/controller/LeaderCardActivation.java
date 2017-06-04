@@ -4,6 +4,7 @@ import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
+
 public class LeaderCardActivation extends AbstractMove {
 	private LeaderCard leaderCard;
 	private Resource servants;

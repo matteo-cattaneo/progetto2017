@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MemberChangeEffect extends MemberValueEffect implements Serializable{
 
+	private static final long serialVersionUID = 6461929235057767416L;
 	private String typeOfMember;
 	private Integer newValueOfMember;
 	public String getTypeOfMember() {

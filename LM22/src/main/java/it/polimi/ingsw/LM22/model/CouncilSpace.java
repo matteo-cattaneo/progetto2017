@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CouncilSpace extends AbstractSpace implements Serializable {
 
+	private static final long serialVersionUID = 923010337475400979L;
 	private final Integer councilPrivilege = 1;
 	private final Resource reward;
 	private List<FamilyMember> members;

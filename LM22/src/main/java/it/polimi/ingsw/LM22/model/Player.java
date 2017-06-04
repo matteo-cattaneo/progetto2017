@@ -3,12 +3,11 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 import java.util.List;
 
-import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
-import it.polimi.ingsw.LM22.model.excommunication.ExEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
-import it.polimi.ingsw.LM22.model.leader.LeaderEffect;
 
 public class Player implements Serializable {
+	
+	private static final long serialVersionUID = 7778308561624051543L;
 	private final Integer NUM_LEADER_CARDS = 4;
 	private final String nickname;
 	private final String color;

@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class Resource implements Serializable {
+	
+	private static final long serialVersionUID = -2464073930476505293L;
 	private Integer wood;
 	private Integer stone;
 	private Integer servants;

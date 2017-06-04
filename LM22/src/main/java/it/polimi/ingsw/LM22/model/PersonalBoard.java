@@ -3,9 +3,9 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 import java.util.List;
 
-import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
-
 public class PersonalBoard implements Serializable {
+	
+	private static final long serialVersionUID = -7460184029407285498L;
 	private final Integer MAXNUMCARDS = 6;
 	private PersonalBonusTile bonusBoard;
 	private Resource resources;

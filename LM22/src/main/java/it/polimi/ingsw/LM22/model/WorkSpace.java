@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class WorkSpace extends AbstractSpace implements Serializable {
-	
+
+	private static final long serialVersionUID = -4179895781015044439L;
 	private final String workType; 
 	private final Integer MALUS = 3;
 	private List<FamilyMember> members;

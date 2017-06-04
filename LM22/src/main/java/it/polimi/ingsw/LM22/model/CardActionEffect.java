@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class CardActionEffect extends ImmediateEffect implements Serializable {
+
+	private static final long serialVersionUID = 8311517314130702912L;
 	private String cardType;
 	private Integer diceValue;
 	private Resource cardDiscount;

@@ -6,6 +6,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 
 public class LeaderResourceEffect extends LeaderEffect implements Serializable{
 
+	private static final long serialVersionUID = 1724300998820029020L;
 	private Resource resource;
 	private Integer councilPrivilege;
 	public Resource getResource() {

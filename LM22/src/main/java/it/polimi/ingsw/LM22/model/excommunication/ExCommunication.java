@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class ExCommunication implements Serializable{
 	
+	private static final long serialVersionUID = -4587740058082723812L;
 	private Integer period;
 	private ExEffect effect;
 	

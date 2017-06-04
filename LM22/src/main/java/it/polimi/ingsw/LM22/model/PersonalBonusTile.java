@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class PersonalBonusTile implements Serializable {
+	
+	private static final long serialVersionUID = 2823653239917665044L;
 	private Integer requirement;
 	// costanti da inizializzare con il costruttore
 	private ResourcePrivilegeEffect productionEffect;

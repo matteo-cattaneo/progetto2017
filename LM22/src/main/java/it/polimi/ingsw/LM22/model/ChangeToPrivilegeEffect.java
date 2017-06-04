@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class ChangeToPrivilegeEffect extends ImmediateEffect implements Serializable  {
+
+	private static final long serialVersionUID = 2164988098962245810L;
 	private Resource exchangedResource;
 	private Integer councilPrivilege;
 

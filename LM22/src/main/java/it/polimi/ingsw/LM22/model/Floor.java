@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class Floor  implements Serializable {
+
+	private static final long serialVersionUID = -9002150340093349610L;
 	//inizializzare (valutare il caricamento da file)
 	private CardSpace space; 
 	private DevelopmentCard card;
