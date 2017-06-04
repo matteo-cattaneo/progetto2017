@@ -59,4 +59,6 @@ public abstract class AbstractUI {
 	public abstract void printMarketSelectionMenu() throws RemoteException;
 
 	public abstract void printInvalidInput();
+
+	public abstract String councilRequest(Integer number);
 }

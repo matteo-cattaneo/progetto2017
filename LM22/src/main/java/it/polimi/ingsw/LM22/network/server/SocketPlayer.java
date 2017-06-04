@@ -56,4 +56,11 @@ public class SocketPlayer implements IPlayer {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public String councilRequest(Integer number) throws IOException {
+		out.writeUTF("council@" + number);
+		out.flush();
+		return in.readUTF();
+	}
 }

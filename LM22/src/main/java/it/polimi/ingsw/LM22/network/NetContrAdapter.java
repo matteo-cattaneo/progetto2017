@@ -20,7 +20,7 @@ public class NetContrAdapter {
 		AbstractMove objMove = null;
 		player = p;
 		// divide sMove string into multiple parameters
-		String[] param = sMove.split("$");
+		String[] param = sMove.split("@");
 		// select the right move type and initialize with the right dynamic type
 		switch (param[0]) {
 		case "LeaderAct":

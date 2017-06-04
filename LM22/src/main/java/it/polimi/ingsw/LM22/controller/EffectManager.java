@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -34,18 +35,18 @@ public class EffectManager {
 		}
 	}
 
-	private void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) {
+	private void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
 		// rivedere ResourceHandler
 		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
-		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
+		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player);
 	}
-	
-	public void workHandle(ResourcePrivilegeEffect effect, Resource resource){
+
+	public void workHandle(ResourcePrivilegeEffect effect, Resource resource) throws IOException {
 		r.addResource(resource, effect.getResource());
-		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
-		//manca la somma del privilegio del consiglio scelto
+		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player);
+		// manca la somma del privilegio del consiglio scelto
 	}
-	
+
 	private void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
 
 	}

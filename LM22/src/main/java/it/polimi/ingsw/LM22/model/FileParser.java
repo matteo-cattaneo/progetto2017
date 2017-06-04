@@ -25,8 +25,8 @@ public class FileParser {
 				.registerSubtype(DoubleChangeEffect.class).registerSubtype(ChangeToPrivilegeEffect.class);
 		RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm = RuntimeTypeAdapterFactory
 				.of(PermanentEffect.class, "type").registerSubtype(NoPermanentEffect.class)
-				.registerSubtype(NoBoardBonusEffect.class).registerSubtype(WorkBonusEffect.class)
-				.registerSubtype(ColorCardBonusEffect.class).registerSubtype(NoCardSpaceBonusEffect.class);
+				.registerSubtype(WorkBonusEffect.class).registerSubtype(ColorCardBonusEffect.class)
+				.registerSubtype(NoCardSpaceBonusEffect.class);
 
 		// tipi di carte per l'oggetto GSON
 		Type bType = new TypeToken<ArrayList<BuildingCard>>() {

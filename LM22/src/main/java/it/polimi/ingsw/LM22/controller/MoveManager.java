@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MoveManager {
 	 * successivamente (se il check dà esito positivo) anche il metodo di manage
 	 * della mossa giusto
 	 */
-	public void manageMove(AbstractMove move) {
+	public void manageMove(AbstractMove move) throws IOException {
 		boolean checkResult = false;
 		String name;
 		Method method;
@@ -318,7 +319,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo MarketMove
 	 */
-	private void marketmoveHandle(MarketMove marketMove) {
+	private void marketmoveHandle(MarketMove marketMove) throws IOException {
 		int opt = marketMove.getMarketSpaceSelected();
 		game.getBoardgame().getMarket()[opt].setMember(marketMove.getMemberUsed());
 		marketMove.getMemberUsed().setUsed(true);
@@ -329,7 +330,8 @@ public class MoveManager {
 				game.getBoardgame().getMarket()[opt].getReward());
 		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				marketMove.getServantsAdded());
-		mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege());
+		mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
+				marketMove.getPlayer());
 	}
 
 	/*
@@ -405,7 +407,7 @@ public class MoveManager {
 	/*
 	 * gestisce la fase di Raccolto
 	 */
-	private void harvestHandle(WorkMove move) {
+	private void harvestHandle(WorkMove move) throws IOException {
 		Integer valueOfAction = move.getMemberUsed().getValue() + move.getServantsAdded().getServants();
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
@@ -430,7 +432,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo CouncilMove
 	 */
-	private void councilmoveHandle(CouncilMove councilMove) {
+	private void councilmoveHandle(CouncilMove councilMove) throws IOException {
 		councilMove.getMemberUsed().setUsed(true);
 		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
 		/*
@@ -438,7 +440,8 @@ public class MoveManager {
 		 */
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				game.getBoardgame().getCouncilPalace().getReward());
-		mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
+		mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
+				councilMove.getPlayer());
 	}
 
 	private boolean leadercardsellingAllowed(LeaderCardSelling move) {
@@ -450,16 +453,18 @@ public class MoveManager {
 	 * privilegio del consiglio + se la carta era attiva devo anche togliere il
 	 * suo effetto dalla lista degli effetti attualmente attivi
 	 */
-	private void leadercardsellingHandle(LeaderCardSelling move) {
+	private void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
 		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
 			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 		else {
-			if (move.getLeaderCard().getEffect() instanceof MemberBonusEffect || move.getLeaderCard().getEffect() instanceof MemberChangeEffect)
-				//gestisco la rimozione di un effetto che modifica il valore dei familiari
-			move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
+			if (move.getLeaderCard().getEffect() instanceof MemberBonusEffect
+					|| move.getLeaderCard().getEffect() instanceof MemberChangeEffect)
+				// gestisco la rimozione di un effetto che modifica il valore
+				// dei familiari
+				move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
 			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
 		}
-		mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE);
+		mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer());
 	}
 
 	/*
@@ -527,4 +532,12 @@ public class MoveManager {
 	// private Effect giveIfContainedClass(List<Effect> list, Object o){
 	//
 	// }
+
+	private boolean endmoveAllowed(EndMove move) {
+		return true;
+	}
+
+	private void endmoveHandle(EndMove move) {
+
+	}
 }

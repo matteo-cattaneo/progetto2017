@@ -30,6 +30,8 @@ public class MainGameController implements Runnable {
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
+	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
+
 	private final Integer PERIOD_END_DEFINER = 2;
 
 	private Integer TIMER_PER_MOVE; // caricabile da file
@@ -42,6 +44,8 @@ public class MainGameController implements Runnable {
 	private InitialConfigurator initialConfigurator;
 	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
+	private ResourceHandler resourceHandler = new ResourceHandler();
+	private int i = 0;
 
 	public MainGameController(IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
@@ -55,23 +59,25 @@ public class MainGameController implements Runnable {
 	public void run() {
 		String sMove;
 		AbstractMove aMove;
-		int i = 0;
 		try {
-			iplayer[ordine[i]].showBoard(game);
-			while (true) {
-				sMove = iplayer[ordine[i]].yourTurn();
-				aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
-				// moveManager.manageMove(aMove);
-				System.out.println(sMove);
-				sendAll();// invio a tutti il nuovo model
-				if (ordine[i + 1] == 4) {
-					i = 0;
-					// vaticano
-				} else {
-					i++;
-				}
-				// turn initializzator
+			sendAll();// invio a tutti il model
+
+			sMove = iplayer[ordine[i]].yourTurn();
+			System.out.println(sMove);
+			aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
+			moveManager.manageMove(aMove);
+
+			if (ordine[i + 1] == 4) {
+				i = 0;
+				// endturn
+				// vaticano
+				// run
+			} else {
+				i++;
+				run();
 			}
+			// turn initializzator
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Partita terminata!");
@@ -104,6 +110,14 @@ public class MainGameController implements Runnable {
 		for (Player p : game.getPlayers()) {
 			if (p.getNickname().equals(ip.getName()))
 				return p;
+		}
+		return null;
+	}
+
+	private IPlayer getIPlayer(Player p) throws RemoteException {
+		for (IPlayer ip : iplayer) {
+			if (p.getNickname().equals(ip.getName()))
+				return ip;
 		}
 		return null;
 	}
@@ -188,9 +202,14 @@ public class MainGameController implements Runnable {
 	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
 	 * ciclo dopo si toglie il tipo di risorsa già scelto
 	 */
-	public Resource selectCouncilPrivilege(Integer councilNumber) {
-		return null;
-		// TODO
+	public Resource selectCouncilPrivilege(Integer councilNumber, Player player) throws IOException {
+		Resource resource = new Resource(0, 0, 0, 0, 0, 0, 0);
+		String result = getIPlayer(player).councilRequest(councilNumber);
+		String[] cp = result.split("@");
+		for (String c : cp) {
+			resource = resourceHandler.sumResource(resource, councilResource.get(c));
+		}
+		return resource;
 	}
 
 	/*
@@ -219,4 +238,14 @@ public class MainGameController implements Runnable {
 
 	}
 
+	private HashMap<String, Resource> initializeCouncilMap() {
+		HashMap<String, Resource> map = new HashMap<String, Resource>();
+		map.put("wood&stone", new Resource(1, 1, 0, 0, 0, 0, 0));
+		map.put("servants", new Resource(0, 0, 2, 0, 0, 0, 0));
+		map.put("coins", new Resource(0, 0, 0, 2, 0, 0, 0));
+		map.put("military", new Resource(0, 0, 0, 0, 0, 2, 0));
+		map.put("faith", new Resource(0, 0, 0, 0, 1, 0, 0));
+		map.put("", new Resource(0, 0, 0, 0, 0, 0, 0));
+		return map;
+	}
 }

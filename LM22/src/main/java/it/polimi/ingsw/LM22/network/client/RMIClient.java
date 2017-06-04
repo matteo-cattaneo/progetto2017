@@ -9,7 +9,7 @@ import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
 	private String name;
 	private AbstractUI UI;
@@ -58,5 +58,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		UI.showBoard(game);
+	}
+
+	@Override
+	public String councilRequest(Integer number) throws RemoteException {
+		return UI.councilRequest(number);
 	}
 }

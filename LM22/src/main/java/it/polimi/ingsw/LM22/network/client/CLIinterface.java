@@ -44,7 +44,7 @@ public class CLIinterface extends AbstractUI {
 	 * costruisco la stringa mossa per poi poterla inviare al server
 	 */
 	public void setMove(String add) {
-		move = move + add + "$";
+		move = move + add + "@";
 	}
 
 	/*
@@ -60,6 +60,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public void printMoveMenu() throws RemoteException {
+		move = "";
 		showMsg("Choose your Move:");
 		showMsg("1: Move a Member");
 		showMsg("2: Sell a LeaderCard");
@@ -330,11 +331,13 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public int showConnectionSelection() {
-		int connType;
-		showMsg("Connection type: ");
-		showMsg("1: RMI");
-		showMsg("2: Socket");
-		connType = Integer.parseInt(in.nextLine());
+		int connType = 0;
+		while (connType != 1 && connType != 2) {
+			showMsg("Connection type: ");
+			showMsg("1: RMI");
+			showMsg("2: Socket");
+			connType = Integer.parseInt(in.nextLine());
+		}
 		return connType;
 	}
 
@@ -389,14 +392,62 @@ public class CLIinterface extends AbstractUI {
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
 		// game object deserialization
-		showMsg("_________________________");
-		showMsg("| Periodo:" + game.getPeriod() + " \t \t |");
-		showMsg("| Round:" + game.getRound() + " \t \t |");
-		showMsg("| \t \t \t |");
-		showMsg("| Name:" + getPlayer(name, game).getNickname() + " \t \t |");
-		showMsg("| Color:" + getPlayer(name, game).getColor() + " \t \t |");
-		showMsg("| Coins:" + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + " \t \t |");
-		showMsg("| Servants:" + getPlayer(name, game).getPersonalBoard().getResources().getServants() + " \t \t |");
-		showMsg("|________________________|");
+		showMsg("_________________________________");
+		showMsg("| Period: " + game.getPeriod() + " \t \t \t |");
+		showMsg("| Round: " + game.getRound() + " \t \t \t |");
+		showMsg("| \t \t \t \t |");
+		showMsg("| Name: " + getPlayer(name, game).getNickname() + " \t \t \t |");
+		showMsg("| Color: " + getPlayer(name, game).getColor() + " \t \t \t |");
+		showMsg("| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + " \t \t \t |");
+		showMsg("| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood() + " \t \t \t |");
+		showMsg("| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone() + " \t \t \t |");
+		showMsg("| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants() + " \t \t \t |");
+		showMsg("| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith() + " \t \t |");
+		showMsg("| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary()
+				+ " \t \t |");
+		showMsg("| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory()
+				+ " \t \t |");
+		showMsg("|________________________________|");
+	}
+
+	@Override
+	public String councilRequest(Integer number) {
+		String result = new String();
+		for (int k = 0; k < number;) {
+			showMsg("Choose the Council Privilege reward:");
+			showMsg("1: one stone & one wood");
+			showMsg("2: two servants");
+			showMsg("3: two conis");
+			showMsg("4: two military points");
+			showMsg("5: one faith point");
+			int option = in.nextInt();
+			switch (option) {
+			case 1:
+				result = result + "@wood&stone";
+				k++;
+				break;
+			case 2:
+				result = result + "@servants";
+				k++;
+				break;
+			case 3:
+				result = result + "@coins";
+				k++;
+				break;
+			case 4:
+				result = result + "@military";
+				k++;
+				break;
+			case 5:
+				result = result + "@faith";
+				k++;
+				break;
+			default:
+				printInvalidInput();
+				break;
+			}
+		}
+		showMsg(result);
+		return result;
 	}
 }

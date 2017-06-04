@@ -20,4 +20,6 @@ public interface IClient extends Remote {
 	public void showBoard(Game game) throws RemoteException;
 	
 	public String getName() throws RemoteException;
+	
+	public String councilRequest(Integer number) throws RemoteException;
 }

@@ -43,13 +43,16 @@ public class SocketClient implements IClient {
 			socketOut.flush();
 			while (true) {
 				// ricevo il comando dal server
-				String socketLine = socketIn.readUTF();
-				if (socketLine.equals("start")) {
+				String[] socketLine = socketIn.readUTF().split("@");
+				if (socketLine[0].equals("start")) {
 					// se è start inizio il mio turno
 					UI.printMoveMenu();
 					socketOut.writeUTF(UI.getMove());
 					socketOut.flush();
-				} else if (socketLine.equals("board")) {
+				} else if (socketLine[0].equals("council")) {
+					socketOut.writeUTF(UI.councilRequest(Integer.parseInt(socketLine[1])));
+					socketOut.flush();
+				} else if (socketLine[0].equals("board")) {
 					// ricevo e visualizzo la board
 					UI.showBoard((Game) socketIn.readObject());
 				}
@@ -75,6 +78,12 @@ public class SocketClient implements IClient {
 	public void showBoard(Game game) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String councilRequest(Integer number) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

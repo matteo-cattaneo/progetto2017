@@ -20,4 +20,6 @@ public interface IPlayer extends Remote {
 	public void login(IClient client) throws RemoteException;
 
 	public String getName() throws RemoteException;
+
+	public String councilRequest(Integer number) throws IOException;
 }

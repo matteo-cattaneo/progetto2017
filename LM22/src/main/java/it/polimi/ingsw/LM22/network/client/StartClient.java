@@ -56,11 +56,12 @@ public class StartClient {
 		});
 		int option;
 		System.out.println("Choose you UI type:");
-		System.out.println("1: GraphicalUserInterface");
-		System.out.println("2: CommandLineInterface");
+		System.out.println("1: GUI");
+		System.out.println("2: CLI");
 		option = Integer.parseInt(stdin.nextLine());
 		switch (option) {
 		case 1:
+			System.err.println("GUI - WIP");
 			this.UI = new GUIinterface();
 			break;
 		case 2:

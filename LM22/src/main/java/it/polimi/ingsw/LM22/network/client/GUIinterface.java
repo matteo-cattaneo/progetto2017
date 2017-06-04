@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.rmi.RemoteException;
+
 import it.polimi.ingsw.LM22.model.Game;
 /*
  * Classe che contiene tutti i metodi che permettono all'utente 
@@ -129,6 +131,24 @@ public class GUIinterface extends AbstractUI {
 	public void showBoard(Game game) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void printMarketSelectionMenu() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printInvalidInput() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String councilRequest(Integer number) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
