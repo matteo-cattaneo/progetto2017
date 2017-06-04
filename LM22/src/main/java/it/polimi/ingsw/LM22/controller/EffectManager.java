@@ -45,7 +45,7 @@ public class EffectManager {
 		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege());
 		//manca la somma del privilegio del consiglio scelto
 	}
-
+	
 	private void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
 
 	}

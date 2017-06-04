@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import it.polimi.ingsw.LM22.model.FamilyMember;
+import it.polimi.ingsw.LM22.model.Floor;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.Player;
@@ -12,10 +13,11 @@ import it.polimi.ingsw.LM22.model.Tower;
 
 public class TurnInizializator {
 	
+	private final Integer FIVE_PLAYERS = 5;
 	private final Integer DICE_NUMBER = 3;
 	private final Integer DICE_MAX = 6;
 	private final Integer DICE_MIN = 1;
-	protected final String[] colors = {"ORANGE" ,"BLACK", "WHITE"};
+	protected final String[] colors = {"Orange" ,"Black", "White"};
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = {"PRODUCTION", "HARVEST"};
 	private final Integer TOWERS_NUM = 4;
@@ -33,7 +35,10 @@ public class TurnInizializator {
 		setNewPlayersOrder(game);
 		cleanBoardGame(game);
 		throwDices(game);
+		setFamilyMembersValue(game);
 		distributeDevelopmentCards(game);
+		if (game.getPlayersOrder().size() == FIVE_PLAYERS)
+			distributeNewResources(game);
 	}
 
 	/*
@@ -43,10 +48,31 @@ public class TurnInizializator {
 	private void cleanBoardGame(Game game){
 		for (Tower tower: game.getBoardgame().getTowers()){
 			tower.setOccupied(false);
+			for (Floor f : tower.getFloor())
+				f.setCard(null);
 			//settaggio a null dello spazio delle carte 
 		}
 		retireMembers(game);
 	}	
+	
+	/*
+	 * metodo che si occupa di riportare tutti i familiari al Player
+	 * e settare il loro flag used a false 
+	 * pulendo tutti i vari AbstractSpace
+	 */
+	private void retireMembers(Game game){
+		for (Player p: game.getPlayers()){
+			for (FamilyMember m: p.getMembers()){
+				m.setUsed(false);
+			}
+		}
+		for (MarketSpace space: game.getBoardgame().getMarket()){
+			space.setMember(null);
+		}
+		for (int cont = 0; cont < WORKSPACES; cont++){
+			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(null);
+		}
+	}
 	
 	/*
 	 * metodo che consente di distribuire tutte e carte sviluppo
@@ -95,6 +121,14 @@ public class TurnInizializator {
 	}
 	
 	/*
+	 * metodo che gestisce l'attivazione di carte leader che modificanno il valore dei 
+	 * familiari del giocatore che la attiva
+	 */
+	public void updateFamilyMembersValue(Player p){
+		
+	}	
+	
+	/*
 	 * metodo che presi in ingresso l'ordine del turno appena finito e la lista 
 	 * dei famiiari inseriti nel CouncilSpace e genera l'ordine per il nuovo turno
 	 * pulendo già il CouncilSpace
@@ -107,7 +141,6 @@ public class TurnInizializator {
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
 		}
-			
 		game.getBoardgame().getCouncilPalace().setMembers(null);
 		for (Player p: game.getPlayersOrder()){
 			if (!newOrder.contains(p)){
@@ -118,25 +151,6 @@ public class TurnInizializator {
 	}
 	
 	/*
-	 * metodo che si occupa di riportare tutti i familiari al Player
-	 * e settare il loro flag used a false 
-	 * pulendo tutti i vari AbstractSpace
-	 */
-	private void retireMembers(Game game){
-		for (Player p: game.getPlayers()){
-			for (FamilyMember m: p.getMembers()){
-				m.setUsed(false);
-			}
-		}
-		for (MarketSpace space: game.getBoardgame().getMarket()){
-			space.setMember(null);
-		}
-		for (int cont = 0; cont < WORKSPACES; cont++){
-			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(null);
-		}
-	}
-	
-	/*
 	 * metodo ipotizzato per la modalità con il quinto giocatore
 	 * --> IDEA
 	 * sarebe quella di distribuire delle risorse in modo prefissato e decrescente
@@ -144,7 +158,7 @@ public class TurnInizializator {
 	 * per il nuovo turno che deve iniziare
 	 * (il quinto giocatore prende molte risorse, il quarto meno e così via fino al primo)
 	 */
-	private void distributeNewResources(){
+	private void distributeNewResources(Game game){
 		
 	}
 }

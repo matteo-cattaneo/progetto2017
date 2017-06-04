@@ -17,6 +17,10 @@ public class FaithGrid  implements Serializable {
 	public Resource[] getRewards() {
 		return rewards;
 	}
+	
+	public Resource getReward(Integer faith){
+		return rewards[faith];
+	}
 
 	public void setRewards(Resource[] rewards) {
 		this.rewards = rewards;

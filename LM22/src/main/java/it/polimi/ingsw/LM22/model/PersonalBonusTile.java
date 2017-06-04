@@ -5,18 +5,18 @@ import java.io.Serializable;
 public class PersonalBonusTile implements Serializable {
 	private Integer requirement;
 	// costanti da inizializzare con il costruttore
-	private Resource productionEffect;
-	private Resource harvestEffect;
+	private ResourcePrivilegeEffect productionEffect;
+	private ResourcePrivilegeEffect harvestEffect;
 
 	/*
 	 * i bonus anche BONUSTILE devono essere caricati di file
 	 */
 
-	public Resource getProductionEffect() {
+	public ResourcePrivilegeEffect getProductionEffect() {
 		return productionEffect;
 	}
 
-	public Resource getHarvestEffect() {
+	public ResourcePrivilegeEffect getHarvestEffect() {
 		return harvestEffect;
 	}
 

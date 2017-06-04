@@ -9,6 +9,8 @@ import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
+import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
+import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
 import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
 import it.polimi.ingsw.LM22.model.leader.NoOccupiedTowerEffect;
 import it.polimi.ingsw.LM22.model.leader.ResourceCardRequest;
@@ -20,13 +22,14 @@ import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 
 public class MoveManager {
 
-	private final Integer SINGLE_PRIVILEGE = 0;
+	private final Integer SINGLE_PRIVILEGE = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
 	private final String PRODUCTION = "PRODUCTION";
@@ -162,23 +165,17 @@ public class MoveManager {
 	 * tipo CardMove
 	 */
 	private boolean checkCardCost(CardMove cardMove) {
+		/*
+		 * importante tenere conto per il check sul costo i servitori che un
+		 * player può già aver giocato sottraendoli nella disequazione di
+		 * controllo del costo
+		 */
 		int tower = cardMove.getTowerSelected();
 		Tower t = game.getBoardgame().getTowers()[tower];
 		int floor = cardMove.getLevelSelected();
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
-		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
-		Resource bonus = space.getReward();
-		resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), bonus);
-		// dobbiamo controllare se il player non ha
-		// la carta Leader delle 3 monete in più
-		// ATTENZIONE
-		Resource additionalCost = NOTHING;
-		boolean occupied = t.isOccupied();
-		boolean hasBrunelleschi = containsClass(cardMove.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
-		if (occupied && !hasBrunelleschi)
-			additionalCost = THREE_COINS;
-		else if (!occupied || hasBrunelleschi)
-			additionalCost = NOTHING;
+		Resource bonus = calculateBonus(t, cardMove);
+		Resource additionalCost = calculateAdditionalCost(t, cardMove);
 		Resource cardCost = NOTHING;
 		switch (tower) {
 		case 3:
@@ -207,7 +204,7 @@ public class MoveManager {
 				return false;
 			break;
 		case 0:
-			if (!militaryPointsAvailable(cardMove)
+			if (!militaryPointsAvailable(cardMove, bonus)
 					|| !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
@@ -219,30 +216,67 @@ public class MoveManager {
 	}
 
 	/*
+	 * metodo che calcola il bonus ottenuto dallo spazio azione del floor
+	 * relativo
+	 */
+	private Resource calculateBonus(Tower t, CardMove move) {
+		Resource bonus;
+		CardSpace space = searchCardSpace(move.getTowerSelected(), move.getLevelSelected());
+		if (move.getPlayer().getEffects().contains(NoCardSpaceBonusEffect.class))
+			bonus = NOTHING;
+		else {
+			// da controllare se ho le scomuniche che riducono il numero di
+			// risorse acquisite
+			bonus = space.getReward();
+		}
+		return bonus;
+	}
+
+	/*
+	 * calcola il possibile costo addizionale dovuto alla torre occupata -->
+	 * gestisce anche l'effetto di Filippo Brunelleschi questo prezzo non può
+	 * essere pagato con il bonus dello spazio azione
+	 */
+	private Resource calculateAdditionalCost(Tower t, CardMove move) {
+		Resource additionalCost = NOTHING;
+		boolean occupied = t.isOccupied();
+		boolean hasBrunelleschi = containsClass(move.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
+		if (occupied && !hasBrunelleschi)
+			additionalCost = THREE_COINS;
+		else if (!occupied || hasBrunelleschi)
+			additionalCost = NOTHING;
+		return additionalCost;
+	}
+
+	/*
 	 * controlla (solo per una CardMove per una TERRITORY) se il player soddisfa
 	 * i requisiti relativi ai punti militari --> controlla anche se è stata
 	 * attivata la carta Leader che annulla questo controllo
 	 */
-	private boolean militaryPointsAvailable(CardMove cardMove) {
+	private boolean militaryPointsAvailable(CardMove cardMove, Resource bonus) {
 		if (!containsClass(cardMove.getPlayer().getEffects(), NoMilitaryRequestEffect.class)) {
 			switch (cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().size()) {
 			case 0:
 			case 1:
 				return true;
 			case 2:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary() < THIRD_TERRITORY)
+				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary() < THIRD_TERRITORY)
 					return false;
 				return true;
 			case 3:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary() < FOURTH_TERRITORY)
+				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary() < FOURTH_TERRITORY)
 					return false;
 				return true;
 			case 4:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary() < FIFTH_TERRITORY)
+				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary() < FIFTH_TERRITORY)
 					return false;
 				return true;
 			case 5:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary() < SIXTH_TERRITORY)
+				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary() < SIXTH_TERRITORY)
 					return false;
 				return true;
 			default:
@@ -420,6 +454,8 @@ public class MoveManager {
 		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
 			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 		else {
+			if (move.getLeaderCard().getEffect() instanceof MemberBonusEffect || move.getLeaderCard().getEffect() instanceof MemberChangeEffect)
+				//gestisco la rimozione di un effetto che modifica il valore dei familiari
 			move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
 			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
 		}
@@ -434,6 +470,16 @@ public class MoveManager {
 	 */
 	private boolean leadercardactivationAllowed(LeaderCardActivation move) {
 		LeaderCardRequest req = move.getLeaderCard().getRequest();
+		if (move.getLeaderCard().getName() == "Lucrezia Borgia") {
+			CardRequest r = ((CardRequest) move.getLeaderCard().getRequest());
+			if (r.getTerritoryCards() <= move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
+					|| r.getCharacterCards() <= move.getPlayer().getPersonalBoard().getCharactersCards().size()
+					|| r.getBuildingCards() <= move.getPlayer().getPersonalBoard().getBuildingsCards().size()
+					|| r.getVentureCards() <= move.getPlayer().getPersonalBoard().getVenturesCards().size()) {
+				return true;
+			} else
+				return false;
+		}
 		if (req instanceof CardRequest) {
 			CardRequest r = ((CardRequest) move.getLeaderCard().getRequest());
 			if (r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
@@ -481,12 +527,4 @@ public class MoveManager {
 	// private Effect giveIfContainedClass(List<Effect> list, Object o){
 	//
 	// }
-
-	private boolean endmoveAllowed(EndMove move) {
-		return true;
-	}
-
-	private void endmoveHandle(EndMove move) {
-		//TODO
-	}
 }

@@ -2,21 +2,22 @@
 
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
 
 public class VaticanReportManager {
 	
 	private final Integer[] goal = {3, 4, 5};
+	private final ResourceHandler resourceHandler = new ResourceHandler();
 	
 	/*
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti
 	 * del periodo corrente per la Chiesa
 	 * */
 	public boolean canGiveSupport(Player p, Integer period){
-		boolean result = false;
 		if (p.getPersonalBoard().getResources().getFaith() >= goal[period-1]){
-			result = true;
+			return true;
 		}
-		return result;
+		return false;
 	}
 	
 	/*
@@ -47,8 +48,11 @@ public class VaticanReportManager {
 		//TO-DO
 	}
 	
-	public void giveVictoryPointsDueToChurchSubstain(){
-		
+	public void giveVictoryPointsDueToChurch(Game game, Player p){
+		Resource bonus = game.getBoardgame().getFaithGrid().getReward(p.getPersonalBoard().getResources().getFaith());
+		Resource faith = new Resource(0,0,0,0,p.getPersonalBoard().getResources().getFaith(), 0, 0);
+		resourceHandler.subResource(p.getPersonalBoard().getResources(), faith);
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), bonus);
 	}
 	
 	/*
