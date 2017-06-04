@@ -21,8 +21,8 @@ public class BoardGame implements Serializable {
 	private WorkSpace productionSpace = new WorkSpace(1, PRODUCTION);
 	private WorkSpace harvestSpace = new WorkSpace(1, HARVEST);
 	private FaithGrid faithGrid = new FaithGrid();
-	private CouncilSpace councilPalace;
-	private HashMap<String, Integer> dices;
+	private CouncilSpace councilPalace = new CouncilSpace(1, new Resource(0, 0, 0, 1, 0, 0, 0), 1);
+	private HashMap<String, Integer> dices = new HashMap<String, Integer>();
 
 	/*
 	 * i vari bonus arbitrari degli spazi saranno da caricare da file -->
@@ -73,6 +73,7 @@ public class BoardGame implements Serializable {
 	}
 
 	public void setDice(String color, Integer value) {
+		dices.put(color, value);
 		dices.replace(color, value);
 	}
 

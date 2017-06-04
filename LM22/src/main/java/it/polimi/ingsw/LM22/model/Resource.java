@@ -3,7 +3,7 @@ package it.polimi.ingsw.LM22.model;
 import java.io.Serializable;
 
 public class Resource implements Serializable {
-	
+
 	private static final long serialVersionUID = -2464073930476505293L;
 	private Integer wood;
 	private Integer stone;
@@ -50,6 +50,34 @@ public class Resource implements Serializable {
 
 	public Integer getVictory() {
 		return victory;
+	}
+
+	public void setWood(Integer wood) {
+		this.wood = wood;
+	}
+
+	public void setStone(Integer stone) {
+		this.stone = stone;
+	}
+
+	public void setServants(Integer servants) {
+		this.servants = servants;
+	}
+
+	public void setCoins(Integer coins) {
+		this.coins = coins;
+	}
+
+	public void setFaith(Integer faith) {
+		this.faith = faith;
+	}
+
+	public void setMilitary(Integer military) {
+		this.military = military;
+	}
+
+	public void setVictory(Integer victory) {
+		this.victory = victory;
 	}
 
 }

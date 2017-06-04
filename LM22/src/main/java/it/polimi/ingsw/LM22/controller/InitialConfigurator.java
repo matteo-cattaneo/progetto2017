@@ -1,13 +1,16 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class InitialConfigurator extends TurnInizializator {
 	FileParser fileParser = new FileParser();
@@ -16,12 +19,19 @@ public class InitialConfigurator extends TurnInizializator {
 	private final Integer BASE_COINS = 5;
 	private final Integer NO_RESOURCE = 0;
 
+	// Colori giocatori
+	private final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
+	// Colori familiari
+	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
+
 	/*
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game) {
+	public InitialConfigurator(Game game, IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
 		initializeTurn(game);
+		throwDices(game);
+		setupPlayers(game, iplayer, ordine, nPlayer);
 		loadConfiguration(game);
 		setNewPlayersOrder(game);
 		giveInitialResources(game);
@@ -40,17 +50,42 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	/*
+	 * inizializzo i giocatori con i dati forniti dal network
+	 */
+	private void setupPlayers(Game game, IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
+		Player players[] = new Player[nPlayer];
+		game.setPlayers(players);
+		int i = 0;
+		for (Player p : game.getPlayers()) {
+			List<FamilyMember> members = new ArrayList<FamilyMember>();
+			int j;
+			for (j = 0; j < 3; j++) {
+				FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
+				fm.setValue(game.getBoardgame().getDice(MEMBER_COLOR[j]));
+				members.add(fm);
+			}
+			FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
+			fm.setValue(0);
+			members.add(fm);
+			// personalBoard: personal tile & dev cards
+			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i], members);
+			i++;
+		}
+	}
+
+	/*
 	 * setta il primo ordine da seguire senza osservare il CouncilSpace -->
 	 * prende l'array dei Player in game e setta la lista del turno (che è vuota
 	 * inizialmente)
 	 */
 	@Override
 	protected void setNewPlayersOrder(Game game) {
-		Random random = new Random();
+		// Random random = new Random();
 		List<Player> p = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
 			// i put the new item in the list randomly
-			p.add(random.nextInt(p.size() + 1), player);
+			// p.add(random.nextInt(p.size() + 1), player);
+			p.add(player);
 		}
 		game.setPlayersOrder(p);
 	}

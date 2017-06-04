@@ -151,4 +151,10 @@ public class GUIinterface extends AbstractUI {
 		return null;
 	}
 
+	@Override
+	public void printCouncilMoveMenu() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

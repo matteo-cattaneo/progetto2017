@@ -1,6 +1,7 @@
 package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.Game;
@@ -108,7 +109,8 @@ public class CLIinterface extends AbstractUI {
 			printWorkMoveMenu();
 			break;
 		case 4:
-			setMove(COUNCILMOVE);
+			printCouncilMoveMenu();
+			break;
 		default:
 			printInvalidInput();
 			printMoveMenu();
@@ -275,6 +277,13 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
+	@Override
+	public void printCouncilMoveMenu() throws RemoteException {
+		setMove(COUNCILMOVE);
+		printFamilyMemberMenu();
+		printServantsAddictionMenu();
+	}
+
 	// TODO test con carte leader caricate
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
@@ -396,6 +405,10 @@ public class CLIinterface extends AbstractUI {
 		showMsg("| Period: " + game.getPeriod() + " \t \t \t |");
 		showMsg("| Round: " + game.getRound() + " \t \t \t |");
 		showMsg("| \t \t \t \t |");
+		showMsg("| Orange dice: " + game.getBoardgame().getDice("Orange") + " \t \t |");
+		showMsg("| Black dice: " + game.getBoardgame().getDice("Black") + " \t \t |");
+		showMsg("| White dice: " + game.getBoardgame().getDice("White") + " \t \t |");
+		showMsg("| \t \t \t \t |");
 		showMsg("| Name: " + getPlayer(name, game).getNickname() + " \t \t \t |");
 		showMsg("| Color: " + getPlayer(name, game).getColor() + " \t \t \t |");
 		showMsg("| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + " \t \t \t |");
@@ -410,44 +423,35 @@ public class CLIinterface extends AbstractUI {
 		showMsg("|________________________________|");
 	}
 
+	// TODO selezionare PdC diversi!
 	@Override
 	public String councilRequest(Integer number) {
+		ArrayList<String> list = new ArrayList<String>();
 		String result = new String();
+		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
 		for (int k = 0; k < number;) {
 			showMsg("Choose the Council Privilege reward:");
-			showMsg("1: one stone & one wood");
-			showMsg("2: two servants");
-			showMsg("3: two conis");
-			showMsg("4: two military points");
-			showMsg("5: one faith point");
+			if (!list.contains("wood&stone"))
+				showMsg("1: one stone & one wood");
+			if (!list.contains("servants"))
+				showMsg("2: two servants");
+			if (!list.contains("coins"))
+				showMsg("3: two conis");
+			if (!list.contains("military"))
+				showMsg("4: two military points");
+			if (!list.contains("faith"))
+				showMsg("5: one faith point");
 			int option = in.nextInt();
-			switch (option) {
-			case 1:
-				result = result + "@wood&stone";
+
+			if (!list.contains(council[(option - 1)])) {
+				list.add(council[(option - 1)]);
 				k++;
-				break;
-			case 2:
-				result = result + "@servants";
-				k++;
-				break;
-			case 3:
-				result = result + "@coins";
-				k++;
-				break;
-			case 4:
-				result = result + "@military";
-				k++;
-				break;
-			case 5:
-				result = result + "@faith";
-				k++;
-				break;
-			default:
+			} else
 				printInvalidInput();
-				break;
-			}
 		}
-		showMsg(result);
+		for (String s : list)
+			result = result + "@" + s;
+
 		return result;
 	}
 }

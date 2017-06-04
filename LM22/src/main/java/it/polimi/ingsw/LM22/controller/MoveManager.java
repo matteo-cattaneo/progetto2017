@@ -74,8 +74,8 @@ public class MoveManager {
 			name = move.getClass().getSimpleName().toLowerCase() + "Allowed";
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e1) {
-
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		if (checkResult) {
 			try {
@@ -83,7 +83,7 @@ public class MoveManager {
 				method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 				method.invoke(this, new Object[] { move });
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-
+				e.printStackTrace();
 			}
 		} else
 			// throw new InvalidMoveException
@@ -422,7 +422,7 @@ public class MoveManager {
 	/*
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
-	private boolean councilmoveAllowed(CouncilMove councilMove) {
+	public boolean councilmoveAllowed(CouncilMove councilMove) {
 		if (councilMove.getMemberUsed().getValue() + councilMove.getServantsAdded().getServants() < game.getBoardgame()
 				.getCouncilPalace().getSpaceRequirement())
 			return false;
@@ -432,7 +432,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo CouncilMove
 	 */
-	private void councilmoveHandle(CouncilMove councilMove) throws IOException {
+	public void councilmoveHandle(CouncilMove councilMove) throws IOException {
 		councilMove.getMemberUsed().setUsed(true);
 		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
 		/*
@@ -440,8 +440,10 @@ public class MoveManager {
 		 */
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				game.getBoardgame().getCouncilPalace().getReward());
-		mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
-				councilMove.getPlayer());
+		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+				mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
+						councilMove.getPlayer()));
+
 	}
 
 	private boolean leadercardsellingAllowed(LeaderCardSelling move) {

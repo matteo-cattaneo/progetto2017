@@ -34,7 +34,7 @@ public class StartClient {
 			break;
 		}
 		/*
-		 * con i metodi relativi alla prpria connessione e UI effettuo la
+		 * 2 * con i metodi relativi alla prpria connessione e UI effettuo la
 		 * connessione
 		 */
 

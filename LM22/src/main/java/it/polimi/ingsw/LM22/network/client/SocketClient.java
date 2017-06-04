@@ -41,7 +41,7 @@ public class SocketClient implements IClient {
 			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
 			socketOut.writeUTF(getName());
 			socketOut.flush();
-			while (true) {
+			while (!socket.isClosed()) {
 				// ricevo il comando dal server
 				String[] socketLine = socketIn.readUTF().split("@");
 				if (socketLine[0].equals("start")) {

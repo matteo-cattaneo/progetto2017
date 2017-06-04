@@ -10,17 +10,18 @@ public class ResourceHandler {
 	 * tolgono risorse...
 	 * 
 	 */
-	
+
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
 		return true;
 	}
-	
+
 	/*
-	 * metodo che gestisce il controllo delle carte Venture, 
-	 * sia con doppio costo che con costo singolo normale o con costo in punti militari
+	 * metodo che gestisce il controllo delle carte Venture, sia con doppio
+	 * costo che con costo singolo normale o con costo in punti militari
 	 */
-	public boolean manageVentureCost(CardMove move){
-		
+	public boolean manageVentureCost(CardMove move) {
+		return false;
+
 	}
 
 	/*
@@ -38,11 +39,11 @@ public class ResourceHandler {
 	}
 
 	/*
-	 * metodo che controlla, solo con interi essendo carte Character,
-	 * se il player in grado di comprare una carta: 
-	 * - è in grado di pagare le possibili 3 monete in più senza bonus,
-	 * - è in grado di pagare il costo della carta anche con i bonus
-	 * --> se entrambe le condizioni precedente sono vere allora può effettuare la mossa
+	 * metodo che controlla, solo con interi essendo carte Character, se il
+	 * player in grado di comprare una carta: - è in grado di pagare le
+	 * possibili 3 monete in più senza bonus, - è in grado di pagare il costo
+	 * della carta anche con i bonus --> se entrambe le condizioni precedente
+	 * sono vere allora può effettuare la mossa
 	 * 
 	 */
 	public boolean enoughResources(CharacterCard card, CardMove cardMove, Resource additionalCost, Resource bonus) {
@@ -65,11 +66,10 @@ public class ResourceHandler {
 		}
 		return true;
 	}
-	
+
 	/*
-	 * DA FARE
-	 * controllo per i bonus permanenti della carte Personaggio
-	 * che hanno l'effetto di diminuire il costo della carta
+	 * DA FARE controllo per i bonus permanenti della carte Personaggio che
+	 * hanno l'effetto di diminuire il costo della carta
 	 */
 	public Resource cardDiscounted(Resource s1, Resource s2) {
 		Integer wood = 0;
@@ -89,13 +89,13 @@ public class ResourceHandler {
 			servants = s1.getServants() - s2.getServants();
 		if (s1.getFaith() - s2.getFaith() > 0)
 			faith = s1.getFaith() - s2.getFaith();
-		if (s1.getMilitary() - s2.getMilitary() > 0)	
+		if (s1.getMilitary() - s2.getMilitary() > 0)
 			military = s1.getMilitary() - s2.getMilitary();
-		if (s1.getVictory() - s2.getVictory() > 0)	
+		if (s1.getVictory() - s2.getVictory() > 0)
 			victory = s1.getVictory() - s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
-}
-	
+	}
+
 	/*
 	 * metodo in grado di controllare se la prima risorsa è >= della seconda
 	 * (true)
@@ -123,7 +123,13 @@ public class ResourceHandler {
 	 * come primo parametro
 	 */
 	public void addResource(Resource playerResource, Resource addingResource) {
-		playerResource = sumResource(playerResource, addingResource);
+		playerResource.setStone(playerResource.getStone() + addingResource.getStone());
+		playerResource.setWood(playerResource.getWood() + addingResource.getWood());
+		playerResource.setCoins(playerResource.getCoins() + addingResource.getCoins());
+		playerResource.setServants(playerResource.getServants() + addingResource.getServants());
+		playerResource.setMilitary(playerResource.getMilitary() + addingResource.getMilitary());
+		playerResource.setFaith(playerResource.getFaith() + addingResource.getFaith());
+		playerResource.setVictory(playerResource.getVictory() + addingResource.getVictory());
 	}
 
 	/*
@@ -139,13 +145,13 @@ public class ResourceHandler {
 		Integer military = 0;
 		Integer victory = 0;
 		wood = s1.getWood() - s2.getWood();
-		stone= s1.getStone() - s2.getStone();
-		coins= s1.getCoins() - s2.getCoins();
-	    servants = s1.getServants() - s2.getServants();
+		stone = s1.getStone() - s2.getStone();
+		coins = s1.getCoins() - s2.getCoins();
+		servants = s1.getServants() - s2.getServants();
 		faith = s1.getFaith() - s2.getFaith();
 		military = s1.getMilitary() - s2.getMilitary();
 		victory = s1.getVictory() - s2.getVictory();
-		s1 = new Resource (wood, stone, servants, coins, faith, military, victory);		
+		s1 = new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 
 	public Resource sumResource(Resource s1, Resource s2) {
@@ -157,9 +163,9 @@ public class ResourceHandler {
 		Integer military = 0;
 		Integer victory = 0;
 		wood = s1.getWood() + s2.getWood();
-		stone= s1.getStone() + s2.getStone();
-		coins= s1.getCoins() + s2.getCoins();
-	    servants = s1.getServants() + s2.getServants();
+		stone = s1.getStone() + s2.getStone();
+		coins = s1.getCoins() + s2.getCoins();
+		servants = s1.getServants() + s2.getServants();
 		faith = s1.getFaith() + s2.getFaith();
 		military = s1.getMilitary() + s2.getMilitary();
 		victory = s1.getVictory() + s2.getVictory();

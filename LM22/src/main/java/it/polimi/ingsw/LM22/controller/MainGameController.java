@@ -25,10 +25,6 @@ import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class MainGameController implements Runnable {
-	// Colori giocatori
-	private final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
-	// Colori familiari
-	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
 	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
@@ -51,8 +47,7 @@ public class MainGameController implements Runnable {
 		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
 		this.ordine = ordine;
-		setupPlayers();
-		this.initialConfigurator = new InitialConfigurator(game);
+		this.initialConfigurator = new InitialConfigurator(game, iplayer, ordine, nPlayer);
 	}
 
 	@Override
@@ -74,32 +69,12 @@ public class MainGameController implements Runnable {
 				// run
 			} else {
 				i++;
-				run();
 			}
 			// turn initializzator
-
+			run();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Partita terminata!");
-		}
-	}
-
-	/*
-	 * inizializzo i giocatori con i dati forniti dal network
-	 */
-	private void setupPlayers() throws RemoteException {
-		Player players[] = new Player[nPlayers];
-		game.setPlayers(players);
-		int i = 0;
-		for (Player p : game.getPlayers()) {
-			List<FamilyMember> members = new ArrayList<FamilyMember>();
-			for (int j = 0; j < 4; j++) {
-				FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
-				// personalBoard: personal tile & dev cards
-				members.add(fm);
-			}
-			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i], members);
-			i++;
 		}
 	}
 
@@ -207,8 +182,11 @@ public class MainGameController implements Runnable {
 		String result = getIPlayer(player).councilRequest(councilNumber);
 		String[] cp = result.split("@");
 		for (String c : cp) {
-			resource = resourceHandler.sumResource(resource, councilResource.get(c));
+			System.out.println("@: " + councilResource.get(c).getStone());
+			resourceHandler.addResource(resource, councilResource.get(c));
+			System.out.println("#: " + resource.getStone());
 		}
+
 		return resource;
 	}
 

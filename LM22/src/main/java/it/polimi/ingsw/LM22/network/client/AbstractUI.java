@@ -61,4 +61,6 @@ public abstract class AbstractUI {
 	public abstract void printInvalidInput();
 
 	public abstract String councilRequest(Integer number);
+
+	public abstract void printCouncilMoveMenu() throws RemoteException;
 }
