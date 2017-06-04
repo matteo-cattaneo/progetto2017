@@ -13,7 +13,6 @@ public class Resource implements Serializable {
 
 	public Resource(Integer wood, Integer stone, Integer servants, Integer coins, Integer faith, Integer military,
 			Integer victory) {
-		super();
 		this.wood = wood;
 		this.stone = stone;
 		this.servants = servants;

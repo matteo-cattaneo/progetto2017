@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
  * Classe che contiene tutti i metodi che permettono all'utente 
@@ -26,6 +27,9 @@ public class CLIinterface extends AbstractUI {
 	private final String BUILDING = "BUILDING";
 	private final String VENTURE = "VENTURE";
 
+	private final String PRODUCTION = "PRODUCTION";
+	private final String HARVEST = "HARVEST";
+
 	private final String LEVEL_1 = "1";
 	private final String LEVEL_2 = "2";
 	private final String LEVEL_3 = "3";
@@ -35,6 +39,7 @@ public class CLIinterface extends AbstractUI {
 	private String move = new String();
 	private Game game;
 	private String name;
+	private Boolean memberMove;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -60,16 +65,22 @@ public class CLIinterface extends AbstractUI {
 		showMsg("1: Move a Member");
 		showMsg("2: Sell a LeaderCard");
 		showMsg("3: Activate a LeaderCard");
+		showMsg("4: End turn");
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
 			printMemberMoveMenu();
+			memberMove = true;
 			break;
 		case 2:
 			printSellLeaderCardMenu();
 			break;
 		case 3:
 			printActivateLeaderCardMenu();
+			break;
+		case 4:
+			setMove("End");
+			memberMove = false;
 			break;
 		default:
 			printInvalidInput();
@@ -88,15 +99,12 @@ public class CLIinterface extends AbstractUI {
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
-			setMove(CARDMOVE);
 			printCardMoveMenu();
 			break;
 		case 2:
-			setMove(MARKETMOVE);
 			printMarketMoveMenu();
 			break;
 		case 3:
-			setMove(WORKMOVE);
 			printWorkMoveMenu();
 			break;
 		case 4:
@@ -110,6 +118,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCardMoveMenu() throws RemoteException {
+		setMove(CARDMOVE);
 		printFamilyMemberMenu();
 		printServantsAddictionMenu();
 		printTowersMenu();
@@ -204,13 +213,14 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMarketMoveMenu() throws RemoteException {
+		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
 		printServantsAddictionMenu();
-		printMarketSelection();
+		printMarketSelectionMenu();
 	}
 
 	@Override
-	public void printMarketSelection() throws RemoteException {
+	public void printMarketSelectionMenu() throws RemoteException {
 		showMsg("Choose the Market space:");
 		showMsg("1: Five coins");
 		showMsg("2: Five servants");
@@ -238,27 +248,73 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printWorkMoveMenu() {
-		// TODO Auto-generated method stub
-
+	public void printWorkMoveMenu() throws RemoteException {
+		setMove(WORKMOVE);
+		printFamilyMemberMenu();
+		printServantsAddictionMenu();
+		printWorkSelectionMenu();
 	}
 
 	@Override
 	public void printWorkSelectionMenu() {
-		// TODO Auto-generated method stub
-
+		showMsg("Choose the Work type:");
+		showMsg("1: Production");
+		showMsg("2: Harvest");
+		int option = in.nextInt();
+		switch (option) {
+		case 1:
+			setMove(PRODUCTION);
+			break;
+		case 2:
+			setMove(HARVEST);
+			break;
+		default:
+			printInvalidInput();
+			printWorkSelectionMenu();
+			break;
+		}
 	}
 
+	// TODO test con carte leader caricate
 	@Override
-	public void printSellLeaderCardMenu() {
-		// TODO Auto-generated method stub
-
+	public void printSellLeaderCardMenu() throws RemoteException {
+		setMove("LeaderSell");
+		showMsg("Choose the Leader card to sell:");
+		int i, j;
+		for (i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
+			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
+		}
+		for (j = 0; j < getPlayer(name, game).getActivatedLeaderCards().size(); j++) {
+			showMsg((j + 1 + i) + ": " + getPlayer(name, game).getActivatedLeaderCards().get(j).getName());
+		}
+		int option = in.nextInt();
+		if (option <= i)
+			setMove(getPlayer(name, game).getLeaderCards().get(option - 1).getName());
+		else if (option > i && option < i + j)
+			setMove(getPlayer(name, game).getActivatedLeaderCards().get(option - 1).getName());
+		else {
+			printInvalidInput();
+			printWorkSelectionMenu();
+		}
 	}
 
+	// TODO test con carte leader caricate
 	@Override
-	public void printActivateLeaderCardMenu() {
-		// TODO Auto-generated method stub
-
+	public void printActivateLeaderCardMenu() throws RemoteException {
+		setMove("LeaderAct");
+		showMsg("Choose the Leader card to activate:");
+		for (int i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
+			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
+		}
+		int option = in.nextInt();
+		if (option <= getPlayer(name, game).getLeaderCards().size())
+			setMove(getPlayer(name, game).getLeaderCards().get(option).getName());
+		else {
+			printInvalidInput();
+			printWorkSelectionMenu();
+		}
+		// TODO controlli su carte speciali per richiedere servitori(Integer) e
+		// colore(String)
 	}
 
 	public void printInvalidInput() {
@@ -267,8 +323,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void showLoginMenu() {
-		// TODO Auto-generated method stub
-
+		// TODO Password & name
 	}
 
 	/*

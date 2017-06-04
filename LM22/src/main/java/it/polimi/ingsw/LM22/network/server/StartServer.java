@@ -40,12 +40,9 @@ public class StartServer {
 			// condivido l'oggetto remoto del server
 			serverRMI = new RMIPlayer();
 			Naming.rebind("rmi://localhost/MSG", serverRMI);
-			while (true) {
-				// apro una sessione di creazione partita
-				startServer.start();
-			}
+			startServer.start();
 		} catch (IOException | InterruptedException e) {
-			System.out.println("Server terminato!");
+			System.err.println("Server terminato!");
 			e.printStackTrace();
 		}
 	}
@@ -96,6 +93,7 @@ public class StartServer {
 		System.out.println("Inizio partita");
 		// avvio thread della partita (controller)
 		executor.submit(new MainGameController(player, ordine, i));
+		start();
 	}
 
 	// verifica la connessione di un client con timeout
@@ -126,7 +124,7 @@ class SocketConnection implements Runnable {
 			// resto in attesa di un client connesso
 			socket = serverSocket.accept();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Socket IOException");
 		}
 	}
 

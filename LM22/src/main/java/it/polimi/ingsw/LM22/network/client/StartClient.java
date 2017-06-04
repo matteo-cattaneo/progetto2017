@@ -26,7 +26,7 @@ public class StartClient {
 			try {
 				client = new RMIClient(UI);
 			} catch (RemoteException e) {
-				e.printStackTrace();
+				UI.showMsg("Errore inizializzazione RMI!");
 			}
 			break;
 		case 2:
@@ -41,7 +41,7 @@ public class StartClient {
 		try {
 			client.connect(UI.getName(), UI.getIP());
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			UI.showMsg("Errore connessione al server!");
 		}
 	}
 	/*

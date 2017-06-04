@@ -24,13 +24,13 @@ public abstract class AbstractUI {
 
 	public abstract void printMarketMoveMenu() throws RemoteException;
 
-	public abstract void printWorkMoveMenu();
+	public abstract void printWorkMoveMenu() throws RemoteException;
 
 	public abstract void printWorkSelectionMenu();
 
-	public abstract void printSellLeaderCardMenu();
+	public abstract void printSellLeaderCardMenu() throws RemoteException;
 
-	public abstract void printActivateLeaderCardMenu();
+	public abstract void printActivateLeaderCardMenu() throws RemoteException;
 
 	public abstract void showLoginMenu();
 
@@ -56,7 +56,7 @@ public abstract class AbstractUI {
 		return null;
 	}
 
-	public abstract void printMarketSelection() throws RemoteException;
+	public abstract void printMarketSelectionMenu() throws RemoteException;
 
 	public abstract void printInvalidInput();
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.LM22.network;
 import it.polimi.ingsw.LM22.controller.AbstractMove;
 import it.polimi.ingsw.LM22.controller.CardMove;
 import it.polimi.ingsw.LM22.controller.CouncilMove;
+import it.polimi.ingsw.LM22.controller.EndMove;
 import it.polimi.ingsw.LM22.controller.LeaderCardActivation;
 import it.polimi.ingsw.LM22.controller.LeaderCardSelling;
 import it.polimi.ingsw.LM22.controller.MarketMove;
@@ -23,7 +24,7 @@ public class NetContrAdapter {
 		// select the right move type and initialize with the right dynamic type
 		switch (param[0]) {
 		case "LeaderAct":
-			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]),getServantsAdded(param[2]),param[3]);
+			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]), getServantsAdded(param[2]), param[3]);
 			break;
 		case "LeaderSell":
 			objMove = new LeaderCardSelling(p, getLeaderCard(param[1]));
@@ -42,16 +43,21 @@ public class NetContrAdapter {
 		case "Council":
 			objMove = new CouncilMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]));
 			break;
+		case "End":
+			objMove = new EndMove(p);
 		}
 		return objMove;
 	}
 
 	private LeaderCard getLeaderCard(String param) {
-		// cast to integer value
-		Integer cardN = Integer.parseInt(param);
 		// get from the player list the proper LeaderCard
-		LeaderCard ld = player.getLeaderCards().get(cardN);
-		return ld;
+		for (LeaderCard ld : player.getActivatedLeaderCards())
+			if (ld.getName().equals(param))
+				return ld;
+		for (LeaderCard ld : player.getLeaderCards())
+			if (ld.getName().equals(param))
+				return ld;
+		return null;
 	}
 
 	private FamilyMember getFamilyMember(String param) {

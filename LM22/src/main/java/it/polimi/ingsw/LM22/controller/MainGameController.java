@@ -40,7 +40,7 @@ public class MainGameController implements Runnable {
 	private VaticanReportManager vaticanReportManager;
 	private TurnInizializator turnInizializator;
 	private InitialConfigurator initialConfigurator;
-	private MoveManager moveManager = new MoveManager(game);
+	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
 	public MainGameController(IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
@@ -62,7 +62,7 @@ public class MainGameController implements Runnable {
 				sMove = iplayer[ordine[i]].yourTurn();
 				aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
 				// moveManager.manageMove(aMove);
-
+				System.out.println(sMove);
 				sendAll();// invio a tutti il nuovo model
 				if (ordine[i + 1] == 4) {
 					i = 0;
@@ -74,7 +74,7 @@ public class MainGameController implements Runnable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Partita terminata!");
+			System.err.println("Partita terminata!");
 		}
 	}
 
@@ -188,8 +188,9 @@ public class MainGameController implements Runnable {
 	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
 	 * ciclo dopo si toglie il tipo di risorsa già scelto
 	 */
-	public void selectCouncilPrivilege(Integer councilNumber) {
-
+	public Resource selectCouncilPrivilege(Integer councilNumber) {
+		return null;
+		// TODO
 	}
 
 	/*

@@ -141,11 +141,11 @@ public class MoveManager {
 		if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
 				+ cardMove.getServantsAdded().getServants()))
 			return false;
-		if(containsClass(cardMove.getPlayer().getEffects(), DiceCardMalusEx.class)){
-			for (Effect e: cardMove.getPlayer().getEffects()){
-				if (e instanceof DiceCardMalusEx){
-					if (((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())){
-						if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue() 
+		if (containsClass(cardMove.getPlayer().getEffects(), DiceCardMalusEx.class)) {
+			for (Effect e : cardMove.getPlayer().getEffects()) {
+				if (e instanceof DiceCardMalusEx) {
+					if (((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())) {
+						if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
 								+ cardMove.getServantsAdded().getServants() - ((DiceCardMalusEx) e).getMalus()))
 							return false;
 					}
@@ -157,8 +157,9 @@ public class MoveManager {
 	}
 
 	/*
-	 * metodo che gestisce il controllo del costo di una carta, gestendo anche tutti i relativi effetti
-	 * che possono essere applicati ad una mossa di tipo CardMove
+	 * metodo che gestisce il controllo del costo di una carta, gestendo anche
+	 * tutti i relativi effetti che possono essere applicati ad una mossa di
+	 * tipo CardMove
 	 */
 	private boolean checkCardCost(CardMove cardMove) {
 		int tower = cardMove.getTowerSelected();
@@ -190,10 +191,11 @@ public class MoveManager {
 			// aggiungere controlli su effetti permanenti per riduzione costo
 			// carte
 			ColorCardBonusEffect e = new ColorCardBonusEffect();
-//			CONTROLLO SE HO EFFETTI DI QUALSIASI TIPO SU QUELLA TORRE
-//			if (cardMove.getPlayer().getEffects()
-//					.contains(e.getCardType() == "BUILDING" && e.getCardDiscount() != null))
-				cardCost = ((BuildingCard) card).getCost();
+			// CONTROLLO SE HO EFFETTI DI QUALSIASI TIPO SU QUELLA TORRE
+			// if (cardMove.getPlayer().getEffects()
+			// .contains(e.getCardType() == "BUILDING" && e.getCardDiscount() !=
+			// null))
+			cardCost = ((BuildingCard) card).getCost();
 			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
@@ -205,8 +207,8 @@ public class MoveManager {
 				return false;
 			break;
 		case 0:
-			if (!militaryPointsAvailable(cardMove) || 
-					!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
+			if (!militaryPointsAvailable(cardMove)
+					|| !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		}
@@ -272,7 +274,9 @@ public class MoveManager {
 		if (game.getBoardgame().getMarket()[pos].getMember() != null)
 			if (!containsClass(marketMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 				return false;
-		if (marketMove.getMemberUsed().getValue() + marketMove.getServantsAdded().getServants() < game.getBoardgame().getMarket()[pos].getSpaceRequirement())
+		if (marketMove.getMemberUsed().getValue()
+				+ marketMove.getServantsAdded().getServants() < game.getBoardgame().getMarket()[pos]
+						.getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -289,7 +293,8 @@ public class MoveManager {
 		 */
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				game.getBoardgame().getMarket()[opt].getReward());
-		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(), marketMove.getServantsAdded());
+		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
+				marketMove.getServantsAdded());
 		mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege());
 	}
 
@@ -370,7 +375,7 @@ public class MoveManager {
 		Integer valueOfAction = move.getMemberUsed().getValue() + move.getServantsAdded().getServants();
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
-		for (TerritoryCard card: move.getPlayer().getPersonalBoard().getTerritoriesCards()){
+		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
 			if (valueOfAction >= card.getRequirement())
 				effectManager.workHandle(card.getPermanentEffect(), total);
 		}
@@ -382,7 +387,8 @@ public class MoveManager {
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
 	private boolean councilmoveAllowed(CouncilMove councilMove) {
-		if (councilMove.getMemberUsed().getValue() + councilMove.getServantsAdded().getServants() < game.getBoardgame().getCouncilPalace().getSpaceRequirement())
+		if (councilMove.getMemberUsed().getValue() + councilMove.getServantsAdded().getServants() < game.getBoardgame()
+				.getCouncilPalace().getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -401,10 +407,10 @@ public class MoveManager {
 		mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege());
 	}
 
-	private boolean leadercardsellingAllowed(LeaderCardSelling move){
+	private boolean leadercardsellingAllowed(LeaderCardSelling move) {
 		return true;
 	}
-	
+
 	/*
 	 * gestisce la vendita di una carta leader e consentirà la scelta del
 	 * privilegio del consiglio + se la carta era attiva devo anche togliere il
@@ -413,7 +419,7 @@ public class MoveManager {
 	private void leadercardsellingHandle(LeaderCardSelling move) {
 		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
 			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
-		else{
+		else {
 			move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
 			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
 		}
@@ -428,51 +434,59 @@ public class MoveManager {
 	 */
 	private boolean leadercardactivationAllowed(LeaderCardActivation move) {
 		LeaderCardRequest req = move.getLeaderCard().getRequest();
-		if (req instanceof CardRequest){
-			CardRequest r = ((CardRequest)move.getLeaderCard().getRequest());
-			if (r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size() || 
-					r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size() ||
-					r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size() ||
-					r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size())
+		if (req instanceof CardRequest) {
+			CardRequest r = ((CardRequest) move.getLeaderCard().getRequest());
+			if (r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
+					|| r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size()
+					|| r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size()
+					|| r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size())
 				return false;
-		}
-		else if (req instanceof ResourceRequest){
-			ResourceRequest r = ((ResourceRequest)move.getLeaderCard().getRequest());
+		} else if (req instanceof ResourceRequest) {
+			ResourceRequest r = ((ResourceRequest) move.getLeaderCard().getRequest());
 			if (!resourceHandler.enoughResources(move.getPlayer().getPersonalBoard().getResources(), r.getResource()))
 				return false;
-		}
-		else if (req instanceof ResourceCardRequest){
-			ResourceCardRequest r = ((ResourceCardRequest)move.getLeaderCard().getRequest());
-			if ((r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size() || 
-					r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size() ||
-					r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size() ||
-					r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size()) ||
-					!resourceHandler.enoughResources(move.getPlayer().getPersonalBoard().getResources(), r.getResource()))
+		} else if (req instanceof ResourceCardRequest) {
+			ResourceCardRequest r = ((ResourceCardRequest) move.getLeaderCard().getRequest());
+			if ((r.getTerritoryCards() > move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
+					|| r.getCharacterCards() > move.getPlayer().getPersonalBoard().getCharactersCards().size()
+					|| r.getBuildingCards() > move.getPlayer().getPersonalBoard().getBuildingsCards().size()
+					|| r.getVentureCards() > move.getPlayer().getPersonalBoard().getVenturesCards().size())
+					|| !resourceHandler.enoughResources(move.getPlayer().getPersonalBoard().getResources(),
+							r.getResource()))
 				return false;
 		}
 		return true;
 	}
-	
+
 	/*
 	 * metodo che gestisce la procedura di attivazione di una carta
 	 */
-	private void leadercardactivationHandle(LeaderCardActivation move){
-//		move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
+	private void leadercardactivationHandle(LeaderCardActivation move) {
+		// move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
 	}
 
 	/*
-	 * metodo che dice se la lista di effetti di un player contiene un elemento di quella classe
+	 * metodo che dice se la lista di effetti di un player contiene un elemento
+	 * di quella classe
 	 */
-	private boolean containsClass(List<Effect> list, Object o){
-		for (Effect e : list){
-			if (e.getClass().equals(o.getClass())){
+	private boolean containsClass(List<Effect> list, Object o) {
+		for (Effect e : list) {
+			if (e.getClass().equals(o.getClass())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-//	private Effect giveIfContainedClass(List<Effect> list, Object o){
-//		
-//	}
+
+	// private Effect giveIfContainedClass(List<Effect> list, Object o){
+	//
+	// }
+
+	private boolean endmoveAllowed(EndMove move) {
+		return true;
+	}
+
+	private void endmoveHandle(EndMove move) {
+		//TODO
+	}
 }

@@ -72,11 +72,11 @@ public class InitialConfigurator extends TurnInizializator {
 	private void loadConfiguration(Game game) {
 		fileParser.getDevCards(game);
 		// carte scomunica
-		// carte leader
+		// carte leader (random)
 		// faithGrid
 		// market
 		// torri
-		// plancia : selezionare personalTile
+		// plancia : selezionare personalTile (random)
 		// consiglio
 	}
 
