@@ -183,7 +183,6 @@ public class MainGameController implements Runnable {
 		for (String c : cp) {
 			resourceHandler.addResource(resource, councilResource.get(c));
 		}
-
 		return resource;
 	}
 

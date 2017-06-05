@@ -6,7 +6,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
 import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
+import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
@@ -23,13 +25,17 @@ import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
+import it.polimi.ingsw.LM22.model.NoPermanentEffect;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
+import it.polimi.ingsw.LM22.model.VentureCard;
 
 public class MoveManager {
 
+	private final String UNCOLORED = "Uncolored";
 	private final Integer SINGLE_PRIVILEGE = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
@@ -98,7 +104,6 @@ public class MoveManager {
 			return false;
 		if (!checkCardSpace(cardMove))
 			return false;
-		// check se la torre è già occupata da un familiare dello stesso player
 		if (game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
 				.contains(cardMove.getPlayer().getColor()))
 			return false;
@@ -142,15 +147,15 @@ public class MoveManager {
 		if (space.getMember() != null)
 			if (!containsClass(cardMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 				return false;
-		if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
-				+ cardMove.getServantsAdded().getServants()))
+		Integer servantsPower = calculateEffectiveServants(cardMove);
+		if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue() + servantsPower))
 			return false;
 		if (containsClass(cardMove.getPlayer().getEffects(), DiceCardMalusEx.class)) {
 			for (Effect e : cardMove.getPlayer().getEffects()) {
 				if (e instanceof DiceCardMalusEx) {
 					if (((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())) {
-						if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue()
-								+ cardMove.getServantsAdded().getServants() - ((DiceCardMalusEx) e).getMalus()))
+						if (space.getSpaceRequirement() > (cardMove.getMemberUsed().getValue() + servantsPower
+								- ((DiceCardMalusEx) e).getMalus()))
 							return false;
 					}
 					break;
@@ -158,6 +163,17 @@ public class MoveManager {
 			}
 		}
 		return true;
+	}
+
+	/*
+	 * metodo che calcola l'effettivo aumento di potere grazie all'utilizzo di
+	 * servitori durante un qualsiasi tipo di mossa che implica il movimento di
+	 * un familiare
+	 */
+	private Integer calculateEffectiveServants(MemberMove move) {
+		if (move.getPlayer().getEffects().contains(DoubleServantsEx.class))
+			return move.getServantsAdded().getServants() / 2;
+		return move.getServantsAdded().getServants();
 	}
 
 	/*
@@ -177,7 +193,7 @@ public class MoveManager {
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
 		Resource bonus = calculateBonus(t, cardMove);
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
-		Resource cardCost = NOTHING;
+		Resource cardCost = calculateCardCost(cardMove, t);
 		switch (tower) {
 		case 3:
 			// problema sarebbe gestire il doppio costo
@@ -227,7 +243,7 @@ public class MoveManager {
 			bonus = NOTHING;
 		else {
 			// da controllare se ho le scomuniche che riducono il numero di
-			// risorse acquisite
+			// risorse acquisite --> azione da fare per ogni aggiunta possibile
 			bonus = space.getReward();
 		}
 		return bonus;
@@ -247,6 +263,15 @@ public class MoveManager {
 		else if (!occupied || hasBrunelleschi)
 			additionalCost = NOTHING;
 		return additionalCost;
+	}
+
+	/*
+	 * metodo che calcola il costo della carta in base alla mossa e alla torre
+	 * in ingresso
+	 */
+	private Resource calculateCardCost(CardMove cardMove, Tower t) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*
@@ -287,15 +312,67 @@ public class MoveManager {
 		return true;
 	}
 
-	private CardSpace searchCardSpace(Integer towerSelected, Integer levelSelected) {
-		return game.getBoardgame().getTowers()[towerSelected].getFloor()[levelSelected].getSpace();
+	/*
+	 * metodo che restituisce il CardSpace relativo al numero della torre
+	 * selezionata e al numero del floor selezionato
+	 */
+	private CardSpace searchCardSpace(Integer towerSelected, Integer floorSelected) {
+		return game.getBoardgame().getTowers()[towerSelected].getFloor()[floorSelected].getSpace();
 	}
 
 	/*
 	 * gestisce una mossa di tipo CardMove
 	 */
 	public void cardmoveHandle(CardMove cardMove) {
+		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
+		space.setMember(cardMove.getMemberUsed());
+		Tower t = game.getBoardgame().getTowers()[cardMove.getTowerSelected()];
+		cardMove.getMemberUsed().setUsed(true);
+		if (!t.isOccupied())
+			t.setOccupied(true);
+		if (cardMove.getMemberUsed().getColor() != UNCOLORED)
+			t.getColoredMembersOnIt().add(cardMove.getMemberUsed().getColor());
+		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
+		resourceHandler.subResource(playerResource, cardMove.getServantsAdded());
+		resourceHandler.addResource(playerResource, calculateBonus(t, cardMove));
+		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
+		resourceHandler.subResource(playerResource, calculateCardCost(cardMove, t));
+		cardGetter(cardMove, t);
+	}
 
+	/*
+	 * metodo che gestisce lo smistamento della carta da prendere nella
+	 * PersonalBoard del player e gestisce le varie carte in maniera different
+	 * (le carte character che hanno un effetto permanente devono anche
+	 * aggiornare la lista degli effetti presente nel Player
+	 */
+	private void cardGetter(CardMove cardMove, Tower t) {
+		switch (cardMove.getTowerSelected()) {
+		case 0:
+			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards()
+					.add((TerritoryCard) (t.getFloor()[cardMove.getLevelSelected()].getCard()));
+			// metodo chiamante l'effectManager per l'effetto immediato
+			break;
+		case 1:
+			cardMove.getPlayer().getPersonalBoard().getCharactersCards()
+					.add((CharacterCard) (t.getFloor()[cardMove.getLevelSelected()].getCard()));
+			if (((CharacterCard) (t.getFloor()[cardMove.getLevelSelected()].getCard())).getPermanentEffect()
+					.getClass() != NoPermanentEffect.class)
+				cardMove.getPlayer().getEffects().add(
+						((CharacterCard) (t.getFloor()[cardMove.getLevelSelected()].getCard())).getPermanentEffect());
+			// metodo chiamante l'effectManager per l'effetto immediato
+			break;
+		case 2:
+			cardMove.getPlayer().getPersonalBoard().getBuildingsCards()
+					.add((BuildingCard) (t.getFloor()[cardMove.getLevelSelected()].getCard()));
+			// metodo chiamante l'effectManager per l'effetto immediato
+			break;
+		case 3:
+			cardMove.getPlayer().getPersonalBoard().getVenturesCards()
+					.add((VentureCard) (t.getFloor()[cardMove.getLevelSelected()].getCard()));
+			// metodo chiamante l'effectManager per l'effetto immediato
+			break;
+		}
 	}
 
 	/*
@@ -309,9 +386,9 @@ public class MoveManager {
 		if (game.getBoardgame().getMarket()[pos].getMember() != null)
 			if (!containsClass(marketMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 				return false;
-		if (marketMove.getMemberUsed().getValue()
-				+ marketMove.getServantsAdded().getServants() < game.getBoardgame().getMarket()[pos]
-						.getSpaceRequirement())
+		int servants = calculateEffectiveServants(marketMove);
+		if (marketMove.getMemberUsed().getValue() + servants < game.getBoardgame().getMarket()[pos]
+				.getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -326,12 +403,27 @@ public class MoveManager {
 		/*
 		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
 		 */
-		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
-				game.getBoardgame().getMarket()[opt].getReward());
+		Resource bonus = calculateBonus(marketMove, game.getBoardgame().getMarket()[opt]);
+		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), bonus);
 		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				marketMove.getServantsAdded());
-		mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
-				marketMove.getPlayer());
+		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
+				mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
+						marketMove.getPlayer()));
+	}
+
+	/*
+	 * metodo che restituisce la risorsa bonus controllando anch eventuali
+	 * scomuniche
+	 */
+	private Resource calculateBonus(MarketMove move, MarketSpace space) {
+		Resource bonus = space.getReward();
+		if (move.getPlayer().getEffects().contains(ResourceMalusEx.class))
+			// modifico il valore del bonus ricevuto se e solo se il bonus
+			// ricevuto è dello stesso tipo
+			// di quello presente nella scomunica
+			return bonus;
+		return bonus;
 	}
 
 	/*
@@ -389,7 +481,7 @@ public class MoveManager {
 	 */
 	public void workMoveHandle(WorkMove workMove) {
 		if (workMove.getWorkType() == PRODUCTION)
-			productionHandle();
+			productionHandle(workMove);
 	}
 
 	/*
@@ -400,15 +492,25 @@ public class MoveManager {
 	 * chiedere al player se vuole o no ottenere tipo il cambio risorse e anche
 	 * chiedere quale attivare nel caso di DoubleChangeEffect
 	 */
-	private void productionHandle() {
-
+	private void productionHandle(WorkMove move) {
+		Integer valueOfAction = move.getMemberUsed().getValue() + calculateEffectiveServants(move);
+		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
+		Resource total = NOTHING;
+		for (BuildingCard card : move.getPlayer().getPersonalBoard().getBuildingsCards()) {
+			// if (valueOfAction >= card.getRequirement())
+			// effectManager.workHandle(card.getPermanentEffect(), total);
+		}
+		// effectManager.workHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(),
+		// total);
+		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
 	/*
 	 * gestisce la fase di Raccolto
 	 */
 	private void harvestHandle(WorkMove move) throws IOException {
-		Integer valueOfAction = move.getMemberUsed().getValue() + move.getServantsAdded().getServants();
+		// devo controllare se ho bonus da carte character oppure scomuniche
+		Integer valueOfAction = move.getMemberUsed().getValue() + calculateEffectiveServants(move);
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
 		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
@@ -423,8 +525,9 @@ public class MoveManager {
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
 	public boolean councilmoveAllowed(CouncilMove councilMove) {
-		if (councilMove.getMemberUsed().getValue() + councilMove.getServantsAdded().getServants() < game.getBoardgame()
-				.getCouncilPalace().getSpaceRequirement())
+		Integer servants = calculateEffectiveServants(councilMove);
+		if (councilMove.getMemberUsed().getValue() + servants < game.getBoardgame().getCouncilPalace()
+				.getSpaceRequirement())
 			return false;
 		return true;
 	}
@@ -443,7 +546,8 @@ public class MoveManager {
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
 						councilMove.getPlayer()));
-		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(), councilMove.getServantsAdded());
+		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+				councilMove.getServantsAdded());
 
 	}
 
