@@ -423,7 +423,6 @@ public class CLIinterface extends AbstractUI {
 		showMsg("|________________________________|");
 	}
 
-	// TODO selezionare PdC diversi!
 	@Override
 	public String councilRequest(Integer number) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -436,7 +435,7 @@ public class CLIinterface extends AbstractUI {
 			if (!list.contains("servants"))
 				showMsg("2: two servants");
 			if (!list.contains("coins"))
-				showMsg("3: two conis");
+				showMsg("3: two coins");
 			if (!list.contains("military"))
 				showMsg("4: two military points");
 			if (!list.contains("faith"))

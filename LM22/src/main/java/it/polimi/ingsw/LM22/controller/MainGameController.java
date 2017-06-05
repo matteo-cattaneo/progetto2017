@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +32,6 @@ public class MainGameController implements Runnable {
 	private Integer TIMER_PER_MOVE; // caricabile da file
 	private Game game = new Game();
 	private IPlayer iplayer[];
-	private int[] ordine;
 	private int nPlayers;
 	private VaticanReportManager vaticanReportManager;
 	private TurnInizializator turnInizializator;
@@ -43,11 +41,10 @@ public class MainGameController implements Runnable {
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	private int i = 0;
 
-	public MainGameController(IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
+	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
-		this.ordine = ordine;
-		this.initialConfigurator = new InitialConfigurator(game, iplayer, ordine, nPlayer);
+		this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
 	}
 
 	@Override
@@ -55,39 +52,41 @@ public class MainGameController implements Runnable {
 		String sMove;
 		AbstractMove aMove;
 		try {
-			sendAll();// invio a tutti il model
+			for (Player p : game.getPlayersOrder()) {
+				sendAll();// invio a tutti il model
 
-			sMove = iplayer[ordine[i]].yourTurn();
-			System.out.println(sMove);
-			aMove = netContrAdapter.moveParser(getPlayer(iplayer[ordine[i]]), sMove);
-			moveManager.manageMove(aMove);
+				sMove = getIPlayer(p).yourTurn();
+				System.out.println(sMove);
+				aMove = netContrAdapter.moveParser(p, sMove);
+				moveManager.manageMove(aMove);
 
-			if (ordine[i + 1] == 4) {
-				i = 0;
-				// endturn
-				// vaticano
-				// run
-			} else {
-				i++;
+				if ((i + 1) == 4) {
+					i = 0;
+					// endturn
+					// vaticano
+					// run
+				} else {
+					i++;
+				}
 			}
 			// turn initializzator
 			run();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Partita terminata!");
+			System.err.println("Room crashed!");
 		}
 	}
 
 	/*
 	 * fornisco il giocatore corrispondente al client fornito
 	 */
-	private Player getPlayer(IPlayer ip) throws RemoteException {
-		for (Player p : game.getPlayers()) {
-			if (p.getNickname().equals(ip.getName()))
-				return p;
-		}
-		return null;
-	}
+	// private Player getPlayer(IPlayer ip) throws RemoteException {
+	// for (Player p : game.getPlayers()) {
+	// if (p.getNickname().equals(ip.getName()))
+	// return p;
+	// }
+	// return null;
+	// }
 
 	private IPlayer getIPlayer(Player p) throws RemoteException {
 		for (IPlayer ip : iplayer) {
@@ -182,9 +181,7 @@ public class MainGameController implements Runnable {
 		String result = getIPlayer(player).councilRequest(councilNumber);
 		String[] cp = result.split("@");
 		for (String c : cp) {
-			System.out.println("@: " + councilResource.get(c).getStone());
 			resourceHandler.addResource(resource, councilResource.get(c));
-			System.out.println("#: " + resource.getStone());
 		}
 
 		return resource;

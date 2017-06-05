@@ -28,10 +28,10 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
+	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
 		initializeTurn(game);
 		throwDices(game);
-		setupPlayers(game, iplayer, ordine, nPlayer);
+		setupPlayers(game, iplayer, nPlayer);
 		loadConfiguration(game);
 		setNewPlayersOrder(game);
 		giveInitialResources(game);
@@ -52,7 +52,7 @@ public class InitialConfigurator extends TurnInizializator {
 	/*
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
-	private void setupPlayers(Game game, IPlayer iplayer[], int[] ordine, int nPlayer) throws RemoteException {
+	private void setupPlayers(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
 		Player players[] = new Player[nPlayer];
 		game.setPlayers(players);
 		int i = 0;
@@ -80,12 +80,11 @@ public class InitialConfigurator extends TurnInizializator {
 	 */
 	@Override
 	protected void setNewPlayersOrder(Game game) {
-		// Random random = new Random();
+		Random random = new Random();
 		List<Player> p = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
 			// i put the new item in the list randomly
-			// p.add(random.nextInt(p.size() + 1), player);
-			p.add(player);
+			p.add(random.nextInt(p.size() + 1), player);
 		}
 		game.setPlayersOrder(p);
 	}

@@ -93,7 +93,7 @@ public class MoveManager {
 	/*
 	 * controlla se una mossa del tipo CardMove è ammessa o no
 	 */
-	private boolean cardmoveAllowed(CardMove cardMove) {
+	public boolean cardmoveAllowed(CardMove cardMove) {
 		if (!checkMaxNumCardLimit(cardMove))
 			return false;
 		if (!checkCardSpace(cardMove))
@@ -294,14 +294,14 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa di tipo CardMove
 	 */
-	private void cardmoveHandle(CardMove cardMove) {
+	public void cardmoveHandle(CardMove cardMove) {
 
 	}
 
 	/*
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
-	private boolean marketmoveAllowed(MarketMove marketMove) {
+	public boolean marketmoveAllowed(MarketMove marketMove) {
 		// check per controllare se ho scomunica del tipo NoMarkeEx
 		if (containsClass(marketMove.getPlayer().getEffects(), NoMarketEx.class))
 			return false;
@@ -319,7 +319,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo MarketMove
 	 */
-	private void marketmoveHandle(MarketMove marketMove) throws IOException {
+	public void marketmoveHandle(MarketMove marketMove) throws IOException {
 		int opt = marketMove.getMarketSpaceSelected();
 		game.getBoardgame().getMarket()[opt].setMember(marketMove.getMemberUsed());
 		marketMove.getMemberUsed().setUsed(true);
@@ -337,7 +337,7 @@ public class MoveManager {
 	/*
 	 * controlla se una mossa del tipo WorkMove è ammessa o no
 	 */
-	private boolean workMoveAllowed(WorkMove workMove) {
+	public boolean workMoveAllowed(WorkMove workMove) {
 		return checkWorkSpace(workMove);
 	}
 
@@ -387,7 +387,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo WorkMove
 	 */
-	private void workMoveHandle(WorkMove workMove) {
+	public void workMoveHandle(WorkMove workMove) {
 		if (workMove.getWorkType() == PRODUCTION)
 			productionHandle();
 	}
@@ -443,10 +443,11 @@ public class MoveManager {
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
 						councilMove.getPlayer()));
+		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(), councilMove.getServantsAdded());
 
 	}
 
-	private boolean leadercardsellingAllowed(LeaderCardSelling move) {
+	public boolean leadercardsellingAllowed(LeaderCardSelling move) {
 		return true;
 	}
 
@@ -455,7 +456,7 @@ public class MoveManager {
 	 * privilegio del consiglio + se la carta era attiva devo anche togliere il
 	 * suo effetto dalla lista degli effetti attualmente attivi
 	 */
-	private void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
+	public void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
 		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
 			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 		else {
@@ -475,7 +476,7 @@ public class MoveManager {
 	 * attivata --> sarà poi gestita dai vari controlli comunque interni a
 	 * questa classe
 	 */
-	private boolean leadercardactivationAllowed(LeaderCardActivation move) {
+	public boolean leadercardactivationAllowed(LeaderCardActivation move) {
 		LeaderCardRequest req = move.getLeaderCard().getRequest();
 		if (move.getLeaderCard().getName() == "Lucrezia Borgia") {
 			CardRequest r = ((CardRequest) move.getLeaderCard().getRequest());
@@ -514,7 +515,7 @@ public class MoveManager {
 	/*
 	 * metodo che gestisce la procedura di attivazione di una carta
 	 */
-	private void leadercardactivationHandle(LeaderCardActivation move) {
+	public void leadercardactivationHandle(LeaderCardActivation move) {
 		// move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
 	}
 
@@ -535,11 +536,11 @@ public class MoveManager {
 	//
 	// }
 
-	private boolean endmoveAllowed(EndMove move) {
+	public boolean endmoveAllowed(EndMove move) {
 		return true;
 	}
 
-	private void endmoveHandle(EndMove move) {
+	public void endmoveHandle(EndMove move) {
 
 	}
 }

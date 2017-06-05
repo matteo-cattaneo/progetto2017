@@ -137,21 +137,13 @@ public class ResourceHandler {
 	 * come primo parametro
 	 */
 	public void subResource(Resource s1, Resource s2) {
-		Integer wood = 0;
-		Integer stone = 0;
-		Integer coins = 0;
-		Integer servants = 0;
-		Integer faith = 0;
-		Integer military = 0;
-		Integer victory = 0;
-		wood = s1.getWood() - s2.getWood();
-		stone = s1.getStone() - s2.getStone();
-		coins = s1.getCoins() - s2.getCoins();
-		servants = s1.getServants() - s2.getServants();
-		faith = s1.getFaith() - s2.getFaith();
-		military = s1.getMilitary() - s2.getMilitary();
-		victory = s1.getVictory() - s2.getVictory();
-		s1 = new Resource(wood, stone, servants, coins, faith, military, victory);
+		s1.setStone(s1.getStone() - s2.getStone());
+		s1.setWood(s1.getWood() - s2.getWood());
+		s1.setCoins(s1.getCoins() - s2.getCoins());
+		s1.setServants(s1.getServants() - s2.getServants());
+		s1.setMilitary(s1.getMilitary() - s2.getMilitary());
+		s1.setFaith(s1.getFaith() - s2.getFaith());
+		s1.setVictory(s1.getVictory() - s2.getVictory());
 	}
 
 	public Resource sumResource(Resource s1, Resource s2) {

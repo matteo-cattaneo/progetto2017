@@ -53,7 +53,6 @@ public class StartServer {
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
 		Integer[] t = { TIMER };
-		int[] ordine = { 4, 4, 4, 4, 4 };
 		player = new IPlayer[4];
 		System.out.println("Attesa client...");
 		while (i < 4) {
@@ -76,23 +75,21 @@ public class StartServer {
 			 */
 
 			if (conn.getSocket().isConnected()) {
-				System.out.println("Socket: Connesso client " + i);
+				System.out.println("Socket: Connected client " + i);
 				player[i] = new SocketPlayer(conn.getSocket());
 				conn = new SocketConnection(serverSocket);
 				executor.submit(conn);
 			} else if (serverRMI.getClient() != null) {
-				System.out.println("RMI: Connesso client " + i);
+				System.out.println("RMI: Connected client " + i);
 				player[i] = serverRMI;
 				serverRMI = new RMIPlayer();
 				Naming.rebind("rmi://localhost/MSG", serverRMI);
 			}
-
-			ordine[i] = i;
 			i++;
 		}
-		System.out.println("Inizio partita");
+		System.out.println("Game started!!!");
 		// avvio thread della partita (controller)
-		executor.submit(new MainGameController(player, ordine, i));
+		executor.submit(new MainGameController(player, i));
 		start();
 	}
 
