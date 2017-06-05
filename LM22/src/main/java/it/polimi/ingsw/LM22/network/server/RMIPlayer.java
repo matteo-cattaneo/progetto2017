@@ -12,8 +12,8 @@ import it.polimi.ingsw.LM22.network.client.IClient;
 public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 
 	private static final long serialVersionUID = -2036349694420489903L;
-	IClient client = null;
-	String name;
+	private transient IClient client;
+	private String name;
 
 	public RMIPlayer() throws RemoteException {
 

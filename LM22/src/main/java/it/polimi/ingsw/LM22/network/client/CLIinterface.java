@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 
 /*
@@ -12,10 +13,9 @@ di interfacciarsi con la CLI
 */
 public class CLIinterface extends AbstractUI {
 
-	private final String ORANGE = "Orange";
-	private final String BLACK = "Black";
-	private final String WHITE = "White";
-	private final String UNCOLORED = "Uncolored";
+	private final String DEFAULT_IP = "localhost";
+	// Colori familiari
+	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
 	private final String CARDMOVE = "Card";
 	private final String MARKETMOVE = "Market";
@@ -39,7 +39,7 @@ public class CLIinterface extends AbstractUI {
 	private String move = new String();
 	private Game game;
 	private String name;
-	private Boolean memberMove;
+	private boolean memberMove = false;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -63,16 +63,13 @@ public class CLIinterface extends AbstractUI {
 	public void printMoveMenu() throws RemoteException {
 		move = "";
 		showMsg("Choose your Move:");
-		showMsg("1: Move a Member");
+		if (memberMove == false)
+			showMsg("1: Move a Member");
 		showMsg("2: Sell a LeaderCard");
 		showMsg("3: Activate a LeaderCard");
 		showMsg("4: End turn");
 		int option = in.nextInt();
 		switch (option) {
-		case 1:
-			printMemberMoveMenu();
-			memberMove = true;
-			break;
 		case 2:
 			printSellLeaderCardMenu();
 			break;
@@ -83,6 +80,12 @@ public class CLIinterface extends AbstractUI {
 			setMove("End");
 			memberMove = false;
 			break;
+		case 1:
+			if (memberMove == false) {
+				printMemberMoveMenu();
+				memberMove = true;
+				break;
+			}
 		default:
 			printInvalidInput();
 			printMoveMenu();
@@ -128,26 +131,24 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printFamilyMemberMenu() {
+	public void printFamilyMemberMenu() throws RemoteException {
 		showMsg("Choose your Family Member you want to move:");
-		showMsg("1: " + ORANGE);
-		showMsg("2: " + BLACK);
-		showMsg("3: " + WHITE);
-		showMsg("4: " + UNCOLORED);
+		int i = 0;
+		for (FamilyMember fm : getPlayer(name, game).getMembers()) {
+			if (!fm.isUsed())
+				showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
+			i++;
+		}
 		int option = in.nextInt();
 		switch (option) {
 		case 1:
-			setMove(ORANGE);
-			break;
 		case 2:
-			setMove(BLACK);
-			break;
 		case 3:
-			setMove(WHITE);
-			break;
 		case 4:
-			setMove(UNCOLORED);
-			break;
+			if (!getPlayer(name, game).getMembers().get(option - 1).isUsed()) {
+				setMove(MEMBER_COLOR[option - 1]);
+				break;
+			}
 		default:
 			printInvalidInput();
 			printFamilyMemberMenu();
@@ -299,7 +300,7 @@ public class CLIinterface extends AbstractUI {
 		int option = in.nextInt();
 		if (option <= i)
 			setMove(getPlayer(name, game).getLeaderCards().get(option - 1).getName());
-		else if (option > i && option < i + j)
+		else if (option > i && option < (j + i))
 			setMove(getPlayer(name, game).getActivatedLeaderCards().get(option - 1).getName());
 		else {
 			printInvalidInput();
@@ -356,10 +357,10 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public String getName() {
 		String name;
-		showMsg("Username(Matteo): ");
+		showMsg("Username(Player): ");
 		name = in.nextLine();
 		if (name.equals(""))
-			name = "Matteo";
+			name = "Player";
 		this.name = name;
 		return name;
 	}
@@ -370,10 +371,10 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public String getIP() {
 		String ip;
-		showMsg("Indirizzo ip server(127.0.0.1): ");
+		showMsg("Indirizzo ip server(" + DEFAULT_IP + "): ");
 		ip = in.nextLine();
 		if (ip.equals(""))
-			ip = "127.0.0.1";
+			ip = DEFAULT_IP;
 		return ip;
 	}
 

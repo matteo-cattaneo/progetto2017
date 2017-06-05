@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
@@ -34,7 +36,7 @@ import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
 
 public class MoveManager {
-
+	private static final Logger LOGGER = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
 	private final String UNCOLORED = "Uncolored";
 	private final Integer SINGLE_PRIVILEGE = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
@@ -81,7 +83,7 @@ public class MoveManager {
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 		if (checkResult) {
 			try {
@@ -89,7 +91,7 @@ public class MoveManager {
 				method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 				method.invoke(this, new Object[] { move });
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 		} else
 			// throw new InvalidMoveException
@@ -171,7 +173,7 @@ public class MoveManager {
 	 * un familiare
 	 */
 	private Integer calculateEffectiveServants(MemberMove move) {
-		if (move.getPlayer().getEffects().contains(DoubleServantsEx.class))
+		if (containsClass(move.getPlayer().getEffects(), DoubleServantsEx.class))
 			return move.getServantsAdded().getServants() / 2;
 		return move.getServantsAdded().getServants();
 	}
@@ -239,7 +241,7 @@ public class MoveManager {
 	private Resource calculateBonus(Tower t, CardMove move) {
 		Resource bonus;
 		CardSpace space = searchCardSpace(move.getTowerSelected(), move.getLevelSelected());
-		if (move.getPlayer().getEffects().contains(NoCardSpaceBonusEffect.class))
+		if (containsClass(move.getPlayer().getEffects(), NoCardSpaceBonusEffect.class))
 			bonus = NOTHING;
 		else {
 			// da controllare se ho le scomuniche che riducono il numero di
@@ -418,7 +420,7 @@ public class MoveManager {
 	 */
 	private Resource calculateBonus(MarketMove move, MarketSpace space) {
 		Resource bonus = space.getReward();
-		if (move.getPlayer().getEffects().contains(ResourceMalusEx.class))
+		if (containsClass(move.getPlayer().getEffects(), ResourceMalusEx.class))
 			// modifico il valore del bonus ricevuto se e solo se il bonus
 			// ricevuto è dello stesso tipo
 			// di quello presente nella scomunica

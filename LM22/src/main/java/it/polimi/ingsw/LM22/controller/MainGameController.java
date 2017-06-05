@@ -11,15 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import it.polimi.ingsw.LM22.model.BuildingCard;
-import it.polimi.ingsw.LM22.model.CharacterCard;
-import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.TerritoryCard;
-import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
@@ -29,6 +26,7 @@ public class MainGameController implements Runnable {
 
 	private final Integer PERIOD_END_DEFINER = 2;
 
+	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Integer TIMER_PER_MOVE; // caricabile da file
 	private Game game = new Game();
 	private IPlayer iplayer[];
@@ -72,7 +70,7 @@ public class MainGameController implements Runnable {
 			// turn initializzator
 			run();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			System.err.println("Room crashed!");
 		}
 	}

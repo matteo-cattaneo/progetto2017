@@ -12,7 +12,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
 	private String name;
-	private AbstractUI UI;
+	private transient AbstractUI UI;
 
 	public RMIClient(AbstractUI UI) throws RemoteException {
 		this.UI = UI;

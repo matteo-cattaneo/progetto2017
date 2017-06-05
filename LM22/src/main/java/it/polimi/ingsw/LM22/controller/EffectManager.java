@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.CardActionEffect;
 import it.polimi.ingsw.LM22.model.CardToResourceEffect;
@@ -18,9 +20,10 @@ import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
 
 public class EffectManager {
-	Player player;
-	MainGameController mainGC;
-	ResourceHandler r = new ResourceHandler();
+	private Player player;
+	private MainGameController mainGC;
+	private ResourceHandler r = new ResourceHandler();
+	private static final Logger LOGGER = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
 
 	public void manageEffect(Effect effect, Player player, MainGameController mainGC) {
 		this.player = player;
@@ -31,7 +34,7 @@ public class EffectManager {
 			if (metodo != null)
 				metodo.invoke(this, new Object[] { effect });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

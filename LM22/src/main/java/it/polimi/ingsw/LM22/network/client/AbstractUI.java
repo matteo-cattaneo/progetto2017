@@ -14,7 +14,7 @@ public abstract class AbstractUI {
 
 	public abstract void printCardMoveMenu() throws RemoteException;
 
-	public abstract void printFamilyMemberMenu();
+	public abstract void printFamilyMemberMenu() throws RemoteException;
 
 	public abstract void printServantsAddictionMenu() throws RemoteException;
 
