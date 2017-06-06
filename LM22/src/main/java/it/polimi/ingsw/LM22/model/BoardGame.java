@@ -16,18 +16,31 @@ public class BoardGame implements Serializable {
 	private final String PRODUCTION = "PRODUCTION";
 	private final String HARVEST = "HARVEST";
 	private final Integer NUM_TOWERS = 4;
+	private final Integer NUM_MARKET = 4;
 	private Tower towers[] = new Tower[NUM_TOWERS];
-	private MarketSpace market[] = new MarketSpace[4];
-	private WorkSpace productionSpace = new WorkSpace(1, PRODUCTION);
-	private WorkSpace harvestSpace = new WorkSpace(1, HARVEST);
-	private FaithGrid faithGrid = new FaithGrid();
-	private CouncilSpace councilPalace = new CouncilSpace(1, new Resource(0, 0, 0, 1, 0, 0, 0), 1);
+	private MarketSpace market[] = new MarketSpace[NUM_MARKET];
+	private WorkSpace productionSpace;
+	private WorkSpace harvestSpace;
+	private FaithGrid faithGrid;
+	private CouncilSpace councilPalace;
 	private HashMap<String, Integer> dices = new HashMap<String, Integer>();
 
 	/*
 	 * i vari bonus arbitrari degli spazi saranno da caricare da file -->
 	 * ATTENZIONE con i costruttori
 	 */
+
+	public void setTowers(Tower[] towers) {
+		this.towers = towers;
+	}
+
+	public void setMarket(MarketSpace[] market) {
+		this.market = market;
+	}
+
+	public void setFaithGrid(FaithGrid faithGrid) {
+		this.faithGrid = faithGrid;
+	}
 
 	public Tower[] getTowers() {
 		return towers;
@@ -42,6 +55,14 @@ public class BoardGame implements Serializable {
 			return productionSpace;
 		} else
 			return harvestSpace;
+	}
+
+	public void setProductionSpace(WorkSpace productionSpace) {
+		this.productionSpace = productionSpace;
+	}
+
+	public void setHarvestSpace(WorkSpace harvestSpace) {
+		this.harvestSpace = harvestSpace;
 	}
 
 	public WorkSpace getProductionSpace() {
@@ -63,10 +84,6 @@ public class BoardGame implements Serializable {
 	public void setCouncilPalace(CouncilSpace councilPalace) {
 		this.councilPalace = councilPalace;
 	}
-
-	// public HashMap<String, Integer> getDices() {
-	// return dices;
-	// }
 
 	public void setDices(HashMap<String, Integer> dices) {
 		this.dices = dices;

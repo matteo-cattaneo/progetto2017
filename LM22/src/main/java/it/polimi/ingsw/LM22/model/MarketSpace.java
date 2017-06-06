@@ -8,18 +8,9 @@ public class MarketSpace extends AbstractSpace implements Serializable {
 	/*
 	 * i bonus del marketSpace devono essere instanziati da File
 	 */
-	private final Resource reward;
-	private final Integer councilPrivilege;
+	private Resource reward;
+	private Integer councilPrivilege;
 	private FamilyMember member;
-
-	/*
-	 * reward deve essere caricato da file ATTENZIONE al costruttore
-	 */
-	public MarketSpace(Integer requirement, Resource reward, Integer councilPrivilege) {
-		super(requirement);
-		this.reward = reward;
-		this.councilPrivilege = councilPrivilege;
-	}
 
 	public FamilyMember getMember() {
 		return member;

@@ -1,21 +1,22 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class Player implements Serializable {
-	
+
 	private static final long serialVersionUID = 7778308561624051543L;
 	private final Integer NUM_LEADER_CARDS = 4;
 	private final String nickname;
 	private final String color;
 	private final List<FamilyMember> members;
 	private final PersonalBoard personalBoard = new PersonalBoard();
-	private List<LeaderCard> leaderCards;
-	private List<LeaderCard> activatedLeaderCards;
-	private List<Effect> effects;
+	private List<LeaderCard> leaderCards = new ArrayList<LeaderCard>();
+	private List<LeaderCard> activatedLeaderCards = new ArrayList<LeaderCard>();;
+	private List<Effect> effects = new ArrayList<Effect>();
 
 	public Player(String nickname, String color, List<FamilyMember> members) {
 		super();
@@ -47,7 +48,7 @@ public class Player implements Serializable {
 	public List<LeaderCard> getActivatedLeaderCards() {
 		return activatedLeaderCards;
 	}
-	
+
 	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}

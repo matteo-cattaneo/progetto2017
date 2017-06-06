@@ -402,7 +402,7 @@ public class CLIinterface extends AbstractUI {
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
 		// game object deserialization
-		showMsg("_________________________________");
+		showMsg(game + "_________________________________");
 		showMsg("| Period: " + game.getPeriod() + " \t \t \t |");
 		showMsg("| Round: " + game.getRound() + " \t \t \t |");
 		showMsg("| \t \t \t \t |");

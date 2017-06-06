@@ -8,5 +8,6 @@
         "military": 0,
         "victory": 0
     },
-    "councilPrivilege": 1
+    "councilPrivilege": 1,
+    "spaceRequirement": 1
 }

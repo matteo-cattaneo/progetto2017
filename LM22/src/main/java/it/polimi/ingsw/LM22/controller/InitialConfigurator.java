@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class InitialConfigurator extends TurnInizializator {
@@ -28,13 +30,14 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
+	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws IOException {
 		initializeTurn(game);
 		throwDices(game);
 		setupPlayers(game, iplayer, nPlayer);
 		loadConfiguration(game);
 		setNewPlayersOrder(game);
 		giveInitialResources(game);
+		distribuiteCards();
 	}
 
 	/*
@@ -45,6 +48,16 @@ public class InitialConfigurator extends TurnInizializator {
 	public void initializeTurn(Game game) {
 		game.setPeriod(1);
 		game.setRound(1);
+
+		WorkSpace harv = new WorkSpace();
+		harv.setSpaceRequirement(1);
+		harv.setWorkType("PRODUCTION");
+		game.getBoardgame().setHarvestSpace(harv);
+		WorkSpace prod = new WorkSpace();
+		prod.setSpaceRequirement(1);
+		prod.setWorkType("HARVEST");
+		game.getBoardgame().setProductionSpace(prod);
+
 		// boardgame
 		// altri parametri?
 	}
@@ -103,15 +116,19 @@ public class InitialConfigurator extends TurnInizializator {
 	 * metodo che costruisce il Model con i parametri principali per poter
 	 * iniziare la partita
 	 */
-	private void loadConfiguration(Game game) {
+	private void loadConfiguration(Game game) throws IOException {
 		fileParser.getDevCards(game);
 		// carte scomunica
-		// carte leader (random)
-		// faithGrid
-		// market
+		fileParser.getLeaderCards(game);// carte leader (random)
+		fileParser.getFaithGrid(game);
+		fileParser.getMarketSpace(game);
 		// torri
 		// plancia : selezionare personalTile (random)
-		// consiglio
+		fileParser.getCouncilSpace(game);
+	}
+
+	private void distribuiteCards() {
+
 	}
 
 	/*

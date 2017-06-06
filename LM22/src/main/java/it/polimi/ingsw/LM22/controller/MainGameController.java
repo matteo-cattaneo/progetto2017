@@ -42,7 +42,11 @@ public class MainGameController implements Runnable {
 	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
-		this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
+		try {
+			this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
+		} catch (IOException e) {
+			System.err.println("Errore nel caricamento dei file JSON");
+		}
 	}
 
 	@Override
