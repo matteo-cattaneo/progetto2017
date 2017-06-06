@@ -9,18 +9,18 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 public class Game implements Serializable {
 
 	private static final long serialVersionUID = -4098227091469224262L;
-	private final Integer NUM_BONUS_TILE = 4;
+	private transient final Integer NUM_BONUS_TILE = 4;
 	private final BoardGame boardgame = new BoardGame();
 	private Integer period;
 	private Integer round;
 	private Player[] players;
 	private List<Player> playersOrder;
-	private ArrayList<TerritoryCard> territoryCards;
-	private ArrayList<CharacterCard> characterCards;
-	private ArrayList<BuildingCard> buildingCards;
-	private ArrayList<VentureCard> ventureCards;
-	private ArrayList<LeaderCard> leaderCards;
-	private final PersonalBonusTile personalBonusTile[] = new PersonalBonusTile[NUM_BONUS_TILE];
+	private transient ArrayList<TerritoryCard> territoryCards;
+	private transient ArrayList<CharacterCard> characterCards;
+	private transient ArrayList<BuildingCard> buildingCards;
+	private transient ArrayList<VentureCard> ventureCards;
+	private transient ArrayList<LeaderCard> leaderCards;
+	private transient final PersonalBonusTile personalBonusTile[] = new PersonalBonusTile[NUM_BONUS_TILE];
 
 	/*
 	 * durante la creazione della Game dovrò inizializzare tutti gli attributi

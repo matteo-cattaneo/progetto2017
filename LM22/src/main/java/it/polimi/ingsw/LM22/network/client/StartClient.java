@@ -54,7 +54,7 @@ public class StartClient {
 			break;
 		default:
 			System.out.println("Invalid input");
-			printUISelection();
+			UI = printUISelection();
 			break;
 		}
 		stdin.close();
@@ -79,7 +79,8 @@ public class StartClient {
 			client = new SocketClient(UI);
 			break;
 		default:
-
+			UI.printInvalidInput();
+			client = selectConnectionType(UI);
 		}
 		return client;
 	}

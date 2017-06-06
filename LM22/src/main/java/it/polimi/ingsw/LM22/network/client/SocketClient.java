@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -7,6 +8,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 
 public class SocketClient implements IClient {
 	private final int SOCKET_PORT = 1337;
@@ -54,7 +56,13 @@ public class SocketClient implements IClient {
 					socketOut.flush();
 				} else if (socketLine[0].equals("board")) {
 					// ricevo e visualizzo la board
-					UI.showBoard((Game) socketIn.readObject());
+					Game game = (Game) socketIn.readObject();
+					FileOutputStream fout = new FileOutputStream("C:\\Users\\Matteo\\Desktop\\client.txt");
+					ObjectOutputStream oos = new ObjectOutputStream(fout);
+					oos.writeObject(game);
+					oos.close();
+					fout.close();
+					UI.showBoard(game);
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {

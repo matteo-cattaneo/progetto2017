@@ -1,6 +1,8 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,7 +39,6 @@ public class MainGameController implements Runnable {
 	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 	private ResourceHandler resourceHandler = new ResourceHandler();
-	private int i = 0;
 
 	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
@@ -51,28 +52,32 @@ public class MainGameController implements Runnable {
 
 	@Override
 	public void run() {
-		String sMove;
 		AbstractMove aMove;
 		try {
+			// inizio turno
 			for (Player p : game.getPlayersOrder()) {
-				sendAll();// invio a tutti il model
-
-				sMove = getIPlayer(p).yourTurn();
-				System.out.println(sMove);
-				aMove = netContrAdapter.moveParser(p, sMove);
-				moveManager.manageMove(aMove);
-
-				if ((i + 1) == 4) {
-					i = 0;
-					// endturn
-					// vaticano
-					// run
-				} else {
-					i++;
+				// turno di un giocatore
+				for (String sMove = ""; !sMove.equals("End@");) {
+					sendAll();// invio a tutti il model
+					FileOutputStream fout = new FileOutputStream("C:\\Users\\Matteo\\Desktop\\server.txt");
+					ObjectOutputStream oos = new ObjectOutputStream(fout);
+					oos.writeObject(game);
+					oos.close();
+					fout.close();
+					sMove = getIPlayer(p).yourTurn();
+					System.out.println(sMove);
+					aMove = netContrAdapter.moveParser(p, sMove);
+					moveManager.manageMove(aMove);
 				}
+				// fine turno di un giocatore
 			}
+			// fine turno/periodo
+			// vaticano
 			// turn initializzator
-			run();
+			if (game.getPeriod().equals(2) && game.getRound().equals(2))
+				manageEndGame(game);
+			else
+				run();
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			System.err.println("Room crashed!");

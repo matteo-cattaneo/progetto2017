@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.network.server;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -7,10 +9,8 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.network.client.IClient;
-/*
- * classe utilizzata per gestire la comunicazione socket con il client 
- */
 
 public class SocketPlayer implements IPlayer {
 	ObjectOutputStream out;
@@ -39,12 +39,17 @@ public class SocketPlayer implements IPlayer {
 	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
+		// for (Player p : game.getPlayersOrder()) {
+		// System.out.println(p.getNickname() + " " +
+		// p.getPersonalBoard().getResources().getStone());
+		// }
 
 		out.writeUTF("board");
 		out.flush();
 
 		out.writeObject(game);
 		out.flush();
+
 	}
 
 	public String getName() {
