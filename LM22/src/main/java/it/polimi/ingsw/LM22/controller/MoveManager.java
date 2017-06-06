@@ -629,7 +629,7 @@ public class MoveManager {
 	 * metodo che dice se la lista di effetti di un player contiene un elemento
 	 * di quella classe
 	 */
-	private boolean containsClass(List<Effect> list, Object o) {
+	public boolean containsClass(List<Effect> list, Object o) {
 		for (Effect e : list) {
 			if (e.getClass().equals(o.getClass())) {
 				return true;
@@ -637,7 +637,7 @@ public class MoveManager {
 		}
 		return false;
 	}
-
+	
 	// private Effect giveIfContainedClass(List<Effect> list, Object o){
 	//
 	// }
