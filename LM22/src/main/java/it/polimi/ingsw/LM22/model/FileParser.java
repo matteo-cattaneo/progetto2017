@@ -31,7 +31,7 @@ import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class FileParser {
-	private final String JSONpath = System.getProperty("user.dir") + "\\JSON\\";
+	private final String JSONpath = ".\\JSON\\";
 
 	public void getDevCards(Game game) throws IOException {
 		FileParser f = new FileParser();
@@ -141,4 +141,28 @@ public class FileParser {
 		faithGrid.setRewards(resources);
 		game.getBoardgame().setFaithGrid(faithGrid);
 	}
+
+	public void getPersonalBonusTile(Game game) throws IOException {
+		Type type = new TypeToken<PersonalBonusTile[]>() {
+		}.getType();
+		// ottengo il contenuto del file
+		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "PersonalBonusTile.json")),
+				StandardCharsets.UTF_8);
+		// genero l'oggetto deserializzatore GSON
+		Gson gson = new GsonBuilder().create();
+		PersonalBonusTile[] personalBonusTile = gson.fromJson(text, type);
+		game.setPersonalBonusTile(personalBonusTile);
+	}
+
+	public void getCardSpace(Game game) throws IOException {
+		Type type = new TypeToken<Tower[]>() {
+		}.getType();
+		// ottengo il contenuto del file
+		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "CardSpace.json")), StandardCharsets.UTF_8);
+		// genero l'oggetto deserializzatore GSON
+		Gson gson = new GsonBuilder().create();
+		Tower[] towers = gson.fromJson(text, type);
+		game.getBoardgame().setTowers(towers);
+	}
+
 }

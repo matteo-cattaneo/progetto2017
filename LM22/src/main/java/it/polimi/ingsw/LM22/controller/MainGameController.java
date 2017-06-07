@@ -115,7 +115,7 @@ public class MainGameController implements Runnable {
 	 * permette di gestire tutta la fase di conteggio dei Punti Finali
 	 */
 	private void manageEndGame(Game game) {
-
+		LOGGER.log(Level.INFO, "Game ended");
 	}
 
 	/*

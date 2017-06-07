@@ -9,7 +9,8 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 0
+        "councilPrivilege": 0,
+        "spaceRequirement":1
         }, {
         "reward": {
             "wood": 0,
@@ -20,7 +21,8 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 0
+        "councilPrivilege": 0,
+        "spaceRequirement":1
         }, {
         "reward": {
             "wood": 0,
@@ -31,7 +33,8 @@
             "military": 3,
             "victory": 0
         },
-        "councilPrivilege": 0
+        "councilPrivilege": 0,
+        "spaceRequirement":1
         }, {
         "reward": {
             "wood": 0,
@@ -42,6 +45,7 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 2
+        "councilPrivilege": 2,
+        "spaceRequirement":1
         }
     ]

@@ -39,11 +39,13 @@ public class InitialConfigurator extends TurnInizializator {
 		initializeTurn(game);
 		throwDices(game);
 		setupPlayers(game, iplayer, nPlayer);
-		loadConfiguration(game);
 		setNewPlayersOrder(game);
+		loadConfiguration(game);
 		giveInitialResources(game);
 		mixCards(game);
 		distributeDevelopmentCards(game);
+		leaderDistribution(game);
+		personalBoardTileDistribution(game);
 	}
 
 	/*
@@ -128,46 +130,45 @@ public class InitialConfigurator extends TurnInizializator {
 		fileParser.getLeaderCards(game);// carte leader (random)
 		fileParser.getFaithGrid(game);
 		fileParser.getMarketSpace(game);
-		// torri
-		// plancia : selezionare personalTile (random)
+		fileParser.getCardSpace(game);
+		fileParser.getPersonalBonusTile(game); // personalTile (random)
 		fileParser.getCouncilSpace(game);
 	}
 
-	private void mixCards(Game game){
+	private void mixCards(Game game) {
 		mixTerritory(game.getTerritoryCards());
 		mixCharacter(game.getCharacterCards());
 		mixBuilding(game.getBuildingCards());
 		mixVenture(game.getVentureCards());
 	}
-	
-	private void mixTerritory(ArrayList<TerritoryCard> list){
+
+	private void mixTerritory(ArrayList<TerritoryCard> list) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++){
-			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		for (int i = 0; i < 100; i++) {
+			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
 		}
 	}
-	
-	private void mixCharacter(ArrayList<CharacterCard> list){
+
+	private void mixCharacter(ArrayList<CharacterCard> list) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++){
-			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		for (int i = 0; i < 100; i++) {
+			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
 		}
 	}
-	
-	private void mixBuilding(ArrayList<BuildingCard> list){
+
+	private void mixBuilding(ArrayList<BuildingCard> list) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++){
-			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		for (int i = 0; i < 100; i++) {
+			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
 		}
 	}
-	
-	private void mixVenture(ArrayList<VentureCard> list){
+
+	private void mixVenture(ArrayList<VentureCard> list) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++){
-			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		for (int i = 0; i < 100; i++) {
+			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
 		}
 	}
-	
 
 	/*
 	 * metodo che implementa la fase di scelta delle carte leader con relativo
@@ -175,10 +176,21 @@ public class InitialConfigurator extends TurnInizializator {
 	 */
 	private void leaderDistribution(Game game) {
 		Random random = new Random();
-		for (Player p: game.getPlayers()){
-			for (int i=0; i < 4; i++){
+		for (Player p : game.getPlayers()) {
+			for (int i = 0; i < 4; i++) {
 				p.getLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
 			}
+		}
+	}
+
+	private void personalBoardTileDistribution(Game game) {
+		Random random = new Random();
+		int num;
+		for (Player p : game.getPlayers()) {
+			for (num = random.nextInt(4); game.getPersonalBonusTile()[num] == null; num = random.nextInt(4))
+				;
+			p.getPersonalBoard().setBonusBoard(game.getPersonalBonusTile()[num]);
+			game.getPersonalBonusTile()[num] = null;
 		}
 	}
 

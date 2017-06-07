@@ -1,83 +1,110 @@
 [
-    {
-        "requirement": 1,
-        "harvestEffect": {
-            "wood": 1,
-            "stone": 1,
-            "servants": 0,
-            "coins": 1,
-            "faith": 0,
-            "military": 0,
-            "victory": 0
-            },
-        "productionEffect": {
-            "wood": 0,
-            "stone": 0,
-            "servants": 1,
-            "coins": 0,
-            "faith": 0,
-            "military": 2,
-            "victory": 0
-        }
-    }, {
-        "requirement": 1,
-        "harvestEffect": {
-            "wood": 1,
-            "stone": 1,
-            "servants": 0,
-            "coins": 0,
-            "faith": 0,
-            "military": 1,
-            "victory": 0
-            },
-        "productionEffect": {
-            "wood": 0,
-            "stone": 0,
-            "servants": 1,
-            "coins": 2,
-            "faith": 0,
-            "military": 0,
-            "victory": 0
-        }
-    }, {
-        "requirement": 1,
-        "harvestEffect": {
-            "wood": 1,
-            "stone": 1,
-            "servants": 0,
-            "coins": 0,
-            "faith": 0,
-            "military": 1,
-            "victory": 0
-            },
-        "productionEffect": {
-            "wood": 0,
-            "stone": 0,
-            "servants": 2,
-            "coins": 1,
-            "faith": 0,
-            "military": 0,
-            "victory": 0
-        }
-    }, {
-        "requirement": 1,
-        "harvestEffect": {
-            "wood": 1,
-            "stone": 1,
-            "servants": 1,
-            "coins": 0,
-            "faith": 0,
-            "military": 0,
-            "victory": 0
-            },
-        "productionEffect": {
-            "wood": 0,
-            "stone": 0,
-            "servants": 0,
-            "coins": 1,
-            "faith": 0,
-            "military": 2,
-            "victory": 0
-        }
-    }
+   {
+      "requirement":1,
+      "harvestEffect":{
+         "resource":{
+            "wood":1,
+            "stone":1,
+            "servants":0,
+            "coins":1,
+            "faith":0,
+            "military":0,
+            "victory":0
+         },
+         "councilPrivilege":0
+      },
+      "productionEffect":{
+         "resource":{
+            "wood":0,
+            "stone":0,
+            "servants":1,
+            "coins":0,
+            "faith":0,
+            "military":2,
+            "victory":0
+         },
+         "councilPrivilege":0
+      }
+   },
+   {
+      "requirement":1,
+      "harvestEffect":{
+         "resource":{
+            "wood":1,
+            "stone":1,
+            "servants":0,
+            "coins":0,
+            "faith":0,
+            "military":1,
+            "victory":0
+         },
+         "councilPrivilege":0
+      },
+      "productionEffect":{
+         "resource":{
+            "wood":0,
+            "stone":0,
+            "servants":1,
+            "coins":2,
+            "faith":0,
+            "military":0,
+            "victory":0
+         },
+         "councilPrivilege":0
+      }
+   },
+   {
+      "requirement":1,
+      "harvestEffect":{
+         "resource":{
+            "wood":1,
+            "stone":1,
+            "servants":0,
+            "coins":0,
+            "faith":0,
+            "military":1,
+            "victory":0
+         },
+         "councilPrivilege":0
+      },
+      "productionEffect":{
+         "resource":{
+            "wood":0,
+            "stone":0,
+            "servants":2,
+            "coins":1,
+            "faith":0,
+            "military":0,
+            "victory":0
+         },
+         "councilPrivilege":0
+      }
+   },
+   {
+      "requirement":1,
+      "harvestEffect":{
+         "resource":{
+            "wood":1,
+            "stone":1,
+            "servants":1,
+            "coins":0,
+            "faith":0,
+            "military":0,
+            "victory":0
+         },
+         "councilPrivilege":0
+      },
+      "productionEffect":{
+         "resource":{
+            "wood":0,
+            "stone":0,
+            "servants":0,
+            "coins":1,
+            "faith":0,
+            "military":2,
+            "victory":0
+         },
+         "councilPrivilege":0
+      }
+   }
 ]

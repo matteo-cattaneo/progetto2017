@@ -17,6 +17,7 @@ import it.polimi.ingsw.LM22.controller.MainGameController;
 public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
 	private final static int SOCKET_PORT = 1337;
+	private final static int RMI_PORT = 1099;
 	static ServerSocket serverSocket;
 	RMIPlayer serverRMI;
 	final int TIMER = 10;
@@ -29,7 +30,7 @@ public class StartServer {
 	public static void main(String[] args) {
 		try {
 			// avvio RMI registry
-			java.rmi.registry.LocateRegistry.createRegistry(1099);
+			java.rmi.registry.LocateRegistry.createRegistry(RMI_PORT);
 			// avvio il server socket
 			serverSocket = new ServerSocket(SOCKET_PORT);
 			StartServer startServer = new StartServer();

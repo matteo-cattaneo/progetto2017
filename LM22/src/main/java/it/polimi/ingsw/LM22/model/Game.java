@@ -20,12 +20,12 @@ public class Game implements Serializable {
 	private transient ArrayList<BuildingCard> buildingCards;
 	private transient ArrayList<VentureCard> ventureCards;
 	private transient ArrayList<LeaderCard> leaderCards;
-	private transient final PersonalBonusTile personalBonusTile[] = new PersonalBonusTile[NUM_BONUS_TILE];
+	private transient PersonalBonusTile personalBonusTile[];
 
-	/*
-	 * durante la creazione della Game dovrò inizializzare tutti gli attributi
-	 * messi a final (saranno sempre quelli)
-	 */
+	public void setPersonalBonusTile(PersonalBonusTile[] personalBonusTile) {
+		this.personalBonusTile = personalBonusTile;
+	}
+
 	public BoardGame getBoardgame() {
 		return boardgame;
 	}

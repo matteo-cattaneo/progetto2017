@@ -9,7 +9,6 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 public class Player implements Serializable {
 
 	private static final long serialVersionUID = 7778308561624051543L;
-	private final Integer NUM_LEADER_CARDS = 4;
 	private final String nickname;
 	private final String color;
 	private final List<FamilyMember> members;

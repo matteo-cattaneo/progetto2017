@@ -1,6 +1,10 @@
 package it.polimi.ingsw.LM22.network.client;
 
 import java.io.FilterInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -40,6 +44,12 @@ public class StartClient {
 			}
 		});
 		int option;
+		try {
+			System.out.println(
+					new String(Files.readAllBytes(Paths.get(".\\JSON\\SplashScreen.txt")), StandardCharsets.UTF_8));
+		} catch (IOException e) {
+		}
+
 		System.out.println("Choose you UI type:");
 		System.out.println("1: GUI");
 		System.out.println("2: CLI");

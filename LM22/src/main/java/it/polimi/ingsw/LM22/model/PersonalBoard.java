@@ -6,18 +6,12 @@ import java.util.List;
 public class PersonalBoard implements Serializable {
 	
 	private static final long serialVersionUID = -7460184029407285498L;
-	private final Integer MAXNUMCARDS = 6;
 	private PersonalBonusTile bonusBoard;
 	private Resource resources;
 	private List<TerritoryCard> territoriesCards;
 	private List<CharacterCard> charactersCards;
 	private List<BuildingCard> buildingsCards;
 	private List<VentureCard> venturesCards;
-	/*
-	 * questa lista di effetti potrebbe essere utile per rendere più veloce il
-	 * controllo mentre viene effettuata una azione
-	 */
-	private List<PermanentEffect> permanentEffects;
 
 	public Resource getResources() {
 		return resources;
