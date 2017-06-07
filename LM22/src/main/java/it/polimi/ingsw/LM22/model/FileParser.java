@@ -71,32 +71,6 @@ public class FileParser {
 		game.setCharacterCards(cCards);
 		game.setTerritoryCards(tCards);
 		game.setVentureCards(vCards);
-
-		// try {
-		// String text = new
-		// String(Files.readAllBytes(Paths.get(path)),StandardCharsets.UTF_8);
-		// Type tType = new TypeToken<Collection<TerritoryCard>>() {
-		// }.getType();
-		// System.out.println(tType);
-		// Gson tGson = new
-		// GsonBuilder().registerTypeAdapterFactory(AdapterImm).create();
-		// System.out.println(tGson);
-		// Collection<TerritoryCard> tCards = tGson.fromJson(text, tType);
-		// System.out.println(tCards);
-		// } catch (IOException e) {
-		// System.err.println("Errore nell'apertura del file JSON
-		// TerritoryCard.json");
-		// }
-
-		// for (TerritoryCard c : tCards) {
-		// try {
-		// System.out.println(
-		// c.getName() + " " + ((ResourcePrivilegeEffect)
-		// c.getImmediateEffect()).getResource().getStone()
-		// + " " + c.getPermanentEffect().getResource().getStone());
-		// } catch (Exception e) {
-		// }
-		// }
 	}
 
 	private <T> T loadDevCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,

@@ -1,15 +1,14 @@
 package it.polimi.ingsw.LM22.network.server;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+import com.google.gson.Gson;
+
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class SocketPlayer implements IPlayer {
@@ -39,15 +38,18 @@ public class SocketPlayer implements IPlayer {
 	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
-		// for (Player p : game.getPlayersOrder()) {
-		// System.out.println(p.getNickname() + " " +
-		// p.getPersonalBoard().getResources().getStone());
-		// }
+		Gson gson = new Gson();
+		/*
+		 * Utilizzo Gson per creare un nuovo oggetto identico a quello di
+		 * partenza per poi poter inviare le modifiche al client socket. Senza
+		 * questo passaggio, il client mantiene l oggetto in locale inalterato
+		 */
+		Game game2 = gson.fromJson(gson.toJson(game), game.getClass());
 
 		out.writeUTF("board");
 		out.flush();
 
-		out.writeObject(game);
+		out.writeObject(game2);
 		out.flush();
 
 	}

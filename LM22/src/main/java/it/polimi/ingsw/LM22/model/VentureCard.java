@@ -7,7 +7,7 @@ public class VentureCard extends DevelopmentCard  implements Serializable {
 	private static final long serialVersionUID = 5037136863567493067L;
 	private Resource cardCost1;
 	private Resource[] cardCost2;
-	private Resource permanentEffect;
+	transient private Resource permanentEffect;
 
 	public Resource getCardCost1() {
 		return cardCost1;

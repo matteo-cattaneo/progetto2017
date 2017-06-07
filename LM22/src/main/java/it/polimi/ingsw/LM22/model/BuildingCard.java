@@ -8,7 +8,7 @@ public class BuildingCard extends DevelopmentCard  implements Serializable {
 	private static final long serialVersionUID = 1129061721831386161L;
 	private Resource cardCost;
 	private Integer requirement;
-	private ImmediateEffect permanentEffect;
+	transient private ImmediateEffect permanentEffect;
 
 	public Resource getCost() {
 		return cardCost;

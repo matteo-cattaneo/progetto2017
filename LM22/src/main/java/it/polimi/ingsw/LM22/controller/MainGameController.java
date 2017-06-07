@@ -1,8 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,11 +57,6 @@ public class MainGameController implements Runnable {
 				// turno di un giocatore
 				for (String sMove = ""; !sMove.equals("End@");) {
 					sendAll();// invio a tutti il model
-					FileOutputStream fout = new FileOutputStream("C:\\Users\\Matteo\\Desktop\\server.txt");
-					ObjectOutputStream oos = new ObjectOutputStream(fout);
-					oos.writeObject(game);
-					oos.close();
-					fout.close();
 					sMove = getIPlayer(p).yourTurn();
 					System.out.println(sMove);
 					aMove = netContrAdapter.moveParser(p, sMove);

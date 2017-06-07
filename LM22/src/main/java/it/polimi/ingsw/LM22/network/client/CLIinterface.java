@@ -116,7 +116,7 @@ public class CLIinterface extends AbstractUI {
 			break;
 		default:
 			printInvalidInput();
-			printMoveMenu();
+			printMemberMoveMenu();
 			break;
 		}
 	}
@@ -245,7 +245,7 @@ public class CLIinterface extends AbstractUI {
 			}
 		default:
 			printInvalidInput();
-			printMarketMoveMenu();
+			printMarketSelectionMenu();
 			break;
 		}
 	}
@@ -304,7 +304,7 @@ public class CLIinterface extends AbstractUI {
 			setMove(getPlayer(name, game).getActivatedLeaderCards().get(option - 1).getName());
 		else {
 			printInvalidInput();
-			printWorkSelectionMenu();
+			printSellLeaderCardMenu();
 		}
 	}
 
@@ -321,7 +321,7 @@ public class CLIinterface extends AbstractUI {
 			setMove(getPlayer(name, game).getLeaderCards().get(option).getName());
 		else {
 			printInvalidInput();
-			printWorkSelectionMenu();
+			printActivateLeaderCardMenu();
 		}
 		// TODO controlli su carte speciali per richiedere servitori(Integer) e
 		// colore(String)
@@ -402,7 +402,7 @@ public class CLIinterface extends AbstractUI {
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
 		// game object deserialization
-		showMsg(game + "_________________________________");
+		showMsg("_________________________________");
 		showMsg("| Period: " + game.getPeriod() + " \t \t \t |");
 		showMsg("| Round: " + game.getRound() + " \t \t \t |");
 		showMsg("| \t \t \t \t |");
