@@ -11,17 +11,21 @@ import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
 import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
 import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.WorkMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
+import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
 import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
 import it.polimi.ingsw.LM22.model.leader.NoOccupiedTowerEffect;
 import it.polimi.ingsw.LM22.model.leader.ResourceCardRequest;
 import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
+import it.polimi.ingsw.LM22.model.leader.WorkAction;
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardSpace;
+import it.polimi.ingsw.LM22.model.CardToResourceEffect;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
@@ -34,6 +38,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.WorkBonusEffect;
 
 public class MoveManager {
 	private static final Logger LOGGER = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
@@ -347,37 +352,49 @@ public class MoveManager {
 		Integer level = cardMove.getLevelSelected();
 		switch (cardMove.getTowerSelected()) {
 		case 0:
-			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards()
-					.add((TerritoryCard) (t.getFloor()[level].getCard()));
+			TerritoryCard card0 = (TerritoryCard) (t.getFloor()[level].getCard());
+			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add(card0);
 			// metodo chiamante l'effectManager per l'effetto immediato
+			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 1:
-			cardMove.getPlayer().getPersonalBoard().getCharactersCards()
-					.add((CharacterCard) (t.getFloor()[level].getCard()));
-			if (((CharacterCard) (t.getFloor()[level].getCard())).getPermanentEffect()
-					.getClass() != NoPermanentEffect.class)
-				cardMove.getPlayer().getEffects()
-						.add(((CharacterCard) (t.getFloor()[level].getCard())).getPermanentEffect());
+			CharacterCard card1 = (CharacterCard) (t.getFloor()[level].getCard());
+			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add(card1);
 			// metodo chiamante l'effectManager per l'effetto immediato
+			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(), mainGame);
+			if (card1.getPermanentEffect().getClass() != NoPermanentEffect.class)
+				cardMove.getPlayer().getEffects().add(card1.getPermanentEffect());
 			break;
 		case 2:
-			cardMove.getPlayer().getPersonalBoard().getBuildingsCards()
-					.add((BuildingCard) (t.getFloor()[level].getCard()));
+			BuildingCard card2 = (BuildingCard) (t.getFloor()[level].getCard());
+			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add(card2);
 			// metodo chiamante l'effectManager per l'effetto immediato
+			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 3:
-			cardMove.getPlayer().getPersonalBoard().getVenturesCards()
-					.add((VentureCard) (t.getFloor()[level].getCard()));
+			VentureCard card3 = (VentureCard) (t.getFloor()[level].getCard());
+			cardMove.getPlayer().getPersonalBoard().getVenturesCards().add(card3);
 			// metodo chiamante l'effectManager per l'effetto immediato
+			effectManager.manageEffect(card3.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		}
+		/*
+		 * parte di codice che sistemerebbe il problema di effetti presenti sia
+		 * come immediati di carte character che come permanenti nelle carte
+		 * building
+		 */
+		// if (t.getFloor()[level].getCard().getImmediateEffect() instanceof
+		// CardToResourceEffect)
+		// effectManager.cardtoresourceeffectManage(
+		// (CardToResourceEffect)
+		// t.getFloor()[level].getCard().getImmediateEffect(),
+		// cardMove.getPlayer().getPersonalBoard().getResources());
 	}
 
 	/*
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
 	public boolean marketmoveAllowed(MarketMove marketMove) {
-		// check per controllare se ho scomunica del tipo NoMarkeEx
 		if (containsClass(marketMove.getPlayer().getEffects(), NoMarketEx.class))
 			return false;
 		int pos = marketMove.getMarketSpaceSelected();
@@ -397,14 +414,14 @@ public class MoveManager {
 	public void marketmoveHandle(MarketMove marketMove) throws IOException {
 		int opt = marketMove.getMarketSpaceSelected();
 		game.getBoardgame().getMarket()[opt].setMember(marketMove.getMemberUsed());
+		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
+				marketMove.getServantsAdded());
 		marketMove.getMemberUsed().setUsed(true);
 		/*
 		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
 		 */
 		Resource bonus = calculateBonus(marketMove, game.getBoardgame().getMarket()[opt]);
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), bonus);
-		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
-				marketMove.getServantsAdded());
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
 						marketMove.getPlayer()));
@@ -473,15 +490,35 @@ public class MoveManager {
 				return false;
 			}
 		}
+		Integer power = findWorkEffects(workMove);
+		workMove.getMemberUsed().setValue(workMove.getMemberUsed().getValue() + power);
 		return true;
+	}
+
+	/*
+	 * calcola il valore totale di eventuali bonus o malus provenienti da
+	 * scomuniche o effetti permanenti di carte leader
+	 */
+	private Integer findWorkEffects(WorkMove move) {
+		Integer total = 0;
+		String type = move.getWorkType();
+		for (Effect e : move.getPlayer().getEffects()) {
+			if (e instanceof WorkMalusEx && type == ((WorkMalusEx) e).getTypeOfWork())
+				total = total - ((WorkMalusEx) e).getValueOfMalus();
+			if (e instanceof WorkBonusEffect && type == ((WorkBonusEffect) e).getTypeOfWork())
+				total = total + ((WorkBonusEffect) e).getWorkBonusValue();
+		}
+		return total;
 	}
 
 	/*
 	 * gestisce una mossa del tipo WorkMove
 	 */
-	public void workMoveHandle(WorkMove workMove) {
+	public void workMoveHandle(WorkMove workMove) throws IOException {
 		if (workMove.getWorkType() == PRODUCTION)
 			productionHandle(workMove);
+		else
+			harvestHandle(workMove);
 	}
 
 	/*
@@ -492,17 +529,20 @@ public class MoveManager {
 	 * chiedere al player se vuole o no ottenere tipo il cambio risorse e anche
 	 * chiedere quale attivare nel caso di DoubleChangeEffect
 	 */
-	private void productionHandle(WorkMove move) {
+	private void productionHandle(WorkMove move) throws IOException {
 		Integer valueOfAction = move.getMemberUsed().getValue() + calculateEffectiveServants(move);
+		game.getBoardgame().getProductionSpace().getMembers().add(move.getMemberUsed());
+		move.getMemberUsed().setUsed(true);
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
 		for (BuildingCard card : move.getPlayer().getPersonalBoard().getBuildingsCards()) {
 			if (valueOfAction >= card.getRequirement()) {
-				// effectManager.workHandle(card.getPermanentEffect(), total);
+				// effectManager.productionHandle(card.getPermanentEffect(),
+				// total);
 			}
 		}
-		// effectManager.workHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(),
-		// total);
+		effectManager.productionHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(),
+				total);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
@@ -510,15 +550,16 @@ public class MoveManager {
 	 * gestisce la fase di Raccolto
 	 */
 	private void harvestHandle(WorkMove move) throws IOException {
-		// devo controllare se ho bonus da carte character oppure scomuniche
 		Integer valueOfAction = move.getMemberUsed().getValue() + calculateEffectiveServants(move);
+		game.getBoardgame().getHarvestSpace().getMembers().add(move.getMemberUsed());
+		move.getMemberUsed().setUsed(true);
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
 		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
 			if (valueOfAction >= card.getRequirement())
-				effectManager.workHandle(card.getPermanentEffect(), total);
+				effectManager.harvestHandle(card.getPermanentEffect(), total);
 		}
-		effectManager.workHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total);
+		effectManager.harvestHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
@@ -539,6 +580,8 @@ public class MoveManager {
 	public void councilmoveHandle(CouncilMove councilMove) throws IOException {
 		councilMove.getMemberUsed().setUsed(true);
 		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
+		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+				councilMove.getServantsAdded());
 		/*
 		 * prendo le varie risorse (moneta oppure privilegi del consiglio)
 		 */
@@ -547,32 +590,22 @@ public class MoveManager {
 		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
 						councilMove.getPlayer()));
-		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(),
-				councilMove.getServantsAdded());
-
 	}
 
 	public boolean leadercardsellingAllowed(LeaderCardSelling move) {
+		if (move.getPlayer().getActivatedLeaderCards().contains(move.getLeaderCard()))
+			return false;
 		return true;
 	}
 
 	/*
 	 * gestisce la vendita di una carta leader e consentirà la scelta del
-	 * privilegio del consiglio + se la carta era attiva devo anche togliere il
-	 * suo effetto dalla lista degli effetti attualmente attivi
+	 * privilegio del consiglio --> posso solo vendere carte non attive
 	 */
 	public void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
-		if (move.getPlayer().getLeaderCards().contains(move.getLeaderCard()))
-			move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
-		else {
-			if (move.getLeaderCard().getEffect() instanceof MemberBonusEffect
-					|| move.getLeaderCard().getEffect() instanceof MemberChangeEffect)
-				// gestisco la rimozione di un effetto che modifica il valore
-				// dei familiari
-				move.getPlayer().getEffects().remove(move.getLeaderCard().getEffect());
-			move.getPlayer().getActivatedLeaderCards().remove(move.getLeaderCard());
-		}
-		mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer());
+		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
+		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(),
+				mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()));
 	}
 
 	/*
@@ -636,10 +669,19 @@ public class MoveManager {
 	}
 
 	/*
-	 * metodo che gestisce la procedura di attivazione di una carta
+	 * metodo che gestisce la procedura di attivazione di una carta -->
+	 * comportamento differente se l'effetto è una volta per turno oppure se è
+	 * un effetto permanente
 	 */
 	public void leadercardactivationHandle(LeaderCardActivation move) {
-		// move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
+		if (!(move.getLeaderCard().getEffect() instanceof LeaderResourceEffect)
+				&& !(move.getLeaderCard().getEffect() instanceof MemberChangeEffect
+						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember() == "COLORED")
+				&& !(move.getLeaderCard().getEffect() instanceof WorkAction))
+			move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
+		effectManager.manageEffect(move.getLeaderCard().getEffect(), move.getPlayer(), mainGame);
+		move.getPlayer().getActivatedLeaderCards().add(move.getLeaderCard());
+		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 	}
 
 	/*

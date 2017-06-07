@@ -163,4 +163,23 @@ public class ResourceHandler {
 		victory = s1.getVictory() + s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
+	
+	public Resource resourceMultiplication(Resource r, Integer m){
+		Resource bonus = new Resource (0,0,0,0,0,0,0);
+		Integer wood = r.getWood() * m;
+		bonus.setWood(wood);
+		Integer stone = r.getStone() * m;
+		bonus.setStone(stone);
+		Integer coins = r.getCoins() * m;
+		bonus.setCoins(coins);
+		Integer servants = r.getServants() * m;
+		bonus.setServants(servants);
+		Integer faith = r.getFaith() * m;
+		bonus.setFaith(faith);
+		Integer military = r.getMilitary() * m;
+		bonus.setMilitary(military);;
+		Integer victory = r.getVictory() * m;
+		bonus.setVictory(victory);
+		return bonus;
+	}
 }

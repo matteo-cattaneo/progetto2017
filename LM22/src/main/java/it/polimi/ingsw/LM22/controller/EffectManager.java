@@ -18,8 +18,15 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
+import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 
 public class EffectManager {
+	/*
+	 * NEEDED represents the first value of the array of dimension 2, 
+	 * representing the needed resource to make the change possible
+	 */
+	private final Integer NEEDED = 0;
+	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private Player player;
 	private MainGameController mainGC;
 	private ResourceHandler r = new ResourceHandler();
@@ -38,47 +45,115 @@ public class EffectManager {
 		}
 	}
 
-	private void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
+	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect) {
+
+	}
+	
+	/*
+	 * metodo che gestisce l'effetto in ingresso come effetto immediato di una carta
+	 */
+	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
 		// rivedere ResourceHandler
 		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
-		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player);
+		r.addResource(player.getPersonalBoard().getResources(),
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
 	}
 
-	public void workHandle(ResourcePrivilegeEffect effect, Resource resource) throws IOException {
+	/*
+	 * metodo che gestisce la produzione per una singola carta e
+	 * che in base all'effetto che si vuole attivare invoca il metodo giusto
+	 */
+	public void productionHandle(Effect effect, Resource sum){
+		
+	}
+	
+	/*
+	 * metodo che gestisce il raccolto per ogni singola carta
+	 * e che in base all'effetto che si vuole attivare invoca il metodo giusto
+	 */
+	public void harvestHandle(ResourcePrivilegeEffect effect, Resource resource) throws IOException {
+		/*
+		 * deve poter anche considerare il ResourceToPrivilegeEffect
+		 */
 		r.addResource(resource, effect.getResource());
-		mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player);
-		// manca la somma del privilegio del consiglio scelto
+		r.addResource(resource, mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
 	}
 
-	private void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
-
+	/*
+	 * gestisce l'effetto del Generale (carta Character)
+	 */
+	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
+		Integer points = player.getPersonalBoard().getResources().getMilitary()/effect.getRequirement().getMilitary();
+		Resource bonus = r.resourceMultiplication(effect.getReward(), points);
+		r.addResource(player.getPersonalBoard().getResources(), bonus);
 	}
 
-	private void cardactioneffectManage(CardActionEffect effect) {
-
-	}
-
-	private void workactioneffectManage(WorkActionEffect effect) {
-
-	}
-
-	private void cardtoresourceeffectManage(CardToResourceEffect effect) {
+	public void cardactioneffectManage(CardActionEffect effect) {
 
 	}
 
-	private void changeeffectManage(ChangeEffect effect) {
+	public void workactioneffectManage(WorkActionEffect effect) {
 
 	}
 
-	private void doublechangeeffectManage(DoubleChangeEffect effect) {
-
+	/*
+	 * metodo che gestisce tale effetto PROBLEMA 
+	 * - se è un effetto immediato allora posso subito aggiungere il reward alle risorse del player 
+	 * - se invece è un effetto permanente devo poterlo sommare alla risorsa sommatrice della produzione
+	 */
+	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource resource) {
+		Resource bonus = NOTHING;
+		switch (effect.getCardRequired()) {
+		case "TERRITORY":
+			bonus = r.resourceMultiplication(effect.getReward(),
+					player.getPersonalBoard().getTerritoriesCards().size());
+		case "CHARACTER":
+			bonus = r.resourceMultiplication(effect.getReward(), player.getPersonalBoard().getCharactersCards().size());
+		case "BUILDING":
+			bonus = r.resourceMultiplication(effect.getReward(), player.getPersonalBoard().getBuildingsCards().size());
+		case "VENTURE":
+			bonus = r.resourceMultiplication(effect.getReward(), player.getPersonalBoard().getVenturesCards().size());
+		}
+		r.addResource(resource, bonus);
 	}
 
-	private void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect) {
+	/*
+	 * metodo che gestisce l'effetto rappresentante uno scambio di risorse
+	 * (non Privilegi del Consiglio)
+	 */
+	public void changeeffectManage(ChangeEffect effect, Resource sum) {
+		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]) && askChangeToPlayer());
+			r.addResource(sum, effect.getExchangeEffect1()[NEEDED+1]);
+			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
+		return;
+	}
+
+	/*
+	 * metodo che chiama il player giocante e chiede se vuole effettuare questo scambio
+	 * (nel caso abbia effettivamente le risorse disponibili)
+	 */
+	private boolean askChangeToPlayer() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*
+	 * metodo che gestisce l'effetto con due possibili scambi
+	 * --> controlla se almeno uno dei due è fattibile (altrimenti esce)
+	 * --> se solo uno è fattibile usa askChangeToPlayer()
+	 * --> atrimenti usa un altro metodo (ancora da implementare)
+	 */
+	public void doublechangeeffectManage(DoubleChangeEffect effect) {
 
 	}
 
 	public void noeffectManage(NoEffect effect) {
+		return;
+	}
 
+	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
+		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
+		r.addResource(player.getPersonalBoard().getResources(),
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
 	}
 }
