@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import it.polimi.ingsw.LM22.model.BuildingCard;
+import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.TerritoryCard;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
@@ -37,7 +42,8 @@ public class InitialConfigurator extends TurnInizializator {
 		loadConfiguration(game);
 		setNewPlayersOrder(game);
 		giveInitialResources(game);
-		distribuiteCards();
+		mixCards(game);
+		distributeDevelopmentCards(game);
 	}
 
 	/*
@@ -51,11 +57,11 @@ public class InitialConfigurator extends TurnInizializator {
 
 		WorkSpace harv = new WorkSpace();
 		harv.setSpaceRequirement(1);
-		harv.setWorkType("PRODUCTION");
+		harv.setWorkType("HARVEST");
 		game.getBoardgame().setHarvestSpace(harv);
 		WorkSpace prod = new WorkSpace();
 		prod.setSpaceRequirement(1);
-		prod.setWorkType("HARVEST");
+		prod.setWorkType("PRODUCTION");
 		game.getBoardgame().setProductionSpace(prod);
 
 		// boardgame
@@ -127,21 +133,58 @@ public class InitialConfigurator extends TurnInizializator {
 		fileParser.getCouncilSpace(game);
 	}
 
-	private void distribuiteCards() {
-
+	private void mixCards(Game game){
+		mixTerritory(game.getTerritoryCards());
+		mixCharacter(game.getCharacterCards());
+		mixBuilding(game.getBuildingCards());
+		mixVenture(game.getVentureCards());
 	}
+	
+	private void mixTerritory(ArrayList<TerritoryCard> list){
+		Random random = new Random();
+		for (int i = 0; i < 100; i++){
+			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		}
+	}
+	
+	private void mixCharacter(ArrayList<CharacterCard> list){
+		Random random = new Random();
+		for (int i = 0; i < 100; i++){
+			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		}
+	}
+	
+	private void mixBuilding(ArrayList<BuildingCard> list){
+		Random random = new Random();
+		for (int i = 0; i < 100; i++){
+			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		}
+	}
+	
+	private void mixVenture(ArrayList<VentureCard> list){
+		Random random = new Random();
+		for (int i = 0; i < 100; i++){
+			list.add(random.nextInt(list.size()-1), list.remove(random.nextInt(list.size())));
+		}
+	}
+	
 
 	/*
 	 * metodo che implementa la fase di scelta delle carte leader con relativo
 	 * passaggio al giocatore successivo delle carte rimanenti
 	 */
-	private void leaderDistribution() {
-
+	private void leaderDistribution(Game game) {
+		Random random = new Random();
+		for (Player p: game.getPlayers()){
+			for (int i=0; i < 4; i++){
+				p.getLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
+			}
+		}
 	}
 
 	/*
 	 * consente di far scegliere ad ogni giocatore la carta leader e inserirla
-	 * nella sua PersonalBoard
+	 * nella sua PersonalBoard //RANDOM (VEDI SOPRA)
 	 */
 	private void leaderSelection() {
 

@@ -1,0 +1,227 @@
+[
+    {
+        "floor": [
+            {
+                "space": {
+                    "spaceRequirement": 1,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 3,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 5,
+                    "reward": {
+                        "wood": 1,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 7,
+                    "reward": {
+                        "wood": 2,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }
+        ]
+    }, {
+        "floor": [
+            {
+                "space": {
+                    "spaceRequirement": 1,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 3,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 5,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 1,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 7,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 2,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }
+        ]
+    }, {
+        "floor": [
+            {
+                "space": {
+                    "spaceRequirement": 1,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 3,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 5,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 1,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 7,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 2,
+                        "victory": 0
+                    }
+                }
+            }
+        ]
+    }, {
+        "floor": [
+            {
+                "space": {
+                    "spaceRequirement": 1,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 3,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 0,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 5,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 1,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }, {
+                "space": {
+                    "spaceRequirement": 7,
+                    "reward": {
+                        "wood": 0,
+                        "stone": 0,
+                        "servants": 0,
+                        "coins": 2,
+                        "faith": 0,
+                        "military": 0,
+                        "victory": 0
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -149,7 +149,7 @@ public class TurnInizializator {
 	/*
 	 * metodo che in base al valore dei dadi tirati conferisce ai familiari il
 	 * loro valore --> qui avviene anche il controllo per le scomuniche che
-	 * danno dei malus ai dadi
+	 * danno dei malus ai dadi + carta leader che aumenta il familiare neutro
 	 */
 	protected void setFamilyMembersValue(Game game) {
 		for (Player p : game.getPlayersOrder()) {
@@ -158,6 +158,7 @@ public class TurnInizializator {
 				if (e instanceof DiceMalusEx)
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
+				//controllo per carte leader che modificano il valore dei familiarix
 				if (m.getColor() != "Uncolored")
 					m.setValue(game.getBoardgame().getDice(m.getColor() + malus));
 				else
