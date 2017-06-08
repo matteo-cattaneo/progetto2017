@@ -98,41 +98,50 @@ public class TurnInizializator {
 
 	protected void distributeTerritoryCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[TERRITORY].getFloor()) {
-			for (TerritoryCard c : game.getTerritoryCards())
+			for (int i = 0; i < game.getTerritoryCards().size(); i++) {
+				TerritoryCard c = game.getTerritoryCards().get(i);
 				if (c.getPeriod() == game.getPeriod()) {
 					f.setCard(c);
 					game.getTerritoryCards().remove(c);
 				}
+			}
 		}
 	}
 
 	protected void distributeCharacterCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[CHARACTER].getFloor()) {
-			for (CharacterCard c : game.getCharacterCards())
+			// for (CharacterCard c : game.getCharacterCards())
+			for (int i = 0; i < game.getCharacterCards().size(); i++) {
+				CharacterCard c = game.getCharacterCards().get(i);
 				if (c.getPeriod() == game.getPeriod()) {
 					f.setCard(c);
 					game.getCharacterCards().remove(c);
 				}
+			}
 		}
 	}
 
 	protected void distributeBuildingCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[BUILDING].getFloor()) {
-			for (BuildingCard c : game.getBuildingCards())
+			for (int i = 0; i < game.getBuildingCards().size(); i++) {
+				BuildingCard c = game.getBuildingCards().get(i);
 				if (c.getPeriod() == game.getPeriod()) {
 					f.setCard(c);
 					game.getBuildingCards().remove(c);
 				}
+			}
 		}
 	}
 
 	protected void distributeVentureCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[VENTURE].getFloor()) {
-			for (VentureCard c : game.getVentureCards())
+			for (int i = 0; i < game.getVentureCards().size(); i++) {
+				VentureCard c = game.getVentureCards().get(i);
 				if (c.getPeriod() == game.getPeriod()) {
 					f.setCard(c);
 					game.getVentureCards().remove(c);
 				}
+			}
 		}
 	}
 
@@ -158,7 +167,8 @@ public class TurnInizializator {
 				if (e instanceof DiceMalusEx)
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
-				//controllo per carte leader che modificano il valore dei familiarix
+				// controllo per carte leader che modificano il valore dei
+				// familiarix
 				if (m.getColor() != "Uncolored")
 					m.setValue(game.getBoardgame().getDice(m.getColor() + malus));
 				else

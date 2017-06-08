@@ -6,7 +6,7 @@ public class TerritoryCard extends DevelopmentCard  implements Serializable {
 
 	private static final long serialVersionUID = 2703079994705550507L;
 	private Integer requirement;
-	transient private ResourcePrivilegeEffect permanentEffect;
+	private ResourcePrivilegeEffect permanentEffect;
 
 	public ResourcePrivilegeEffect getPermanentEffect() {
 		return permanentEffect;

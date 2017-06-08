@@ -8,7 +8,6 @@ import java.util.Random;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
-import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
@@ -42,7 +41,7 @@ public class InitialConfigurator extends TurnInizializator {
 		setNewPlayersOrder(game);
 		loadConfiguration(game);
 		giveInitialResources(game);
-		mixCards(game);
+		// mixCards(game);
 		distributeDevelopmentCards(game);
 		leaderDistribution(game);
 		personalBoardTileDistribution(game);
@@ -78,18 +77,18 @@ public class InitialConfigurator extends TurnInizializator {
 		game.setPlayers(players);
 		int i = 0;
 		for (Player p : game.getPlayers()) {
+			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i]);
 			List<FamilyMember> members = new ArrayList<FamilyMember>();
 			int j;
 			for (j = 0; j < 3; j++) {
-				FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
+				FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
 				fm.setValue(game.getBoardgame().getDice(MEMBER_COLOR[j]));
 				members.add(fm);
 			}
-			FamilyMember fm = new FamilyMember(p, MEMBER_COLOR[j]);
+			FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
 			fm.setValue(0);
 			members.add(fm);
-			// personalBoard: personal tile & dev cards
-			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i], members);
+			players[i].setMembers(members);
 			i++;
 		}
 	}

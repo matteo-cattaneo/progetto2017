@@ -38,18 +38,20 @@ public class SocketPlayer implements IPlayer {
 	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
-		Gson gson = new Gson();
+//		Gson gson = new Gson();
 		/*
 		 * Utilizzo Gson per creare un nuovo oggetto identico a quello di
 		 * partenza per poi poter inviare le modifiche al client socket. Senza
 		 * questo passaggio, il client mantiene l oggetto in locale inalterato
 		 */
-		Game game2 = gson.fromJson(gson.toJson(game), game.getClass());
+//		Game game2 = gson.fromJson(gson.toJson(game), game.getClass());
 
 		out.writeUTF("board");
 		out.flush();
 
-		out.writeObject(game2);
+		out.reset();
+		
+		out.writeObject(game);
 		out.flush();
 
 	}

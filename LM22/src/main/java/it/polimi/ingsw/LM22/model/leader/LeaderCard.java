@@ -6,8 +6,8 @@ public class LeaderCard implements Serializable {
 
 	private static final long serialVersionUID = -3480796713023783579L;
 	private String name;
-	transient private LeaderCardRequest request;
-	transient private LeaderEffect effect;
+	private LeaderCardRequest request;
+	private LeaderEffect effect;
 
 	public String getName() {
 		return name;

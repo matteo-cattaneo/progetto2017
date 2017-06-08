@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Tower;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
  * Classe che contiene tutti i metodi che permettono all'utente 
@@ -65,16 +68,28 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
-		showMsg("2: Sell a LeaderCard");
-		showMsg("3: Activate a LeaderCard");
+		if (getPlayer(name, game).getLeaderCards().size() != 0) {
+			showMsg("2: Sell a LeaderCard");
+			showMsg("3: Activate a LeaderCard");
+		}
 		showMsg("4: End turn");
 		int option = in.nextInt();
 		switch (option) {
 		case 2:
-			printSellLeaderCardMenu();
+			if (getPlayer(name, game).getLeaderCards().size() != 0)
+				printSellLeaderCardMenu();
+			else {
+				printInvalidInput();
+				printMoveMenu();
+			}
 			break;
 		case 3:
-			printActivateLeaderCardMenu();
+			if (getPlayer(name, game).getLeaderCards().size() != 0)
+				printActivateLeaderCardMenu();
+			else {
+				printInvalidInput();
+				printMoveMenu();
+			}
 			break;
 		case 4:
 			setMove("End");
@@ -294,6 +309,7 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
 		}
+		// TODO le carte leader attivate si possono vendere?
 		for (j = 0; j < getPlayer(name, game).getActivatedLeaderCards().size(); j++) {
 			showMsg((j + 1 + i) + ": " + getPlayer(name, game).getActivatedLeaderCards().get(j).getName());
 		}
@@ -401,27 +417,95 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
-		// game object deserialization
 		showMsg("_________________________________");
-		showMsg("| Period: " + game.getPeriod() + " \t \t \t |");
-		showMsg("| Round: " + game.getRound() + " \t \t \t |");
-		showMsg("| \t \t \t \t |");
-		showMsg("| Orange dice: " + game.getBoardgame().getDice("Orange") + " \t \t |");
-		showMsg("| Black dice: " + game.getBoardgame().getDice("Black") + " \t \t |");
-		showMsg("| White dice: " + game.getBoardgame().getDice("White") + " \t \t |");
-		showMsg("| \t \t \t \t |");
-		showMsg("| Name: " + getPlayer(name, game).getNickname() + " \t \t \t |");
-		showMsg("| Color: " + getPlayer(name, game).getColor() + " \t \t \t |");
-		showMsg("| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + " \t \t \t |");
-		showMsg("| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood() + " \t \t \t |");
-		showMsg("| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone() + " \t \t \t |");
-		showMsg("| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants() + " \t \t \t |");
-		showMsg("| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith() + " \t \t |");
+		showMsg("| Period: " + game.getPeriod() + " \t\t\t|");
+		showMsg("| Round: " + game.getRound() + "\t\t\t|");
+		showMsg("| \t\t\t\t|");
+		showMsg("| Dices:\t\t\t|");
+		showMsg("| Orange: " + game.getBoardgame().getDice("Orange") + "\t\t\t|");
+		showMsg("| Black: " + game.getBoardgame().getDice("Black") + " \t\t\t|");
+		showMsg("| White: " + game.getBoardgame().getDice("White") + " \t\t\t|");
+		showMsg("|_______________________________|");
+		showMsg("| Family members:\t\t|");
+		showMsg("| Orange: " + getPlayer(name, game).getMembers().get(0).getValue() + "\t\t\t|");
+		showMsg("| Black: " + getPlayer(name, game).getMembers().get(1).getValue() + "\t\t\t|");
+		showMsg("| White: " + getPlayer(name, game).getMembers().get(2).getValue() + "\t\t\t|");
+		showMsg("| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue() + "\t\t\t|");
+		showMsg("| \t\t\t\t|");
+		showMsg("| Name: " + getPlayer(name, game).getNickname() + "\t\t\t|");
+		showMsg("| Color: " + getPlayer(name, game).getColor() + " \t\t\t|");
+		showMsg("| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + "\t\t\t|");
+		showMsg("| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood() + " \t\t\t|");
+		showMsg("| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone() + " \t\t\t|");
+		showMsg("| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants() + "\t\t\t|");
+		showMsg("| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith() + " \t\t|");
 		showMsg("| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary()
-				+ " \t \t |");
-		showMsg("| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory()
-				+ " \t \t |");
-		showMsg("|________________________________|");
+				+ "\t\t|");
+		showMsg("| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory() + "\t\t|");
+		showMsg("|_______________________________|");
+		// palazzo del consiglio
+		showMsg("| Council Palace members: \t|");
+		int i = 1;
+		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
+
+			showMsg("| " + i + ":" + fm.getPlayer().getNickname() + "\t\t\t|");
+			i++;
+		}
+		showMsg("|_______________________________|");
+		// Towers
+		for (int j = 0; j < 4; j++) {
+			System.out.print("| ");
+			// TODO rewards
+			for (Tower t : game.getBoardgame().getTowers())
+				System.out.print(t.getFloor()[j].getCard().getName() + " | ");
+			showMsg("");
+		}
+		showMsg("|_______________________________|");
+		// leaderCard
+		showMsg("| Leader cards:\t\t\t|");
+		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+			showMsg("| " + ld.getName() + "\t\t|");
+		showMsg("|_______________________________|");
+		showMsg("| Faith points track:\t\t|");
+		// trovo il massimo victory
+		int maxF = 0;
+		for (Player p : game.getPlayers())
+			if (p.getPersonalBoard().getResources().getFaith() > maxF)
+				maxF = p.getPersonalBoard().getResources().getFaith();
+		// stampo lista player
+		for (int j = maxF; j >= 0; j--)
+			for (Player p : game.getPlayers())
+				if (p.getPersonalBoard().getResources().getFaith() == j)
+					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
+		showMsg("|_______________________________|");
+		showMsg("| Military points track:\t|");
+		// trovo il massimo victory
+		int maxM = 0;
+		for (Player p : game.getPlayers())
+			if (p.getPersonalBoard().getResources().getMilitary() > maxM)
+				maxM = p.getPersonalBoard().getResources().getMilitary();
+		// stampo lista player
+		for (int j = maxM; j >= 0; j--)
+			for (Player p : game.getPlayers())
+				if (p.getPersonalBoard().getResources().getMilitary() == j)
+					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
+		showMsg("|_______________________________|");
+		showMsg("| Victory points track:\t\t|");
+		// trovo il massimo victory
+		int maxV = 0;
+		for (Player p : game.getPlayers())
+			if (p.getPersonalBoard().getResources().getVictory() > maxV)
+				maxV = p.getPersonalBoard().getResources().getVictory();
+		// stampo lista player
+		for (int j = maxV; j >= 0; j--)
+			for (Player p : game.getPlayers())
+				if (p.getPersonalBoard().getResources().getVictory() == j)
+					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
+		showMsg("|_______________________________|");
+
+		/*
+		 * personal board altri giocatori?
+		 */
 	}
 
 	@Override
