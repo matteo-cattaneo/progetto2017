@@ -17,6 +17,12 @@ public class StartClient {
 	}
 
 	public void setup() {
+		// visualizzo splash screen caricandola da file
+		try {
+			System.out.println(
+					new String(Files.readAllBytes(Paths.get(".\\JSON\\SplashScreen.txt")), StandardCharsets.UTF_8));
+		} catch (IOException e) {
+		}
 		// stampo la selezione dell'intefaccia
 		AbstractUI UI = printUISelection();
 		// richiedo tipo connessione
@@ -44,12 +50,7 @@ public class StartClient {
 			}
 		});
 		int option;
-		try {
-			System.out.println(
-					new String(Files.readAllBytes(Paths.get(".\\JSON\\SplashScreen.txt")), StandardCharsets.UTF_8));
-		} catch (IOException e) {
-		}
-
+		// richiedo di selezionare la UI
 		System.out.println("Choose you UI type:");
 		System.out.println("1: GUI");
 		System.out.println("2: CLI");

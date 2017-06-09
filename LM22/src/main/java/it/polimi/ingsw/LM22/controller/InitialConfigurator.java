@@ -41,7 +41,7 @@ public class InitialConfigurator extends TurnInizializator {
 		setNewPlayersOrder(game);
 		loadConfiguration(game);
 		giveInitialResources(game);
-		// mixCards(game);
+		mixCards(game);
 		distributeDevelopmentCards(game);
 		leaderDistribution(game);
 		personalBoardTileDistribution(game);
@@ -85,6 +85,7 @@ public class InitialConfigurator extends TurnInizializator {
 				fm.setValue(game.getBoardgame().getDice(MEMBER_COLOR[j]));
 				members.add(fm);
 			}
+			// familiare neutro
 			FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
 			fm.setValue(0);
 			members.add(fm);
@@ -126,47 +127,66 @@ public class InitialConfigurator extends TurnInizializator {
 	private void loadConfiguration(Game game) throws IOException {
 		fileParser.getDevCards(game);
 		// carte scomunica
-		fileParser.getLeaderCards(game);// carte leader (random)
+		fileParser.getLeaderCards(game);
 		fileParser.getFaithGrid(game);
 		fileParser.getMarketSpace(game);
 		fileParser.getCardSpace(game);
-		fileParser.getPersonalBonusTile(game); // personalTile (random)
+		fileParser.getPersonalBonusTile(game);
 		fileParser.getCouncilSpace(game);
+		// timeout inizio partita
+		// timeout turno player
 	}
 
 	private void mixCards(Game game) {
-		mixTerritory(game.getTerritoryCards());
-		mixCharacter(game.getCharacterCards());
-		mixBuilding(game.getBuildingCards());
-		mixVenture(game.getVentureCards());
+		mixTerritory(game.getTerritoryCards(), game);
+		mixCharacter(game.getCharacterCards(), game);
+		mixBuilding(game.getBuildingCards(), game);
+		mixVenture(game.getVentureCards(), game);
 	}
 
-	private void mixTerritory(ArrayList<TerritoryCard> list) {
+	private void mixTerritory(ArrayList<TerritoryCard> list, Game game) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++) {
-			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
+		// for (int i = 0; i < 100; i++) {
+		// list.add(random.nextInt(list.size() - 1),
+		// list.remove(random.nextInt(list.size())));
+		// }
+		ArrayList<TerritoryCard> list2 = new ArrayList<TerritoryCard>();
+		for (int i = 0; i < list.size(); i++) {
+			TerritoryCard c = list.get(i);
+			list2.add(list.remove(random.nextInt(list2.size() + 1)));
 		}
+		game.setTerritoryCards(list2);
 	}
 
-	private void mixCharacter(ArrayList<CharacterCard> list) {
+	private void mixCharacter(ArrayList<CharacterCard> list, Game game) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++) {
-			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
+		ArrayList<CharacterCard> list2 = new ArrayList<CharacterCard>();
+		for (int i = 0; i < list.size(); i++) {
+			CharacterCard c = list.get(i);
+			list2.add(list.remove(random.nextInt(list2.size() + 1)));
 		}
+		game.setCharacterCards(list2);
 	}
 
-	private void mixBuilding(ArrayList<BuildingCard> list) {
+	private void mixBuilding(ArrayList<BuildingCard> list, Game game) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++) {
-			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
+		ArrayList<BuildingCard> list2 = new ArrayList<BuildingCard>();
+		for (int i = 0; i < list.size(); i++) {
+			BuildingCard c = list.get(i);
+			list2.add(list.remove(random.nextInt(list2.size() + 1)));
 		}
+		game.setBuildingCards(list2);
 	}
 
-	private void mixVenture(ArrayList<VentureCard> list) {
+	private void mixVenture(ArrayList<VentureCard> list, Game game) {
 		Random random = new Random();
-		for (int i = 0; i < 100; i++) {
-			list.add(random.nextInt(list.size() - 1), list.remove(random.nextInt(list.size())));
+		ArrayList<VentureCard> list2 = new ArrayList<VentureCard>();
+		for (int i = 0; i < list.size(); i++) {
+			VentureCard c = list.get(i);
+			list2.add(list.remove(random.nextInt(list2.size() + 1)));
 		}
+		game.setVentureCards(list2);
+
 	}
 
 	/*

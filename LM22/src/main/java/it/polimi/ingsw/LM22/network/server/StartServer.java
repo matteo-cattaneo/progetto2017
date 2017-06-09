@@ -20,7 +20,7 @@ public class StartServer {
 	private final static int RMI_PORT = 1099;
 	static ServerSocket serverSocket;
 	RMIPlayer serverRMI;
-	final int TIMER = 10;
+	final int TIMER = 5;
 	final int THIRDPLAYER = 2;
 	final int FOURTHPLAYER = 3;
 	private IPlayer player[];

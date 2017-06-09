@@ -68,7 +68,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
-		if (getPlayer(name, game).getLeaderCards().size() != 0) {
+		if (!getPlayer(name, game).getLeaderCards().isEmpty()) {
 			showMsg("2: Sell a LeaderCard");
 			showMsg("3: Activate a LeaderCard");
 		}
@@ -76,7 +76,7 @@ public class CLIinterface extends AbstractUI {
 		int option = in.nextInt();
 		switch (option) {
 		case 2:
-			if (getPlayer(name, game).getLeaderCards().size() != 0)
+			if (!getPlayer(name, game).getLeaderCards().isEmpty())
 				printSellLeaderCardMenu();
 			else {
 				printInvalidInput();
@@ -84,7 +84,7 @@ public class CLIinterface extends AbstractUI {
 			}
 			break;
 		case 3:
-			if (getPlayer(name, game).getLeaderCards().size() != 0)
+			if (!getPlayer(name, game).getLeaderCards().isEmpty())
 				printActivateLeaderCardMenu();
 			else {
 				printInvalidInput();
@@ -527,8 +527,8 @@ public class CLIinterface extends AbstractUI {
 				showMsg("5: one faith point");
 			int option = in.nextInt();
 
-			if (!list.contains(council[(option - 1)])) {
-				list.add(council[(option - 1)]);
+			if (!list.contains(council[option - 1])) {
+				list.add(council[option - 1]);
 				k++;
 			} else
 				printInvalidInput();
