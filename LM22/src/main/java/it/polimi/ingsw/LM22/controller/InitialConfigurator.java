@@ -3,6 +3,7 @@ package it.polimi.ingsw.LM22.controller;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
+import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
@@ -34,12 +36,16 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws IOException {
+	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
 		initializeTurn(game);
 		throwDices(game);
 		setupPlayers(game, iplayer, nPlayer);
 		setNewPlayersOrder(game);
-		loadConfiguration(game);
+		try {
+			loadConfiguration(game);
+		} catch (IOException e) {
+			System.err.println("Errore nel caricamento dei file JSON");
+		}
 		giveInitialResources(game);
 		mixCards(game);
 		distributeDevelopmentCards(game);
@@ -137,56 +143,15 @@ public class InitialConfigurator extends TurnInizializator {
 		// timeout turno player
 	}
 
+	/*
+	 * metodo che mischia le carte utilizzando applicando il metodo shuffle
+	 * sulle 4 liste di carte
+	 */
 	private void mixCards(Game game) {
-		mixTerritory(game.getTerritoryCards(), game);
-		mixCharacter(game.getCharacterCards(), game);
-		mixBuilding(game.getBuildingCards(), game);
-		mixVenture(game.getVentureCards(), game);
-	}
-
-	private void mixTerritory(ArrayList<TerritoryCard> list, Game game) {
-		Random random = new Random();
-		// for (int i = 0; i < 100; i++) {
-		// list.add(random.nextInt(list.size() - 1),
-		// list.remove(random.nextInt(list.size())));
-		// }
-		ArrayList<TerritoryCard> list2 = new ArrayList<TerritoryCard>();
-		for (int i = 0; i < list.size(); i++) {
-			TerritoryCard c = list.get(i);
-			list2.add(list.remove(random.nextInt(list2.size() + 1)));
-		}
-		game.setTerritoryCards(list2);
-	}
-
-	private void mixCharacter(ArrayList<CharacterCard> list, Game game) {
-		Random random = new Random();
-		ArrayList<CharacterCard> list2 = new ArrayList<CharacterCard>();
-		for (int i = 0; i < list.size(); i++) {
-			CharacterCard c = list.get(i);
-			list2.add(list.remove(random.nextInt(list2.size() + 1)));
-		}
-		game.setCharacterCards(list2);
-	}
-
-	private void mixBuilding(ArrayList<BuildingCard> list, Game game) {
-		Random random = new Random();
-		ArrayList<BuildingCard> list2 = new ArrayList<BuildingCard>();
-		for (int i = 0; i < list.size(); i++) {
-			BuildingCard c = list.get(i);
-			list2.add(list.remove(random.nextInt(list2.size() + 1)));
-		}
-		game.setBuildingCards(list2);
-	}
-
-	private void mixVenture(ArrayList<VentureCard> list, Game game) {
-		Random random = new Random();
-		ArrayList<VentureCard> list2 = new ArrayList<VentureCard>();
-		for (int i = 0; i < list.size(); i++) {
-			VentureCard c = list.get(i);
-			list2.add(list.remove(random.nextInt(list2.size() + 1)));
-		}
-		game.setVentureCards(list2);
-
+		Collections.shuffle(game.getTerritoryCards());
+		Collections.shuffle(game.getCharacterCards());
+		Collections.shuffle(game.getBuildingCards());
+		Collections.shuffle(game.getVentureCards());
 	}
 
 	/*

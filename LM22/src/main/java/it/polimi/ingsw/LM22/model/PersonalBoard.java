@@ -1,6 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonalBoard implements Serializable {
@@ -8,10 +9,10 @@ public class PersonalBoard implements Serializable {
 	private static final long serialVersionUID = -7460184029407285498L;
 	private PersonalBonusTile bonusBoard;
 	private Resource resources;
-	private List<TerritoryCard> territoriesCards;
-	private List<CharacterCard> charactersCards;
-	private List<BuildingCard> buildingsCards;
-	private List<VentureCard> venturesCards;
+	private List<TerritoryCard> territoriesCards = new ArrayList<TerritoryCard>();
+	private List<CharacterCard> charactersCards = new ArrayList<CharacterCard>();
+	private List<BuildingCard> buildingsCards = new ArrayList<BuildingCard>();
+	private List<VentureCard> venturesCards = new ArrayList<VentureCard>();
 
 	public Resource getResources() {
 		return resources;

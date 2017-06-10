@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
@@ -414,59 +415,71 @@ public class CLIinterface extends AbstractUI {
 	 * 
 	 * WIP
 	 */
-	@Override
-	public void showBoard(Game game) throws RemoteException {
-		this.game = game;
-		showMsg("_________________________________");
-		showMsg("| Period: " + game.getPeriod() + " \t\t\t|");
-		showMsg("| Round: " + game.getRound() + "\t\t\t|");
-		showMsg("| \t\t\t\t|");
-		showMsg("| Dices:\t\t\t|");
-		showMsg("| Orange: " + game.getBoardgame().getDice("Orange") + "\t\t\t|");
-		showMsg("| Black: " + game.getBoardgame().getDice("Black") + " \t\t\t|");
-		showMsg("| White: " + game.getBoardgame().getDice("White") + " \t\t\t|");
-		showMsg("|_______________________________|");
-		showMsg("| Family members:\t\t|");
-		showMsg("| Orange: " + getPlayer(name, game).getMembers().get(0).getValue() + "\t\t\t|");
-		showMsg("| Black: " + getPlayer(name, game).getMembers().get(1).getValue() + "\t\t\t|");
-		showMsg("| White: " + getPlayer(name, game).getMembers().get(2).getValue() + "\t\t\t|");
-		showMsg("| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue() + "\t\t\t|");
-		showMsg("| \t\t\t\t|");
-		showMsg("| Name: " + getPlayer(name, game).getNickname() + "\t\t\t|");
-		showMsg("| Color: " + getPlayer(name, game).getColor() + " \t\t\t|");
-		showMsg("| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins() + "\t\t\t|");
-		showMsg("| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood() + " \t\t\t|");
-		showMsg("| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone() + " \t\t\t|");
-		showMsg("| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants() + "\t\t\t|");
-		showMsg("| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith() + " \t\t|");
-		showMsg("| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary()
-				+ "\t\t|");
-		showMsg("| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory() + "\t\t|");
-		showMsg("|_______________________________|");
-		// palazzo del consiglio
-		showMsg("| Council Palace members: \t|");
-		int i = 1;
-		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
+	private void showPersonalBoard(Game game) throws RemoteException {
+		System.out.printf("%-30s|\n", "| Period: " + game.getPeriod());
+		System.out.printf("%-30s|\n", "| Round: " + game.getRound());
+		System.out.printf("%-30s|\n", "| ");
+		System.out.printf("%-30s|\n", "| Dices:");
+		System.out.printf("%-30s|\n", "| Orange: " + game.getBoardgame().getDice("Orange"));
+		System.out.printf("%-30s|\n", "| Black: " + game.getBoardgame().getDice("Black"));
+		System.out.printf("%-30s|\n", "| White: " + game.getBoardgame().getDice("White"));
+		showMsg("|_____________________________|");
+		System.out.printf("%-30s|\n", "| Family members:");
+		System.out.printf("%-30s|\n", "| Orange: " + getPlayer(name, game).getMembers().get(0).getValue());
+		System.out.printf("%-30s|\n", "| Black: " + getPlayer(name, game).getMembers().get(1).getValue());
+		System.out.printf("%-30s|\n", "| White: " + getPlayer(name, game).getMembers().get(2).getValue());
+		System.out.printf("%-30s|\n", "| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue());
+		System.out.printf("%-30s|\n", "| ");
+		System.out.printf("%-30s|\n", "| Name: " + getPlayer(name, game).getNickname());
+		System.out.printf("%-30s|\n", "| Color: " + getPlayer(name, game).getColor());
+		System.out.printf("%-30s|\n", "| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
+		System.out.printf("%-30s|\n", "| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
+		System.out.printf("%-30s|\n", "| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
+		System.out.printf("%-30s|\n",
+				"| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
+		System.out.printf("%-30s|\n",
+				"| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith());
+		System.out.printf("%-30s|\n",
+				"| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary());
+		System.out.printf("%-30s|\n",
+				"| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory());
+		showMsg("|_____________________________|");
+		// leaderCard
+		System.out.printf("%-30s|\n", "| Leader cards:");
+		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+			System.out.printf("%-30s|\n", "| " + ld.getName());
+		showMsg("|_____________________________|");
+		// player dev cards
+		System.out.printf("%-30s|\n", "| Development cards:");
 
-			showMsg("| " + i + ":" + fm.getPlayer().getNickname() + "\t\t\t|");
-			i++;
-		}
-		showMsg("|_______________________________|");
-		// Towers
-		for (int j = 0; j < 4; j++) {
+		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
 			System.out.print("| ");
-			// TODO rewards
-			for (Tower t : game.getBoardgame().getTowers())
-				System.out.print(t.getFloor()[j].getCard().getName() + " | ");
+			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+				System.out.printf("%-22s| ", c.getName());
 			showMsg("");
 		}
-		showMsg("|_______________________________|");
-		// leaderCard
-		showMsg("| Leader cards:\t\t\t|");
-		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-			showMsg("| " + ld.getName() + "\t\t|");
-		showMsg("|_______________________________|");
-		showMsg("| Faith points track:\t\t|");
+		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+			System.out.print("| ");
+			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+				System.out.printf("%-22s| ", c.getName());
+			showMsg("");
+		}
+		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+			System.out.print("| ");
+			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+				System.out.printf("%-22s| ", c.getName());
+			showMsg("");
+		}
+		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+			System.out.print("| ");
+			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+				System.out.printf("%-22s| ", c.getName());
+			showMsg("");
+		}
+	}
+
+	private void showBoardTracks(Game game) {
+		System.out.printf("%-30s|\n", "| Faith points track:");
 		// trovo il massimo victory
 		int maxF = 0;
 		for (Player p : game.getPlayers())
@@ -476,9 +489,9 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxF; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getFaith() == j)
-					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
-		showMsg("|_______________________________|");
-		showMsg("| Military points track:\t|");
+					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+		showMsg("|_____________________________|");
+		System.out.printf("%-30s|\n", "| Military points track:");
 		// trovo il massimo victory
 		int maxM = 0;
 		for (Player p : game.getPlayers())
@@ -488,9 +501,9 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxM; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getMilitary() == j)
-					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
-		showMsg("|_______________________________|");
-		showMsg("| Victory points track:\t\t|");
+					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+		showMsg("|_____________________________|");
+		System.out.printf("%-30s|\n", "| Victory points track:");
 		// trovo il massimo victory
 		int maxV = 0;
 		for (Player p : game.getPlayers())
@@ -500,9 +513,40 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxV; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getVictory() == j)
-					showMsg("| " + j + " " + p.getNickname() + "\t\t|");
-		showMsg("|_______________________________|");
+					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+	}
 
+	@Override
+	public void showBoard(Game game) throws RemoteException {
+		this.game = game;
+		// Towers
+		showMsg("______________________________");
+		System.out.printf("%-30s|\n", "| Towers: ");
+		showMsg("________________________________________________________________________________________________");
+		for (int j = 0; j < 4; j++) {
+			System.out.print("| ");
+			// TODO rewards
+			for (Tower t : game.getBoardgame().getTowers())
+				System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
+			showMsg("");
+		}
+		showMsg("|_______________________|_______________________|_______________________|_______________________|");
+		// palazzo del consiglio
+		showMsg("");
+		showMsg("______________________________");
+		System.out.printf("%-30s|\n", "| Council Palace members: ");
+		int i = 1;
+		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
+			System.out.printf("%-30s|\n", "| " + i + ":" + fm.getPlayer().getNickname());
+			i++;
+		}
+		showMsg("|_____________________________|");
+		showBoardTracks(game);
+		showMsg("|_____________________________|");
+		showMsg("______________________________");
+		showPersonalBoard(game);
+		showMsg("|_____________________________|");
+		showMsg("");
 		/*
 		 * personal board altri giocatori?
 		 */

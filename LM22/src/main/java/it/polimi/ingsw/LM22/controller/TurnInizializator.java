@@ -96,7 +96,7 @@ public class TurnInizializator {
 	}
 
 	/*
-	 * metodo che consente di distribuire tutte e carte sviluppo
+	 * metodo che consente di distribuire tutte le carte sviluppo
 	 */
 	protected void distributeDevelopmentCards(Game game) {
 		distributeTerritoryCards(game);
@@ -105,44 +105,64 @@ public class TurnInizializator {
 		distributeVentureCards(game);
 	}
 
+	/*
+	 * ognuno dei seguenti metodi cerca la prima carta del periodo attuale per
+	 * ogni piano della propria torre
+	 */
 	protected void distributeTerritoryCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[TERRITORY].getFloor()) {
-			TerritoryCard c = game.getTerritoryCards().get(0);
-			if (c.getPeriod() == game.getPeriod()) {
-				f.setCard(c);
-				game.getTerritoryCards().remove(c);
+			int i = 0;
+			TerritoryCard c = game.getTerritoryCards().get(i);
+			for (; c.getPeriod() != game.getPeriod();) {
+				i++;
+				c = game.getTerritoryCards().get(i);
 			}
+			f.setCard(c);
+			game.getTerritoryCards().remove(c);
+			i++;
 		}
+
 	}
 
 	protected void distributeCharacterCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[CHARACTER].getFloor()) {
-			// for (CharacterCard c : game.getCharacterCards())
-			CharacterCard c = game.getCharacterCards().get(0);
-			if (c.getPeriod() == game.getPeriod()) {
-				f.setCard(c);
-				game.getCharacterCards().remove(c);
+			int i = 0;
+			CharacterCard c = game.getCharacterCards().get(i);
+			for (; c.getPeriod() != game.getPeriod();) {
+				i++;
+				c = game.getCharacterCards().get(i);
 			}
+			f.setCard(c);
+			game.getCharacterCards().remove(c);
+			i++;
 		}
 	}
 
 	protected void distributeBuildingCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[BUILDING].getFloor()) {
-			BuildingCard c = game.getBuildingCards().get(0);
-			if (c.getPeriod() == game.getPeriod()) {
-				f.setCard(c);
-				game.getBuildingCards().remove(c);
+			int i = 0;
+			BuildingCard c = game.getBuildingCards().get(i);
+			for (; c.getPeriod() != game.getPeriod();) {
+				i++;
+				c = game.getBuildingCards().get(i);
 			}
+			f.setCard(c);
+			game.getBuildingCards().remove(c);
+			i++;
 		}
 	}
 
 	protected void distributeVentureCards(Game game) {
 		for (Floor f : game.getBoardgame().getTowers()[VENTURE].getFloor()) {
-			VentureCard c = game.getVentureCards().get(0);
-			if (c.getPeriod() == game.getPeriod()) {
-				f.setCard(c);
-				game.getVentureCards().remove(c);
+			int i = 0;
+			VentureCard c = game.getVentureCards().get(i);
+			for (; c.getPeriod() != game.getPeriod();) {
+				i++;
+				c = game.getVentureCards().get(i);
 			}
+			f.setCard(c);
+			game.getVentureCards().remove(c);
+			i++;
 		}
 	}
 

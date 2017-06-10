@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,28 +27,27 @@ public class MainGameController implements Runnable {
 
 	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
-	private final Integer PERIOD_END_DEFINER = 2;
+	private final Integer END_DEFINER = 2;
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
-	private Integer TIMER_PER_MOVE; // caricabile da file
+	private Integer TIMER_PER_MOVE = 10; // caricabile da file (secondi)
 	private Game game = new Game();
 	private IPlayer iplayer[];
 	private int nPlayers;
 	private VaticanReportManager vaticanReportManager;
-	private TurnInizializator turnInizializator;
+	private TurnInizializator turnInizializator = new TurnInizializator();;
 	private InitialConfigurator initialConfigurator;
 	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 	private ResourceHandler resourceHandler = new ResourceHandler();
 
+	ExecutorService executor = Executors.newCachedThreadPool();
+	PlayerMove playerMove;
+
 	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
-		try {
-			this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
-		} catch (IOException e) {
-			System.err.println("Errore nel caricamento dei file JSON");
-		}
+		this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
 	}
 
 	@Override
@@ -56,18 +58,34 @@ public class MainGameController implements Runnable {
 			for (Player p : game.getPlayersOrder()) {
 				// turno di un giocatore
 				for (String sMove = ""; !sMove.equals("End@");) {
-					sendAll();// invio a tutti il model
-					sMove = getIPlayer(p).yourTurn();
-					System.out.println(sMove);
-					aMove = netContrAdapter.moveParser(p, sMove);
-					moveManager.manageMove(aMove);
+					sendAll();// invio a tutti il nuovo model
+					// richiedo mossa a player
+					playerMove = new PlayerMove(getIPlayer(p));
+					executor.submit(playerMove);
+					// IDEA passare executor come parametro per poterlo
+					// terminare
+
+					/*
+					 * Verifico che la mossa venga eseguita nel tempo
+					 * prestabilito. Se non è trascorsa l'intera durata del
+					 * tempo concesso, la mossa è valida
+					 */
+					if (executor.awaitTermination(TIMER_PER_MOVE, TimeUnit.SECONDS)) {
+						sMove = playerMove.getMove();
+						System.out.println(sMove);
+						aMove = netContrAdapter.moveParser(p, sMove);
+						moveManager.manageMove(aMove);
+					} else {
+						System.out.println("Tempo scaduto!");
+						break;
+					}
 				}
 				// fine turno di un giocatore
 			}
 			// fine turno/periodo
-			// vaticano
-			// turn initializzator
-			if (game.getPeriod().equals(2) && game.getRound().equals(2))
+			vaticanReport();
+			turnInizializator.initializeTurn(game);
+			if (game.getPeriod().equals(END_DEFINER) && game.getRound().equals(END_DEFINER))
 				manageEndGame(game);
 			else
 				run();
@@ -103,7 +121,8 @@ public class MainGameController implements Runnable {
 	}
 
 	private void vaticanReport() {
-		if (game.getPeriod() % PERIOD_END_DEFINER == 0)
+		// solo alla fine del periodo
+		if (game.getRound().equals(END_DEFINER))
 			vaticanReportManager.manageVaticanReport(game);
 	}
 
@@ -222,4 +241,29 @@ public class MainGameController implements Runnable {
 		map.put("", new Resource(0, 0, 0, 0, 0, 0, 0));
 		return map;
 	}
+}
+
+// classe che resta in attesa della mossa di un client
+class PlayerMove implements Runnable {
+	private String move = "";
+	private IPlayer iplayer;
+
+	public PlayerMove(IPlayer iplayer) {
+		this.iplayer = iplayer;
+	}
+
+	@Override
+	public void run() {
+		try {
+			move = iplayer.yourTurn();
+		} catch (ClassNotFoundException | IOException e) {
+
+		}
+	}
+
+	// restituisco il socket del client connesso
+	public String getMove() {
+		return move;
+	}
+
 }
