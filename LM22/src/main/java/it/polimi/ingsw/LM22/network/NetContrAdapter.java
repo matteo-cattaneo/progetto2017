@@ -44,7 +44,10 @@ public class NetContrAdapter {
 			objMove = new CouncilMove(p, getFamilyMember(param[1]), getServantsAdded(param[2]));
 			break;
 		case "End":
-			objMove = new EndMove(p);
+			if (param.length == 2)
+				objMove = new EndMove(p, param[1]);
+			else
+				objMove = new EndMove(p, "noError");
 		}
 		return objMove;
 	}

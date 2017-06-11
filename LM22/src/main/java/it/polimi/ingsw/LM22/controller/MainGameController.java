@@ -11,9 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,82 +27,81 @@ public class MainGameController implements Runnable {
 	private final Integer END_DEFINER = 2;
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
-	private Integer TIMER_PER_MOVE = 10; // caricabile da file (secondi)
 	private Game game = new Game();
 	private IPlayer iplayer[];
 	private int nPlayers;
-	private VaticanReportManager vaticanReportManager;
-	private TurnInizializator turnInizializator = new TurnInizializator();;
-	private InitialConfigurator initialConfigurator;
+	private VaticanReportManager vaticanReportManager = new VaticanReportManager();;
+	private EffectManager effectManager = new EffectManager();
+	private ResourceHandler resourceHandler = new ResourceHandler();
+	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);;
 	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
-	private ResourceHandler resourceHandler = new ResourceHandler();
-
-	ExecutorService executor = Executors.newCachedThreadPool();
-	PlayerMove playerMove;
+	private int i = 0;
 
 	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
 		this.nPlayers = nPlayer;
 		this.iplayer = iplayer;
-		this.initialConfigurator = new InitialConfigurator(game, iplayer, nPlayer);
+		new InitialConfigurator(game, iplayer, nPlayer, resourceHandler, effectManager);
 	}
 
 	@Override
 	public void run() {
 		AbstractMove aMove;
-		try {
-			// inizio turno
-			for (Player p : game.getPlayersOrder()) {
-				// turno di un giocatore
-				for (String sMove = ""; !sMove.equals("End@");) {
-					sendAll();// invio a tutti il nuovo model
+		// inizio turno
+		i = 0;
+		Player p;
+		while (i < game.getPlayersOrder().size()) {
+			// inizio turno di un giocatore
+			p = game.getPlayersOrder().get(i);
+			for (String sMove = ""; !sMove.startsWith("End@");) {
+				try {
+					// invio a tutti il nuovo model
+					sendAll();
 					// richiedo mossa a player
-					playerMove = new PlayerMove(getIPlayer(p));
-					executor.submit(playerMove);
-					// IDEA passare executor come parametro per poterlo
-					// terminare
-
-					/*
-					 * Verifico che la mossa venga eseguita nel tempo
-					 * prestabilito. Se non è trascorsa l'intera durata del
-					 * tempo concesso, la mossa è valida
-					 */
-					if (executor.awaitTermination(TIMER_PER_MOVE, TimeUnit.SECONDS)) {
-						sMove = playerMove.getMove();
-						System.out.println(sMove);
-						aMove = netContrAdapter.moveParser(p, sMove);
-						moveManager.manageMove(aMove);
-					} else {
-						System.out.println("Tempo scaduto!");
-						break;
-					}
+					sMove = getIPlayer(p).yourTurn();
+				} catch (ClassNotFoundException | IOException e) {
+					// ho perso la connessione con il client
+					sMove = "End@Disconnect@";
 				}
-				// fine turno di un giocatore
+				System.out.println(sMove);
+				// ottengo informazioni dalla mossa ricevuta
+				aMove = netContrAdapter.moveParser(p, sMove);
+				// provo ad eseguire la mossa
+				try {
+					moveManager.manageMove(aMove);
+				} catch (InvalidMoveException e) {
+					// segnalo al client che non può fare questa mossa
+				}
 			}
-			// fine turno/periodo
-			vaticanReport();
-			turnInizializator.initializeTurn(game);
-			if (game.getPeriod().equals(END_DEFINER) && game.getRound().equals(END_DEFINER))
-				manageEndGame(game);
-			else
-				run();
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			System.err.println("Room crashed!");
+			i++;
+			// fine turno di un giocatore
 		}
+		// fine turno/periodo
+		// vaticanReport();
+		// turnInizializator.initializeTurn(game);
+		// verifico se è la fine del gioco
+		// if (game.getPeriod().equals(END_DEFINER) &&
+		// game.getRound().equals(END_DEFINER))
+		// manageEndGame(game);
+		// else
+		if (!game.getPlayersOrder().isEmpty())
+			run();
 	}
 
 	/*
-	 * fornisco il giocatore corrispondente al client fornito
+	 * restituisco il giocatore corrispondente al client newtwork fornito
 	 */
-	// private Player getPlayer(IPlayer ip) throws RemoteException {
-	// for (Player p : game.getPlayers()) {
-	// if (p.getNickname().equals(ip.getName()))
-	// return p;
-	// }
-	// return null;
-	// }
+	private Player getPlayer(IPlayer ip) throws RemoteException {
+		for (Player p : game.getPlayers()) {
+			if (p.getNickname().equals(ip.getName()))
+				return p;
+		}
+		return null;
+	}
 
+	/*
+	 * restituisco il client newtwork corrispondente al giocatore fornito
+	 */
 	private IPlayer getIPlayer(Player p) throws RemoteException {
 		for (IPlayer ip : iplayer) {
 			if (p.getNickname().equals(ip.getName()))
@@ -114,10 +110,13 @@ public class MainGameController implements Runnable {
 		return null;
 	}
 
+	/*
+	 * invio il model a tutti i clients connessi
+	 */
 	private void sendAll() throws IOException {
-		for (int j = 0; j < nPlayers; j++) {
-			iplayer[j].showBoard(game);
-		}
+		for (int j = 0; j < nPlayers; j++)
+			if (game.getPlayersOrder().contains(getPlayer(iplayer[j])))
+				iplayer[j].showBoard(game);
 	}
 
 	private void vaticanReport() {
@@ -241,29 +240,11 @@ public class MainGameController implements Runnable {
 		map.put("", new Resource(0, 0, 0, 0, 0, 0, 0));
 		return map;
 	}
-}
 
-// classe che resta in attesa della mossa di un client
-class PlayerMove implements Runnable {
-	private String move = "";
-	private IPlayer iplayer;
-
-	public PlayerMove(IPlayer iplayer) {
-		this.iplayer = iplayer;
+	public void disconnectPlayer(Player player) {
+		game.getPlayersOrder().remove(player);
+		// TODO informare tutti
+		System.out.println("Player " + player.getNickname() + " disconnected!");
+		// TODO impostare connected a false o remove player from list
 	}
-
-	@Override
-	public void run() {
-		try {
-			move = iplayer.yourTurn();
-		} catch (ClassNotFoundException | IOException e) {
-
-		}
-	}
-
-	// restituisco il socket del client connesso
-	public String getMove() {
-		return move;
-	}
-
 }

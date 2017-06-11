@@ -3,6 +3,12 @@ package it.polimi.ingsw.LM22.network.client;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
@@ -20,6 +26,8 @@ public class CLIinterface extends AbstractUI {
 	private final String DEFAULT_IP = "localhost";
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
+
+	private Integer TIMER_PER_MOVE = 30; // caricabile da file (secondi)
 
 	private final String CARDMOVE = "Card";
 	private final String MARKETMOVE = "Market";
@@ -66,6 +74,14 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "";
+		/*
+		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
+		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
+		 */
+		ExecutorService exe = Executors.newFixedThreadPool(1);
+		Future<Integer> future = exe.submit(() -> {
+			return in.nextInt();
+		});
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
@@ -74,39 +90,51 @@ public class CLIinterface extends AbstractUI {
 			showMsg("3: Activate a LeaderCard");
 		}
 		showMsg("4: End turn");
-		int option = in.nextInt();
-		switch (option) {
-		case 2:
-			if (!getPlayer(name, game).getLeaderCards().isEmpty())
-				printSellLeaderCardMenu();
-			else {
+		showMsg("5: End timeout #DEBUG#");
+		int option;
+		try {
+			option = future.get(TIMER_PER_MOVE, TimeUnit.SECONDS);
+			switch (option) {
+			case 2:
+				if (!getPlayer(name, game).getLeaderCards().isEmpty())
+					printSellLeaderCardMenu();
+				else {
+					printInvalidInput();
+					printMoveMenu();
+				}
+				break;
+			case 3:
+				if (!getPlayer(name, game).getLeaderCards().isEmpty())
+					printActivateLeaderCardMenu();
+				else {
+					printInvalidInput();
+					printMoveMenu();
+				}
+				break;
+			case 4:
+				setMove("End");
+				memberMove = false;
+				break;
+			case 5:
+				setMove("End@Disconnect");
+				System.out.println("Tempo scaduto!");
+				break;
+			case 1:
+				if (memberMove == false) {
+					printMemberMoveMenu();
+					memberMove = true;
+					break;
+				}
+			default:
 				printInvalidInput();
 				printMoveMenu();
-			}
-			break;
-		case 3:
-			if (!getPlayer(name, game).getLeaderCards().isEmpty())
-				printActivateLeaderCardMenu();
-			else {
-				printInvalidInput();
-				printMoveMenu();
-			}
-			break;
-		case 4:
-			setMove("End");
-			memberMove = false;
-			break;
-		case 1:
-			if (memberMove == false) {
-				printMemberMoveMenu();
-				memberMove = true;
 				break;
 			}
-		default:
-			printInvalidInput();
-			printMoveMenu();
-			break;
+		} catch (ExecutionException | TimeoutException | InterruptedException e) {
+			setMove("End@Disconnect");
+			System.out.println("Tempo scaduto!");
 		}
+
 	}
 
 	@Override

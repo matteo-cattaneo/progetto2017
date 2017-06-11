@@ -68,7 +68,7 @@ public class MoveManager {
 	 * successivamente (se il check dà esito positivo) anche il metodo di manage
 	 * della mossa giusto
 	 */
-	public void manageMove(AbstractMove move) throws IOException, InvalidMoveException {
+	public void manageMove(AbstractMove move) throws InvalidMoveException {
 		boolean checkResult = false;
 		String name;
 		Method method;
@@ -744,13 +744,11 @@ public class MoveManager {
 	}
 
 	/*
-	 * metodo invocato se:
-	 * - player dice intenzionalmente di aver finito il suo turno
-	 * - timer per effettuare il proprio turno scade
+	 * metodo invocato se: - player dice intenzionalmente di aver finito il suo
+	 * turno - timer per effettuare il proprio turno scade
 	 */
 	public void endmoveHandle(EndMove move) {
-		/*
-		 * dovrebbe passare il testimone al player successivo
-		 */
+		if (!move.getError().equals("noError"))
+			mainGame.disconnectPlayer(move.getPlayer());
 	}
 }
