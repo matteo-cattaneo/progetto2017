@@ -12,6 +12,7 @@ import it.polimi.ingsw.LM22.model.ChangeEffect;
 import it.polimi.ingsw.LM22.model.ChangeToPrivilegeEffect;
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Effect;
+import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.NoEffect;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
@@ -19,6 +20,8 @@ import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
+import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
+import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
 
 public class EffectManager {
 	/*
@@ -27,6 +30,7 @@ public class EffectManager {
 	 */
 	private final Integer NEEDED = 0;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
+	private final String UNCOLORED = "Uncolored";
 	private Player player;
 	private MainGameController mainGC;
 	private ResourceHandler r = new ResourceHandler();
@@ -156,4 +160,37 @@ public class EffectManager {
 		r.addResource(player.getPersonalBoard().getResources(),
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
 	}
+	
+	public void memberchangeeffectManage(MemberChangeEffect e, Player p){
+		String color = e.getTypeOfMember();
+		switch (color) {
+		case "ALL":
+			for (FamilyMember m : p.getMembers()) {
+				if (m.getColor() != UNCOLORED)
+					m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
+			}
+			break;
+		case "UNCOLORED":
+			for (FamilyMember m : p.getMembers())
+				if (m.getColor() == UNCOLORED) {
+					m.setValue(e.getNewValueOfMember());
+					break;
+				}
+		}
+	}
+
+	/*
+	 * metodo che gestisce tale effetto
+	 */
+	public void memberbonuseffectManage(MemberBonusEffect e, Player p) {
+		String color = e.getTypeOfMember();
+		switch (color) {
+		case "ALL": {
+			for (FamilyMember f : p.getMembers()) {
+				f.setValue(f.getValue() + e.getValueOfBonus());
+			}
+		}
+		}
+	}
+	
 }

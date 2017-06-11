@@ -83,7 +83,7 @@
     },
     "permanentEffect": {
         "type": "ColorCardBonusEffect",
-        "cardType": "VENTURE",
+        "cardType": 3,
         "diceBonus": 2,
         "cardDiscount": {
             "wood": 0,
@@ -113,7 +113,7 @@
     },
     "permanentEffect": {
         "type": "ColorCardBonusEffect",
-        "cardType": "CHARACTER",
+        "cardType": 1,
         "diceBonus": 2,
         "cardDiscount": {
             "wood": 0,
@@ -142,7 +142,7 @@
     },
     "permanentEffect": {
         "type": "ColorCardBonusEffect",
-        "cardType": "BUILDING",
+        "cardType": 2,
         "diceBonus": 2,
         "cardDiscount": {
             "wood": -1,
@@ -181,7 +181,7 @@
     },
     "permanentEffect": {
         "type": "ColorCardBonusEffect",
-        "cardType": "TERRITORY",
+        "cardType": 0,
         "diceBonus": 2,
         "cardDiscount": {
             "wood": 0,

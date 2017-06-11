@@ -12,6 +12,7 @@ import it.polimi.ingsw.LM22.model.Floor;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
@@ -28,15 +29,22 @@ public class TurnInizializator {
 	private final Integer VENTURE = 3;
 	private final Integer FIVE_PLAYERS = 5;
 	private final Integer UNCOLORED_MEMBER = 0;
-	private final String UNCOLORED = "Uncolored";
 	private final Integer DICE_NUMBER = 3;
 	private final Integer DICE_MAX = 6;
 	private final Integer DICE_MIN = 1;
 	protected final String[] colors = { "Orange", "Black", "White" };
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = { "PRODUCTION", "HARVEST" };
-	private final Integer TOWERS_NUM = 4;
+	private final Integer NOTHING = 0;
+	
+	private EffectManager effectManager;
+	private ResourceHandler r;
 
+	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler){
+		this.effectManager = effectManager;
+		this.r = resourceHandler;
+	}
+	
 	/*
 	 * metodo generale che gestisce tutta la parte iniziale di preparazione di
 	 * un nuovo turno --> invocherà tutti i metodi minori in grado di svolgere
@@ -204,32 +212,10 @@ public class TurnInizializator {
 	 * MONTEFELTRO
 	 */
 	public void updateFamilyMembersValue(Player p, MemberValueEffect e) {
-		String color = new String();
 		if (e instanceof MemberChangeEffect) {
-			color = ((MemberChangeEffect) e).getTypeOfMember();
-			switch (color) {
-			case "ALL":
-				for (FamilyMember m : p.getMembers()) {
-					if (m.getColor() != UNCOLORED)
-						m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
-				}
-				break;
-			case "UNCOLORED":
-				for (FamilyMember m : p.getMembers())
-					if (m.getColor() == UNCOLORED) {
-						m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
-						break;
-					}
-			}
+			effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
 		} else if (e instanceof MemberBonusEffect) {
-			color = ((MemberBonusEffect) e).getTypeOfMember();
-			switch (color) {
-			case "ALL": {
-				for (FamilyMember f : p.getMembers()) {
-					f.setValue(f.getValue() + ((MemberBonusEffect) e).getValueOfBonus());
-				}
-			}
-			}
+			effectManager.memberbonuseffectManage(((MemberBonusEffect) e), p);
 		}
 	}
 
@@ -263,6 +249,10 @@ public class TurnInizializator {
 	 * risorse, il quarto meno e così via fino al primo)
 	 */
 	private void distributeNewResources(Game game) {
-
+		int i = 1;
+		for (Player p: game.getPlayersOrder()){
+			r.addResource(p.getPersonalBoard().getResources(), new Resource(i, i, i, i, NOTHING, NOTHING, NOTHING));
+			i++;
+		}
 	}
 }

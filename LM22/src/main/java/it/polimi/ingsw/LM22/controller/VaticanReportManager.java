@@ -35,6 +35,7 @@ public class VaticanReportManager {
 	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
 	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
 	 * punti vittoria
+	 * + deve controllare se ha Sisto VI attivato
 	 */
 	public void askVatican(Player player) {
 		// TODO sposterei il metodo nel mainGameController

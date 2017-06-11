@@ -7,16 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import it.polimi.ingsw.LM22.model.BuildingCard;
-import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.FileParser;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.TerritoryCard;
-import it.polimi.ingsw.LM22.model.Tower;
-import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
@@ -36,7 +31,8 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
+	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer, ResourceHandler r, EffectManager m) throws RemoteException {
+		super(m, r);
 		initializeTurn(game);
 		throwDices(game);
 		setupPlayers(game, iplayer, nPlayer);
