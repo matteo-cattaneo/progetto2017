@@ -14,12 +14,21 @@ public class Player implements Serializable {
 	private List<FamilyMember> members;
 	private final PersonalBoard personalBoard = new PersonalBoard();
 	private List<LeaderCard> leaderCards = new ArrayList<LeaderCard>();
+	private List<LeaderCard> handLeaderCards = new ArrayList<LeaderCard>();
 	private List<LeaderCard> activatedLeaderCards = new ArrayList<LeaderCard>();;
 	private List<Effect> effects = new ArrayList<Effect>();
 
 	public Player(String nickname, String color) {
 		this.nickname = nickname;
 		this.color = color;
+	}
+
+	public List<LeaderCard> getHandLeaderCards() {
+		return handLeaderCards;
+	}
+
+	public void setHandLeaderCards(List<LeaderCard> handLeaderCards) {
+		this.handLeaderCards = handLeaderCards;
 	}
 
 	public void setMembers(List<FamilyMember> members) {

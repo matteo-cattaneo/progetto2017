@@ -640,7 +640,7 @@ public class MoveManager {
 	 * privilegio del consiglio --> posso solo vendere carte non attive
 	 */
 	public void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
-		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
+		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(),
 				mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()));
 	}
@@ -719,7 +719,9 @@ public class MoveManager {
 		}
 		effectManager.manageEffect(move.getLeaderCard().getEffect(), move.getPlayer(), mainGame);
 		move.getPlayer().getActivatedLeaderCards().add(move.getLeaderCard());
+
 		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
+		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
 	}
 
 	/*

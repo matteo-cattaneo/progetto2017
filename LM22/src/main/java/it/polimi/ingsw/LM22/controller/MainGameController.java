@@ -2,6 +2,7 @@ package it.polimi.ingsw.LM22.controller;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
+import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class MainGameController implements Runnable {
 
@@ -28,8 +30,7 @@ public class MainGameController implements Runnable {
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
-	private IPlayer iplayer[];
-	private int nPlayers;
+	private ArrayList<PlayerInfo> playerRoom;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();;
 	private EffectManager effectManager = new EffectManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
@@ -38,10 +39,9 @@ public class MainGameController implements Runnable {
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 	private int i = 0;
 
-	public MainGameController(IPlayer iplayer[], int nPlayer) throws RemoteException {
-		this.nPlayers = nPlayer;
-		this.iplayer = iplayer;
-		new InitialConfigurator(game, iplayer, nPlayer, resourceHandler, effectManager);
+	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
+		this.playerRoom = playerRoom;
+		new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
 	}
 
 	@Override
@@ -86,6 +86,8 @@ public class MainGameController implements Runnable {
 		// else
 		if (!game.getPlayersOrder().isEmpty())
 			run();
+		else
+			manageEndGame(game);
 	}
 
 	/*
@@ -103,9 +105,9 @@ public class MainGameController implements Runnable {
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
 	private IPlayer getIPlayer(Player p) throws RemoteException {
-		for (IPlayer ip : iplayer) {
-			if (p.getNickname().equals(ip.getName()))
-				return ip;
+		for (int j = 0; j < playerRoom.size(); j++) {
+			if (p.getNickname().equals(playerRoom.get(j).getName()))
+				return playerRoom.get(j).getIplayer();
 		}
 		return null;
 	}
@@ -114,9 +116,10 @@ public class MainGameController implements Runnable {
 	 * invio il model a tutti i clients connessi
 	 */
 	private void sendAll() throws IOException {
-		for (int j = 0; j < nPlayers; j++)
-			if (game.getPlayersOrder().contains(getPlayer(iplayer[j])))
-				iplayer[j].showBoard(game);
+		for (int j = 0; j < playerRoom.size(); j++) {
+			if (game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
+				playerRoom.get(j).getIplayer().showBoard(game);
+		}
 	}
 
 	private void vaticanReport() {

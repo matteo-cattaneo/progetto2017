@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -18,14 +19,14 @@ public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
 	private final static int SOCKET_PORT = 1337;
 	private final static int RMI_PORT = 1099;
-	static ServerSocket serverSocket;
-	RMIPlayer serverRMI;
-	final int TIMER = 5;
-	final int THIRDPLAYER = 2;
-	final int FOURTHPLAYER = 3;
-	private IPlayer player[];
-	ExecutorService executor = Executors.newCachedThreadPool();
-	SocketConnection conn;
+	private final int TIMER = 5;
+	private final int THIRDPLAYER = 2;
+	private final int FOURTHPLAYER = 3;
+	private static ServerSocket serverSocket;
+	private RMIPlayer serverRMI;
+	private ArrayList<ArrayList<PlayerInfo>> playerInfo = new ArrayList<ArrayList<PlayerInfo>>();
+	private ExecutorService executor = Executors.newCachedThreadPool();
+	private SocketConnection conn;
 
 	public static void main(String[] args) {
 		try {
@@ -57,7 +58,10 @@ public class StartServer {
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
 		Integer t = TIMER;
-		player = new IPlayer[4];
+		// creo lista giocatori della nuova room
+		ArrayList<PlayerInfo> playerRoom = new ArrayList<PlayerInfo>();
+		// salvo nel server la nuova lista
+		playerInfo.add(playerRoom);
 		System.out.println("Attesa client...");
 		while (i < 4) {
 			if (i == THIRDPLAYER || i == FOURTHPLAYER) {
@@ -77,23 +81,31 @@ public class StartServer {
 			 * inizializzazione del player e la reinizializzazione dell' oggetto
 			 * di connessione
 			 */
-
+			PlayerInfo player = new PlayerInfo();
 			if (conn.getSocket().isConnected()) {
+				player.setIplayer(new SocketPlayer(conn.getSocket()));
 				System.out.println("Socket: Connected client " + i);
-				player[i] = new SocketPlayer(conn.getSocket());
 				conn = new SocketConnection(serverSocket);
 				executor.submit(conn);
 			} else if (serverRMI.getClient() != null) {
+				player.setIplayer(serverRMI);
 				System.out.println("RMI: Connected client " + i);
-				player[i] = serverRMI;
 				serverRMI = new RMIPlayer();
 				Naming.rebind("rmi://localhost/MSG", serverRMI);
 			}
+			// ottengo il nome del player
+			player.setName(player.getIplayer().getName());
+			// agiungo il player alla lista della room
+			/*
+			 * TODO verifica login
+			 */
+			playerRoom.add(player);
 			i++;
 		}
 		System.out.println("Game started!!!");
-		// avvio thread della partita (controller)
-		executor.submit(new MainGameController(player, i));
+		// avvio thread della partita (controller) passandogli la lista dei
+		// giocatori
+		executor.submit(new MainGameController(playerRoom));
 		start();
 	}
 

@@ -13,7 +13,7 @@ import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.WorkSpace;
-import it.polimi.ingsw.LM22.network.server.IPlayer;
+import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class InitialConfigurator extends TurnInizializator {
 	FileParser fileParser = new FileParser();
@@ -31,11 +31,12 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, IPlayer iplayer[], int nPlayer, ResourceHandler r, EffectManager m) throws RemoteException {
+	public InitialConfigurator(Game game, ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m)
+			throws RemoteException {
 		super(m, r);
 		initializeTurn(game);
 		throwDices(game);
-		setupPlayers(game, iplayer, nPlayer);
+		setupPlayers(game, playerRoom);
 		setNewPlayersOrder(game);
 		try {
 			loadConfiguration(game);
@@ -74,12 +75,12 @@ public class InitialConfigurator extends TurnInizializator {
 	/*
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
-	private void setupPlayers(Game game, IPlayer iplayer[], int nPlayer) throws RemoteException {
-		Player players[] = new Player[nPlayer];
+	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) throws RemoteException {
+		Player players[] = new Player[playerRoom.size()];
 		game.setPlayers(players);
 		int i = 0;
 		for (Player p : game.getPlayers()) {
-			players[i] = new Player(iplayer[i].getName(), PLAYER_COLOR[i]);
+			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);
 			List<FamilyMember> members = new ArrayList<FamilyMember>();
 			int j;
 			for (j = 0; j < 3; j++) {
@@ -158,7 +159,7 @@ public class InitialConfigurator extends TurnInizializator {
 		Random random = new Random();
 		for (Player p : game.getPlayers()) {
 			for (int i = 0; i < 4; i++) {
-				p.getLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
+				p.getHandLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
 			}
 		}
 	}

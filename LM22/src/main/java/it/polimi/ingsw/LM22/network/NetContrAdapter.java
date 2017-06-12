@@ -54,7 +54,7 @@ public class NetContrAdapter {
 
 	private LeaderCard getLeaderCard(String param) {
 		// get from the player list the proper LeaderCard
-		for (LeaderCard ld : player.getActivatedLeaderCards())
+		for (LeaderCard ld : player.getHandLeaderCards())
 			if (ld.getName().equals(param))
 				return ld;
 		for (LeaderCard ld : player.getLeaderCards())

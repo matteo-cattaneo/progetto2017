@@ -2,6 +2,7 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -85,10 +86,10 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
-		if (!getPlayer(name, game).getLeaderCards().isEmpty()) {
+		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
 			showMsg("2: Sell a LeaderCard");
+		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
 			showMsg("3: Activate a LeaderCard");
-		}
 		showMsg("4: End turn");
 		showMsg("5: End timeout #DEBUG#");
 		int option;
@@ -96,7 +97,7 @@ public class CLIinterface extends AbstractUI {
 			option = future.get(TIMER_PER_MOVE, TimeUnit.SECONDS);
 			switch (option) {
 			case 2:
-				if (!getPlayer(name, game).getLeaderCards().isEmpty())
+				if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
 					printSellLeaderCardMenu();
 				else {
 					printInvalidInput();
@@ -104,7 +105,8 @@ public class CLIinterface extends AbstractUI {
 				}
 				break;
 			case 3:
-				if (!getPlayer(name, game).getLeaderCards().isEmpty())
+				if (!getPlayer(name, game).getLeaderCards().isEmpty()
+						|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
 					printActivateLeaderCardMenu();
 				else {
 					printInvalidInput();
@@ -116,9 +118,7 @@ public class CLIinterface extends AbstractUI {
 				memberMove = false;
 				break;
 			case 5:
-				setMove("End@Disconnect");
-				System.out.println("Tempo scaduto!");
-				break;
+				throw new TimeoutException();
 			case 1:
 				if (memberMove == false) {
 					printMemberMoveMenu();
@@ -132,7 +132,8 @@ public class CLIinterface extends AbstractUI {
 			}
 		} catch (ExecutionException | TimeoutException | InterruptedException e) {
 			setMove("End@Disconnect");
-			System.out.println("Tempo scaduto!");
+			System.out.println("Move time expired, now you have been disconnected!");
+			// System.exit(0);
 		}
 
 	}
@@ -334,19 +335,13 @@ public class CLIinterface extends AbstractUI {
 	public void printSellLeaderCardMenu() throws RemoteException {
 		setMove("LeaderSell");
 		showMsg("Choose the Leader card to sell:");
-		int i, j;
-		for (i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
-			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
-		}
-		// TODO le carte leader attivate si possono vendere?
-		for (j = 0; j < getPlayer(name, game).getActivatedLeaderCards().size(); j++) {
-			showMsg((j + 1 + i) + ": " + getPlayer(name, game).getActivatedLeaderCards().get(j).getName());
+		int i;
+		for (i = 0; i < getPlayer(name, game).getHandLeaderCards().size(); i++) {
+			showMsg((i + 1) + ": " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 		}
 		int option = in.nextInt();
 		if (option <= i)
-			setMove(getPlayer(name, game).getLeaderCards().get(option - 1).getName());
-		else if (option > i && option < (j + i))
-			setMove(getPlayer(name, game).getActivatedLeaderCards().get(option - 1).getName());
+			setMove(getPlayer(name, game).getHandLeaderCards().get(option - 1).getName());
 		else {
 			printInvalidInput();
 			printSellLeaderCardMenu();
@@ -356,13 +351,16 @@ public class CLIinterface extends AbstractUI {
 	// TODO test con carte leader caricate
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
+		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
+		Collections.copy(ld, getPlayer(name, game).getLeaderCards());
 		setMove("LeaderAct");
 		showMsg("Choose the Leader card to activate:");
-		for (int i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
+		int i;
+		for (i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
 		}
 		int option = in.nextInt();
-		if (option <= getPlayer(name, game).getLeaderCards().size())
+		if (option <= i)
 			setMove(getPlayer(name, game).getLeaderCards().get(option).getName());
 		else {
 			printInvalidInput();
@@ -472,9 +470,16 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|\n",
 				"| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory());
 		showMsg("|_____________________________|");
-		// leaderCard
-		System.out.printf("%-30s|\n", "| Leader cards:");
+		// Hand LeaderCard
+		System.out.printf("%-30s|\n", "| Hand leader cards:");
+		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+			System.out.printf("%-30s|\n", "| " + ld.getName());
+		showMsg("|_____________________________|");
+		// Table LeaderCard
+		System.out.printf("%-30s|\n", "| Table leader cards:");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+			System.out.printf("%-30s|\n", "| " + ld.getName());
+		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
 			System.out.printf("%-30s|\n", "| " + ld.getName());
 		showMsg("|_____________________________|");
 		// player dev cards
@@ -553,7 +558,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("________________________________________________________________________________________________");
 		for (int j = 0; j < 4; j++) {
 			System.out.print("| ");
-			// TODO rewards
+			// TODO rewards o dice requirement
 			for (Tower t : game.getBoardgame().getTowers())
 				System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
 			showMsg("");
