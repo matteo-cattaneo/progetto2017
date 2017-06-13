@@ -12,6 +12,11 @@ public class ResourceHandler {
 	 */
 
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
+		Resource cost = cardDiscounted(cardCost, bonus);
+		if (!enoughResources(diffResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded()),
+				sumResource(additionalCost, cost))) {
+			return false;
+		}
 		return true;
 	}
 
@@ -19,7 +24,7 @@ public class ResourceHandler {
 	 * metodo che gestisce il controllo delle carte Venture, sia con doppio
 	 * costo che con costo singolo normale o con costo in punti militari
 	 */
-	public boolean manageVentureCost(CardMove move) {
+	public boolean manageVentureCost(Resource cost1, Resource[] cost2) {
 		return false;
 
 	}
@@ -33,37 +38,32 @@ public class ResourceHandler {
 	 * 
 	 */
 	public boolean enoughResources(CardMove cardMove, Resource additionalCost) {
-		if (!enoughResources(cardMove.getPlayer().getPersonalBoard().getResources(), additionalCost))
+		if (!enoughResources(
+				diffResource(cardMove.getPlayer().getPersonalBoard().getResources(), cardMove.getServantsAdded()),
+				additionalCost))
 			return false;
 		return true;
 	}
 
 	/*
-	 * metodo che controlla, solo con interi essendo carte Character, se il
-	 * player in grado di comprare una carta: - è in grado di pagare le
-	 * possibili 3 monete in più senza bonus, - è in grado di pagare il costo
-	 * della carta anche con i bonus --> se entrambe le condizioni precedente
-	 * sono vere allora può effettuare la mossa
-	 * 
+	 * metodo in grado di controllare se la prima risorsa è >= della seconda
+	 * (true)
 	 */
-	public boolean enoughResources(CharacterCard card, CardMove cardMove, Resource additionalCost, Resource bonus) {
-		// Resource playerResource =
-		// cardMove.getPlayer().getPersonalBoard().getResources();
-		// addResource(playerResource, bonus);
-		// if (!enoughResources(playerResource,card.getCost()))
-		// return false;
-		Integer occupiedCost = additionalCost.getCoins();
-		Integer playerCoins = cardMove.getPlayer().getPersonalBoard().getResources().getCoins();
-		Integer bonusCoins = bonus.getCoins();
-		Integer coinsCost = card.getCost().getCoins();
-		if (bonusCoins <= coinsCost) {
-			if ((playerCoins - occupiedCost) - (coinsCost - bonusCoins) < 0) {
-				return false;
-			}
-		} else {
-			if ((playerCoins - occupiedCost) < 0)
-				return false;
-		}
+	public boolean enoughResources(Resource r, Resource resource) {
+		if (r.getWood() < resource.getWood())
+			return false;
+		if (r.getStone() < resource.getStone())
+			return false;
+		if (r.getCoins() < resource.getCoins())
+			return false;
+		if (r.getServants() < resource.getServants())
+			return false;
+		if (r.getFaith() < resource.getFaith())
+			return false;
+		if (r.getMilitary() < resource.getMilitary())
+			return false;
+		if (r.getVictory() < resource.getVictory())
+			return false;
 		return true;
 	}
 
@@ -97,28 +97,6 @@ public class ResourceHandler {
 	}
 
 	/*
-	 * metodo in grado di controllare se la prima risorsa è >= della seconda
-	 * (true)
-	 */
-	public boolean enoughResources(Resource playerResource, Resource resource) {
-		if (playerResource.getWood() < resource.getWood())
-			return false;
-		if (playerResource.getStone() < resource.getStone())
-			return false;
-		if (playerResource.getCoins() < resource.getCoins())
-			return false;
-		if (playerResource.getServants() < resource.getServants())
-			return false;
-		if (playerResource.getFaith() < resource.getFaith())
-			return false;
-		if (playerResource.getMilitary() < resource.getMilitary())
-			return false;
-		if (playerResource.getVictory() < resource.getVictory())
-			return false;
-		return true;
-	}
-
-	/*
 	 * aggiunge la risorsa ricevuta come secondo parametro alla risorsa ricevuta
 	 * come primo parametro
 	 */
@@ -146,6 +124,17 @@ public class ResourceHandler {
 		s1.setVictory(s1.getVictory() - s2.getVictory());
 	}
 
+	public Resource diffResource(Resource s1, Resource s2) {
+		Integer stone = (s1.getStone() - s2.getStone());
+		Integer wood = (s1.getWood() - s2.getWood());
+		Integer coins = (s1.getCoins() - s2.getCoins());
+		Integer servants = (s1.getServants() - s2.getServants());
+		Integer military = (s1.getMilitary() - s2.getMilitary());
+		Integer faith = (s1.getFaith() - s2.getFaith());
+		Integer victory = (s1.getVictory() - s2.getVictory());
+		return new Resource(wood, stone, servants, coins, faith, military, victory);
+	}
+
 	public Resource sumResource(Resource s1, Resource s2) {
 		Integer wood = 0;
 		Integer stone = 0;
@@ -163,9 +152,9 @@ public class ResourceHandler {
 		victory = s1.getVictory() + s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
-	
-	public Resource resourceMultiplication(Resource r, Integer m){
-		Resource bonus = new Resource (0,0,0,0,0,0,0);
+
+	public Resource resourceMultiplication(Resource r, Integer m) {
+		Resource bonus = new Resource(0, 0, 0, 0, 0, 0, 0);
 		Integer wood = r.getWood() * m;
 		bonus.setWood(wood);
 		Integer stone = r.getStone() * m;
@@ -177,7 +166,8 @@ public class ResourceHandler {
 		Integer faith = r.getFaith() * m;
 		bonus.setFaith(faith);
 		Integer military = r.getMilitary() * m;
-		bonus.setMilitary(military);;
+		bonus.setMilitary(military);
+		;
 		Integer victory = r.getVictory() * m;
 		bonus.setVictory(victory);
 		return bonus;

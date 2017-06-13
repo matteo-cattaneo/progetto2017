@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.polimi.ingsw.LM22.model.CardActionEffect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
@@ -249,5 +250,41 @@ public class MainGameController implements Runnable {
 		// TODO informare tutti
 		System.out.println("Player " + player.getNickname() + " disconnected!");
 		// TODO impostare connected a false o remove player from list
+	}
+
+	/*
+	 * metodo che gestisce la richiesta del numero di servitori che il player vuole aggiungere
+	 * ad un effetto (sia di cardAction che di WorkAction)
+	 */
+	public Resource askForServants(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * metodo che chiede torre e piano per una nuova mossa
+	 * ritorna come primo parametro la torre e come secondo il floor
+	 */
+	public Integer[] askForCardSpace(Player player, CardActionEffect effect) {
+		Integer[] param = new Integer[2];
+		if (effect.getCardType() == "ALL")
+			//sarebbe meglio farlo non con le stringhe ma direttamente con 
+			//gli interi rappresentanti le torri
+			param[0] = askForTower(player);
+		/*
+		 * else passaggio da parametro dell'effetto a torre della nuova mossa
+		 */
+		param[1] = askForFloor(player);
+		return null;
+	}
+
+	private Integer askForFloor(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Integer askForTower(Player player) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

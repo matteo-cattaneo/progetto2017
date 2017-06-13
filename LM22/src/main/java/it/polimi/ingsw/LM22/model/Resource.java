@@ -80,4 +80,10 @@ public class Resource implements Serializable {
 		this.victory = victory;
 	}
 
+	public Resource clone() {
+		return new Resource(new Integer(this.wood), new Integer(this.stone), new Integer(this.servants),
+				new Integer(this.coins), new Integer(this.faith), new Integer(this.military),
+				new Integer(this.victory));
+	}
+
 }

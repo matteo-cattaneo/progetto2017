@@ -103,8 +103,9 @@ public class MoveManager {
 			return false;
 		if (!checkCardSpace(cardMove))
 			return false;
-		if (game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
-				.contains(cardMove.getPlayer().getColor()))
+		if (cardMove.getMemberUsed().getColor() != UNCOLORED
+				&& game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
+						.contains(cardMove.getPlayer().getColor()))
 			return false;
 		if (!checkCardCost(cardMove))
 			return false;
@@ -148,30 +149,27 @@ public class MoveManager {
 		if (space.getMember() != null && !containsClass(cardMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 			return false;
 		Integer memberEffectiveValue = calculateMemberEffectiveValue(cardMove);
-		// if (space.getSpaceRequirement() >
-		// (cardMove.getMemberUsed().getValue() + servantsPower))
-		// return false;
-		// devo aggiungere il controllo anche per gli effetti permanenti delle
-		// carte Leader
 		if (space.getSpaceRequirement() > memberEffectiveValue)
 			return false;
 		return true;
 	}
 
+	/*
+	 * calcola il valore effettivo del familiare contando anche il numero di
+	 * servitori aggiunti, i vari effetti presenti sia come scomuniche che come
+	 * effetti di carte personaggio
+	 */
 	private Integer calculateMemberEffectiveValue(CardMove cardMove) {
 		Integer servantsPower = calculateEffectiveServants(cardMove);
 		Integer total = cardMove.getMemberUsed().getValue();
 		total = total + servantsPower;
-		if (containsClass(cardMove.getPlayer().getEffects(), DiceCardMalusEx.class)
-				|| containsClass(cardMove.getPlayer().getEffects(), ColorCardBonusEffect.class)) {
-			for (Effect e : cardMove.getPlayer().getEffects()) {
-				if (e instanceof DiceCardMalusEx
-						&& ((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())) {
-					total = total - ((DiceCardMalusEx) e).getMalus();
-				} else if ((e instanceof ColorCardBonusEffect)
-						&& ((ColorCardBonusEffect) e).getCardType().equals(cardMove.getTowerSelected())) {
-					total = total + ((ColorCardBonusEffect) e).getDiceBonus();
-				}
+		for (Effect e : cardMove.getPlayer().getEffects()) {
+			if (e instanceof DiceCardMalusEx
+					&& ((DiceCardMalusEx) e).getCardType().equals(cardMove.getTowerSelected())) {
+				total = total - ((DiceCardMalusEx) e).getMalus();
+			} else if ((e instanceof ColorCardBonusEffect)
+					&& ((ColorCardBonusEffect) e).getCardType().equals(cardMove.getTowerSelected())) {
+				total = total + ((ColorCardBonusEffect) e).getDiceBonus();
 			}
 		}
 		return total;
@@ -205,27 +203,17 @@ public class MoveManager {
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
 		Resource bonus = calculateBonus(cardMove);
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
+		// cardCost già scontato rispetto agli effetti delle carte Personaggio
 		Resource cardCost = calculateCardCost(cardMove, tower);
 		switch (tower) {
 		case 3:
 			// problema sarebbe gestire il doppio costo --> se valido solo 1
 			// faccio comunque la mossa
 			// se invece doppio devo chiedere al'utente quale vuole utilizzare
-			resourceHandler.manageVentureCost(cardMove);
+			resourceHandler.manageVentureCost(cardCost, ((VentureCard) card).getCardCost2());
 			break;
 		case 2:
-			// aggiungere controlli su effetti permanenti per riduzione costo
-			// carte
-			// ColorCardBonusEffect e = new ColorCardBonusEffect();
-			// CONTROLLO SE HO EFFETTI DI QUALSIASI TIPO SU QUELLA TORRE
-			cardCost = ((BuildingCard) card).getCost();
-			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
-				return false;
-			break;
 		case 1:
-			// aggiungere controlli su effetti permanenti per riduzione costo
-			// carte
-			cardCost = ((CharacterCard) card).getCost();
 			if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
@@ -274,11 +262,39 @@ public class MoveManager {
 
 	/*
 	 * metodo che calcola il costo della carta in base alla mossa e alla torre
-	 * in ingresso
+	 * in ingresso contando anche eventuali sconti sulle carte
 	 */
 	private Resource calculateCardCost(CardMove cardMove, Integer tower) {
-		// TODO Auto-generated method stub
-		return null;
+		Resource cost = NOTHING;
+		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[cardMove.getLevelSelected()].getCard();
+		switch (tower) {
+		case 0:
+			break;
+		case 1: {
+			cost = discountCard(((CharacterCard) card).getCost(), cardMove, tower);
+			break;
+		}
+		case 2: {
+			cost = discountCard(((BuildingCard) card).getCost(), cardMove, tower);
+			break;
+		}
+		case 3:
+			cost = discountCard(((VentureCard) card).getCardCost1(), cardMove, tower);
+			break;
+		}
+		return cost;
+	}
+
+	/*
+	 * calcola il costo della carta scontandola in base agli effetti presenti
+	 */
+	private Resource discountCard(Resource cost, CardMove cardMove, Integer tower) {
+		Resource res = cost.clone();
+		for (Effect e : cardMove.getPlayer().getEffects()) {
+			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType() == tower)
+				resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
+		}
+		return res;
 	}
 
 	/*
@@ -359,15 +375,13 @@ public class MoveManager {
 		case 0:
 			TerritoryCard card0 = (TerritoryCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add(card0);
-			// metodo chiamante l'effectManager per l'effetto immediato != da
-			// NoEffect
+			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 1:
 			CharacterCard card1 = (CharacterCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add(card1);
-			// metodo chiamante l'effectManager per l'effetto immediato != da
-			// NoEffect
+			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			if (card1.getPermanentEffect().getClass() != NoPermanentEffect.class)
 				cardMove.getPlayer().getEffects().add(card1.getPermanentEffect());
@@ -375,8 +389,7 @@ public class MoveManager {
 		case 2:
 			BuildingCard card2 = (BuildingCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add(card2);
-			// metodo chiamante l'effectManager per l'effetto immediato != da
-			// NoEffect
+			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 3:
@@ -442,18 +455,19 @@ public class MoveManager {
 	 */
 	private Resource calculateBonus(MarketMove move, MarketSpace space) {
 		Resource bonus = space.getReward();
-		if (containsClass(move.getPlayer().getEffects(), ResourceMalusEx.class))
+		if (containsClass(move.getPlayer().getEffects(), ResourceMalusEx.class)) {
 			// modifico il valore del bonus ricevuto se e solo se il bonus
 			// ricevuto è dello stesso tipo
 			// di quello presente nella scomunica
 			return bonus;
+		}
 		return bonus;
 	}
 
 	/*
 	 * controlla se una mossa del tipo WorkMove è ammessa o no
 	 */
-	public boolean workMoveAllowed(WorkMove workMove) {
+	public boolean workmoveAllowed(WorkMove workMove) {
 		return checkWorkSpace(workMove);
 	}
 
@@ -469,16 +483,16 @@ public class MoveManager {
 		switch (game.getPlayers().length) {
 		case 2:
 			if (workMove.getWorkType() == "PRODUCTION") {
-				if (!containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
-						&& !game.getBoardgame().getProductionSpace().getMembers().isEmpty())
+				if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
+						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 					return false;
 				if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
 					return false;
 				break;
 			} else {
-				if (!containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
-						&& !game.getBoardgame().getHarvestSpace().getMembers().isEmpty())
+				if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
+						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 					return false;
 				if (game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
@@ -530,7 +544,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa del tipo WorkMove
 	 */
-	public void workMoveHandle(WorkMove workMove) throws IOException {
+	public void workmoveHandle(WorkMove workMove) throws IOException {
 		if (workMove.getWorkType() == PRODUCTION)
 			productionHandle(workMove);
 		else
