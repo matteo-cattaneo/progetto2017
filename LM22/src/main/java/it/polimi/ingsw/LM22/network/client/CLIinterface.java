@@ -28,7 +28,7 @@ public class CLIinterface extends AbstractUI {
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
-	private Integer TIMER_PER_MOVE = 30; // caricabile da file (secondi)
+	private Integer TIMER_PER_MOVE = 30000; // caricabile da file (secondi)
 
 	private final String CARDMOVE = "Card";
 	private final String MARKETMOVE = "Market";
@@ -53,6 +53,7 @@ public class CLIinterface extends AbstractUI {
 	private Game game;
 	private String name;
 	private boolean memberMove = false;
+	private long timeout = TIMER_PER_MOVE;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -79,22 +80,23 @@ public class CLIinterface extends AbstractUI {
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
 		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
 		 */
+
 		ExecutorService exe = Executors.newFixedThreadPool(1);
-		Future<Integer> future = exe.submit(() -> {
-			return in.nextInt();
-		});
-		showMsg("Choose your Move:");
-		if (memberMove == false)
-			showMsg("1: Move a Member");
-		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
-			showMsg("2: Sell a LeaderCard");
-		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
-			showMsg("3: Activate a LeaderCard");
-		showMsg("4: End turn");
-		showMsg("5: End timeout #DEBUG#");
-		int option;
-		try {
-			option = future.get(TIMER_PER_MOVE, TimeUnit.SECONDS);
+		Future<?> future = exe.submit(() -> {
+			// return in.nextInt();
+			System.out.println("Timeout: " + timeout);
+			long time = System.currentTimeMillis();
+			showMsg("Choose your Move:");
+			if (memberMove == false)
+				showMsg("1: Move a Member");
+			if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
+				showMsg("2: Sell a LeaderCard");
+			if (!getPlayer(name, game).getLeaderCards().isEmpty()
+					|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
+				showMsg("3: Activate a LeaderCard");
+			showMsg("4: End turn");
+			int option;
+			option = in.nextInt();
 			switch (option) {
 			case 2:
 				if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
@@ -116,9 +118,8 @@ public class CLIinterface extends AbstractUI {
 			case 4:
 				setMove("End");
 				memberMove = false;
+				timeout = TIMER_PER_MOVE;
 				break;
-			case 5:
-				throw new TimeoutException();
 			case 1:
 				if (memberMove == false) {
 					printMemberMoveMenu();
@@ -130,12 +131,16 @@ public class CLIinterface extends AbstractUI {
 				printMoveMenu();
 				break;
 			}
-		} catch (ExecutionException | TimeoutException | InterruptedException e) {
-			setMove("End@Disconnect");
+			timeout = timeout - (System.currentTimeMillis() - time);
+			return 0;
+		});
+		try {
+			future.get(timeout, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			move = "End@Disconnect@";
 			System.out.println("Move time expired, now you have been disconnected!");
 			// System.exit(0);
 		}
-
 	}
 
 	@Override

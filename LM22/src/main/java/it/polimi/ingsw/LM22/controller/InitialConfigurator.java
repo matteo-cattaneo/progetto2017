@@ -129,9 +129,9 @@ public class InitialConfigurator extends TurnInizializator {
 	 */
 	private void loadConfiguration(Game game) throws IOException {
 		fileParser.getDevCards(game);
-		// carte scomunica
 		fileParser.getLeaderCards(game);
 		fileParser.getFaithGrid(game);
+		// carte scomunica
 		fileParser.getMarketSpace(game);
 		fileParser.getCardSpace(game);
 		fileParser.getPersonalBonusTile(game);
@@ -163,7 +163,7 @@ public class InitialConfigurator extends TurnInizializator {
 			}
 		}
 	}
-
+	//distribuzione casuale delle personal tile
 	private void personalBoardTileDistribution(Game game) {
 		Random random = new Random();
 		int num;

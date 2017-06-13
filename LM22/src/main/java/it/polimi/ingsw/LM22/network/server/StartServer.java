@@ -95,9 +95,9 @@ public class StartServer {
 			}
 			// ottengo il nome del player
 			player.setName(player.getIplayer().getName());
-			// agiungo il player alla lista della room
+			// agiungo il player alla lista della room adatta
 			/*
-			 * TODO verifica login
+			 * TODO verifica login (player)
 			 */
 			playerRoom.add(player);
 			i++;

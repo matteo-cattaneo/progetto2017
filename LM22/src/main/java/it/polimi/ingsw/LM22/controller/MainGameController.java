@@ -60,7 +60,7 @@ public class MainGameController implements Runnable {
 					// richiedo mossa a player
 					sMove = getIPlayer(p).yourTurn();
 				} catch (ClassNotFoundException | IOException e) {
-					// ho perso la connessione con il client
+					// ho perso la conn1essione con il client
 					sMove = "End@Disconnect@";
 				}
 				System.out.println(sMove);
@@ -77,7 +77,7 @@ public class MainGameController implements Runnable {
 			// fine turno di un giocatore
 		}
 		// fine turno/periodo
-		// vaticanReport();
+		vaticanReport();
 		// turnInizializator.initializeTurn(game);
 		// verifico se è la fine del gioco
 		// if (game.getPeriod().equals(END_DEFINER) &&
