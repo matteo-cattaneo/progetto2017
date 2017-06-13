@@ -14,12 +14,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.controller.MainGameController;
+import it.polimi.ingsw.LM22.model.FileParser;
 
 public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
 	private final static int SOCKET_PORT = 1337;
 	private final static int RMI_PORT = 1099;
-	private final int TIMER = 5;
+	private Integer TIMER;
 	private final int THIRDPLAYER = 2;
 	private final int FOURTHPLAYER = 3;
 	private static ServerSocket serverSocket;
@@ -30,7 +31,7 @@ public class StartServer {
 
 	public static void main(String[] args) {
 		try {
-			// avvio RMI registry
+			//avvio RMI registry
 			java.rmi.registry.LocateRegistry.createRegistry(RMI_PORT);
 			// avvio il server socket
 			serverSocket = new ServerSocket(SOCKET_PORT);
@@ -43,7 +44,9 @@ public class StartServer {
 		}
 	}
 
-	public void initilizeServers() throws RemoteException, MalformedURLException {
+	public void initilizeServers() throws IOException {
+		// carico timeout da file
+		TIMER = FileParser.getLoginTimeouts();
 		// avvio in thread che gestisce le connesioni socket
 		conn = new SocketConnection(serverSocket);
 		executor.submit(conn);

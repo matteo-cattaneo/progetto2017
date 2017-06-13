@@ -6,12 +6,26 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
+import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.DiceMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
+import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
+import it.polimi.ingsw.LM22.model.excommunication.ExEffect;
+import it.polimi.ingsw.LM22.model.excommunication.FinalCardCostMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.FinalResourceMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.NoFinalCardPointsEx;
+import it.polimi.ingsw.LM22.model.excommunication.NoFirstTurnEx;
+import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
+import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.WorkMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
@@ -31,7 +45,8 @@ import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class FileParser {
-	private final String JSONpath = ".\\JSON\\";
+	private final static String JSONpath = ".\\JSON\\";
+	private final Integer nExTile = 7;
 
 	public void getDevCards(Game game) throws IOException {
 		FileParser f = new FileParser();
@@ -165,4 +180,40 @@ public class FileParser {
 		game.getBoardgame().setTowers(towers);
 	}
 
+	public void getExCommunicationsTile(Game game) throws IOException {
+		Type type = new TypeToken<ExCommunication[]>() {
+		}.getType();
+		RuntimeTypeAdapterFactory<ExEffect> effect = RuntimeTypeAdapterFactory.of(ExEffect.class, "type")
+				.registerSubtype(DiceCardMalusEx.class).registerSubtype(DiceMalusEx.class)
+				.registerSubtype(DoubleServantsEx.class).registerSubtype(FinalCardCostMalusEx.class)
+				.registerSubtype(FinalResourceMalusEx.class).registerSubtype(NoFinalCardPointsEx.class)
+				.registerSubtype(NoFirstTurnEx.class).registerSubtype(NoMarketEx.class)
+				.registerSubtype(ResourceMalusEx.class).registerSubtype(WorkMalusEx.class);
+		// ottengo il contenuto del file
+		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "ExCommunication.json")),
+				StandardCharsets.UTF_8);
+		// genero l'oggetto deserializzatore GSON
+		Gson gson = new GsonBuilder().registerTypeAdapterFactory(effect).create();
+		ExCommunication[] ExComm = gson.fromJson(text, type);
+		for (int i = 0; i < 3; i++) {
+			Random r = new Random();
+			game.getBoardgame().getFaithGrid().getExCommunicationTiles().add(ExComm[r.nextInt(nExTile) + i * nExTile]);
+		}
+	}
+
+	public void getMoveTimeouts(Game game) throws IOException {
+		// ottengo il contenuto del file
+		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);
+		// genero l'oggetto deserializzatore GSON
+		JsonObject jobj = new Gson().fromJson(text, JsonObject.class);
+		game.setMoveTimer(Integer.parseInt(jobj.get("move").toString()));
+	}
+
+	public static Integer getLoginTimeouts() throws IOException {
+		// ottengo il contenuto del file
+		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);
+		// genero l'oggetto deserializzatore GSON
+		JsonObject jobj = new Gson().fromJson(text, JsonObject.class);
+		return Integer.parseInt(jobj.get("login").toString());
+	}
 }

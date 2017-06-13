@@ -28,8 +28,6 @@ public class CLIinterface extends AbstractUI {
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
-	private Integer TIMER_PER_MOVE = 30000; // caricabile da file (secondi)
-
 	private final String CARDMOVE = "Card";
 	private final String MARKETMOVE = "Market";
 	private final String WORKMOVE = "Work";
@@ -53,7 +51,7 @@ public class CLIinterface extends AbstractUI {
 	private Game game;
 	private String name;
 	private boolean memberMove = false;
-	private long timeout = TIMER_PER_MOVE;
+	private Integer timeout = 0;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -80,12 +78,12 @@ public class CLIinterface extends AbstractUI {
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
 		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
 		 */
-
 		ExecutorService exe = Executors.newFixedThreadPool(1);
 		Future<?> future = exe.submit(() -> {
-			// return in.nextInt();
+			// while (in.hasNext())
+			// in.next();
 			System.out.println("Timeout: " + timeout);
-			long time = System.currentTimeMillis();
+			Integer time = (int) System.currentTimeMillis();
 			showMsg("Choose your Move:");
 			if (memberMove == false)
 				showMsg("1: Move a Member");
@@ -118,7 +116,7 @@ public class CLIinterface extends AbstractUI {
 			case 4:
 				setMove("End");
 				memberMove = false;
-				timeout = TIMER_PER_MOVE;
+				timeout = game.getMoveTimer();
 				break;
 			case 1:
 				if (memberMove == false) {
@@ -131,11 +129,16 @@ public class CLIinterface extends AbstractUI {
 				printMoveMenu();
 				break;
 			}
-			timeout = timeout - (System.currentTimeMillis() - time);
+			// calcolo il timeout da cui dovrò partire alla possima mossa
+
+			timeout = (timeout - ((int) (System.currentTimeMillis() / 1000) - time));
 			return 0;
 		});
 		try {
-			future.get(timeout, TimeUnit.MILLISECONDS);
+			// eseguo l interfaccia di comunicazione in un thread con timeut
+			// allo scadere del timeout termino il thread e disconnetto il
+			// client
+			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			move = "End@Disconnect@";
 			System.out.println("Move time expired, now you have been disconnected!");
@@ -557,6 +560,8 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
+		if (timeout.equals(0))
+			timeout = game.getMoveTimer();
 		// Towers
 		showMsg("______________________________");
 		System.out.printf("%-30s|\n", "| Towers: ");

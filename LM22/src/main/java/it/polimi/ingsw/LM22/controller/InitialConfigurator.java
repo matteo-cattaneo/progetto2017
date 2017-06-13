@@ -131,13 +131,12 @@ public class InitialConfigurator extends TurnInizializator {
 		fileParser.getDevCards(game);
 		fileParser.getLeaderCards(game);
 		fileParser.getFaithGrid(game);
-		// carte scomunica
+		fileParser.getExCommunicationsTile(game);
 		fileParser.getMarketSpace(game);
 		fileParser.getCardSpace(game);
 		fileParser.getPersonalBonusTile(game);
 		fileParser.getCouncilSpace(game);
-		// timeout inizio partita
-		// timeout turno player
+		fileParser.getMoveTimeouts(game);
 	}
 
 	/*
@@ -163,7 +162,8 @@ public class InitialConfigurator extends TurnInizializator {
 			}
 		}
 	}
-	//distribuzione casuale delle personal tile
+
+	// distribuzione casuale delle personal tile
 	private void personalBoardTileDistribution(Game game) {
 		Random random = new Random();
 		int num;

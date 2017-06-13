@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class FinalCardCostMalusEx extends FinalResourceMalusEx implements Serializable{
 
 	private static final long serialVersionUID = -850332193094560511L;
-	private String cardType;
+	private Integer cardType;
 
-	public String getCardType() {
+	public Integer getCardType() {
 		return cardType;
 	}
 	

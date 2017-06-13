@@ -139,7 +139,8 @@ public class MainGameController implements Runnable {
 	 * punti vittoria + deve controllare se ha Sisto VI attivato
 	 */
 	public boolean askSupport(Player player) {
-		// TODO sposterei il metodo nel mainGameController
+		
+		return false;
 	}
 
 	private void turnInit() {
@@ -266,8 +267,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/*
-	 * metodo che gestisce la richiesta del numero di servitori che il player vuole aggiungere
-	 * ad un effetto (sia di cardAction che di WorkAction)
+	 * metodo che gestisce la richiesta del numero di servitori che il player
+	 * vuole aggiungere ad un effetto (sia di cardAction che di WorkAction)
 	 */
 	public Resource askForServants(Player player) {
 		// TODO Auto-generated method stub
@@ -275,14 +276,14 @@ public class MainGameController implements Runnable {
 	}
 
 	/*
-	 * metodo che chiede torre e piano per una nuova mossa
-	 * ritorna come primo parametro la torre e come secondo il floor
+	 * metodo che chiede torre e piano per una nuova mossa ritorna come primo
+	 * parametro la torre e come secondo il floor
 	 */
 	public Integer[] askForCardSpace(Player player, CardActionEffect effect) {
 		Integer[] param = new Integer[2];
 		if (effect.getCardType() == "ALL")
-			//sarebbe meglio farlo non con le stringhe ma direttamente con 
-			//gli interi rappresentanti le torri
+			// sarebbe meglio farlo non con le stringhe ma direttamente con
+			// gli interi rappresentanti le torri
 			param[0] = askForTower(player);
 		/*
 		 * else passaggio da parametro dell'effetto a torre della nuova mossa
