@@ -16,6 +16,10 @@ public class FaithGrid  implements Serializable {
 		return exCommunicationTiles;
 	}
 	
+	public ExCommunication getExCommunication(Integer period){
+		return exCommunicationTiles[period-1];
+	}
+	
 	public Resource[] getRewards() {
 		return rewards;
 	}

@@ -6,15 +6,20 @@ import it.polimi.ingsw.LM22.model.Resource;
 
 public class VaticanReportManager {
 
-	private final Integer[] goal = { 3, 4, 5 };
+	/*
+	 * risorse richieste sono da caricare da file oppure no?
+	 */
+	private final Resource[] goal = { new Resource(0, 0, 0, 0, 3, 0, 0), new Resource(0, 0, 0, 0, 4, 0, 0),
+			new Resource(0, 0, 0, 0, 5, 0, 0) };
 	private final ResourceHandler resourceHandler = new ResourceHandler();
+	private Game game;
 
 	/*
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti del periodo
 	 * corrente per la Chiesa
 	 */
 	public boolean canGiveSupport(Player p, Integer period) {
-		if (p.getPersonalBoard().getResources().getFaith() >= goal[period - 1]) {
+		if (resourceHandler.enoughResources(p.getPersonalBoard().getResources(), goal[period - 1])) {
 			return true;
 		}
 		return false;
@@ -26,30 +31,15 @@ public class VaticanReportManager {
 	 * (giveSupport()-->false) - su richiesta del giocatore se askPlayer mi dice
 	 * che il giocatore decide autonomamente di non dare il sostegno alla Chiesa
 	 */
-	public void exCommunicate(Player player) {
-		// TODO
+	public void exCommunicate(Player player, Integer period) {
+		player.getEffects().add(game.getBoardgame().getFaithGrid().getExCommunication(period).getEffect());
 	}
 
 	/*
-	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
-	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
-	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
-	 * punti vittoria
-	 * + deve controllare se ha Sisto VI attivato
+	 * metodo che distribuisce i reward derivati dall'aver supportato la chiesa
+	 * o per essere scomunicati
 	 */
-	public void askVatican(Player player) {
-		// TODO sposterei il metodo nel mainGameController
-	}
-
-	/*
-	 * metodo che si occupa dettagliatamente del recupero della scomunica e
-	 * della copia nei vari giocatori scomunicati
-	 */
-	public void giveExTile() {
-		// TODO
-	}
-
-	public void giveVictoryPointsDueToChurch(Game game, Player p) {
+	public void giveResourceDueToChurchSubstain(Player p) {
 		Resource bonus = game.getBoardgame().getFaithGrid().getReward(p.getPersonalBoard().getResources().getFaith());
 		Resource faith = new Resource(0, 0, 0, 0, p.getPersonalBoard().getResources().getFaith(), 0, 0);
 		resourceHandler.subResource(p.getPersonalBoard().getResources(), faith);
@@ -60,12 +50,16 @@ public class VaticanReportManager {
 	 * metodo che gestisce tutta la fase di VaticanReport controllando volta per
 	 * volta tutti i giocatori
 	 */
-	public void manageVaticanReport(Game game) {
+	public void manageVaticanReport(Game game, MainGameController mainGame) {
+		this.game = game;
+		Integer period = game.getPeriod();
 		for (Player p : game.getPlayersOrder()) {
-			if (canGiveSupport(p, game.getPeriod())) {
-				askVatican(p);
-			} else
-				exCommunicate(p);
+			if (canGiveSupport(p, period) && !mainGame.askSupport(p)) {
+					exCommunicate(p, period);
+					continue;
+				}
+			exCommunicate(p, period);
+			giveResourceDueToChurchSubstain(p);
 		}
 	}
 

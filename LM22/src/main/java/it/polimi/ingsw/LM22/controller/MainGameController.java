@@ -123,10 +123,23 @@ public class MainGameController implements Runnable {
 		}
 	}
 
+	/*
+	 * metodo chiamato dal controller per gestire il rapporto con il Vaticano
+	 */
 	private void vaticanReport() {
 		// solo alla fine del periodo
 		if (game.getRound().equals(END_DEFINER))
-			vaticanReportManager.manageVaticanReport(game);
+			vaticanReportManager.manageVaticanReport(game, this);
+	}
+
+	/*
+	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
+	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
+	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
+	 * punti vittoria + deve controllare se ha Sisto VI attivato
+	 */
+	public boolean askSupport(Player player) {
+		// TODO sposterei il metodo nel mainGameController
 	}
 
 	private void turnInit() {

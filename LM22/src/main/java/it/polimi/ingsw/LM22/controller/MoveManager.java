@@ -375,12 +375,14 @@ public class MoveManager {
 		case 0:
 			TerritoryCard card0 = (TerritoryCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add(card0);
+//			t.getFloor()[level].setCard(null);
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 1:
 			CharacterCard card1 = (CharacterCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add(card1);
+//			t.getFloor()[level].setCard(null);
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			if (card1.getPermanentEffect().getClass() != NoPermanentEffect.class)
@@ -389,12 +391,14 @@ public class MoveManager {
 		case 2:
 			BuildingCard card2 = (BuildingCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add(card2);
+//			t.getFloor()[level].setCard(null);
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 3:
 			VentureCard card3 = (VentureCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getVenturesCards().add(card3);
+//			t.getFloor()[level].setCard(null);
 			// metodo chiamante l'effectManager per l'effetto immediato != da
 			// NoEffect
 			effectManager.manageEffect(card3.getImmediateEffect(), cardMove.getPlayer(), mainGame);
