@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +25,7 @@ import it.polimi.ingsw.LM22.network.server.IPlayer;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class MainGameController implements Runnable {
-
+	private Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
 	private final Integer END_DEFINER = 2;
@@ -32,14 +33,14 @@ public class MainGameController implements Runnable {
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
 	private ArrayList<PlayerInfo> playerRoom;
-	InitialConfigurator initialConfigurator;
+	private InitialConfigurator initialConfigurator;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();;
 	private EffectManager effectManager = new EffectManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);;
 	private MoveManager moveManager = new MoveManager(game, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
-	private int i = 0;
+	// private int i = 0;
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
@@ -49,37 +50,38 @@ public class MainGameController implements Runnable {
 	@Override
 	public void run() {
 		AbstractMove aMove;
-		// inizio turno
-		i = 0;
-		Player p;
-		while (i < game.getPlayersOrder().size()) {
-			// inizio turno di un giocatore
-			// TODO check giocatore connesso
-			p = game.getPlayersOrder().get(i);
-			for (String sMove = ""; !sMove.startsWith("End@");) {
-				try {
-					// invio a tutti il nuovo model
-					sendAll();
-					// richiedo mossa a player
-					sMove = getIPlayer(p).yourTurn();
-				} catch (ClassNotFoundException | IOException e) {
-					// ho perso la connessione con il client
-					sMove = "End@Disconnect@";
-				}
-				System.out.println(sMove);
-				// ottengo informazioni dalla mossa ricevuta
-				aMove = netContrAdapter.moveParser(p, sMove);
-				// provo ad eseguire la mossa
-				try {
-					moveManager.manageMove(aMove);
-				} catch (InvalidMoveException e) {
-					// segnalo al client che non può fare questa mossa
-				}
+		for (int countTurn = 0; countTurn < 4; countTurn++) {
+			// inizio turno
+			for (Player p : game.getPlayersOrder()) {
+				// inizio turno di un giocatore
+				if (checkPlayer(p))
+					for (String sMove = ""; !sMove.startsWith("End@");) {
+						try {
+							// invio a tutti il nuovo model
+							sendAll();
+							// richiedo mossa a player
+							sMove = getIPlayer(p).yourTurn();
+						} catch (IOException e) {
+							// ho perso la connessione con il client
+							sMove = "End@Disconnect@";
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						}
+						System.out.println(p.getNickname() + ": " + sMove);
+						// ottengo informazioni dalla mossa ricevuta
+						aMove = netContrAdapter.moveParser(p, sMove);
+						// provo ad eseguire la mossa
+						try {
+							moveManager.manageMove(aMove);
+						} catch (InvalidMoveException e) {
+							// segnalo al client che non può fare questa mossa
+						}
+					}
+				// fine turno di un giocatore
 			}
-			i++;
-			// fine turno di un giocatore
+			// fine turno
 		}
-		// fine turno/periodo
+
 		vaticanReport();
 		// turnInizializator.initializeTurn(game);
 		// verifico se è la fine del gioco
@@ -93,14 +95,20 @@ public class MainGameController implements Runnable {
 			manageEndGame(game);
 	}
 
+	private boolean checkPlayer(Player p) {
+		for (int j = 0; j < playerRoom.size(); j++)
+			if (p.getNickname().equals(playerRoom.get(j).getName()))
+				return playerRoom.get(j).getConnected();
+		return false;
+	}
+
 	/*
 	 * restituisco il giocatore corrispondente al client newtwork fornito
 	 */
 	private Player getPlayer(IPlayer ip) throws RemoteException {
-		for (Player p : game.getPlayers()) {
+		for (Player p : game.getPlayers())
 			if (p.getNickname().equals(ip.getName()))
 				return p;
-		}
 		return null;
 	}
 
@@ -108,10 +116,9 @@ public class MainGameController implements Runnable {
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
 	private IPlayer getIPlayer(Player p) throws RemoteException {
-		for (int j = 0; j < playerRoom.size(); j++) {
+		for (int j = 0; j < playerRoom.size(); j++)
 			if (p.getNickname().equals(playerRoom.get(j).getName()))
 				return playerRoom.get(j).getIplayer();
-		}
 		return null;
 	}
 
@@ -120,7 +127,8 @@ public class MainGameController implements Runnable {
 	 */
 	private void sendAll() throws IOException {
 		for (int j = 0; j < playerRoom.size(); j++) {
-			if (game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
+			if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer()))
+					&& game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
 				playerRoom.get(j).getIplayer().showBoard(game);
 		}
 	}
@@ -257,24 +265,28 @@ public class MainGameController implements Runnable {
 		map.put("coins", new Resource(0, 0, 0, 2, 0, 0, 0));
 		map.put("military", new Resource(0, 0, 0, 0, 0, 2, 0));
 		map.put("faith", new Resource(0, 0, 0, 0, 1, 0, 0));
-		map.put("", new Resource(0, 0, 0, 0, 0, 0, 0));
+		map.put("", NOTHING.clone());
 		return map;
 	}
 
 	public void disconnectPlayer(Player player) {
-		game.getPlayersOrder().remove(player);
+		// game.getPlayersOrder().remove(player);
+		for (int j = 0; j < playerRoom.size(); j++)
+			if (player.getNickname().equals(playerRoom.get(j).getName()))
+				playerRoom.get(j).setConnected(false);
 		// TODO informare tutti
-		System.out.println("Player " + player.getNickname() + " disconnected!");
-		// TODO impostare connected a false o remove player from list
+		System.out.println(player.getNickname() + " disconnected!");
 	}
 
 	/*
 	 * metodo che gestisce la richiesta del numero di servitori che il player
 	 * vuole aggiungere ad un effetto (sia di cardAction che di WorkAction)
 	 */
-	public Resource askForServants(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+	public Resource askForServants(Player player) throws IOException {
+		Resource servants = NOTHING.clone();
+		String result = getIPlayer(player).servantsRequest();
+		servants.setServants(Integer.parseInt(result));
+		return servants;
 	}
 
 	/*
@@ -283,20 +295,16 @@ public class MainGameController implements Runnable {
 	 */
 	public Integer[] askForCardSpace(Player player, CardActionEffect effect) {
 		Integer[] param = new Integer[2];
-		if (effect.getCardType().equals(-1))
-			param[0] = askForTower(player);
-		
-		param[1] = askForFloor(player);
+		try {
+			if (effect.getCardType().equals(-1))
+				param[0] = Integer.parseInt(getIPlayer(player).towerRequest());
+			else
+				param[0] = effect.getCardType();
+			param[1] = Integer.parseInt(getIPlayer(player).floorRequest());
+		} catch (NumberFormatException | IOException e) {
+			e.printStackTrace();
+		}
 		return param;
 	}
 
-	private Integer askForFloor(Player player) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Integer askForTower(Player player) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

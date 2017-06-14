@@ -1,7 +1,6 @@
 package it.polimi.ingsw.LM22.network.server;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
@@ -25,13 +24,13 @@ public class StartServer {
 	private final int FOURTHPLAYER = 3;
 	private static ServerSocket serverSocket;
 	private RMIPlayer serverRMI;
-	private ArrayList<ArrayList<PlayerInfo>> playerInfo = new ArrayList<ArrayList<PlayerInfo>>();
+	private ArrayList<ArrayList<PlayerInfo>> serverInfo = new ArrayList<ArrayList<PlayerInfo>>();
 	private ExecutorService executor = Executors.newCachedThreadPool();
 	private SocketConnection conn;
 
 	public static void main(String[] args) {
 		try {
-			//avvio RMI registry
+			// avvio RMI registry
 			java.rmi.registry.LocateRegistry.createRegistry(RMI_PORT);
 			// avvio il server socket
 			serverSocket = new ServerSocket(SOCKET_PORT);
@@ -64,7 +63,7 @@ public class StartServer {
 		// creo lista giocatori della nuova room
 		ArrayList<PlayerInfo> playerRoom = new ArrayList<PlayerInfo>();
 		// salvo nel server la nuova lista
-		playerInfo.add(playerRoom);
+		serverInfo.add(playerRoom);
 		System.out.println("Attesa client...");
 		while (i < 4) {
 			if (i == THIRDPLAYER || i == FOURTHPLAYER) {
@@ -99,17 +98,27 @@ public class StartServer {
 			// ottengo il nome del player
 			player.setName(player.getIplayer().getName());
 			// agiungo il player alla lista della room adatta
-			/*
-			 * TODO verifica login (player)
-			 */
-			playerRoom.add(player);
-			i++;
+			if (!playerExist(player)) {
+				playerRoom.add(player);
+				i++;
+			}
 		}
 		System.out.println("Game started!!!");
 		// avvio thread della partita (controller) passandogli la lista dei
 		// giocatori
 		executor.submit(new MainGameController(playerRoom));
 		start();
+	}
+
+	private boolean playerExist(PlayerInfo player) {
+		for (ArrayList<PlayerInfo> room : serverInfo)
+			for (PlayerInfo pi : room)
+				if (pi.getName().equals(player.getName())) {
+					pi.setIplayer(player.getIplayer());
+					pi.setConnected(true);
+					return true;
+				}
+		return false;
 	}
 
 	// verifica la connessione di un client con timeout

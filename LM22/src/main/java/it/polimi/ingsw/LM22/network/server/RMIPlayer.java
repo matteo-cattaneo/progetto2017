@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.network.server;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -55,5 +56,20 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
 		return client.councilRequest(number);
+	}
+
+	@Override
+	public String servantsRequest() throws IOException {
+		return client.servantsRequest();
+	}
+
+	@Override
+	public String towerRequest() throws IOException {
+		return client.towerRequest();
+	}
+
+	@Override
+	public String floorRequest() throws IOException {
+		return client.floorRequest();
 	}
 }

@@ -16,11 +16,11 @@ public abstract class AbstractUI {
 
 	public abstract void printFamilyMemberMenu() throws RemoteException;
 
-	public abstract void printServantsAddictionMenu() throws RemoteException;
+	public abstract String printServantsAddictionMenu() throws RemoteException;
 
-	public abstract void printTowersMenu();
+	public abstract String printTowersMenu();
 
-	public abstract void printLevelsMenu();
+	public abstract String printLevelsMenu();
 
 	public abstract void printMarketMoveMenu() throws RemoteException;
 

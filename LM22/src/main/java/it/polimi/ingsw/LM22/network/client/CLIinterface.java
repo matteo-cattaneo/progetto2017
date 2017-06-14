@@ -17,7 +17,6 @@ import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
-import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
@@ -29,7 +28,6 @@ di interfacciarsi con la CLI
 */
 public class CLIinterface extends AbstractUI {
 
-	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final String DEFAULT_IP = "localhost";
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
@@ -47,17 +45,12 @@ public class CLIinterface extends AbstractUI {
 	private final String PRODUCTION = "PRODUCTION";
 	private final String HARVEST = "HARVEST";
 
-	private final String LEVEL_1 = "1";
-	private final String LEVEL_2 = "2";
-	private final String LEVEL_3 = "3";
-	private final String LEVEL_4 = "4";
-
 	private Scanner in = new Scanner(System.in);
 	private String move = new String();
 	private Game game;
 	private String name;
 	private boolean memberMove = false;
-	private Integer timeout = 0;
+	private long timeout = 0;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -87,6 +80,7 @@ public class CLIinterface extends AbstractUI {
 		ExecutorService exe = Executors.newFixedThreadPool(1);
 		Future<?> future = exe.submit(() -> {
 			try {
+				System.out.println("Timeout: " + timeout);
 				showPrincipalMenu();
 			} catch (RemoteException e) {
 			}
@@ -99,13 +93,12 @@ public class CLIinterface extends AbstractUI {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			move = "End@Disconnect@";
 			System.out.println("Move time expired, now you have been disconnected!");
-			e.printStackTrace();
 			// System.exit(0);
 		}
 	}
 
 	private void showPrincipalMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		long time = System.currentTimeMillis() / 1000;
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
@@ -115,7 +108,6 @@ public class CLIinterface extends AbstractUI {
 		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
 			showMsg("4: Activate a LeaderCard");
 		showMsg("5: End turn");
-		Integer time = (int) System.currentTimeMillis();
 		int option;
 		option = in.nextInt();
 		switch (option) {
@@ -156,7 +148,7 @@ public class CLIinterface extends AbstractUI {
 			break;
 		}
 		// calcolo il timeout da cui dovrò partire alla possima mossa
-		timeout = (timeout - ((int) (System.currentTimeMillis() / 1000) - time));
+		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
 	}
 
 	private void showCard() {
@@ -245,9 +237,9 @@ public class CLIinterface extends AbstractUI {
 	public void printCardMoveMenu() throws RemoteException {
 		setMove(CARDMOVE);
 		printFamilyMemberMenu();
-		printServantsAddictionMenu();
-		printTowersMenu();
-		printLevelsMenu();
+		setMove(printServantsAddictionMenu());
+		setMove(printTowersMenu());
+		setMove(printLevelsMenu());
 	}
 
 	@Override
@@ -276,21 +268,21 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
-	@Override
-	public void printServantsAddictionMenu() throws RemoteException {
+	public String printServantsAddictionMenu() throws RemoteException {
 		showMsg("Insert how many servants you want to use");
 		showMsg("Please insert a positive number or zero");
 		Integer servants = in.nextInt();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
-			setMove(servants.toString());
+			return servants.toString();
 		} else {
 			printInvalidInput();
 			printServantsAddictionMenu();
 		}
+		return null;
 	}
 
 	@Override
-	public void printTowersMenu() {
+	public String printTowersMenu() {
 		showMsg("Choose the Tower:");
 		showMsg("1: " + TERRITORY);
 		showMsg("2: " + CHARACTER);
@@ -302,43 +294,37 @@ public class CLIinterface extends AbstractUI {
 		case 2:
 		case 3:
 		case 4:
-			setMove(String.valueOf(option - 1));
-			break;
+			return String.valueOf(option - 1);
 		default:
 			printInvalidInput();
 			printTowersMenu();
 			break;
 		}
+		return null;
 	}
 
 	@Override
-	public void printLevelsMenu() {
+	public String printLevelsMenu() {
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
-		Integer servants = in.nextInt();
-		switch (servants) {
+		Integer level = in.nextInt();
+		switch (level) {
 		case 1:
-			setMove(LEVEL_1);
-			break;
 		case 2:
-			setMove(LEVEL_2);
-			break;
 		case 3:
-			setMove(LEVEL_3);
-			break;
 		case 4:
-			setMove(LEVEL_4);
-			break;
+			return String.valueOf(level - 1);
 		default:
 			printInvalidInput();
 			printLevelsMenu();
 		}
+		return null;
 	}
 
 	@Override
 	public void printMarketMoveMenu() throws RemoteException {
 		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
-		printServantsAddictionMenu();
+		setMove(printServantsAddictionMenu());
 		printMarketSelectionMenu();
 	}
 
@@ -374,7 +360,7 @@ public class CLIinterface extends AbstractUI {
 	public void printWorkMoveMenu() throws RemoteException {
 		setMove(WORKMOVE);
 		printFamilyMemberMenu();
-		printServantsAddictionMenu();
+		setMove(printServantsAddictionMenu());
 		printWorkSelectionMenu();
 	}
 
@@ -402,7 +388,7 @@ public class CLIinterface extends AbstractUI {
 	public void printCouncilMoveMenu() throws RemoteException {
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
-		printServantsAddictionMenu();
+		setMove(printServantsAddictionMenu());
 	}
 
 	// TODO test con carte leader caricate
@@ -627,7 +613,7 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
-		if (timeout.equals(0))
+		if (timeout == 0)
 			timeout = game.getMoveTimer();
 		// Towers
 		showMsg("______________________________");

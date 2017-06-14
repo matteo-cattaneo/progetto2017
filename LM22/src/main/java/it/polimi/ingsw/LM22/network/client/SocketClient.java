@@ -52,6 +52,15 @@ public class SocketClient implements IClient {
 				} else if (socketLine[0].equals("council")) {
 					socketOut.writeUTF(UI.councilRequest(Integer.parseInt(socketLine[1])));
 					socketOut.flush();
+				} else if (socketLine[0].equals("servants")) {
+					socketOut.writeUTF(UI.printServantsAddictionMenu());
+					socketOut.flush();
+				} else if (socketLine[0].equals("tower")) {
+					socketOut.writeUTF(UI.printTowersMenu());
+					socketOut.flush();
+				} else if (socketLine[0].equals("floor")) {
+					socketOut.writeUTF(UI.printLevelsMenu());
+					socketOut.flush();
 				} else if (socketLine[0].equals("board")) {
 					// ricevo e visualizzo la board
 					UI.showBoard((Game) socketIn.readObject());
@@ -82,6 +91,24 @@ public class SocketClient implements IClient {
 
 	@Override
 	public String councilRequest(Integer number) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String servantsRequest() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String towerRequest() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String floorRequest() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

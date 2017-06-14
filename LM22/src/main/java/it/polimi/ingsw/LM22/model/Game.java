@@ -21,13 +21,13 @@ public class Game implements Serializable {
 	private transient ArrayList<VentureCard> ventureCards;
 	private transient ArrayList<LeaderCard> leaderCards;
 	private transient PersonalBonusTile personalBonusTile[];
-	private Integer moveTimer; // caricabile da file (millisecondi)
+	private long moveTimer; // caricabile da file (secondi)
 
-	public Integer getMoveTimer() {
+	public long getMoveTimer() {
 		return moveTimer;
 	}
 
-	public void setMoveTimer(Integer moveTimer) {
+	public void setMoveTimer(long moveTimer) {
 		this.moveTimer = moveTimer;
 	}
 

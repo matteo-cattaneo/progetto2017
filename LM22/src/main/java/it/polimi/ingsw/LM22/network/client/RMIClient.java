@@ -64,4 +64,19 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	public String councilRequest(Integer number) throws RemoteException {
 		return UI.councilRequest(number);
 	}
+
+	@Override
+	public String servantsRequest() throws RemoteException {
+		return UI.printServantsAddictionMenu();
+	}
+
+	@Override
+	public String towerRequest() throws RemoteException {
+		return UI.printTowersMenu();
+	}
+
+	@Override
+	public String floorRequest() throws RemoteException {
+		return UI.printLevelsMenu();
+	}
 }

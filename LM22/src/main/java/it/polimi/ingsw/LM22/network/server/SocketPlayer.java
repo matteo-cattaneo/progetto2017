@@ -70,4 +70,26 @@ public class SocketPlayer implements IPlayer {
 		out.flush();
 		return in.readUTF();
 	}
+
+	@Override
+	public String servantsRequest() throws IOException {
+		out.writeUTF("servants");
+		out.flush();
+		return in.readUTF();
+	}
+
+	@Override
+	public String towerRequest() throws IOException {
+		out.writeUTF("tower");
+		out.flush();
+		return in.readUTF();
+	}
+
+	@Override
+	public String floorRequest() throws IOException {
+		out.writeUTF("floor");
+		out.flush();
+		return in.readUTF();
+	}
+
 }

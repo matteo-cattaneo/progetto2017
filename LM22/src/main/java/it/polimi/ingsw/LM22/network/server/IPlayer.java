@@ -22,4 +22,10 @@ public interface IPlayer extends Remote {
 	public String getName() throws RemoteException;
 
 	public String councilRequest(Integer number) throws IOException;
+
+	public String servantsRequest() throws IOException;
+
+	public String towerRequest() throws IOException;
+
+	public String floorRequest() throws IOException;
 }

@@ -12,55 +12,55 @@ di interfacciarsi con la GUI
 public class GUIinterface extends AbstractUI {
 
 	@Override
-	public void printMoveMenu() {
+	public void printMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printMemberMoveMenu() {
+	public void printMemberMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printCardMoveMenu() {
+	public void printCardMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printFamilyMemberMenu() {
+	public void printFamilyMemberMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printServantsAddictionMenu() {
+	public String printServantsAddictionMenu() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String printTowersMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String printLevelsMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void printMarketMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printTowersMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void printLevelsMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void printMarketMoveMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void printWorkMoveMenu() {
+	public void printWorkMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
@@ -72,13 +72,13 @@ public class GUIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void printSellLeaderCardMenu() {
+	public void printSellLeaderCardMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void printActivateLeaderCardMenu() {
+	public void printActivateLeaderCardMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
@@ -91,10 +91,8 @@ public class GUIinterface extends AbstractUI {
 
 	@Override
 	public int showConnectionSelection() {
-		return 0;
-
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 	@Override
@@ -128,7 +126,7 @@ public class GUIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void showBoard(Game game) {
+	public void showBoard(Game game) throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
@@ -136,13 +134,13 @@ public class GUIinterface extends AbstractUI {
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void printInvalidInput() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -154,7 +152,7 @@ public class GUIinterface extends AbstractUI {
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

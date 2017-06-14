@@ -22,4 +22,10 @@ public interface IClient extends Remote {
 	public String getName() throws RemoteException;
 
 	public String councilRequest(Integer number) throws RemoteException;
+
+	public String servantsRequest() throws RemoteException;
+
+	public String towerRequest() throws RemoteException;
+
+	public String floorRequest() throws RemoteException;
 }
