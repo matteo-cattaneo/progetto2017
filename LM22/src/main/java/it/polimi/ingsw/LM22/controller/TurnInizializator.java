@@ -17,6 +17,8 @@ import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.excommunication.DiceMalusEx;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberValueEffect;
@@ -36,15 +38,15 @@ public class TurnInizializator {
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = { "PRODUCTION", "HARVEST" };
 	private final Integer NOTHING = 0;
-	
+
 	private EffectManager effectManager;
 	private ResourceHandler r;
 
-	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler){
+	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler) {
 		this.effectManager = effectManager;
 		this.r = resourceHandler;
 	}
-	
+
 	/*
 	 * metodo generale che gestisce tutta la parte iniziale di preparazione di
 	 * un nuovo turno --> invocherà tutti i metodi minori in grado di svolgere
@@ -56,6 +58,7 @@ public class TurnInizializator {
 		setGameTurn(game);
 		setNewPlayersOrder(game);
 		cleanBoardGame(game);
+		manageLeaderCards(game);
 		throwDices(game);
 		setFamilyMembersValue(game);
 		distributeDevelopmentCards(game);
@@ -242,6 +245,24 @@ public class TurnInizializator {
 	}
 
 	/*
+	 * metodo che consente di redistribuire le carte leader attivate tra
+	 * activated e leaderCard in base al tipo di effetto che la carta ha NB
+	 * stare attento anche alle carte leader che aggiungono un effetto alla
+	 * lista Effect di player
+	 */
+	private void manageLeaderCards(Game game) {
+		for (Player p : game.getPlayersOrder()) {
+			for (LeaderCard card : p.getActivatedLeaderCards()) {
+				if (card.getEffect() instanceof LeaderResourceEffect || (card.getEffect() instanceof MemberChangeEffect
+						&& card.getName() == "Federico di Montefeltro")) {
+					p.getLeaderCards().add(card);
+					p.getActivatedLeaderCards().remove(card);
+				}
+			}
+		}
+	}
+
+	/*
 	 * metodo ipotizzato per la modalità con il quinto giocatore --> IDEA sarebe
 	 * quella di distribuire delle risorse in modo prefissato e decrescente in
 	 * base all'ordine inverso di turno di quello che è stato appena calcolato
@@ -250,7 +271,7 @@ public class TurnInizializator {
 	 */
 	private void distributeNewResources(Game game) {
 		int i = 1;
-		for (Player p: game.getPlayersOrder()){
+		for (Player p : game.getPlayersOrder()) {
 			r.addResource(p.getPersonalBoard().getResources(), new Resource(i, i, i, i, NOTHING, NOTHING, NOTHING));
 			i++;
 		}

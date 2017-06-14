@@ -15,5 +15,11 @@ public class WorkBonusEffect extends PermanentEffect implements Serializable {
 	public Integer getWorkBonusValue() {
 		return workBonusValue;
 	}
+	
+	public String getInfo(){
+		String info ="";
+		info = info + "You get a bonus of " + workBonusValue + "for " + typeOfWork + "actions";
+		return info;
+	}
 
 }

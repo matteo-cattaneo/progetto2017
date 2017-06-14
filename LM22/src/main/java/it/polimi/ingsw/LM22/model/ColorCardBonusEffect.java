@@ -21,4 +21,10 @@ public class ColorCardBonusEffect extends PermanentEffect implements Serializabl
 		return cardDiscount;
 	}
 
+	public String getInfo(){
+		String info = "";
+		info = info + "You have a bonus of " + diceBonus + "on the" + (cardType+1) + "tower %n";
+		info = info + "You have a card discount of " + cardDiscount;
+		return info;
+	}
 }

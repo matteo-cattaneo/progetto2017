@@ -85,5 +85,24 @@ public class Resource implements Serializable {
 				new Integer(this.coins), new Integer(this.faith), new Integer(this.military),
 				new Integer(this.victory));
 	}
+	
+	public String getInfo(){
+		String info = "";
+		if (wood>0)
+			info = info + "wood: " + wood + "%n";
+		if (stone>0)
+			info = info + "stone: " + stone + "%n";
+		if (servants>0)
+			info = info + "servants: " + servants + "%n";
+		if (coins>0)
+			info = info + "coins: " + coins + "%n";
+		if (faith>0)
+			info = info + "faith: " + faith + "%n";
+		if (military>0)
+			info = info + "military: " + military + "%n";
+		if (victory>0)
+			info = info + "victory: " + victory + "%n";
+		return info;
+	}
 
 }

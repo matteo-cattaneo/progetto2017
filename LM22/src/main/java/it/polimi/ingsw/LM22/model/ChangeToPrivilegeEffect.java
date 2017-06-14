@@ -15,4 +15,11 @@ public class ChangeToPrivilegeEffect extends ImmediateEffect implements Serializ
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}
+	
+	public String getInfo() {
+		String info = "";
+		info = info + "You can change " + exchangedResource.getInfo() + "into " + councilPrivilege
+				+ "councilPrivilege(s)%n";
+		return info;
+	}
 }

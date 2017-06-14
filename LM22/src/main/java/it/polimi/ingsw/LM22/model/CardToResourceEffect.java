@@ -18,4 +18,9 @@ public class CardToResourceEffect extends ImmediateEffect implements Serializabl
 		return reward;
 	}
 
+	public String getInfo() {
+		String info = "";
+		info = info + "You get " + reward.getInfo() + "for every " + cardRequired + " card you have%n";
+		return info;
+	}
 }

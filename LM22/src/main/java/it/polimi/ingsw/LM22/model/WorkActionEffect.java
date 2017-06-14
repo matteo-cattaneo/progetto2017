@@ -25,4 +25,14 @@ public class WorkActionEffect extends ImmediateEffect  implements Serializable {
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}
+
+	@Override
+	public String getInfo() {
+		String info = "";
+		info = info + "You earn " + resource.getInfo();
+		if (councilPrivilege > 0)
+			info = info + "You eard also " + councilPrivilege + "councilPrivilege(s)%n";
+		info = info + "You can do a " + typeOfWork + "Action with a value of " + workActionValue;
+		return info;
+	}
 }

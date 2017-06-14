@@ -16,4 +16,13 @@ public class ResourcePrivilegeEffect extends ImmediateEffect  implements Seriali
 		return resource;
 	}
 
+	@Override
+	public String getInfo() {
+		String info = "";
+		info = info + "You earn%n" + resource.getInfo();
+		if (councilPrivilege > 0)
+			info = info + ("and also " + councilPrivilege + "councilPrivilege(s)");
+		return info;
+	}
+
 }

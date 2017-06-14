@@ -21,6 +21,8 @@ public class InitialConfigurator extends TurnInizializator {
 	private final Integer BASE_SERVANTS = 3;
 	private final Integer BASE_COINS = 5;
 	private final Integer NO_RESOURCE = 0;
+	private final Integer UNCOLORED_VALUE = 0;
+	private final Integer INIT = 1;
 
 	// Colori giocatori
 	private final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
@@ -56,8 +58,8 @@ public class InitialConfigurator extends TurnInizializator {
 	 */
 	@Override
 	public void initializeTurn(Game game) {
-		game.setPeriod(1);
-		game.setRound(1);
+		game.setPeriod(INIT);
+		game.setRound(INIT);
 
 		WorkSpace harv = new WorkSpace();
 		harv.setSpaceRequirement(1);
@@ -90,7 +92,7 @@ public class InitialConfigurator extends TurnInizializator {
 			}
 			// familiare neutro
 			FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
-			fm.setValue(0);
+			fm.setValue(UNCOLORED_VALUE);
 			members.add(fm);
 			players[i].setMembers(members);
 			i++;
@@ -151,7 +153,7 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	/*
-	 * metodo che implementa la fase di scelta delle carte leader con relativo
+	 * metodo che implementa la fase di distribuzione random delle carte leader con relativo
 	 * passaggio al giocatore successivo delle carte rimanenti
 	 */
 	private void leaderDistribution(Game game) {

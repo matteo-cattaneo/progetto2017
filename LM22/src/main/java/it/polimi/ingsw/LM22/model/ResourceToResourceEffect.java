@@ -16,4 +16,11 @@ public class ResourceToResourceEffect extends ImmediateEffect implements Seriali
 		return reward;
 	}
 
+	@Override
+	public String getInfo() {
+		String info ="";
+		info = info + "for every " + requirement.getInfo() + "you have, you earn " + reward.getInfo();
+		return info;
+	}
+
 }
