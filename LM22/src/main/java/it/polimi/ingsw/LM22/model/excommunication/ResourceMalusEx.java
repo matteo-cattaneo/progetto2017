@@ -12,4 +12,9 @@ public class ResourceMalusEx extends ExEffect implements Serializable {
 		return malus;
 	}
 
+	@Override
+	public String getInfo() {
+		return ("Everytime you earn resources you earn " + malus.getInfo() + "less");
+	}
+
 }

@@ -15,6 +15,13 @@ public class LeaderResourceEffect extends LeaderEffect implements Serializable{
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}
+	@Override
+	public String getInfo() {
+		String info ="You will get " + resource.getInfo();
+		if (councilPrivilege > 0)
+			info = info + "and " + councilPrivilege + "councilPrivilege(s)";
+		return info;
+	}
 	
 	
 }

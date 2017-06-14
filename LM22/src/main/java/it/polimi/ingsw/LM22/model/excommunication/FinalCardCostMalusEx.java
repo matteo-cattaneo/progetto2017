@@ -11,4 +11,9 @@ public class FinalCardCostMalusEx extends FinalResourceMalusEx implements Serial
 		return cardType;
 	}
 	
+	@Override
+	public String getInfo() {
+		return "You get a malus of " + resource.getInfo() + "due to your" + (cardType+1) + "cost";
+	}
+	
 }

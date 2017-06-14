@@ -14,6 +14,10 @@ public class WorkMalusEx extends ExEffect implements Serializable{
 	public Integer getValueOfMalus() {
 		return valueOfMalus;
 	}
+	@Override
+	public String getInfo() {
+		return "You will have a malus of "+ valueOfMalus + "for " + typeOfWork + "actions";
+	}
 	
 	
 }

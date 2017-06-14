@@ -12,6 +12,11 @@ public class ChurchSubstainEffect extends LeaderEffect implements Serializable{
 	public Resource getReward() {
 		return reward;
 	}
+
+	@Override
+	public String getInfo() {
+		return "Everytime you substain the Church you will earn " + reward.getInfo(); 
+	}
 	
 	
 }

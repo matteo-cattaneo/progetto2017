@@ -10,6 +10,13 @@ public class NoFinalCardPointsEx extends ExEffect implements Serializable{
 	public Integer getCardType() {
 		return cardType;
 	}
+
+	@Override
+	public String getInfo() {
+		String info = "";
+		info = info + "You don't get your final Points for the cards you have of the" + (cardType+1) + "tower%n";
+		return info;
+	}
 	
 	
 }
