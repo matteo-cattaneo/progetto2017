@@ -1,7 +1,10 @@
 package it.polimi.ingsw.LM22.controller;
 
 import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.Effect;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 
 public class ResourceHandler {
 	/*
@@ -11,6 +14,17 @@ public class ResourceHandler {
 	 * 
 	 */
 
+	/*
+	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba essere ridotto
+	 */
+	public Resource calculateResource(Resource res, Player p) {
+		for (Effect e: p.getEffects())
+			if (e instanceof ResourceMalusEx){
+				diffResource(res, ((ResourceMalusEx) e).getMalus());
+			}
+		return res;
+	}
+	
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
 		Resource cost = cardDiscounted(cardCost, bonus);
 		if (!enoughResources(diffResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded()),

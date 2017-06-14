@@ -201,7 +201,7 @@ public class MoveManager {
 		Tower t = game.getBoardgame().getTowers()[tower];
 		int floor = cardMove.getLevelSelected();
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
-		Resource bonus = calculateBonus(cardMove);
+		Resource bonus = resourceHandler.calculateResource(calculateBonus(cardMove), cardMove.getPlayer());
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
 		// cardCost già scontato rispetto agli effetti delle carte Personaggio
 		Resource cardCost = calculateCardCost(cardMove, tower);
@@ -239,8 +239,6 @@ public class MoveManager {
 		if (containsClass(move.getPlayer().getEffects(), NoCardSpaceBonusEffect.class))
 			bonus = NOTHING;
 		else {
-			// da controllare se ho le scomuniche che riducono il numero di
-			// risorse acquisite --> azione da fare per ogni aggiunta possibile
 			bonus = space.getReward();
 		}
 		return bonus;
@@ -351,13 +349,17 @@ public class MoveManager {
 		Tower t = game.getBoardgame().getTowers()[cardMove.getTowerSelected()];
 		space.setMember(cardMove.getMemberUsed());
 		cardMove.getMemberUsed().setUsed(true);
-		if (!t.isOccupied())
+		if (!t.isOccupied() /*
+							 * && non si tratta di una mossa per effetto di una
+							 * CardMove
+							 */)
 			t.setOccupied(true);
 		if (cardMove.getMemberUsed().getColor() != UNCOLORED)
-			t.getColoredMembersOnIt().add(cardMove.getMemberUsed().getColor());
+			t.getColoredMembersOnIt().add(cardMove.getPlayer().getColor());
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
 		resourceHandler.subResource(playerResource, cardMove.getServantsAdded());
-		resourceHandler.addResource(playerResource, calculateBonus(cardMove));
+		resourceHandler.addResource(playerResource,
+				resourceHandler.calculateResource(calculateBonus(cardMove), cardMove.getPlayer()));
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
 		resourceHandler.subResource(playerResource, calculateCardCost(cardMove, cardMove.getTowerSelected()));
 		cardGetter(cardMove, t);
@@ -446,26 +448,14 @@ public class MoveManager {
 		/*
 		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
 		 */
-		Resource bonus = calculateBonus(marketMove, game.getBoardgame().getMarket()[opt]);
+		Resource bonus = resourceHandler.calculateResource(game.getBoardgame().getMarket()[opt].getReward(),
+				marketMove.getPlayer());
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), bonus);
-		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
-				mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
-						marketMove.getPlayer()));
-	}
-
-	/*
-	 * metodo che restituisce la risorsa bonus controllando anch eventuali
-	 * scomuniche
-	 */
-	private Resource calculateBonus(MarketMove move, MarketSpace space) {
-		Resource bonus = space.getReward();
-		if (containsClass(move.getPlayer().getEffects(), ResourceMalusEx.class)) {
-			// modifico il valore del bonus ricevuto se e solo se il bonus
-			// ricevuto è dello stesso tipo
-			// di quello presente nella scomunica
-			return bonus;
-		}
-		return bonus;
+		resourceHandler
+				.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
+						resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(
+								game.getBoardgame().getMarket()[opt].getCouncilPrivilege(), marketMove.getPlayer()),
+								marketMove.getPlayer()));
 	}
 
 	/*
@@ -621,21 +611,20 @@ public class MoveManager {
 	}
 
 	/*
-	 * gestisce una mossa del tipo CouncilMove
+	 * gestisce una mossa del tipo CouncilMove prendendo i relativi bonus
 	 */
 	public void councilmoveHandle(CouncilMove councilMove) throws IOException {
 		councilMove.getMemberUsed().setUsed(true);
 		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
 		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				councilMove.getServantsAdded());
-		/*
-		 * prendo le varie risorse (moneta oppure privilegi del consiglio)
-		 */
-		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
-				game.getBoardgame().getCouncilPalace().getReward());
-		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
-				mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
-						councilMove.getPlayer()));
+		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(), resourceHandler
+				.calculateResource(game.getBoardgame().getCouncilPalace().getReward(), councilMove.getPlayer()));
+		resourceHandler
+				.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+						resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(
+								game.getBoardgame().getCouncilPalace().getCouncilPrivilege(), councilMove.getPlayer()),
+								councilMove.getPlayer()));
 	}
 
 	/*
@@ -650,6 +639,11 @@ public class MoveManager {
 	public boolean leadercardsellingAllowed(LeaderCardSelling move) {
 		if ((move.getPlayer().getActivatedLeaderCards().contains(move.getLeaderCard())
 				|| move.getPlayer().getLeaderCards().contains(move.getLeaderCard())))
+			/*
+			 * non sarebbe meglio mettere if
+			 * (!move.getPlayer().getHandLeaderCard().contains(move.
+			 * getLeaderCard()))?
+			 */
 			return false;
 		return true;
 	}
@@ -661,7 +655,8 @@ public class MoveManager {
 	public void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
 		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(),
-				mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()));
+				resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()),
+						move.getPlayer()));
 	}
 
 	/*

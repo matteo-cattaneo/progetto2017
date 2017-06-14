@@ -19,6 +19,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
+import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
@@ -33,6 +34,7 @@ public class EffectManager {
 	private final String UNCOLORED = "Uncolored";
 	private Player player;
 	private MainGameController mainGC;
+	// private MoveManager moveManager = new MoveManager();
 	private ResourceHandler r = new ResourceHandler();
 	private static final Logger LOGGER = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
 
@@ -52,7 +54,7 @@ public class EffectManager {
 	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect) throws IOException {
 		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangedResource());
 		r.addResource(player.getPersonalBoard().getResources(),
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
+				r.calculateResource(mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player), player));
 	}
 
 	/*
@@ -61,9 +63,9 @@ public class EffectManager {
 	 */
 	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
 		// rivedere ResourceHandler
-		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
+		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(effect.getResource(), player));
 		r.addResource(player.getPersonalBoard().getResources(),
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
+				r.calculateResource(mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player), player));
 	}
 
 	/*
@@ -92,6 +94,7 @@ public class EffectManager {
 	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
 		Integer points = player.getPersonalBoard().getResources().getMilitary() / effect.getRequirement().getMilitary();
 		Resource bonus = r.resourceMultiplication(effect.getReward(), points);
+		bonus = r.calculateResource(bonus, player);
 		r.addResource(player.getPersonalBoard().getResources(), bonus);
 	}
 
@@ -99,10 +102,10 @@ public class EffectManager {
 	 * gestisce un effetto di tipo CardAction
 	 */
 	public void cardactioneffectManage(CardActionEffect effect) throws IOException {
-		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
+		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(effect.getResource(), player));
 		r.addResource(player.getPersonalBoard().getResources(),
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
-		//TODO
+				r.calculateResource(mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player), player));
+		// TODO
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);
 		Integer tower = info[0];
@@ -110,11 +113,15 @@ public class EffectManager {
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
-		// CardMove move = new CardMove(player, other, servants);
+		CardMove move = new CardMove(player, other, servants, tower, floor);
+		// moveManager.manageMove(move);
 	}
 
-	public void workactioneffectManage(WorkActionEffect effect) {
-
+	public void workactioneffectManage(WorkActionEffect effect) throws IOException {
+		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(effect.getResource(), player));
+		r.addResource(player.getPersonalBoard().getResources(),
+				r.calculateResource(mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player), player));
+		// TODO
 	}
 
 	/*
@@ -136,18 +143,21 @@ public class EffectManager {
 		case "VENTURE":
 			bonus = r.resourceMultiplication(effect.getReward(), player.getPersonalBoard().getVenturesCards().size());
 		}
-		r.addResource(resource, bonus);
+		r.addResource(resource, r.calculateResource(bonus, player));
 	}
 
 	/*
 	 * metodo che gestisce l'effetto rappresentante uno scambio di risorse (non
 	 * Privilegi del Consiglio)
 	 */
+	/*
+	 * TODO CHECK SE STO PRENDENDO IL PLAYER GIUSTO!!!!!
+	 */
 	public void changeeffectManage(ChangeEffect effect, Resource sum) {
 		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& askChangeToPlayer())
 			;
-		r.addResource(sum, effect.getExchangeEffect1()[NEEDED + 1]);
+		r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1], player));
 		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 		return;
 	}
@@ -176,9 +186,9 @@ public class EffectManager {
 	}
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
-		r.addResource(player.getPersonalBoard().getResources(), effect.getResource());
+		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(effect.getResource(), player));
 		r.addResource(player.getPersonalBoard().getResources(),
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player));
+				r.calculateResource(mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player), player));
 	}
 
 	public void memberchangeeffectManage(MemberChangeEffect e, Player p) {
