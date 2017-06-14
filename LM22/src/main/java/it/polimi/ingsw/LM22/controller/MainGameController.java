@@ -32,6 +32,7 @@ public class MainGameController implements Runnable {
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
 	private ArrayList<PlayerInfo> playerRoom;
+	InitialConfigurator initialConfigurator;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();;
 	private EffectManager effectManager = new EffectManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
@@ -42,7 +43,7 @@ public class MainGameController implements Runnable {
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
-		new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
+		initialConfigurator = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class MainGameController implements Runnable {
 		Player p;
 		while (i < game.getPlayersOrder().size()) {
 			// inizio turno di un giocatore
+			// TODO check giocatore connesso
 			p = game.getPlayersOrder().get(i);
 			for (String sMove = ""; !sMove.startsWith("End@");) {
 				try {
@@ -61,7 +63,7 @@ public class MainGameController implements Runnable {
 					// richiedo mossa a player
 					sMove = getIPlayer(p).yourTurn();
 				} catch (ClassNotFoundException | IOException e) {
-					// ho perso la conn1essione con il client
+					// ho perso la connessione con il client
 					sMove = "End@Disconnect@";
 				}
 				System.out.println(sMove);
@@ -139,7 +141,7 @@ public class MainGameController implements Runnable {
 	 * punti vittoria + deve controllare se ha Sisto VI attivato
 	 */
 	public boolean askSupport(Player player) {
-		
+
 		return false;
 	}
 
@@ -281,15 +283,11 @@ public class MainGameController implements Runnable {
 	 */
 	public Integer[] askForCardSpace(Player player, CardActionEffect effect) {
 		Integer[] param = new Integer[2];
-		if (effect.getCardType() == "ALL")
-			// sarebbe meglio farlo non con le stringhe ma direttamente con
-			// gli interi rappresentanti le torri
+		if (effect.getCardType().equals(-1))
 			param[0] = askForTower(player);
-		/*
-		 * else passaggio da parametro dell'effetto a torre della nuova mossa
-		 */
+		
 		param[1] = askForFloor(player);
-		return null;
+		return param;
 	}
 
 	private Integer askForFloor(Player player) {

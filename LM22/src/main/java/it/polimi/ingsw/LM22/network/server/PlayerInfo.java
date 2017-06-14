@@ -1,8 +1,8 @@
 package it.polimi.ingsw.LM22.network.server;
 
 public class PlayerInfo {
-	private String name = "";
-	private String password = "";
+	private String name;
+	private String password;
 	private IPlayer iplayer;
 	private Boolean connected = true;
 

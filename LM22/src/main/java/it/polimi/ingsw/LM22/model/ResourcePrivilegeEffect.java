@@ -21,7 +21,7 @@ public class ResourcePrivilegeEffect extends ImmediateEffect  implements Seriali
 		String info = "";
 		info = info + "You earn%n" + resource.getInfo();
 		if (councilPrivilege > 0)
-			info = info + ("and also " + councilPrivilege + "councilPrivilege(s)");
+			info = info + ("and also " + councilPrivilege + " councilPrivilege(s)%n");
 		return info;
 	}
 

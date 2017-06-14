@@ -1000,7 +1000,7 @@
 	}],
     "immediateEffect": {
         "type": "CardActionEffect",
-        "cardType": "ALL",
+        "cardType": -1,
         "diceValue": 7,
         "cardDiscount": {
             "wood": 0,

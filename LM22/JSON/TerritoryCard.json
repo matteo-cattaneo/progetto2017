@@ -137,14 +137,14 @@
                 "coins": 0,
                 "servants": 1,
                 "faith": 0,
-                "militaryPoints": 2,
+                "military": 2,
                 "victory": 0
             },
             "councilPrivilege": 0
         },
         "requirement": 6,
         "permanentEffect": {
-            "reward": {
+            "resource": {
                 "wood": 0,
                 "stone": 1,
                 "coins": 0,
@@ -161,8 +161,8 @@
         "immediateEffect": {
           "type": "NoEffect"  
         },
+        "requirement": 1,
         "permanentEffect": {
-            "requirement": 1,
             "resource": {
                 "wood": 0,
                 "stone": 0,

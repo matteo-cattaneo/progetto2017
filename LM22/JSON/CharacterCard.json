@@ -40,7 +40,7 @@
     },
     "immediatEffect": {
         "type": "CardActionEffect",
-        "cardType": "ALL",
+        "cardType": -1,
         "diceValue": 4,
         "resource": {
             "wood": 0,
@@ -275,7 +275,7 @@
     },
     "immediatEffect": {
         "type": "CardActionEffect",
-        "cardType": "CHARACTER",
+        "cardType": 1,
         "diceValue": 6,
         "resource": {
             "wood": 0,
@@ -382,7 +382,7 @@
     },
     "immediatEffect": {
         "type": "CardActionEffect",
-        "cardType": "TERRITORY",
+        "cardType": 0,
         "diceValue": 6,
         "resource": {
             "wood": 0,
@@ -421,7 +421,7 @@
     },
     "immediateEffect": {
         "type": "CardActionEffect",
-        "cardType": "BUILDING",
+        "cardType": 2,
         "diceValue": 6,
         "resource": {
             "wood": 0,
@@ -460,7 +460,7 @@
     },
     "immediateEffect": {
         "type": "CardActionEffect",
-        "cardType": "VENTURE",
+        "cardType": 3,
         "diceValue": 6,
         "resource": {
             "wood": 0,
@@ -698,7 +698,7 @@
     },
     "immediatEffect": {
         "type": "CardActionEffect",
-        "cardType": "ALL",
+        "cardType": -1,
         "diceValue": 7,
         "resource": {
             "wood": 0,

@@ -12,10 +12,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
+import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
@@ -24,6 +29,7 @@ di interfacciarsi con la CLI
 */
 public class CLIinterface extends AbstractUI {
 
+	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final String DEFAULT_IP = "localhost";
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
@@ -80,74 +86,135 @@ public class CLIinterface extends AbstractUI {
 		 */
 		ExecutorService exe = Executors.newFixedThreadPool(1);
 		Future<?> future = exe.submit(() -> {
-			// while (in.hasNext())
-			// in.next();
-			System.out.println("Timeout: " + timeout);
-			Integer time = (int) System.currentTimeMillis();
-			showMsg("Choose your Move:");
-			if (memberMove == false)
-				showMsg("1: Move a Member");
-			if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
-				showMsg("2: Sell a LeaderCard");
-			if (!getPlayer(name, game).getLeaderCards().isEmpty()
-					|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
-				showMsg("3: Activate a LeaderCard");
-			showMsg("4: End turn");
-			int option;
-			option = in.nextInt();
-			switch (option) {
-			case 2:
-				if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
-					printSellLeaderCardMenu();
-				else {
-					printInvalidInput();
-					printMoveMenu();
-				}
-				break;
-			case 3:
-				if (!getPlayer(name, game).getLeaderCards().isEmpty()
-						|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
-					printActivateLeaderCardMenu();
-				else {
-					printInvalidInput();
-					printMoveMenu();
-				}
-				break;
-			case 4:
-				setMove("End");
-				memberMove = false;
-				timeout = game.getMoveTimer();
-				break;
-			case 1:
-				if (memberMove == false) {
-					printMemberMoveMenu();
-					memberMove = true;
-					break;
-				}
-			default:
-				printInvalidInput();
-				printMoveMenu();
-				break;
+			try {
+				showPrincipalMenu();
+			} catch (RemoteException e) {
 			}
-			// calcolo il timeout da cui dovrò partire alla possima mossa
-
-			timeout = (timeout - ((int) (System.currentTimeMillis() / 1000) - time));
-			return 0;
 		});
 		try {
-			// eseguo l interfaccia di comunicazione in un thread con timeut
+			// eseguo l interfaccia di comunicazione in un thread con timeout
 			// allo scadere del timeout termino il thread e disconnetto il
 			// client
 			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			move = "End@Disconnect@";
 			System.out.println("Move time expired, now you have been disconnected!");
+			e.printStackTrace();
 			// System.exit(0);
 		}
 	}
 
+	private void showPrincipalMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
+		showMsg("Choose your Move:");
+		if (memberMove == false)
+			showMsg("1: Move a Member");
+		showMsg("2: Show card");
+		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
+			showMsg("3: Sell a LeaderCard");
+		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
+			showMsg("4: Activate a LeaderCard");
+		showMsg("5: End turn");
+		Integer time = (int) System.currentTimeMillis();
+		int option;
+		option = in.nextInt();
+		switch (option) {
+		case 2:
+			showCard();
+			showPrincipalMenu();
+			break;
+		case 3:
+			if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
+				printSellLeaderCardMenu();
+			else {
+				printInvalidInput();
+				showPrincipalMenu();
+			}
+			break;
+		case 4:
+			if (!getPlayer(name, game).getLeaderCards().isEmpty()
+					|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
+				printActivateLeaderCardMenu();
+			else {
+				printInvalidInput();
+				showPrincipalMenu();
+			}
+			break;
+		case 5:
+			setMove("End");
+			memberMove = false;
+			timeout = game.getMoveTimer();
+			break;
+		case 1:
+			if (memberMove == false) {
+				printMemberMoveMenu();
+				break;
+			}
+		default:
+			printInvalidInput();
+			showPrincipalMenu();
+			break;
+		}
+		// calcolo il timeout da cui dovrò partire alla possima mossa
+		timeout = (timeout - ((int) (System.currentTimeMillis() / 1000) - time));
+	}
+
+	private void showCard() {
+		showMsg("Insert the card name: (no case sensitive)");
+		in.nextLine();
+		String name = in.nextLine();
+		DevelopmentCard card = null;
+		for (int j = 0; j < 4; j++)
+			for (Tower t : game.getBoardgame().getTowers())
+				if (t.getFloor()[j].getCard().getName().toLowerCase().equals(name.toLowerCase()))
+					card = t.getFloor()[j].getCard();
+		showMsg("");
+		showMsg("Name: " + card.getName());
+		showMsg("Period: " + card.getPeriod());
+		if (card instanceof TerritoryCard) {
+			showMsg("Immediate effect: ");
+			System.out.printf(card.getImmediateEffect().getInfo());
+			showMsg("Permament effect:");
+			System.out.printf("Requirement: " + ((TerritoryCard) card).getRequirement().toString() + "%n"
+					+ ((TerritoryCard) card).getPermanentEffect().getInfo());
+			showMsg("Card type: Territory");
+		}
+		if (card instanceof CharacterCard) {
+			showMsg("Card cost: ");
+			System.out.printf(((CharacterCard) card).getCost().getInfo());
+			showMsg("Immediate effect: ");
+			System.out.printf(card.getImmediateEffect().getInfo());
+			showMsg("Permament effect:");
+			System.out.printf(((CharacterCard) card).getPermanentEffect().getInfo());
+			showMsg("Card type: Character");
+		}
+		if (card instanceof BuildingCard) {
+			showMsg("Card cost: ");
+			System.out.printf(((BuildingCard) card).getCost().getInfo());
+			showMsg("Immediate effect: ");
+			System.out.printf(card.getImmediateEffect().getInfo());
+			showMsg("Permament effect:");
+			System.out.printf(((BuildingCard) card).getPermanentEffect().getInfo());
+			showMsg("Card type: Building");
+		}
+		if (card instanceof VentureCard) {
+			showMsg("Card cost: ");
+			System.out.printf(((VentureCard) card).getCardCost1().getInfo());
+			showMsg("Second card cost: ");
+			System.out.printf("Require: " + ((VentureCard) card).getCardCost2()[0].getInfo());
+			System.out.printf("Cost: " + ((VentureCard) card).getCardCost2()[1].getInfo());
+			showMsg("Immediate effect: ");
+			System.out.printf(card.getImmediateEffect().getInfo());
+			showMsg("Permament effect:");
+			System.out.printf(((VentureCard) card).getPermanentEffect().getInfo());
+			showMsg("Card type: Venture");
+		}
+		showMsg("");
+	}
+
 	@Override
 	public void printMemberMoveMenu() throws RemoteException {
+		memberMove = true;
 		showMsg("Choose your move:");
 		showMsg("1: Card");
 		showMsg("2: Market");
@@ -450,48 +517,48 @@ public class CLIinterface extends AbstractUI {
 	 * WIP
 	 */
 	private void showPersonalBoard(Game game) throws RemoteException {
-		System.out.printf("%-30s|\n", "| Period: " + game.getPeriod());
-		System.out.printf("%-30s|\n", "| Round: " + game.getRound());
-		System.out.printf("%-30s|\n", "| ");
-		System.out.printf("%-30s|\n", "| Dices:");
-		System.out.printf("%-30s|\n", "| Orange: " + game.getBoardgame().getDice("Orange"));
-		System.out.printf("%-30s|\n", "| Black: " + game.getBoardgame().getDice("Black"));
-		System.out.printf("%-30s|\n", "| White: " + game.getBoardgame().getDice("White"));
+		System.out.printf("%-30s|%n", "| Period: " + game.getPeriod());
+		System.out.printf("%-30s|%n", "| Round: " + game.getRound());
+		System.out.printf("%-30s|%n", "| ");
+		System.out.printf("%-30s|%n", "| Dices:");
+		System.out.printf("%-30s|%n", "| Orange: " + game.getBoardgame().getDice("Orange"));
+		System.out.printf("%-30s|%n", "| Black: " + game.getBoardgame().getDice("Black"));
+		System.out.printf("%-30s|%n", "| White: " + game.getBoardgame().getDice("White"));
 		showMsg("|_____________________________|");
-		System.out.printf("%-30s|\n", "| Family members:");
-		System.out.printf("%-30s|\n", "| Orange: " + getPlayer(name, game).getMembers().get(0).getValue());
-		System.out.printf("%-30s|\n", "| Black: " + getPlayer(name, game).getMembers().get(1).getValue());
-		System.out.printf("%-30s|\n", "| White: " + getPlayer(name, game).getMembers().get(2).getValue());
-		System.out.printf("%-30s|\n", "| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue());
-		System.out.printf("%-30s|\n", "| ");
-		System.out.printf("%-30s|\n", "| Name: " + getPlayer(name, game).getNickname());
-		System.out.printf("%-30s|\n", "| Color: " + getPlayer(name, game).getColor());
-		System.out.printf("%-30s|\n", "| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
-		System.out.printf("%-30s|\n", "| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
-		System.out.printf("%-30s|\n", "| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
-		System.out.printf("%-30s|\n",
+		System.out.printf("%-30s|%n", "| Family members:");
+		System.out.printf("%-30s|%n", "| Orange: " + getPlayer(name, game).getMembers().get(0).getValue());
+		System.out.printf("%-30s|%n", "| Black: " + getPlayer(name, game).getMembers().get(1).getValue());
+		System.out.printf("%-30s|%n", "| White: " + getPlayer(name, game).getMembers().get(2).getValue());
+		System.out.printf("%-30s|%n", "| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue());
+		System.out.printf("%-30s|%n", "| ");
+		System.out.printf("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
+		System.out.printf("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
+		System.out.printf("%-30s|%n", "| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
+		System.out.printf("%-30s|%n", "| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
+		System.out.printf("%-30s|%n", "| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
+		System.out.printf("%-30s|%n",
 				"| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
-		System.out.printf("%-30s|\n",
+		System.out.printf("%-30s|%n",
 				"| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith());
-		System.out.printf("%-30s|\n",
+		System.out.printf("%-30s|%n",
 				"| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary());
-		System.out.printf("%-30s|\n",
+		System.out.printf("%-30s|%n",
 				"| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory());
 		showMsg("|_____________________________|");
 		// Hand LeaderCard
-		System.out.printf("%-30s|\n", "| Hand leader cards:");
+		System.out.printf("%-30s|%n", "| Hand leader cards:");
 		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-			System.out.printf("%-30s|\n", "| " + ld.getName());
+			System.out.printf("%-30s|%n", "| " + ld.getName());
 		showMsg("|_____________________________|");
 		// Table LeaderCard
-		System.out.printf("%-30s|\n", "| Table leader cards:");
+		System.out.printf("%-30s|%n", "| Table leader cards:");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-			System.out.printf("%-30s|\n", "| " + ld.getName());
+			System.out.printf("%-30s|%n", "| " + ld.getName());
 		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
-			System.out.printf("%-30s|\n", "| " + ld.getName());
+			System.out.printf("%-30s|%n", "| " + ld.getName());
 		showMsg("|_____________________________|");
 		// player dev cards
-		System.out.printf("%-30s|\n", "| Development cards:");
+		System.out.printf("%-30s|%n", "| Development cards:");
 
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
 			System.out.print("| ");
@@ -499,28 +566,28 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf("%-22s| ", c.getName());
 			showMsg("");
 		}
-		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
 			System.out.print("| ");
-			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
 				System.out.printf("%-22s| ", c.getName());
 			showMsg("");
 		}
-		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
 			System.out.print("| ");
-			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
 				System.out.printf("%-22s| ", c.getName());
 			showMsg("");
 		}
-		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
 			System.out.print("| ");
-			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
+			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
 				System.out.printf("%-22s| ", c.getName());
 			showMsg("");
 		}
 	}
 
 	private void showBoardTracks(Game game) {
-		System.out.printf("%-30s|\n", "| Faith points track:");
+		System.out.printf("%-30s|%n", "| Faith points track:");
 		// trovo il massimo victory
 		int maxF = 0;
 		for (Player p : game.getPlayers())
@@ -530,9 +597,9 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxF; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getFaith() == j)
-					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
 		showMsg("|_____________________________|");
-		System.out.printf("%-30s|\n", "| Military points track:");
+		System.out.printf("%-30s|%n", "| Military points track:");
 		// trovo il massimo victory
 		int maxM = 0;
 		for (Player p : game.getPlayers())
@@ -542,9 +609,9 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxM; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getMilitary() == j)
-					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
 		showMsg("|_____________________________|");
-		System.out.printf("%-30s|\n", "| Victory points track:");
+		System.out.printf("%-30s|%n", "| Victory points track:");
 		// trovo il massimo victory
 		int maxV = 0;
 		for (Player p : game.getPlayers())
@@ -554,7 +621,7 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxV; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getVictory() == j)
-					System.out.printf("%-30s|\n", "| " + j + " " + p.getNickname());
+					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
 	}
 
 	@Override
@@ -564,7 +631,7 @@ public class CLIinterface extends AbstractUI {
 			timeout = game.getMoveTimer();
 		// Towers
 		showMsg("______________________________");
-		System.out.printf("%-30s|\n", "| Towers: ");
+		System.out.printf("%-30s|%n", "| Towers: ");
 		showMsg("________________________________________________________________________________________________");
 		for (int j = 0; j < 4; j++) {
 			System.out.print("| ");
@@ -577,10 +644,10 @@ public class CLIinterface extends AbstractUI {
 		// palazzo del consiglio
 		showMsg("");
 		showMsg("______________________________");
-		System.out.printf("%-30s|\n", "| Council Palace members: ");
+		System.out.printf("%-30s|%n", "| Council Palace members: ");
 		int i = 1;
 		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
-			System.out.printf("%-30s|\n", "| " + i + ":" + fm.getPlayer().getNickname());
+			System.out.printf("%-30s|%n", "| " + i + ":" + fm.getPlayer().getNickname());
 			i++;
 		}
 		showMsg("|_____________________________|");
