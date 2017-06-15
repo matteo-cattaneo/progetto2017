@@ -23,7 +23,6 @@ public class SocketPlayer implements IPlayer {
 		in = new ObjectInputStream(socket.getInputStream());
 		// leggo il nome del client
 		name = in.readUTF();
-		// TODO verificare se ha gia iniziato un altra partita
 	}
 
 	// indica al client quando è il suo turno e restituisce la mossa da lui
@@ -58,7 +57,6 @@ public class SocketPlayer implements IPlayer {
 
 	@Override
 	public void login(IClient client) throws RemoteException {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -188,7 +188,7 @@ public class EffectManager {
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
 		CardMove move = new CardMove(player, other, servants, tower, floor);
-		//TODO
+		// TODO
 		moveManager.manageMove(move);
 	}
 
@@ -202,7 +202,7 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		//TODO
+		// TODO
 		moveManager.manageMove(move);
 	}
 
@@ -218,15 +218,19 @@ public class EffectManager {
 		case "TERRITORY":
 			bonus = r.resourceMultiplication(effect.getReward().clone(),
 					player.getPersonalBoard().getTerritoriesCards().size());
+			break;
 		case "CHARACTER":
 			bonus = r.resourceMultiplication(effect.getReward().clone(),
 					player.getPersonalBoard().getCharactersCards().size());
+			break;
 		case "BUILDING":
 			bonus = r.resourceMultiplication(effect.getReward().clone(),
 					player.getPersonalBoard().getBuildingsCards().size());
+			break;
 		case "VENTURE":
 			bonus = r.resourceMultiplication(effect.getReward().clone(),
 					player.getPersonalBoard().getVenturesCards().size());
+			break;
 		}
 		r.addResource(resource, r.calculateResource(bonus.clone(), player));
 	}
@@ -249,17 +253,16 @@ public class EffectManager {
 	/*
 	 * da decidere se mettere il throws oppure usare il try catch TODO
 	 */
-	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException{
+	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException {
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		//TODO
+		// TODO
 		moveManager.manageMove(move);
 	}
-	
-	
+
 	/*
 	 * metodo che gestisce il metodo di modifica dei valori dei familiari in
 	 * base all'effetto
@@ -279,6 +282,7 @@ public class EffectManager {
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}
+			break;
 		case "COLORED": {
 			String choice = mainGC.askForColor(p);
 			for (FamilyMember m : p.getMembers())
@@ -304,29 +308,29 @@ public class EffectManager {
 		}
 		}
 	}
-	
-	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect){
+
+	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {
 		player.getEffects().add(effect);
 	}
 
-	public void inoccupiedspaceeffectManage(InOccupiedSpaceEffect effect){
+	public void inoccupiedspaceeffectManage(InOccupiedSpaceEffect effect) {
 		player.getEffects().add(effect);
 	}
-	
-	public void nomilitaryrequesteffectManage(NoMilitaryRequestEffect effect){
+
+	public void nomilitaryrequesteffectManage(NoMilitaryRequestEffect effect) {
 		player.getEffects().add(effect);
 	}
-	
-	public void churchsubstaineffectManage(ChurchSubstainEffect effect){
+
+	public void churchsubstaineffectManage(ChurchSubstainEffect effect) {
 		player.getEffects().add(effect);
 	}
-	
-	public void doubleresourceeffectManage(DoubleResourceEffect effect){
+
+	public void doubleresourceeffectManage(DoubleResourceEffect effect) {
 		player.getEffects().add(effect);
 	}
-	
-	public void coinsdiscounteffectManage(CoinsDiscountEffect effect){
+
+	public void coinsdiscounteffectManage(CoinsDiscountEffect effect) {
 		player.getEffects().add(effect);
 	}
-	
+
 }

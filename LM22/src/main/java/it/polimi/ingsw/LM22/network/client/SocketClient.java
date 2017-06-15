@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -12,6 +14,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 
 public class SocketClient implements IClient {
+	private final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
 	private final int SOCKET_PORT = 1337;
 	private Socket socket;
 	private AbstractUI UI;
@@ -35,7 +38,7 @@ public class SocketClient implements IClient {
 			// stabilisco connessione con socoket server
 			socket = new Socket(ip, SOCKET_PORT);
 		} catch (IOException e) {
-			UI.showMsg("Socket connection error!");
+			LOGGER.log(Level.SEVERE, "Socket connection error!", e);
 		}
 		UI.connectionOK();
 		try {
@@ -100,7 +103,7 @@ public class SocketClient implements IClient {
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {
-			UI.showMsg("Connessione chiusa");
+			LOGGER.log(Level.SEVERE, "Connessione chiusa", e);
 		}
 
 	}

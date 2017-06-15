@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.network.client;
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -11,7 +13,7 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
-
+	private final transient Logger LOGGER = Logger.getLogger(RMIClient.class.getClass().getSimpleName());
 	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
 	private String name;
@@ -40,7 +42,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 			// mando il mio oggetto al server
 			server.login(this);
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			UI.showMsg("RMI connection error!");
+			LOGGER.log(Level.SEVERE, "RMI connection error!", e);
 		}
 		UI.connectionOK();
 	}

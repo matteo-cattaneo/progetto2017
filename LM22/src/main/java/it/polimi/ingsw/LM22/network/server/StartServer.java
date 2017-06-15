@@ -38,8 +38,7 @@ public class StartServer {
 			startServer.initilizeServers();
 			startServer.start();
 		} catch (IOException | InterruptedException e) {
-			System.err.println("Server terminato!");
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			LOGGER.log(Level.SEVERE, "Server terminato!", e);
 		}
 	}
 
@@ -150,6 +149,7 @@ class SocketConnection implements Runnable {
 			// resto in attesa di un client connesso
 			socket = serverSocket.accept();
 		} catch (IOException e) {
+
 			System.err.println("Socket IOException");
 		}
 	}

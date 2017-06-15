@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
@@ -30,6 +32,7 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 di interfacciarsi con la CLI
 */
 public class CLIinterface extends AbstractUI {
+	private final Logger LOGGER = Logger.getLogger(CLIinterface.class.getClass().getSimpleName());
 
 	private final String DEFAULT_IP = "localhost";
 	// Colori familiari
@@ -88,7 +91,7 @@ public class CLIinterface extends AbstractUI {
 			try {
 				showPrincipalMenu();
 			} catch (RemoteException e) {
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 		});
 		try {
@@ -657,7 +660,7 @@ public class CLIinterface extends AbstractUI {
 			if (ms.getMember() == null) {
 				System.out.printf("%-30s|%n", "| Reward:");
 				System.out.printf("- " + ms.getReward().getInfo().replaceAll("%n", "%n- "));
-				System.out.printf("PdC: " + ms.getCouncilPrivilege() + "%n");
+				System.out.printf("%s%n", "PdC: " + ms.getCouncilPrivilege());
 				System.out.printf("%-30s|%n", "| Requirement:" + ms.getSpaceRequirement());
 			} else
 				System.out.printf("%-30s|%n", "| " + ms.getMember().getPlayer().getNickname());
@@ -747,8 +750,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("1: Resource cost");
 		System.out.printf(vc.getCardCost1().getInfo());
 		showMsg("2: Military points cost");
-		System.out.printf("Requirement: " + vc.getCardCost2()[0].getInfo());
-		System.out.printf("Cost: " + vc.getCardCost2()[1].getInfo());
+		System.out.println("Requirement: " + vc.getCardCost2()[0].getMilitary() + "military points");
+		System.out.println("Cost: " + vc.getCardCost2()[1].getMilitary() + "military points");
 		Integer option = in.nextInt();
 		switch (option) {
 		case 1:

@@ -31,7 +31,7 @@ public class MainGameController implements Runnable {
 
 	private final Integer END_DEFINER = 2;
 
-	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
+	private final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
 	private ArrayList<PlayerInfo> playerRoom;
 	private InitialConfigurator initialConfigurator;
@@ -65,7 +65,7 @@ public class MainGameController implements Runnable {
 							// ho perso la connessione con il client
 							sMove = "End@Disconnect@";
 						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
+							LOGGER.log(Level.SEVERE, e.getMessage(), e);
 						}
 						System.out.println(p.getNickname() + ": " + sMove);
 						// ottengo informazioni dalla mossa ricevuta
@@ -74,7 +74,7 @@ public class MainGameController implements Runnable {
 						try {
 							moveManager.manageMove(aMove);
 						} catch (InvalidMoveException e) {
-							e.printStackTrace();
+							LOGGER.log(Level.SEVERE, e.getMessage(), e);
 						}
 					}
 				// fine turno di un giocatore
@@ -145,7 +145,7 @@ public class MainGameController implements Runnable {
 			try {
 				vaticanReportManager.manageVaticanReport(game, this);
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 	}
 

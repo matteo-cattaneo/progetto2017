@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.FileParser;
@@ -16,7 +18,8 @@ import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class InitialConfigurator extends TurnInizializator {
-	FileParser fileParser = new FileParser();
+	private final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
+	private FileParser fileParser = new FileParser();
 	private final Integer BASE_WOOD_STONE = 2;
 	private final Integer BASE_SERVANTS = 3;
 	private final Integer BASE_COINS = 5;
@@ -43,7 +46,7 @@ public class InitialConfigurator extends TurnInizializator {
 		try {
 			loadConfiguration(game);
 		} catch (IOException e) {
-			System.err.println("Errore nel caricamento dei file JSON");
+			LOGGER.log(Level.SEVERE, "Errore nel caricamento dei file JSON", e);
 		}
 		giveInitialResources(game);
 		mixCards(game);

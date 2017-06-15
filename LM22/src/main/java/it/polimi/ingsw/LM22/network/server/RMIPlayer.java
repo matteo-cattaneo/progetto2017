@@ -44,7 +44,6 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public void login(IClient client) throws RemoteException {
 		this.name = client.getName();
 		this.client = client;
-		// TODO verificare se ha gia iniziato un altra partita
 	}
 
 	// restituisce l'oggetto remoto del client

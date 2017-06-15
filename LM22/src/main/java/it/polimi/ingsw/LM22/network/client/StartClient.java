@@ -7,8 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StartClient {
+	private static final Logger LOGGER = Logger.getLogger(StartClient.class.getClass().getSimpleName());
 
 	public static void main(String[] args) {
 		StartClient start = new StartClient();
@@ -22,6 +25,7 @@ public class StartClient {
 			System.out.println(
 					new String(Files.readAllBytes(Paths.get(".\\JSON\\SplashScreen.txt")), StandardCharsets.UTF_8));
 		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Splash screen not found!", e);
 		}
 		// stampo la selezione dell'intefaccia
 		AbstractUI UI = printUISelection();
@@ -35,7 +39,7 @@ public class StartClient {
 		try {
 			client.connect(UI.getName(), UI.getIP());
 		} catch (RemoteException e) {
-			UI.showMsg("Connection server error!");
+			LOGGER.log(Level.SEVERE, "Connection server error!", e);
 		}
 	}
 	/*
@@ -83,7 +87,7 @@ public class StartClient {
 			try {
 				client = new RMIClient(UI);
 			} catch (RemoteException e) {
-				UI.showMsg("Error RMI!");
+				LOGGER.log(Level.SEVERE, "Error RMI!", e);
 			}
 			break;
 		case 2:
