@@ -103,17 +103,17 @@ public class StartServer {
 				i++;
 			}
 		}
-		System.out.println("Game started!!!");
 		// avvio thread della partita (controller) passandogli la lista dei
 		// giocatori
 		executor.submit(new MainGameController(playerRoom));
 		start();
 	}
 
-	private boolean playerExist(PlayerInfo player) {
+	private boolean playerExist(PlayerInfo player) throws IOException {
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {
+					pi.getIplayer().showMsg("You are now disconnected, new session established!");
 					pi.setIplayer(player.getIplayer());
 					pi.setConnected(true);
 					return true;

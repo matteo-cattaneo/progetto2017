@@ -8,7 +8,7 @@ public class TestResource extends TestCase {
 	Resource prova;
 
 	// assigning the values
-	protected void setUp() {
+	public void setUp() {
 		prova = new Resource(0, 2, 3, 4, 8, 1, 4);
 	}
 

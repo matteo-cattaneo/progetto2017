@@ -92,4 +92,10 @@ public class SocketPlayer implements IPlayer {
 		return in.readUTF();
 	}
 
+	@Override
+	public void showMsg(String msg) throws IOException {
+		out.writeUTF("msg@" + msg);
+		out.flush();
+	}
+
 }

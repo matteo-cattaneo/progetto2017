@@ -79,4 +79,9 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	public String floorRequest() throws RemoteException {
 		return UI.printLevelsMenu();
 	}
+
+	@Override
+	public void showMsg(String msg) throws RemoteException {
+		UI.showMsg(msg);
+	}
 }

@@ -28,4 +28,6 @@ public interface IClient extends Remote {
 	public String towerRequest() throws RemoteException;
 
 	public String floorRequest() throws RemoteException;
+	
+	public void showMsg(String msg) throws RemoteException;
 }

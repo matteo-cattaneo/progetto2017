@@ -72,4 +72,9 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public String floorRequest() throws IOException {
 		return client.floorRequest();
 	}
+
+	@Override
+	public void showMsg(String msg) throws IOException {
+		client.showMsg(msg);
+	}
 }

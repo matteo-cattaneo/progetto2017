@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,6 +48,7 @@ public class MainGameController implements Runnable {
 
 	@Override
 	public void run() {
+		showMsgAll("New turn started!");
 		AbstractMove aMove;
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
 			// inizio turno
@@ -95,6 +95,9 @@ public class MainGameController implements Runnable {
 			manageEndGame(game);
 	}
 
+	/*
+	 * verifico se il player in questione è connesso
+	 */
 	private boolean checkPlayer(Player p) {
 		for (int j = 0; j < playerRoom.size(); j++)
 			if (p.getNickname().equals(playerRoom.get(j).getName()))
@@ -269,13 +272,30 @@ public class MainGameController implements Runnable {
 		return map;
 	}
 
+	/*
+	 * sospendo i client che sono disconnessi o non hanno effettuato la mossa in
+	 * tempo utile
+	 */
 	public void disconnectPlayer(Player player) {
-		// game.getPlayersOrder().remove(player);
+		// imposto a false l attibuto connected, cosi da segnalare che i player
+		// è disconnesso
 		for (int j = 0; j < playerRoom.size(); j++)
 			if (player.getNickname().equals(playerRoom.get(j).getName()))
 				playerRoom.get(j).setConnected(false);
-		// TODO informare tutti
-		System.out.println(player.getNickname() + " disconnected!");
+		showMsgAll(player.getNickname() + " disconnected!");
+	}
+
+	/*
+	 * visualizzo un messaggio sul display di tutti i client
+	 */
+	private void showMsgAll(String msg) {
+		for (int j = 0; j < playerRoom.size(); j++)
+			try {
+				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer())))
+					playerRoom.get(j).getIplayer().showMsg(msg);
+			} catch (IOException e) {
+			}
+		System.out.println(msg);
 	}
 
 	/*
@@ -302,7 +322,6 @@ public class MainGameController implements Runnable {
 				param[0] = effect.getCardType();
 			param[1] = Integer.parseInt(getIPlayer(player).floorRequest());
 		} catch (NumberFormatException | IOException e) {
-			e.printStackTrace();
 		}
 		return param;
 	}

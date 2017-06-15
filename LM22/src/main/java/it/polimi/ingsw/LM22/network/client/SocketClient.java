@@ -61,6 +61,8 @@ public class SocketClient implements IClient {
 				} else if (socketLine[0].equals("floor")) {
 					socketOut.writeUTF(UI.printLevelsMenu());
 					socketOut.flush();
+				} else if (socketLine[0].equals("msg")) {
+					UI.showMsg(socketLine[1]);
 				} else if (socketLine[0].equals("board")) {
 					// ricevo e visualizzo la board
 					UI.showBoard((Game) socketIn.readObject());
@@ -111,6 +113,12 @@ public class SocketClient implements IClient {
 	public String floorRequest() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void showMsg(String msg) throws RemoteException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

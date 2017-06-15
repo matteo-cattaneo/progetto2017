@@ -161,47 +161,54 @@ public class CLIinterface extends AbstractUI {
 				if (t.getFloor()[j].getCard().getName().toLowerCase().equals(name.toLowerCase()))
 					card = t.getFloor()[j].getCard();
 		showMsg("");
-		showMsg("Name: " + card.getName());
-		showMsg("Period: " + card.getPeriod());
-		if (card instanceof TerritoryCard) {
-			showMsg("Immediate effect: ");
-			System.out.printf(card.getImmediateEffect().getInfo());
-			showMsg("Permament effect:");
-			System.out.printf("Requirement: " + ((TerritoryCard) card).getRequirement().toString() + "%n"
-					+ ((TerritoryCard) card).getPermanentEffect().getInfo());
-			showMsg("Card type: Territory");
+		if (card != null) {
+			showMsg("Name: " + card.getName());
+			showMsg("Period: " + card.getPeriod());
+			if (card instanceof TerritoryCard) {
+				showMsg("Immediate effect: ");
+				System.out.printf(card.getImmediateEffect().getInfo());
+				showMsg("Permament effect:");
+				System.out.printf("Requirement: " + ((TerritoryCard) card).getRequirement().toString() + "%n"
+						+ ((TerritoryCard) card).getPermanentEffect().getInfo());
+				showMsg("Card type: Territory");
+			}
+			if (card instanceof CharacterCard) {
+				showMsg("Card cost: ");
+				System.out.printf(((CharacterCard) card).getCost().getInfo());
+				showMsg("Immediate effect: ");
+				System.out.printf(card.getImmediateEffect().getInfo());
+				showMsg("Permament effect:");
+				System.out.printf(((CharacterCard) card).getPermanentEffect().getInfo());
+				showMsg("Card type: Character");
+			}
+			if (card instanceof BuildingCard) {
+				showMsg("Card cost: ");
+				System.out.printf(((BuildingCard) card).getCost().getInfo());
+				showMsg("Immediate effect: ");
+				System.out.printf(card.getImmediateEffect().getInfo());
+				showMsg("Permament effect:");
+				System.out.printf(((BuildingCard) card).getPermanentEffect().getInfo());
+				showMsg("Card type: Building");
+			}
+			if (card instanceof VentureCard) {
+				showMsg("Card cost: ");
+				System.out.printf(((VentureCard) card).getCardCost1().getInfo());
+				showMsg("Second card cost: ");
+				showMsg("Require: ");
+				System.out.printf(((VentureCard) card).getCardCost2()[0].getInfo());
+				showMsg("Cost: ");
+				System.out.printf(((VentureCard) card).getCardCost2()[1].getInfo());
+				showMsg("Immediate effect: ");
+				System.out.printf(card.getImmediateEffect().getInfo());
+				showMsg("Permament effect:");
+				System.out.printf(((VentureCard) card).getPermanentEffect().getInfo());
+				showMsg("Card type: Venture");
+			}
 		}
-		if (card instanceof CharacterCard) {
-			showMsg("Card cost: ");
-			System.out.printf(((CharacterCard) card).getCost().getInfo());
-			showMsg("Immediate effect: ");
-			System.out.printf(card.getImmediateEffect().getInfo());
-			showMsg("Permament effect:");
-			System.out.printf(((CharacterCard) card).getPermanentEffect().getInfo());
-			showMsg("Card type: Character");
-		}
-		if (card instanceof BuildingCard) {
-			showMsg("Card cost: ");
-			System.out.printf(((BuildingCard) card).getCost().getInfo());
-			showMsg("Immediate effect: ");
-			System.out.printf(card.getImmediateEffect().getInfo());
-			showMsg("Permament effect:");
-			System.out.printf(((BuildingCard) card).getPermanentEffect().getInfo());
-			showMsg("Card type: Building");
-		}
-		if (card instanceof VentureCard) {
-			showMsg("Card cost: ");
-			System.out.printf(((VentureCard) card).getCardCost1().getInfo());
-			showMsg("Second card cost: ");
-			System.out.printf("Require: " + ((VentureCard) card).getCardCost2()[0].getInfo());
-			System.out.printf("Cost: " + ((VentureCard) card).getCardCost2()[1].getInfo());
-			showMsg("Immediate effect: ");
-			System.out.printf(card.getImmediateEffect().getInfo());
-			showMsg("Permament effect:");
-			System.out.printf(((VentureCard) card).getPermanentEffect().getInfo());
-			showMsg("Card type: Venture");
-		}
+		else showMsg("Card not found!");
+			
 		showMsg("");
+
 	}
 
 	@Override

@@ -28,4 +28,6 @@ public interface IPlayer extends Remote {
 	public String towerRequest() throws IOException;
 
 	public String floorRequest() throws IOException;
+
+	public void showMsg(String msg) throws IOException;
 }
