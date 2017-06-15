@@ -556,25 +556,25 @@ public class CLIinterface extends AbstractUI {
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
 			System.out.print("| ");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
-				System.out.printf("%-22s| ", c.getName());
+				System.out.printf("%-30s| ", c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
 			System.out.print("| ");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
-				System.out.printf("%-22s| ", c.getName());
+				System.out.printf("%-30s| ", c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
 			System.out.print("| ");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
-				System.out.printf("%-22s| ", c.getName());
+				System.out.printf("%-30s| ", c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
 			System.out.print("| ");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
-				System.out.printf("%-22s| ", c.getName());
+				System.out.printf("%-30s| ", c.getName());
 			showMsg("");
 		}
 	}
@@ -630,7 +630,10 @@ public class CLIinterface extends AbstractUI {
 			System.out.print("| ");
 			// TODO rewards o dice requirement
 			for (Tower t : game.getBoardgame().getTowers())
-				System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
+				if (t.getFloor()[j].getCard().getName() != null)
+					System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
+				else 
+					System.out.printf("%-22s| ", "");
 			showMsg("");
 		}
 		showMsg("|_______________________|_______________________|_______________________|_______________________|");

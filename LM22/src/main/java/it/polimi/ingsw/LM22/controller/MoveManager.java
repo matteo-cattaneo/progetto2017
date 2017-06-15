@@ -10,13 +10,11 @@ import java.util.logging.Logger;
 import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
 import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
-import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.WorkMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
-import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
 import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
 import it.polimi.ingsw.LM22.model.leader.NoOccupiedTowerEffect;
@@ -25,15 +23,14 @@ import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.leader.WorkAction;
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardSpace;
-import it.polimi.ingsw.LM22.model.CardToResourceEffect;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
 import it.polimi.ingsw.LM22.model.NoPermanentEffect;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
@@ -56,7 +53,7 @@ public class MoveManager {
 	private Game game;
 	private MainGameController mainGame;
 	private ResourceHandler resourceHandler = new ResourceHandler();
-	public EffectManager effectManager;
+	public EffectManager effectManager = new EffectManager(this);
 
 	public MoveManager(Game game, MainGameController mainGame) {
 		this.game = game;
@@ -203,14 +200,14 @@ public class MoveManager {
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
 		Resource bonus = resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer());
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
-		// cardCost già scontato rispetto agli effetti delle carte Personaggio
 		Resource cardCost = calculateCardCost(cardMove, tower);
 		switch (tower) {
 		case 3:
-			// problema sarebbe gestire il doppio costo --> se valido solo 1
-			// faccio comunque la mossa
-			// se invece doppio devo chiedere al'utente quale vuole utilizzare
-			resourceHandler.manageVentureCost(cardCost, ((VentureCard) card).getCardCost2());
+			Integer choice = mainGame.askForCost(cardMove);
+			if (choice == 2 && !resourceHandler.manageVentureCost(cardMove.getPlayer(), ((VentureCard) card).getCardCost2()))
+				return false;
+			else if(!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
+				return false;
 			break;
 		case 2:
 		case 1:
@@ -223,12 +220,9 @@ public class MoveManager {
 				return false;
 			break;
 		}
-		// ISTRUZIONE DA ESEGUIRE NELL'HANDLE
-		// resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(),
-		// bonus);
 		return true;
 	}
-
+	
 	/*
 	 * metodo che calcola il bonus ottenuto dallo spazio azione del floor
 	 * relativo
@@ -377,14 +371,14 @@ public class MoveManager {
 		case 0:
 			TerritoryCard card0 = (TerritoryCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add(card0);
-			t.getFloor()[level].setCard(null);
+			t.getFloor()[level].setCard(new TerritoryCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 1:
 			CharacterCard card1 = (CharacterCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add(card1);
-			t.getFloor()[level].setCard(null);
+			t.getFloor()[level].setCard(new CharacterCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			if (card1.getPermanentEffect().getClass() != NoPermanentEffect.class)
@@ -393,14 +387,14 @@ public class MoveManager {
 		case 2:
 			BuildingCard card2 = (BuildingCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add(card2);
-			t.getFloor()[level].setCard(null);
+			t.getFloor()[level].setCard(new BuildingCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
 			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(), mainGame);
 			break;
 		case 3:
 			VentureCard card3 = (VentureCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getVenturesCards().add(card3);
-			t.getFloor()[level].setCard(null);
+			t.getFloor()[level].setCard(new BuildingCard());
 			// metodo chiamante l'effectManager per l'effetto immediato != da
 			// NoEffect
 			effectManager.manageEffect(card3.getImmediateEffect(), cardMove.getPlayer(), mainGame);

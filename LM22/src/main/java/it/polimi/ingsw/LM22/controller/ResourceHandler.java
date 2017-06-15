@@ -20,7 +20,7 @@ public class ResourceHandler {
 	public Resource calculateResource(Resource res, Player p) {
 		for (Effect e: p.getEffects())
 			if (e instanceof ResourceMalusEx){
-				diffResource(res, ((ResourceMalusEx) e).getMalus());
+				res = cardDiscounted(res, ((ResourceMalusEx) e).getMalus());
 			}
 		return res;
 	}
@@ -38,7 +38,8 @@ public class ResourceHandler {
 	 * metodo che gestisce il controllo delle carte Venture, sia con doppio
 	 * costo che con costo singolo normale o con costo in punti militari
 	 */
-	public boolean manageVentureCost(Resource cost1, Resource[] cost2) {
+	public boolean manageVentureCost(Player p, Resource[] cost2) {
+		//TODO
 		return false;
 
 	}

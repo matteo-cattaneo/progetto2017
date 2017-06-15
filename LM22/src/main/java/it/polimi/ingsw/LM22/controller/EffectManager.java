@@ -206,7 +206,16 @@ public class EffectManager {
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}
+		case "COLORED": {
+			String choice = mainGC.askForColor(p);
+			for (FamilyMember m: p.getMembers())
+				if (m.getColor() == choice){
+					m.setValue(e.getNewValueOfMember());
+					break;
+				}
 		}
+		}
+		
 	}
 
 	/*

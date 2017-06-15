@@ -336,4 +336,18 @@ public class MainGameController implements Runnable {
 		return false;
 	}
 
+	/*
+	 * metodo che richiede al player il colore su cui vuole attivare 
+	 * un determinato effetto
+	 */
+	public String askForColor(Player p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Integer askForCost(CardMove cardMove) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

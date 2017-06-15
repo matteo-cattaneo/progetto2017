@@ -1,6 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tower implements Serializable {
@@ -9,7 +10,7 @@ public class Tower implements Serializable {
 	private final Integer LEVELS = 4;
 	private final Floor floor[] = new Floor[LEVELS];
 	private boolean occupied;
-	private List<String> coloredMembersOnIt;
+	private List<String> coloredMembersOnIt = new ArrayList<String>();
 
 	public Floor[] getFloor() {
 		return floor;
