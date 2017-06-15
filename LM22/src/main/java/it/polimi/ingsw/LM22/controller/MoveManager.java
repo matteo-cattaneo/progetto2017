@@ -30,7 +30,6 @@ import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
 import it.polimi.ingsw.LM22.model.NoPermanentEffect;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
@@ -204,9 +203,10 @@ public class MoveManager {
 		switch (tower) {
 		case 3:
 			Integer choice = mainGame.askForCost(cardMove);
-			if (choice == 2 && !resourceHandler.manageVentureCost(cardMove.getPlayer(), ((VentureCard) card).getCardCost2()))
+			if (choice == 2
+					&& !resourceHandler.manageVentureCost(cardMove.getPlayer(), ((VentureCard) card).getCardCost2()))
 				return false;
-			else if(!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
+			else if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
 			break;
 		case 2:
@@ -222,7 +222,7 @@ public class MoveManager {
 		}
 		return true;
 	}
-	
+
 	/*
 	 * metodo che calcola il bonus ottenuto dallo spazio azione del floor
 	 * relativo
@@ -586,9 +586,10 @@ public class MoveManager {
 		Resource total = NOTHING;
 		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
 			if (valueOfAction >= card.getRequirement())
-				effectManager.harvestHandle(card.getPermanentEffect(), total);
+				effectManager.harvestHandle(card.getPermanentEffect(), total, move.getPlayer(), mainGame);
 		}
-		effectManager.harvestHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total);
+		effectManager.harvestHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total,
+				move.getPlayer(), mainGame);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 

@@ -82,10 +82,6 @@ public class ResourceHandler {
 		return true;
 	}
 
-	/*
-	 * DA FARE controllo per i bonus permanenti della carte Personaggio che
-	 * hanno l'effetto di diminuire il costo della carta
-	 */
 	public Resource cardDiscounted(Resource s1, Resource s2) {
 		Integer wood = 0;
 		Integer stone = 0;
