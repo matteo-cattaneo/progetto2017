@@ -20,9 +20,16 @@ import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
 import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
+import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
+import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
+import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
+import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
+import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
+import it.polimi.ingsw.LM22.model.leader.NoOccupiedTowerEffect;
+import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class EffectManager {
 
@@ -55,11 +62,9 @@ public class EffectManager {
 		}
 	}
 
-	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource resource) throws IOException {
-		r.subResource(resource, effect.getExchangedResource());
-		r.addResource(resource, r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
-	}
+	/*
+	 * DEVELOPMENT CARDS' EFFECTS
+	 */
 
 	/*
 	 * metodo che gestisce l'effetto in ingresso come effetto immediato di una
@@ -89,6 +94,12 @@ public class EffectManager {
 		}
 	}
 
+	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource resource) throws IOException {
+		r.subResource(resource, effect.getExchangedResource());
+		r.addResource(resource, r.calculateResource(
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+	}
+
 	/*
 	 * metodo che gestisce l'effetto rappresentante uno scambio di risorse (non
 	 * Privilegi del Consiglio)
@@ -109,8 +120,8 @@ public class EffectManager {
 	 * (ancora da implementare)
 	 */
 	public void doublechangeeffectManage(DoubleChangeEffect effect, Resource sum) {
-		//se entrambi i change sono disponibili chiedo quale effettuare
-		//dovrei chiedere se lo vuole fare
+		// se entrambi i change sono disponibili chiedo quale effettuare
+		// dovrei chiedere se lo vuole fare
 		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])) {
 			// metodo che chiede quale dei due cambi si vole effettuare
@@ -118,7 +129,7 @@ public class EffectManager {
 			if (choice == FIRST_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
-			} else if (choice == SECOND_CHANGE){
+			} else if (choice == SECOND_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 			}
@@ -177,6 +188,7 @@ public class EffectManager {
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
 		CardMove move = new CardMove(player, other, servants, tower, floor);
+		//TODO
 		moveManager.manageMove(move);
 	}
 
@@ -190,6 +202,7 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
+		//TODO
 		moveManager.manageMove(move);
 	}
 
@@ -222,6 +235,10 @@ public class EffectManager {
 		return;
 	}
 
+	/*
+	 * LEADER CARDS' EFFECTS
+	 */
+
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
@@ -230,8 +247,22 @@ public class EffectManager {
 	}
 
 	/*
-	 * metodo che gestisce il metodo di modifica dei valori dei familiari in base 
-	 * all'effetto 
+	 * da decidere se mettere il throws oppure usare il try catch TODO
+	 */
+	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException{
+		Resource servants = mainGC.askForServants(player);
+		FamilyMember other = new FamilyMember(player, UNCOLORED);
+		other.setUsed(false);
+		other.setValue(effect.getValueOfWork());
+		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
+		//TODO
+		moveManager.manageMove(move);
+	}
+	
+	
+	/*
+	 * metodo che gestisce il metodo di modifica dei valori dei familiari in
+	 * base all'effetto
 	 */
 	public void memberchangeeffectManage(MemberChangeEffect e, Player p) {
 		String color = e.getTypeOfMember();
@@ -257,11 +288,11 @@ public class EffectManager {
 				}
 		}
 		}
-
 	}
 
 	/*
-	 * metodo che gestisce tale effetto, ossia l'aumento del valore del proprio familiare
+	 * metodo che gestisce tale effetto, ossia l'aumento del valore del proprio
+	 * familiare
 	 */
 	public void memberbonuseffectManage(MemberBonusEffect e, Player p) {
 		String color = e.getTypeOfMember();
@@ -273,5 +304,29 @@ public class EffectManager {
 		}
 		}
 	}
+	
+	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect){
+		player.getEffects().add(effect);
+	}
 
+	public void inoccupiedspaceeffectManage(InOccupiedSpaceEffect effect){
+		player.getEffects().add(effect);
+	}
+	
+	public void nomilitaryrequesteffectManage(NoMilitaryRequestEffect effect){
+		player.getEffects().add(effect);
+	}
+	
+	public void churchsubstaineffectManage(ChurchSubstainEffect effect){
+		player.getEffects().add(effect);
+	}
+	
+	public void doubleresourceeffectManage(DoubleResourceEffect effect){
+		player.getEffects().add(effect);
+	}
+	
+	public void coinsdiscounteffectManage(CoinsDiscountEffect effect){
+		player.getEffects().add(effect);
+	}
+	
 }

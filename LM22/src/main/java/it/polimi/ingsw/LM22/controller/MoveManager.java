@@ -12,6 +12,7 @@ import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
 import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
 import it.polimi.ingsw.LM22.model.excommunication.WorkMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
+import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
@@ -285,6 +286,9 @@ public class MoveManager {
 		for (Effect e : cardMove.getPlayer().getEffects()) {
 			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType() == tower)
 				resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
+			else if (e instanceof CoinsDiscountEffect){
+				resourceHandler.cardDiscounted(res, ((CoinsDiscountEffect) e).getDiscount());
+			}
 		}
 		return res;
 	}
