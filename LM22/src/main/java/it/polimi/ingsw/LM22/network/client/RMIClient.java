@@ -4,7 +4,10 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
@@ -83,5 +86,30 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	@Override
 	public void showMsg(String msg) throws RemoteException {
 		UI.showMsg(msg);
+	}
+
+	@Override
+	public boolean supportRequest() throws RemoteException {
+		return UI.printSupportMenu();
+	}
+
+	@Override
+	public String colorRequest() throws RemoteException {
+		return UI.printColorMenu();
+	}
+
+	@Override
+	public Integer ventureCostRequest(VentureCard vc) throws RemoteException {
+		return UI.printVentureCostMenu(vc);
+	}
+
+	@Override
+	public boolean changeRequest(Resource[] exchange) throws RemoteException {
+		return UI.printChangeMenu(exchange);
+	}
+
+	@Override
+	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
+		return UI.printDoubleChangeMenu(effect);
 	}
 }

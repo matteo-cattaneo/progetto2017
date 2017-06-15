@@ -95,7 +95,7 @@ public class MoveManager {
 	/*
 	 * controlla se una mossa del tipo CardMove è ammessa o no
 	 */
-	public boolean cardmoveAllowed(CardMove cardMove) {
+	public boolean cardmoveAllowed(CardMove cardMove) throws IOException {
 		if (!checkMaxNumCardLimit(cardMove))
 			return false;
 		if (!checkCardSpace(cardMove))
@@ -143,7 +143,7 @@ public class MoveManager {
 	 */
 	private boolean checkCardSpace(CardMove cardMove) {
 		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
-		if (space.getMember() != null && !containsClass(cardMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
+		if (space.getMember() != null)
 			return false;
 		Integer memberEffectiveValue = calculateMemberEffectiveValue(cardMove);
 		if (space.getSpaceRequirement() > memberEffectiveValue)
@@ -188,7 +188,7 @@ public class MoveManager {
 	 * tutti i relativi effetti che possono essere applicati ad una mossa di
 	 * tipo CardMove
 	 */
-	private boolean checkCardCost(CardMove cardMove) {
+	private boolean checkCardCost(CardMove cardMove) throws IOException {
 		/*
 		 * importante tenere conto per il check sul costo i servitori che un
 		 * player può già aver giocato sottraendoli nella disequazione di

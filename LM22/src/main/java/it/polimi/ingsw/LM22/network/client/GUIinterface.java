@@ -2,11 +2,14 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
 /*
  * Classe che contiene tutti i metodi che permettono all'utente 
 di interfacciarsi con la GUI 
 */
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 
 //WIP
 public class GUIinterface extends AbstractUI {
@@ -84,12 +87,6 @@ public class GUIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void showLoginMenu() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public int showConnectionSelection() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -153,6 +150,36 @@ public class GUIinterface extends AbstractUI {
 	public void printCouncilMoveMenu() throws RemoteException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean printSupportMenu() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String printColorMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer printVentureCostMenu(VentureCard vc) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean printChangeMenu(Resource[] exchange) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

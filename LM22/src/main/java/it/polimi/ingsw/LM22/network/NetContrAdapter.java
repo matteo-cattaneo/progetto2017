@@ -24,7 +24,7 @@ public class NetContrAdapter {
 		// select the right move type and initialize with the right dynamic type
 		switch (param[0]) {
 		case "LeaderAct":
-			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]), getServantsAdded(param[2]), param[3]);
+			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]));
 			break;
 		case "LeaderSell":
 			objMove = new LeaderCardSelling(p, getLeaderCard(param[1]));

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -214,7 +215,7 @@ public class TurnInizializator {
 	 * dei familiari del giocatore che l'ha attivata NON GESTISCE FEDERICO DI
 	 * MONTEFELTRO
 	 */
-	public void updateFamilyMembersValue(Player p, MemberValueEffect e) {
+	public void updateFamilyMembersValue(Player p, MemberValueEffect e) throws IOException {
 		if (e instanceof MemberChangeEffect) {
 			effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
 		} else if (e instanceof MemberBonusEffect) {

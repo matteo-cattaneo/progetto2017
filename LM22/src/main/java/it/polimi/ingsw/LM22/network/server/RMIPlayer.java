@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 /*
  * classe utilizzata da remoto per le azioni sul client RMI
@@ -76,5 +79,30 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void showMsg(String msg) throws IOException {
 		client.showMsg(msg);
+	}
+
+	@Override
+	public boolean supportRequest() throws IOException {
+		return client.supportRequest();
+	}
+
+	@Override
+	public String colorRequest() throws IOException {
+		return client.colorRequest();
+	}
+
+	@Override
+	public Integer ventureCostRequest(VentureCard vc) throws IOException {
+		return client.ventureCostRequest(vc);
+	}
+
+	@Override
+	public boolean changeRequest(Resource[] exchange) throws IOException {
+		return client.changeRequest(exchange);
+	}
+
+	@Override
+	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException {
+		return client.doubleChangeRequest(effect);
 	}
 }

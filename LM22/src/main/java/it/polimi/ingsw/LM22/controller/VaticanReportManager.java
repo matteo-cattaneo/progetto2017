@@ -1,5 +1,7 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
+
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
@@ -50,7 +52,7 @@ public class VaticanReportManager {
 	 * metodo che gestisce tutta la fase di VaticanReport controllando volta per
 	 * volta tutti i giocatori
 	 */
-	public void manageVaticanReport(Game game, MainGameController mainGame) {
+	public void manageVaticanReport(Game game, MainGameController mainGame) throws IOException {
 		this.game = game;
 		Integer period = game.getPeriod();
 		for (Player p : game.getPlayersOrder()) {

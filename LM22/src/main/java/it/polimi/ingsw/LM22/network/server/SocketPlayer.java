@@ -6,7 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class SocketPlayer implements IPlayer {
@@ -36,17 +39,12 @@ public class SocketPlayer implements IPlayer {
 	// inivia al client il model per poter visualizzare la board
 	@Override
 	public void showBoard(Game game) throws IOException {
-		// Gson gson = new Gson();
-		/*
-		 * Utilizzo Gson per creare un nuovo oggetto identico a quello di
-		 * partenza per poi poter inviare le modifiche al client socket. Senza
-		 * questo passaggio, il client mantiene l oggetto in locale inalterato
-		 */
-		// Game game2 = gson.fromJson(gson.toJson(game), game.getClass());
 
 		out.writeUTF("board");
 		out.flush();
 
+		// fondamentale, pulisce la cache e permette di inviare il nuovo oggetto
+		// modficato
 		out.reset();
 
 		out.writeObject(game);
@@ -96,6 +94,59 @@ public class SocketPlayer implements IPlayer {
 	public void showMsg(String msg) throws IOException {
 		out.writeUTF("msg@" + msg);
 		out.flush();
+	}
+
+	@Override
+	public boolean supportRequest() throws IOException {
+		out.writeUTF("support");
+		out.flush();
+		return in.readBoolean();
+	}
+
+	@Override
+	public String colorRequest() throws IOException {
+		out.writeUTF("color");
+		out.flush();
+		return in.readUTF();
+	}
+
+	@Override
+	public Integer ventureCostRequest(VentureCard vc) throws IOException {
+		out.writeUTF("ventureCost");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(vc);
+		out.flush();
+
+		return in.readInt();
+	}
+
+	@Override
+	public boolean changeRequest(Resource[] exchange) throws IOException {
+		out.writeUTF("change");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(exchange);
+		out.flush();
+
+		return in.readBoolean();
+	}
+
+	@Override
+	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException {
+		out.writeUTF("doubleChange");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(effect);
+		out.flush();
+
+		return in.readInt();
 	}
 
 }

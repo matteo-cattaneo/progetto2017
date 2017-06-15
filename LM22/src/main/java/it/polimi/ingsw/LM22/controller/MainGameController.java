@@ -16,9 +16,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.CardActionEffect;
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
@@ -39,7 +41,6 @@ public class MainGameController implements Runnable {
 	private EffectManager effectManager = new EffectManager(moveManager);
 	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
-	// private int i = 0;
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
@@ -48,7 +49,6 @@ public class MainGameController implements Runnable {
 
 	@Override
 	public void run() {
-		showMsgAll("New turn started!");
 		AbstractMove aMove;
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
 			// inizio turno
@@ -74,7 +74,7 @@ public class MainGameController implements Runnable {
 						try {
 							moveManager.manageMove(aMove);
 						} catch (InvalidMoveException e) {
-							// segnalo al client che non può fare questa mossa
+							e.printStackTrace();
 						}
 					}
 				// fine turno di un giocatore
@@ -142,18 +142,11 @@ public class MainGameController implements Runnable {
 	private void vaticanReport() {
 		// solo alla fine del periodo
 		if (game.getRound().equals(END_DEFINER))
-			vaticanReportManager.manageVaticanReport(game, this);
-	}
-
-	/*
-	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
-	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
-	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
-	 * punti vittoria + deve controllare se ha Sisto VI attivato
-	 */
-	public boolean askSupport(Player player) {
-
-		return false;
+			try {
+				vaticanReportManager.manageVaticanReport(game, this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 	private void turnInit() {
@@ -313,7 +306,7 @@ public class MainGameController implements Runnable {
 	 * metodo che chiede torre e piano per una nuova mossa ritorna come primo
 	 * parametro la torre e come secondo il floor
 	 */
-	public Integer[] askForCardSpace(Player player, CardActionEffect effect) {
+	public Integer[] askForCardSpace(Player player, CardActionEffect effect) throws IOException {
 		Integer[] param = new Integer[2];
 		try {
 			if (effect.getCardType().equals(-1))
@@ -321,33 +314,53 @@ public class MainGameController implements Runnable {
 			else
 				param[0] = effect.getCardType();
 			param[1] = Integer.parseInt(getIPlayer(player).floorRequest());
-		} catch (NumberFormatException | IOException e) {
+		} catch (NumberFormatException e) {
 		}
 		return param;
 	}
-	
 
 	/*
 	 * metodo che chiama il player giocante e chiede se vuole effettuare questo
 	 * scambio (nel caso abbia effettivamente le risorse disponibili)
 	 */
-	public boolean askChangeToPlayer(Player p, Resource[] exchange) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean askChangeToPlayer(Player p, Resource[] exchange) throws IOException {
+		return getIPlayer(p).changeRequest(exchange);
 	}
 
 	/*
-	 * metodo che richiede al player il colore su cui vuole attivare 
-	 * un determinato effetto
+	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
+	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
+	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
+	 * punti vittoria + deve controllare se ha Sisto VI attivato
 	 */
-	public String askForColor(Player p) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean askSupport(Player player) throws IOException {
+		return getIPlayer(player).supportRequest();
 	}
 
-	public Integer askForCost(CardMove cardMove) {
-		// TODO Auto-generated method stub
-		return null;
+	/*
+	 * metodo che richiede al player il colore su cui vuole attivare un
+	 * determinato effetto
+	 */
+	public String askForColor(Player player) throws IOException {
+		return getIPlayer(player).colorRequest();
+	}
+
+	/*
+	 * Chiedo al player quale costo vuole usare: 0 -> primo costo(risorse), 1 ->
+	 * secondo costo (punti militari)
+	 */
+	public Integer askForCost(CardMove cardMove) throws IOException {
+		VentureCard vc = (VentureCard) game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getFloor()[cardMove
+				.getLevelSelected()].getCard();
+		return getIPlayer(cardMove.getPlayer()).ventureCostRequest(vc);
+	}
+
+	/*
+	 * Chiedo al player quale effetto vuole attivare: 1 -> primo effetto, 2 ->
+	 * secondo effetto
+	 */
+	public Integer askForDoubleChange(Player player, DoubleChangeEffect effect) throws IOException {
+		return getIPlayer(player).doubleChangeRequest(effect);
 	}
 
 }

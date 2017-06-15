@@ -6,7 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 
 public class SocketClient implements IClient {
 	private final int SOCKET_PORT = 1337;
@@ -44,28 +47,56 @@ public class SocketClient implements IClient {
 			while (!socket.isClosed()) {
 				// ricevo il comando dal server
 				String[] socketLine = socketIn.readUTF().split("@");
-				if (socketLine[0].equals("start")) {
+				switch (socketLine[0]) {
+				case "msg":
+					UI.showMsg(socketLine[1]);
+					break;
+				case "board":
+					// ricevo e visualizzo la board
+					UI.showBoard((Game) socketIn.readObject());
+					break;
+				case "start":
 					// se è start inizio il mio turno
 					UI.printMoveMenu();
 					socketOut.writeUTF(UI.getMove());
 					socketOut.flush();
-				} else if (socketLine[0].equals("council")) {
+					break;
+				case "council":
 					socketOut.writeUTF(UI.councilRequest(Integer.parseInt(socketLine[1])));
 					socketOut.flush();
-				} else if (socketLine[0].equals("servants")) {
+					break;
+				case "servants":
 					socketOut.writeUTF(UI.printServantsAddictionMenu());
 					socketOut.flush();
-				} else if (socketLine[0].equals("tower")) {
+					break;
+				case "tower":
 					socketOut.writeUTF(UI.printTowersMenu());
 					socketOut.flush();
-				} else if (socketLine[0].equals("floor")) {
+					break;
+				case "floor":
 					socketOut.writeUTF(UI.printLevelsMenu());
 					socketOut.flush();
-				} else if (socketLine[0].equals("msg")) {
-					UI.showMsg(socketLine[1]);
-				} else if (socketLine[0].equals("board")) {
-					// ricevo e visualizzo la board
-					UI.showBoard((Game) socketIn.readObject());
+					break;
+				case "support":
+					socketOut.writeBoolean(UI.printSupportMenu());
+					socketOut.flush();
+					break;
+				case "color":
+					socketOut.writeUTF(UI.printColorMenu());
+					socketOut.flush();
+					break;
+				case "ventureCost":
+					socketOut.writeInt(UI.printVentureCostMenu((VentureCard) socketIn.readObject()));
+					socketOut.flush();
+					break;
+				case "change":
+					socketOut.writeBoolean(UI.printChangeMenu((Resource[]) socketIn.readObject()));
+					socketOut.flush();
+					break;
+				case "doubleChange":
+					socketOut.writeInt(UI.printDoubleChangeMenu((DoubleChangeEffect) socketIn.readObject()));
+					socketOut.flush();
+					break;
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {
@@ -119,6 +150,36 @@ public class SocketClient implements IClient {
 	public void showMsg(String msg) throws RemoteException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public boolean supportRequest() throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String colorRequest() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer ventureCostRequest(VentureCard vc) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean changeRequest(Resource[] exchange) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

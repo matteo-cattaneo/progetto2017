@@ -104,7 +104,7 @@ public class EffectManager {
 	 * metodo che gestisce l'effetto rappresentante uno scambio di risorse (non
 	 * Privilegi del Consiglio)
 	 */
-	public void changeeffectManage(ChangeEffect effect, Resource sum) {
+	public void changeeffectManage(ChangeEffect effect, Resource sum) throws IOException {
 		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
@@ -119,13 +119,13 @@ public class EffectManager {
 	 * fattibile usa askChangeToPlayer() --> altrimenti usa un altro metodo
 	 * (ancora da implementare)
 	 */
-	public void doublechangeeffectManage(DoubleChangeEffect effect, Resource sum) {
+	public void doublechangeeffectManage(DoubleChangeEffect effect, Resource sum) throws IOException {
 		// se entrambi i change sono disponibili chiedo quale effettuare
 		// dovrei chiedere se lo vuole fare
 		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])) {
 			// metodo che chiede quale dei due cambi si vole effettuare
-			Integer choice = mainGC.askForDoubleChange(effect);
+			Integer choice = mainGC.askForDoubleChange(player, effect);
 			if (choice == FIRST_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
@@ -264,7 +264,7 @@ public class EffectManager {
 	 * metodo che gestisce il metodo di modifica dei valori dei familiari in
 	 * base all'effetto
 	 */
-	public void memberchangeeffectManage(MemberChangeEffect e, Player p) {
+	public void memberchangeeffectManage(MemberChangeEffect e, Player p) throws IOException {
 		String color = e.getTypeOfMember();
 		switch (color) {
 		case "ALL":

@@ -14,9 +14,12 @@ import java.util.concurrent.TimeoutException;
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.Player;
+import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
@@ -51,11 +54,12 @@ public class CLIinterface extends AbstractUI {
 	private String name;
 	private boolean memberMove = false;
 	private long timeout = 0;
+	private long time;
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
 	 */
-	public void setMove(String add) {
+	private void setMove(String add) {
 		move = move + add + "@";
 	}
 
@@ -63,7 +67,7 @@ public class CLIinterface extends AbstractUI {
 	 * restituisce al chiamante la mossa creata in precedenza tramite il menu
 	 */
 	@Override
-	public String getMove() {
+	public String getMove() throws RemoteException {
 		return move;
 	}
 
@@ -73,6 +77,8 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "";
+		timeout = game.getMoveTimer();
+		time = System.currentTimeMillis() / 1000;
 		/*
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
 		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
@@ -80,9 +86,9 @@ public class CLIinterface extends AbstractUI {
 		ExecutorService exe = Executors.newFixedThreadPool(1);
 		Future<?> future = exe.submit(() -> {
 			try {
-				System.out.println("Timeout: " + timeout);
 				showPrincipalMenu();
 			} catch (RemoteException e) {
+				e.printStackTrace();
 			}
 		});
 		try {
@@ -98,7 +104,8 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	private void showPrincipalMenu() throws RemoteException {
-		long time = System.currentTimeMillis() / 1000;
+		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
@@ -111,6 +118,14 @@ public class CLIinterface extends AbstractUI {
 		int option;
 		option = in.nextInt();
 		switch (option) {
+		case 1:
+			if (memberMove == false) {
+				printMemberMoveMenu();
+				break;
+			} else {
+				printInvalidInput();
+				showPrincipalMenu();
+			}
 		case 2:
 			showCard();
 			showPrincipalMenu();
@@ -135,13 +150,7 @@ public class CLIinterface extends AbstractUI {
 		case 5:
 			setMove("End");
 			memberMove = false;
-			timeout = game.getMoveTimer();
 			break;
-		case 1:
-			if (memberMove == false) {
-				printMemberMoveMenu();
-				break;
-			}
 		default:
 			printInvalidInput();
 			showPrincipalMenu();
@@ -151,7 +160,7 @@ public class CLIinterface extends AbstractUI {
 		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
 	}
 
-	private void showCard() {
+	private void showCard() throws RemoteException {
 		showMsg("Insert the card name: (no case sensitive)");
 		in.nextLine();
 		String name = in.nextLine();
@@ -204,9 +213,9 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf(((VentureCard) card).getPermanentEffect().getInfo());
 				showMsg("Card type: Venture");
 			}
-		}
-		else showMsg("Card not found!");
-			
+		} else
+			showMsg("Card not found!");
+
 		showMsg("");
 
 	}
@@ -271,7 +280,6 @@ public class CLIinterface extends AbstractUI {
 		default:
 			printInvalidInput();
 			printFamilyMemberMenu();
-			break;
 		}
 	}
 
@@ -283,13 +291,12 @@ public class CLIinterface extends AbstractUI {
 			return servants.toString();
 		} else {
 			printInvalidInput();
-			printServantsAddictionMenu();
+			return printServantsAddictionMenu();
 		}
-		return null;
 	}
 
 	@Override
-	public String printTowersMenu() {
+	public String printTowersMenu() throws RemoteException {
 		showMsg("Choose the Tower:");
 		showMsg("1: " + TERRITORY);
 		showMsg("2: " + CHARACTER);
@@ -304,14 +311,12 @@ public class CLIinterface extends AbstractUI {
 			return String.valueOf(option - 1);
 		default:
 			printInvalidInput();
-			printTowersMenu();
-			break;
+			return printTowersMenu();
 		}
-		return null;
 	}
 
 	@Override
-	public String printLevelsMenu() {
+	public String printLevelsMenu() throws RemoteException {
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
 		Integer level = in.nextInt();
 		switch (level) {
@@ -322,9 +327,8 @@ public class CLIinterface extends AbstractUI {
 			return String.valueOf(level - 1);
 		default:
 			printInvalidInput();
-			printLevelsMenu();
+			return printLevelsMenu();
 		}
-		return null;
 	}
 
 	@Override
@@ -398,7 +402,6 @@ public class CLIinterface extends AbstractUI {
 		setMove(printServantsAddictionMenu());
 	}
 
-	// TODO test con carte leader caricate
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
 		setMove("LeaderSell");
@@ -416,7 +419,6 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
-	// TODO test con carte leader caricate
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
 		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
@@ -434,17 +436,11 @@ public class CLIinterface extends AbstractUI {
 			printInvalidInput();
 			printActivateLeaderCardMenu();
 		}
-		// TODO controlli su carte speciali per richiedere servitori(Integer) e
-		// colore(String)
-	}
-
-	public void printInvalidInput() {
-		showMsg("Invalid input");
 	}
 
 	@Override
-	public void showLoginMenu() {
-		// TODO Password & name
+	public void printInvalidInput() {
+		showMsg("Invalid input");
 	}
 
 	/*
@@ -554,32 +550,28 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|%n", "| Development cards:");
 
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			System.out.print("| ");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
-				System.out.printf("%-30s| ", c.getName());
+				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			System.out.print("| ");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
-				System.out.printf("%-30s| ", c.getName());
+				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.print("| ");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
-				System.out.printf("%-30s| ", c.getName());
+				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.print("| ");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
-				System.out.printf("%-30s| ", c.getName());
+				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
 		}
 	}
 
-	private void showBoardTracks(Game game) {
+	private void showBoardTracks(Game game) throws RemoteException {
 		System.out.printf("%-30s|%n", "| Faith points track:");
 		// trovo il massimo victory
 		int maxF = 0;
@@ -620,23 +612,33 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
-		if (timeout == 0)
-			timeout = game.getMoveTimer();
 		// Towers
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Towers: ");
-		showMsg("________________________________________________________________________________________________");
-		for (int j = 0; j < 4; j++) {
-			System.out.print("| ");
-			// TODO rewards o dice requirement
+		showMsg("|_____________________________|");
+		showMsg("        _________________________________________________________________________________________________");
+		for (int j = 3; j >= 0; j--) {
+			System.out.print("Dice " + game.getBoardgame().getTowers()[0].getFloor()[j].getSpace().getSpaceRequirement()
+					+ ": | ");
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
 					System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
-				else 
-					System.out.printf("%-22s| ", "");
+				else
+					System.out.printf("%-22s| ",
+							"#Name: " + t.getFloor()[j].getSpace().getMember().getPlayer().getNickname());
 			showMsg("");
+			System.out.print("Reward: | ");
+			for (Tower t : game.getBoardgame().getTowers())
+				if (t.getFloor()[j].getCard().getName() != null)
+					System.out.printf("%-22s| ",
+							t.getFloor()[j].getSpace().getReward().getInfo().replaceAll("%n", " "));
+				else
+					System.out.printf("%-22s| ",
+							"#Color: " + t.getFloor()[j].getSpace().getMember().getPlayer().getColor());
+			showMsg("");
+			showMsg("        |_______________________|_______________________|_______________________|_______________________|");
+
 		}
-		showMsg("|_______________________|_______________________|_______________________|_______________________|");
 		// palazzo del consiglio
 		showMsg("");
 		showMsg("______________________________");
@@ -646,7 +648,22 @@ public class CLIinterface extends AbstractUI {
 			System.out.printf("%-30s|%n", "| " + i + ":" + fm.getPlayer().getNickname());
 			i++;
 		}
+		// mercato
 		showMsg("|_____________________________|");
+		showMsg("______________________________");
+		System.out.printf("%-30s|%n", "| Market spaces: ");
+		showMsg("|_____________________________|");
+		for (MarketSpace ms : game.getBoardgame().getMarket()) {
+			if (ms.getMember() == null) {
+				System.out.printf("%-30s|%n", "| Reward:");
+				System.out.printf("- " + ms.getReward().getInfo().replaceAll("%n", "%n- "));
+				System.out.printf("PdC: " + ms.getCouncilPrivilege() + "%n");
+				System.out.printf("%-30s|%n", "| Requirement:" + ms.getSpaceRequirement());
+			} else
+				System.out.printf("%-30s|%n", "| " + ms.getMember().getPlayer().getNickname());
+			showMsg("|_____________________________|");
+		}
+		showMsg("______________________________");
 		showBoardTracks(game);
 		showMsg("|_____________________________|");
 		showMsg("______________________________");
@@ -659,7 +676,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public String councilRequest(Integer number) {
+	public String councilRequest(Integer number) throws RemoteException {
 		ArrayList<String> list = new ArrayList<String>();
 		String result = new String();
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
@@ -687,5 +704,102 @@ public class CLIinterface extends AbstractUI {
 			result = result + "@" + s;
 
 		return result;
+	}
+
+	@Override
+	public boolean printSupportMenu() throws RemoteException {
+		showMsg("Do you want support the Vatican?: ");
+		showMsg("1: Yes");
+		showMsg("2: No");
+		Integer option = in.nextInt();
+		switch (option) {
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			printInvalidInput();
+			return printSupportMenu();
+		}
+	}
+
+	@Override
+	public String printColorMenu() throws RemoteException {
+		showMsg("Choose the family member that you want improve: ");
+		for (int i = 0; i < 3; i++) {
+			showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
+		}
+		Integer option = in.nextInt();
+		switch (option) {
+		case 1:
+		case 2:
+		case 3:
+			return MEMBER_COLOR[option - 1];
+		default:
+			printInvalidInput();
+			return printColorMenu();
+		}
+	}
+
+	@Override
+	public Integer printVentureCostMenu(VentureCard vc) throws RemoteException {
+		showMsg("Which cost do you want pay?: ");
+		showMsg("1: Resource cost");
+		System.out.printf(vc.getCardCost1().getInfo());
+		showMsg("2: Military points cost");
+		System.out.printf("Requirement: " + vc.getCardCost2()[0].getInfo());
+		System.out.printf("Cost: " + vc.getCardCost2()[1].getInfo());
+		Integer option = in.nextInt();
+		switch (option) {
+		case 1:
+		case 2:
+			return (option - 1);
+		default:
+			printInvalidInput();
+			return printVentureCostMenu(vc);
+		}
+	}
+
+	@Override
+	public boolean printChangeMenu(Resource[] exchange) throws RemoteException {
+		showMsg("Do you want change");
+		System.out.printf(exchange[0].getInfo());
+		showMsg("with");
+		System.out.printf(exchange[1].getInfo());
+		showMsg("1: Yes");
+		showMsg("2: No");
+		Integer option = in.nextInt();
+		switch (option) {
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			printInvalidInput();
+			return printChangeMenu(exchange);
+		}
+	}
+
+	@Override
+	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) throws RemoteException {
+		showMsg("Choose the effect that you want activate: ");
+		showMsg("1: Change");
+		System.out.printf(effect.getExchangeEffect1()[0].getInfo());
+		showMsg("With");
+		System.out.printf(effect.getExchangeEffect1()[1].getInfo());
+		showMsg("OR");
+		showMsg("2: Change");
+		System.out.printf(effect.getExchangeEffect2()[0].getInfo());
+		showMsg("With");
+		System.out.printf(effect.getExchangeEffect2()[1].getInfo());
+		Integer option = in.nextInt();
+		switch (option) {
+		case 1:
+		case 2:
+			return option;
+		default:
+			printInvalidInput();
+			return printDoubleChangeMenu(effect);
+		}
 	}
 }

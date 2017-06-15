@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 /*
@@ -28,6 +31,16 @@ public interface IPlayer extends Remote {
 	public String towerRequest() throws IOException;
 
 	public String floorRequest() throws IOException;
+
+	public boolean supportRequest() throws IOException;
+
+	public String colorRequest() throws IOException;
+
+	public Integer ventureCostRequest(VentureCard vc) throws IOException;
+
+	public boolean changeRequest(Resource[] exchange) throws IOException;
+
+	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException;
 
 	public void showMsg(String msg) throws IOException;
 }
