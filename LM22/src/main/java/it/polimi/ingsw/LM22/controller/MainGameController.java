@@ -33,11 +33,11 @@ public class MainGameController implements Runnable {
 	private Game game = new Game();
 	private ArrayList<PlayerInfo> playerRoom;
 	private InitialConfigurator initialConfigurator;
-	private VaticanReportManager vaticanReportManager = new VaticanReportManager();;
-	private EffectManager effectManager = new EffectManager();
+	private VaticanReportManager vaticanReportManager = new VaticanReportManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
-	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);;
 	private MoveManager moveManager = new MoveManager(game, this);
+	private EffectManager effectManager = new EffectManager(moveManager);
+	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 	// private int i = 0;
 
@@ -324,6 +324,16 @@ public class MainGameController implements Runnable {
 		} catch (NumberFormatException | IOException e) {
 		}
 		return param;
+	}
+	
+
+	/*
+	 * metodo che chiama il player giocante e chiede se vuole effettuare questo
+	 * scambio (nel caso abbia effettivamente le risorse disponibili)
+	 */
+	public boolean askChangeToPlayer(Player p, Resource[] exchange) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

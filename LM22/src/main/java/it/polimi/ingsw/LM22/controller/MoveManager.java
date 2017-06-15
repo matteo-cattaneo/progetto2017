@@ -201,7 +201,7 @@ public class MoveManager {
 		Tower t = game.getBoardgame().getTowers()[tower];
 		int floor = cardMove.getLevelSelected();
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[floor].getCard();
-		Resource bonus = resourceHandler.calculateResource(calculateBonus(cardMove), cardMove.getPlayer());
+		Resource bonus = resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer());
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
 		// cardCost già scontato rispetto agli effetti delle carte Personaggio
 		Resource cardCost = calculateCardCost(cardMove, tower);
@@ -359,7 +359,7 @@ public class MoveManager {
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
 		resourceHandler.subResource(playerResource, cardMove.getServantsAdded());
 		resourceHandler.addResource(playerResource,
-				resourceHandler.calculateResource(calculateBonus(cardMove), cardMove.getPlayer()));
+				resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer()));
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
 		resourceHandler.subResource(playerResource, calculateCardCost(cardMove, cardMove.getTowerSelected()));
 		cardGetter(cardMove, t);
@@ -448,14 +448,14 @@ public class MoveManager {
 		/*
 		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
 		 */
-		Resource bonus = resourceHandler.calculateResource(game.getBoardgame().getMarket()[opt].getReward(),
+		Resource bonus = resourceHandler.calculateResource(game.getBoardgame().getMarket()[opt].getReward().clone(),
 				marketMove.getPlayer());
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), bonus);
-		resourceHandler
-				.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
-						resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(
-								game.getBoardgame().getMarket()[opt].getCouncilPrivilege(), marketMove.getPlayer()),
-								marketMove.getPlayer()));
+		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(),
+				resourceHandler.calculateResource(
+						mainGame.selectCouncilPrivilege(game.getBoardgame().getMarket()[opt].getCouncilPrivilege(),
+								marketMove.getPlayer()).clone(),
+						marketMove.getPlayer()));
 	}
 
 	/*
@@ -562,17 +562,16 @@ public class MoveManager {
 		game.getBoardgame().getProductionSpace().getMembers().add(move.getMemberUsed());
 		move.getMemberUsed().setUsed(true);
 		if (move.getMemberUsed().getColor() != UNCOLORED)
-			game.getBoardgame().getProductionSpace().getColoredMemberOnIt().add(move.getMemberUsed().getColor());
+			game.getBoardgame().getProductionSpace().getColoredMemberOnIt().add(move.getPlayer().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING;
 		for (BuildingCard card : move.getPlayer().getPersonalBoard().getBuildingsCards()) {
 			if (valueOfAction >= card.getRequirement()) {
-				// effectManager.productionHandle(card.getPermanentEffect(),
-				// total);
+				effectManager.productionHandle(card.getPermanentEffect(), total, move.getPlayer(), mainGame);
 			}
 		}
-		effectManager.productionHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(),
-				total);
+		effectManager.productionHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(), total,
+				move.getPlayer(), mainGame);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
@@ -618,13 +617,14 @@ public class MoveManager {
 		game.getBoardgame().getCouncilPalace().getMembers().add(councilMove.getMemberUsed());
 		resourceHandler.subResource(councilMove.getPlayer().getPersonalBoard().getResources(),
 				councilMove.getServantsAdded());
-		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(), resourceHandler
-				.calculateResource(game.getBoardgame().getCouncilPalace().getReward(), councilMove.getPlayer()));
-		resourceHandler
-				.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
-						resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(
-								game.getBoardgame().getCouncilPalace().getCouncilPrivilege(), councilMove.getPlayer()),
-								councilMove.getPlayer()));
+		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+				resourceHandler.calculateResource(game.getBoardgame().getCouncilPalace().getReward().clone(),
+						councilMove.getPlayer()));
+		resourceHandler.addResource(councilMove.getPlayer().getPersonalBoard().getResources(),
+				resourceHandler.calculateResource(
+						mainGame.selectCouncilPrivilege(game.getBoardgame().getCouncilPalace().getCouncilPrivilege(),
+								councilMove.getPlayer()).clone(),
+						councilMove.getPlayer()));
 	}
 
 	/*
@@ -637,13 +637,7 @@ public class MoveManager {
 	 * carte effettivamente attivate durante tutto il corso della partita?
 	 */
 	public boolean leadercardsellingAllowed(LeaderCardSelling move) {
-		if ((move.getPlayer().getActivatedLeaderCards().contains(move.getLeaderCard())
-				|| move.getPlayer().getLeaderCards().contains(move.getLeaderCard())))
-			/*
-			 * non sarebbe meglio mettere if
-			 * (!move.getPlayer().getHandLeaderCard().contains(move.
-			 * getLeaderCard()))?
-			 */
+		if (!move.getPlayer().getHandLeaderCards().contains(move.getLeaderCard()))
 			return false;
 		return true;
 	}
@@ -655,8 +649,8 @@ public class MoveManager {
 	public void leadercardsellingHandle(LeaderCardSelling move) throws IOException {
 		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(),
-				resourceHandler.calculateResource(mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()),
-						move.getPlayer()));
+				resourceHandler.calculateResource(
+						mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()).clone(), move.getPlayer()));
 	}
 
 	/*
