@@ -183,4 +183,22 @@ public class ResourceHandler {
 		bonus.setVictory(victory);
 		return bonus;
 	}
+	
+	public boolean equalResources(Resource s1, Resource s2){
+		if (s1.getWood() != s2.getWood())
+			return false;
+		if (s1.getStone() != s2.getStone())
+			return false;
+		if (s1.getServants() != s2.getServants())
+			return false;
+		if (s1.getCoins() != s2.getCoins())
+			return false;
+		if (s1.getFaith() != s2.getFaith())
+			return false;
+		if (s1.getMilitary() != s2.getMilitary())
+			return false;
+		if (s1.getVictory() != s2.getVictory())
+			return false;
+		return true;
+	}
 }

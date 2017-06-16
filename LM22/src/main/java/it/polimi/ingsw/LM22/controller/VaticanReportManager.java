@@ -34,7 +34,7 @@ public class VaticanReportManager {
 	 * che il giocatore decide autonomamente di non dare il sostegno alla Chiesa
 	 */
 	public void exCommunicate(Player player, Integer period) {
-		player.getEffects().add(game.getBoardgame().getFaithGrid().getExCommunication(period).getEffect());
+		player.getEffects().add(game.getBoardgame().getFaithGrid().getExCommunication(period).getEffect());		
 	}
 
 	/*
@@ -56,12 +56,17 @@ public class VaticanReportManager {
 		this.game = game;
 		Integer period = game.getPeriod();
 		for (Player p : game.getPlayersOrder()) {
-			if (canGiveSupport(p, period) && !mainGame.askSupport(p)) {
+			if (canGiveSupport(p, period)) {
+				//poichè può decidere se dare sostegno o no viene chiesto
+				//e in base alla risposta si procede diversamente
+				if (!mainGame.askSupport(p)) {
 					exCommunicate(p, period);
-					continue;
-				}
-			exCommunicate(p, period);
-			giveResourceDueToChurchSubstain(p);
+				} else
+					giveResourceDueToChurchSubstain(p);
+			} else {
+				exCommunicate(p, period);
+				giveResourceDueToChurchSubstain(p);
+			}
 		}
 	}
 

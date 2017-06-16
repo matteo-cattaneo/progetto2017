@@ -55,7 +55,7 @@ public class TurnInizializator {
 	 * pulizia della Board : - distribuzione carte (di 4 tipi) - lancio dei dadi
 	 * - calcolo nuovo ordine di turno -
 	 */
-	public void initializeTurn(Game game) {
+	public void initializeTurn(Game game) throws IOException {
 		setGameTurn(game);
 		setNewPlayersOrder(game);
 		cleanBoardGame(game);
@@ -83,6 +83,7 @@ public class TurnInizializator {
 		for (Tower tower : game.getBoardgame().getTowers()) {
 			tower.setOccupied(false);
 			for (Floor f : tower.getFloor())
+				//TODO qui potremmo avere problemi (Settaggio a null pericoloso)
 				f.setCard(null);
 			// settaggio a null dello spazio delle carte
 		}
@@ -100,9 +101,11 @@ public class TurnInizializator {
 			}
 		}
 		for (MarketSpace space : game.getBoardgame().getMarket()) {
+			//TODO qui potremmo avere problemi quando poi ci devo mettere un familiare
 			space.setMember(null);
 		}
 		for (int cont = 0; cont < WORKSPACES; cont++) {
+			//TODO qui potremmo avere problemi quando poi ci devo mettere un familiare
 			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(null);
 		}
 	}
@@ -193,21 +196,20 @@ public class TurnInizializator {
 	 * loro valore --> qui avviene anche il controllo per le scomuniche che
 	 * danno dei malus ai dadi + carta leader che aumenta il familiare neutro
 	 */
-	protected void setFamilyMembersValue(Game game) {
+	protected void setFamilyMembersValue(Game game) throws IOException {
 		for (Player p : game.getPlayersOrder()) {
 			Integer malus = 0;
 			for (Effect e : p.getEffects())
 				if (e instanceof DiceMalusEx)
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
-				// controllo per carte leader che modificano il valore dei
-				// familiarix
 				if (m.getColor() != "Uncolored")
 					m.setValue(game.getBoardgame().getDice(m.getColor() + malus));
 				else
 					m.setValue(UNCOLORED_MEMBER);
 			}
 		}
+		updateFamilyMembersValue(game);
 	}
 
 	/*
@@ -215,12 +217,15 @@ public class TurnInizializator {
 	 * dei familiari del giocatore che l'ha attivata NON GESTISCE FEDERICO DI
 	 * MONTEFELTRO
 	 */
-	public void updateFamilyMembersValue(Player p, MemberValueEffect e) throws IOException {
-		if (e instanceof MemberChangeEffect) {
-			effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
-		} else if (e instanceof MemberBonusEffect) {
-			effectManager.memberbonuseffectManage(((MemberBonusEffect) e), p);
-		}
+	public void updateFamilyMembersValue(Game game) throws IOException {
+		for (Player p: game.getPlayersOrder())
+			for (Effect e: p.getEffects()){
+				if (e instanceof MemberChangeEffect) {
+					effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
+				} else if (e instanceof MemberBonusEffect) {
+					effectManager.memberbonuseffectManage(((MemberBonusEffect) e), p);
+				}
+			}
 	}
 
 	/*

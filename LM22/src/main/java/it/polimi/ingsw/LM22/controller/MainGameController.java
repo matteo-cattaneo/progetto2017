@@ -15,12 +15,17 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CardActionEffect;
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
+import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.excommunication.FinalCardCostMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.FinalResourceMalusEx;
+import it.polimi.ingsw.LM22.model.excommunication.NoFinalCardPointsEx;
 import it.polimi.ingsw.LM22.network.NetContrAdapter;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
@@ -30,6 +35,15 @@ public class MainGameController implements Runnable {
 	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
 	private final Integer END_DEFINER = 2;
+	private final Integer TERRITORY = 0;
+	private final Resource[] territoryReward = { NOTHING, NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
+			new Resource(0, 0, 0, 0, 0, 0, 4), new Resource(0, 0, 0, 0, 0, 0, 10), new Resource(0, 0, 0, 0, 0, 0, 20) };
+	private final Integer CHARACTER = 1;
+	private final Resource[] characterReward = { NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
+			new Resource(0, 0, 0, 0, 0, 0, 3), new Resource(0, 0, 0, 0, 0, 0, 6), new Resource(0, 0, 0, 0, 0, 0, 10),
+			new Resource(0, 0, 0, 0, 0, 0, 15), new Resource(0, 0, 0, 0, 0, 0, 21) };
+	private final Integer BUILDING = 2;
+	private final Integer VENTURE = 3;
 
 	private final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
@@ -149,7 +163,7 @@ public class MainGameController implements Runnable {
 			}
 	}
 
-	private void turnInit() {
+	private void turnInit() throws IOException {
 		turnInizializator.initializeTurn(game);
 	}
 
@@ -157,14 +171,10 @@ public class MainGameController implements Runnable {
 	 * permette di gestire tutta la fase di conteggio dei Punti Finali
 	 */
 	private void manageEndGame(Game game) {
+		manageMilitaryStandingPoints(game);
+		manageVictoryPointDueToCards(game);
+		electWinner(game);
 		LOGGER.log(Level.INFO, "Game ended");
-	}
-
-	/*
-	 * metodo che gestisce le scomuniche di terzo periodo
-	 */
-	private void manageFinalExCommunications(Game game) {
-
 	}
 
 	/*
@@ -191,6 +201,9 @@ public class MainGameController implements Runnable {
 		while (iterator2.hasNext()) {
 			Map.Entry me2 = (Map.Entry) iterator2.next();
 		}
+		// chiamata per distribuzione punti vittoria in base a classifica
+		// militare
+		// givePointsDueToMilitaryStanding()
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -235,8 +248,55 @@ public class MainGameController implements Runnable {
 	 * caso devo fare il controllo su alcuni tipi di scomuniche del terzo
 	 * periodo
 	 */
-	private void manageVictoryPointDueToCards() {
+	private void manageVictoryPointDueToCards(Game game) {
+		for (Player p : game.getPlayersOrder()) {
+			manageVictoryPointsDueToResource(p);
+			manageFinalTerritoryCards(p);
+			manageFinalCharacterCards(p);
+			manageFinalBuildingCards(p);
+			manageFinalVentureCards(p);
+		}
+	}
 
+	private void manageFinalVentureCards(Player p) {
+		for (Effect e : p.getEffects()) {
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == VENTURE)
+				return;
+		}
+		Resource total = NOTHING;
+		for (VentureCard card : p.getPersonalBoard().getVenturesCards()) {
+			resourceHandler.addResource(total, resourceHandler.calculateResource(card.getPermanentEffect().clone(), p));
+		}
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), total);
+	}
+
+	private void manageFinalBuildingCards(Player p) {
+		for (Effect e : p.getEffects())
+			if (e instanceof FinalResourceMalusEx && ((FinalCardCostMalusEx) e).getCardType() == BUILDING) {
+				Integer total = 0;
+				for (BuildingCard card : p.getPersonalBoard().getBuildingsCards()) {
+					total = total + card.getCost().getStone() + card.getCost().getStone();
+				}
+				resourceHandler.subResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
+			}
+	}
+
+	private void manageFinalCharacterCards(Player p) {
+		for (Effect e : p.getEffects()) {
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == CHARACTER)
+				return;
+		}
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
+				.calculateResource(characterReward[p.getPersonalBoard().getCharactersCards().size()].clone(), p));
+	}
+
+	private void manageFinalTerritoryCards(Player p) {
+		for (Effect e : p.getEffects()) {
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == TERRITORY)
+				return;
+		}
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
+				.calculateResource(territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].clone(), p));
 	}
 
 	/*
@@ -246,12 +306,32 @@ public class MainGameController implements Runnable {
 	 * controllo la presenza di scomuniche del terzo periodo che non fanno
 	 * prendere certi punti
 	 */
-	private void manageVictoryPointsDueToResource() {
-
+	private void manageVictoryPointsDueToResource(Player p) {
+		for (Effect e : p.getEffects()) {
+			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getMilitary() == 1) {
+				resourceHandler.subResource(p.getPersonalBoard().getResources(),
+						new Resource(0, 0, 0, 0, 0, 0, p.getPersonalBoard().getResources().getMilitary()));
+			}
+			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getVictory() == 5) {
+				resourceHandler.subResource(p.getPersonalBoard().getResources(),
+						new Resource(0, 0, 0, 0, 0, 0, p.getPersonalBoard().getResources().getVictory() / 5));
+			}
+			if (e instanceof FinalResourceMalusEx && resourceHandler
+					.equalResources(((FinalResourceMalusEx) e).getResource(), new Resource(1, 1, 1, 1, 0, 0, 0))) {
+				Integer total = ((FinalResourceMalusEx) e).getResource().getWood()
+						+ ((FinalResourceMalusEx) e).getResource().getStone()
+						+ ((FinalResourceMalusEx) e).getResource().getCoins()
+						+ ((FinalResourceMalusEx) e).getResource().getServants();
+				resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
+			}
+		}
+		Integer total = p.getPersonalBoard().getResources().getWood() + p.getPersonalBoard().getResources().getStone()
+				+ p.getPersonalBoard().getResources().getCoins() + p.getPersonalBoard().getResources().getServants();
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
 	}
 
-	private void electWinner() {
-
+	private void electWinner(Game game) {
+		//TODO
 	}
 
 	private HashMap<String, Resource> initializeCouncilMap() {
