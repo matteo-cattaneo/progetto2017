@@ -525,57 +525,67 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|%n", "| ");
 		System.out.printf("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
 		System.out.printf("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
-		System.out.printf("%-30s|%n", "| Coins: " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
-		System.out.printf("%-30s|%n", "| Wood: " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
-		System.out.printf("%-30s|%n", "| Stone: " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
-		System.out.printf("%-30s|%n",
-				"| Servants: " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
-		System.out.printf("%-30s|%n",
-				"| Faith Points: " + getPlayer(name, game).getPersonalBoard().getResources().getFaith());
-		System.out.printf("%-30s|%n",
-				"| Military Points: " + getPlayer(name, game).getPersonalBoard().getResources().getMilitary());
-		System.out.printf("%-30s|%n",
-				"| Victory Points: " + getPlayer(name, game).getPersonalBoard().getResources().getVictory());
-		showMsg("|_____________________________|");
+		showMsg("|_____________________________|__________________");
+		System.out.printf("%-12s", "| Coins");
+		System.out.printf("%-12s", "| Wood");
+		System.out.printf("%-12s", "| Stone");
+		System.out.printf("%-12s|%n", "| Servants");
+		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
+		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
+		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
+		System.out.printf("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
+		showMsg("|___________|___________|___________|___________|");
 		// Hand LeaderCard
-		System.out.printf("%-30s|%n", "| Hand leader cards:");
-		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-			System.out.printf("%-30s|%n", "| " + ld.getName());
-		showMsg("|_____________________________|");
+		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
+			System.out.printf("%-30s|%n", "| Hand leader cards:");
+			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+				System.out.printf("%-30s|%n", "| " + ld.getName());
+			showMsg("|_____________________________|");
+		}
 		// Table LeaderCard
-		System.out.printf("%-30s|%n", "| Table leader cards:");
+		if (!getPlayer(name, game).getLeaderCards().isEmpty()
+				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty())
+			System.out.printf("%-30s|%n", "| Table leader cards:");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
 			System.out.printf("%-30s|%n", "| " + ld.getName());
 		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
 			System.out.printf("%-30s|%n", "| " + ld.getName());
 		showMsg("|_____________________________|");
 		// player dev cards
-		System.out.printf("%-30s|%n", "| Development cards:");
-
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+			System.out.printf("%-30s|%n", "| Building cards:");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
 				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
+			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
+			System.out.printf("%-30s|%n", "| Territory cards:");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
 				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
+			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
+			System.out.printf("%-30s|%n", "| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
 				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
+			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
+			System.out.printf("%-30s|%n", "| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
 				System.out.printf("%-30s| ", "| " + c.getName());
 			showMsg("");
+			showMsg("|_____________________________|");
 		}
 	}
 
 	private void showBoardTracks(Game game) throws RemoteException {
-		System.out.printf("%-30s|%n", "| Faith points track:");
+		ArrayList<String> faith = new ArrayList<String>();
+		ArrayList<String> military = new ArrayList<String>();
+		ArrayList<String> victory = new ArrayList<String>();
 		// trovo il massimo victory
 		int maxF = 0;
 		for (Player p : game.getPlayers())
@@ -585,9 +595,8 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxF; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getFaith() == j)
-					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
-		showMsg("|_____________________________|");
-		System.out.printf("%-30s|%n", "| Military points track:");
+					faith.add(j + " " + p.getNickname());
+		// System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
 		// trovo il massimo victory
 		int maxM = 0;
 		for (Player p : game.getPlayers())
@@ -597,9 +606,7 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxM; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getMilitary() == j)
-					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
-		showMsg("|_____________________________|");
-		System.out.printf("%-30s|%n", "| Victory points track:");
+					military.add(j + " " + p.getNickname());
 		// trovo il massimo victory
 		int maxV = 0;
 		for (Player p : game.getPlayers())
@@ -609,7 +616,17 @@ public class CLIinterface extends AbstractUI {
 		for (int j = maxV; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getVictory() == j)
-					System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
+					victory.add(j + " " + p.getNickname());
+		showMsg("________________________________________________________________________");
+		System.out.printf("%-24s", "| Faith track:");
+		System.out.printf("%-24s", "| Military track:");
+		System.out.printf("%-24s|%n", "| Victory track:");
+		for (int i = 0; i < game.getPlayersOrder().size(); i++) {
+			System.out.printf("| %-22s| ", faith.get(i));
+			System.out.printf("%-22s| ", military.get(i));
+			System.out.printf("%-22s|%n", victory.get(i));
+		}
+		showMsg("|_______________________|_______________________|_______________________|");
 	}
 
 	@Override
@@ -666,12 +683,9 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf("%-30s|%n", "| " + ms.getMember().getPlayer().getNickname());
 			showMsg("|_____________________________|");
 		}
-		showMsg("______________________________");
 		showBoardTracks(game);
-		showMsg("|_____________________________|");
 		showMsg("______________________________");
 		showPersonalBoard(game);
-		showMsg("|_____________________________|");
 		showMsg("");
 		/*
 		 * personal board altri giocatori?

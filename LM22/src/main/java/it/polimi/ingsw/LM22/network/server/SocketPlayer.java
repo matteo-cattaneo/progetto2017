@@ -28,7 +28,7 @@ public class SocketPlayer implements IPlayer {
 	// indica al client quando è il suo turno e restituisce la mossa da lui
 	// effettuata
 	@Override
-	public String yourTurn() throws ClassNotFoundException, IOException {
+	public String yourTurn() throws IOException {
 		out.writeUTF("start");
 		out.flush();
 

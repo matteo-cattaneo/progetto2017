@@ -38,7 +38,7 @@
         "military": 0,
         "victory": 0
     },
-    "immediatEffect": {
+    "immediateEffect": {
         "type": "CardActionEffect",
         "cardType": -1,
         "diceValue": 4,
@@ -273,7 +273,7 @@
         "military": 0,
         "victory": 0
     },
-    "immediatEffect": {
+    "immediateEffect": {
         "type": "CardActionEffect",
         "cardType": 1,
         "diceValue": 6,
@@ -380,7 +380,7 @@
         "military": 0,
         "victory": 0
     },
-    "immediatEffect": {
+    "immediateEffect": {
         "type": "CardActionEffect",
         "cardType": 0,
         "diceValue": 6,
@@ -696,7 +696,7 @@
         "military": 0,
         "victory": 0
     },
-    "immediatEffect": {
+    "immediateEffect": {
         "type": "CardActionEffect",
         "cardType": -1,
         "diceValue": 7,

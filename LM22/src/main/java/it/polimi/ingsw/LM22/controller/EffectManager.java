@@ -380,7 +380,7 @@ public class EffectManager {
 				}
 			}
 		}
-		String choice = askToPlayerForEffectToCopy(player, lcards);
+		String choice = mainGC.askToPlayerForEffectToCopy(player, lcards);
 		/*
 		 * qui va modificato il comportamento in base al tipo di effetto 
 		 * che è stato scelto

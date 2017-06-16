@@ -149,7 +149,6 @@ class SocketConnection implements Runnable {
 			// resto in attesa di un client connesso
 			socket = serverSocket.accept();
 		} catch (IOException e) {
-
 			System.err.println("Socket IOException");
 		}
 	}

@@ -22,7 +22,6 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
-import it.polimi.ingsw.LM22.model.leader.MemberValueEffect;
 
 public class TurnInizializator {
 
@@ -83,7 +82,8 @@ public class TurnInizializator {
 		for (Tower tower : game.getBoardgame().getTowers()) {
 			tower.setOccupied(false);
 			for (Floor f : tower.getFloor())
-				//TODO qui potremmo avere problemi (Settaggio a null pericoloso)
+				// TODO qui potremmo avere problemi (Settaggio a null
+				// pericoloso)
 				f.setCard(null);
 			// settaggio a null dello spazio delle carte
 		}
@@ -101,11 +101,13 @@ public class TurnInizializator {
 			}
 		}
 		for (MarketSpace space : game.getBoardgame().getMarket()) {
-			//TODO qui potremmo avere problemi quando poi ci devo mettere un familiare
+			// TODO qui potremmo avere problemi quando poi ci devo mettere un
+			// familiare
 			space.setMember(null);
 		}
 		for (int cont = 0; cont < WORKSPACES; cont++) {
-			//TODO qui potremmo avere problemi quando poi ci devo mettere un familiare
+			// TODO qui potremmo avere problemi quando poi ci devo mettere un
+			// familiare
 			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(new ArrayList<FamilyMember>());
 		}
 	}
@@ -204,7 +206,7 @@ public class TurnInizializator {
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
 				if (m.getColor() != "Uncolored")
-					m.setValue(game.getBoardgame().getDice(m.getColor() + malus));
+					m.setValue(game.getBoardgame().getDice(m.getColor()) + malus);
 				else
 					m.setValue(UNCOLORED_MEMBER);
 			}
@@ -218,8 +220,8 @@ public class TurnInizializator {
 	 * MONTEFELTRO
 	 */
 	public void updateFamilyMembersValue(Game game) throws IOException {
-		for (Player p: game.getPlayersOrder())
-			for (Effect e: p.getEffects()){
+		for (Player p : game.getPlayersOrder())
+			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {
 					effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
 				} else if (e instanceof MemberBonusEffect) {
@@ -240,9 +242,9 @@ public class TurnInizializator {
 			if (!newOrder.contains(m.getPlayer()))
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
-//			game.getBoardgame().getCouncilPalace().getMembers().remove(m);
 		}
-		game.getBoardgame().getCouncilPalace().setMembers(new ArrayList<FamilyMember>()); 
+		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers())
+			game.getBoardgame().getCouncilPalace().getMembers().remove(fm);
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
 				newOrder.add(p);
