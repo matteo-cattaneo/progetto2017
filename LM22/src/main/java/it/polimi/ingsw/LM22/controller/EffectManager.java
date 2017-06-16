@@ -3,6 +3,8 @@ package it.polimi.ingsw.LM22.controller;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,8 +24,10 @@ import it.polimi.ingsw.LM22.model.WorkActionEffect;
 import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
+import it.polimi.ingsw.LM22.model.leader.CopyEffect;
 import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
@@ -175,7 +179,7 @@ public class EffectManager {
 	/*
 	 * gestisce un effetto di tipo CardAction
 	 */
-	public void cardactioneffectManage(CardActionEffect effect) throws IOException, InvalidMoveException {
+	public void cardactioneffectManage(CardActionEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
@@ -188,11 +192,18 @@ public class EffectManager {
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
 		CardMove move = new CardMove(player, other, servants, tower, floor);
-		// TODO
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			/*
+			 * qualcosa per far notare al player che la mossa non era valida (fa
+			 * perdere la mossa comunque, non si ripete)
+			 */
+			return;
+		}
 	}
 
-	public void workactioneffectManage(WorkActionEffect effect) throws IOException, InvalidMoveException {
+	public void workactioneffectManage(WorkActionEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
@@ -202,8 +213,15 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		// TODO
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			/*
+			 * qualcosa per far notare al player che la mossa non era valida (fa
+			 * perdere la mossa comunque, non si ripete)
+			 */
+			return;
+		}
 	}
 
 	/*
@@ -251,16 +269,24 @@ public class EffectManager {
 	}
 
 	/*
-	 * da decidere se mettere il throws oppure usare il try catch TODO
+	 * metodo che permette di gestire una nuova mossa work proveniente
+	 * dall'attivazione di una carta leader
 	 */
-	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException {
+	public void workactionManage(WorkAction effect) throws IOException {
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		// TODO
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			/*
+			 * qualcosa per far notare al player che la mossa non era valida (fa
+			 * perdere la mossa comunque, non si ripete)
+			 */
+			return;
+		}
 	}
 
 	/*
@@ -275,11 +301,13 @@ public class EffectManager {
 				if (m.getColor() != UNCOLORED)
 					m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
 			}
+			p.getEffects().add(e);
 			break;
 		case "UNCOLORED":
 			for (FamilyMember m : p.getMembers())
 				if (m.getColor() == UNCOLORED) {
 					m.setValue(e.getNewValueOfMember());
+					p.getEffects().add(e);
 					break;
 				}
 			break;
@@ -307,6 +335,7 @@ public class EffectManager {
 			}
 		}
 		}
+		p.getEffects().add(e);
 	}
 
 	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {
@@ -331,6 +360,42 @@ public class EffectManager {
 
 	public void coinsdiscounteffectManage(CoinsDiscountEffect effect) {
 		player.getEffects().add(effect);
+	}
+
+	/*
+	 * metodo che raggruppa tutte le carte leader giocate o attive attualmente
+	 * da tutti i giocatori diversi dal richiedente di questo metodo -->
+	 * raccolta la lista si chiede al player richiedente quale carta di vuole
+	 * copiare
+	 */
+	public void copyeffectManage(CopyEffect effect) {
+		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
+		for (Player p : mainGC.getGame().getPlayersOrder()) {
+			if (p != player) {
+				for (LeaderCard card : p.getActivatedLeaderCards()) {
+					lcards.add(card);
+				}
+				for (LeaderCard card1 : p.getLeaderCards()) {
+					lcards.add(card1);
+				}
+			}
+		}
+		String choice = askToPlayerForEffectToCopy(player, lcards);
+		/*
+		 * qui va modificato il comportamento in base al tipo di effetto 
+		 * che è stato scelto
+		 * POSSIBILI SOLUZIONI
+		 * - modifico l'effetto della carta da CopyEffect a quello nuovo richiesto 
+		 * (necessita di avere la carta leader attivata e va bene per effetti permanenti)
+		 * - aggiungo alla lista degli effetti attivi quello rchiesto 
+		 * (a patto che non sia un effetto valido una volta per turno)
+		 */
+		for (LeaderCard chosen : lcards) {
+			if (chosen.getName() == choice) {
+				player.getEffects().add(chosen.getEffect());
+			}
+		}
+
 	}
 
 }

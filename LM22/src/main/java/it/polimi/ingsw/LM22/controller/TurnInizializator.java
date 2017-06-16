@@ -106,7 +106,7 @@ public class TurnInizializator {
 		}
 		for (int cont = 0; cont < WORKSPACES; cont++) {
 			//TODO qui potremmo avere problemi quando poi ci devo mettere un familiare
-			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(null);
+			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(new ArrayList<FamilyMember>());
 		}
 	}
 
@@ -240,8 +240,9 @@ public class TurnInizializator {
 			if (!newOrder.contains(m.getPlayer()))
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
+//			game.getBoardgame().getCouncilPalace().getMembers().remove(m);
 		}
-		game.getBoardgame().getCouncilPalace().setMembers(null);
+		game.getBoardgame().getCouncilPalace().setMembers(new ArrayList<FamilyMember>()); 
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
 				newOrder.add(p);
