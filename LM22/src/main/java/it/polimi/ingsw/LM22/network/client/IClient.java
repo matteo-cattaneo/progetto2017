@@ -2,11 +2,14 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
  * Interfaccia estesa da RMI e SOCKET client
@@ -41,6 +44,8 @@ public interface IClient extends Remote {
 	public boolean changeRequest(Resource[] exchange) throws RemoteException;
 
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException;
+
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException;
 
 	public void showMsg(String msg) throws RemoteException;
 }

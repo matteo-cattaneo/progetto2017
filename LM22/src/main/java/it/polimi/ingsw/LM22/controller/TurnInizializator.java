@@ -56,7 +56,7 @@ public class TurnInizializator {
 	 */
 	public void initializeTurn(Game game) throws IOException {
 		setGameTurn(game);
-		setNewPlayersOrder(game);
+//		setNewPlayersOrder(game);
 		cleanBoardGame(game);
 		manageLeaderCards(game);
 		throwDices(game);

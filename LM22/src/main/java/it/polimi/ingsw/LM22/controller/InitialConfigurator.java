@@ -20,6 +20,7 @@ import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 public class InitialConfigurator extends TurnInizializator {
 	private final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
 	private FileParser fileParser = new FileParser();
+	private ArrayList<PlayerInfo> playerRoom;
 	private final Integer BASE_WOOD_STONE = 2;
 	private final Integer BASE_SERVANTS = 3;
 	private final Integer BASE_COINS = 5;
@@ -36,23 +37,9 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m)
-			throws RemoteException {
+	public InitialConfigurator(Game game, ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m) {
 		super(m, r);
-		initializeTurn(game);
-		throwDices(game);
-		setupPlayers(game, playerRoom);
-		setNewPlayersOrder(game);
-		try {
-			loadConfiguration(game);
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Errore nel caricamento dei file JSON", e);
-		}
-		giveInitialResources(game);
-		mixCards(game);
-		distributeDevelopmentCards(game);
-		leaderDistribution(game);
-		personalBoardTileDistribution(game);
+		this.playerRoom = playerRoom;
 	}
 
 	/*
@@ -73,14 +60,25 @@ public class InitialConfigurator extends TurnInizializator {
 		prod.setWorkType("PRODUCTION");
 		game.getBoardgame().setProductionSpace(prod);
 
-		// boardgame
-		// altri parametri?
+		throwDices(game);
+		setupPlayers(game, playerRoom);
+		setNewPlayersOrder(game);
+		try {
+			loadConfiguration(game);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Errore nel caricamento dei file JSON", e);
+		}
+		giveInitialResources(game);
+		mixCards(game);
+		distributeDevelopmentCards(game);
+		leaderDistribution(game);
+		personalBoardTileDistribution(game);
 	}
 
 	/*
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
-	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) throws RemoteException {
+	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) {
 		Player players[] = new Player[playerRoom.size()];
 		game.setPlayers(players);
 		int i = 0;
@@ -156,8 +154,8 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	/*
-	 * metodo che implementa la fase di distribuzione random delle carte leader con relativo
-	 * passaggio al giocatore successivo delle carte rimanenti
+	 * metodo che implementa la fase di distribuzione random delle carte leader
+	 * con relativo passaggio al giocatore successivo delle carte rimanenti
 	 */
 	private void leaderDistribution(Game game) {
 		Random random = new Random();

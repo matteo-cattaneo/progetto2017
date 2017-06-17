@@ -1,6 +1,7 @@
 package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -10,6 +11,7 @@ di interfacciarsi con la GUI
 */
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 //WIP
 public class GUIinterface extends AbstractUI {
@@ -178,6 +180,12 @@ public class GUIinterface extends AbstractUI {
 
 	@Override
 	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) {
 		// TODO Auto-generated method stub
 		return null;
 	}

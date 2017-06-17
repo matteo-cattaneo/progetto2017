@@ -31,21 +31,23 @@ public class MainGameController implements Runnable {
 	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
 	private final Integer END_DEFINER = 2;
+	private final Integer LAST_PERIOD = 3;
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
 	private ArrayList<PlayerInfo> playerRoom;
-	private InitialConfigurator initialConfigurator;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	private MoveManager moveManager = new MoveManager(game, this);
 	private EffectManager effectManager = new EffectManager(moveManager);
+	private InitialConfigurator initConf;
 	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
-		initialConfigurator = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
+		initConf = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
+		initConf.initializeTurn(game);
 	}
 
 	@Override
@@ -67,12 +69,13 @@ public class MainGameController implements Runnable {
 			// fine turno
 		}
 		vaticanReport();
-		turnInit();
 		// verifico se è la fine del gioco
-		if (game.getPeriod().equals(END_DEFINER) && game.getRound().equals(END_DEFINER))
+		if (game.getPeriod().equals(LAST_PERIOD) && game.getRound().equals(END_DEFINER))
 			manageEndGame(game);
-		else
+		else {
+			turnInit();
 			startGame();
+		}
 	}
 
 	private void playTurn(Player p) {
@@ -153,6 +156,7 @@ public class MainGameController implements Runnable {
 		// solo alla fine del periodo
 		if (game.getRound().equals(END_DEFINER))
 			try {
+				showMsgAll("Vatican Report!");
 				vaticanReportManager.manageVaticanReport(game, this);
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Vatican Report error!", e);
@@ -349,6 +353,7 @@ public class MainGameController implements Runnable {
 	 * punti vittoria + deve controllare se ha Sisto VI attivato
 	 */
 	public boolean askSupport(Player player) throws IOException {
+		System.out.println(player.getNickname() + ": ask support");
 		return getIPlayer(player).supportRequest();
 	}
 
@@ -382,9 +387,12 @@ public class MainGameController implements Runnable {
 		return game;
 	}
 
-	public String askToPlayerForEffectToCopy(Player player, List<LeaderCard> lcards) {
-
-		return null;
+	/*
+	 * chiedo al player da quale card vuole copiare l'effetto e restituisco il
+	 * nome
+	 */
+	public String askToPlayerForEffectToCopy(Player player, List<LeaderCard> lcards) throws IOException {
+		return getIPlayer(player).askToPlayerForEffectToCopy(lcards);
 	}
 
 }

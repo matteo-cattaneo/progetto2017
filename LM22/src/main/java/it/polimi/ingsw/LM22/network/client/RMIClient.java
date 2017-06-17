@@ -3,13 +3,16 @@ package it.polimi.ingsw.LM22.network.client;
 import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient {
@@ -113,5 +116,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
 		return UI.printDoubleChangeMenu(effect);
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
+		return UI.askToPlayerForEffectToCopy(lcards);
 	}
 }

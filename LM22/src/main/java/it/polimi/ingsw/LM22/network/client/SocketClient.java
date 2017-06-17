@@ -5,13 +5,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class SocketClient implements IClient {
 	private final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
@@ -100,6 +103,10 @@ public class SocketClient implements IClient {
 					socketOut.writeInt(UI.printDoubleChangeMenu((DoubleChangeEffect) socketIn.readObject()));
 					socketOut.flush();
 					break;
+				case "askCopy":
+					socketOut.writeUTF(UI.askToPlayerForEffectToCopy((List<LeaderCard>) socketIn.readObject()));
+					socketOut.flush();
+					break;
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {
@@ -181,6 +188,12 @@ public class SocketClient implements IClient {
 
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -368,7 +368,7 @@ public class EffectManager {
 	 * raccolta la lista si chiede al player richiedente quale carta di vuole
 	 * copiare
 	 */
-	public void copyeffectManage(CopyEffect effect) {
+	public void copyeffectManage(CopyEffect effect) throws IOException {
 		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
 		for (Player p : mainGC.getGame().getPlayersOrder()) {
 			if (p != player) {

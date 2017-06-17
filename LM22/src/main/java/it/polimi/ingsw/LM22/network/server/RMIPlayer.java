@@ -3,11 +3,14 @@ package it.polimi.ingsw.LM22.network.server;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 /*
  * classe utilizzata da remoto per le azioni sul client RMI
@@ -103,5 +106,10 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException {
 		return client.doubleChangeRequest(effect);
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws IOException {
+		return client.askToPlayerForEffectToCopy(lcards);
 	}
 }

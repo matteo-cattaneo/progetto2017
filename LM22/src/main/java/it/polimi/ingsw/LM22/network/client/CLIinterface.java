@@ -3,6 +3,7 @@ package it.polimi.ingsw.LM22.network.client;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -512,20 +513,26 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|%n", "| Period: " + game.getPeriod());
 		System.out.printf("%-30s|%n", "| Round: " + game.getRound());
 		System.out.printf("%-30s|%n", "| ");
-		System.out.printf("%-30s|%n", "| Dices:");
-		System.out.printf("%-30s|%n", "| Orange: " + game.getBoardgame().getDice("Orange"));
-		System.out.printf("%-30s|%n", "| Black: " + game.getBoardgame().getDice("Black"));
-		System.out.printf("%-30s|%n", "| White: " + game.getBoardgame().getDice("White"));
-		showMsg("|_____________________________|");
-		System.out.printf("%-30s|%n", "| Family members:");
-		System.out.printf("%-30s|%n", "| Orange: " + getPlayer(name, game).getMembers().get(0).getValue());
-		System.out.printf("%-30s|%n", "| Black: " + getPlayer(name, game).getMembers().get(1).getValue());
-		System.out.printf("%-30s|%n", "| White: " + getPlayer(name, game).getMembers().get(2).getValue());
-		System.out.printf("%-30s|%n", "| Uncolored: " + getPlayer(name, game).getMembers().get(3).getValue());
-		System.out.printf("%-30s|%n", "| ");
+		// visualizzo tutti i dadi sulla stessa riga
+		System.out.printf("%-30s|%n| ", "| Dices:");
+		for (int i = 0; i < 3; i++)
+			System.out.printf("%-8s| ", MEMBER_COLOR[i]);
+		System.out.printf("%n| ");
+		for (int i = 0; i < 3; i++)
+			System.out.printf("%-8s| ", game.getBoardgame().getDice(MEMBER_COLOR[i]));
+
+		System.out.printf("%n|_____________________________|%n");
 		System.out.printf("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
 		System.out.printf("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
-		showMsg("|_____________________________|__________________");
+		System.out.printf("%-30s|%n", "| ");
+		// visualizzo i familiari su due righe
+		System.out.printf("%-30s|%n| ", "| Family members:");
+		for (int i = 0; i < 2; i++)
+			System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+		System.out.printf("%n| ");
+		for (int i = 2; i < 4; i++)
+			System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+		System.out.printf("%n|_____________________________|__________________%n");
 		System.out.printf("%-12s", "| Coins");
 		System.out.printf("%-12s", "| Wood");
 		System.out.printf("%-12s", "| Stone");
@@ -544,13 +551,14 @@ public class CLIinterface extends AbstractUI {
 		}
 		// Table LeaderCard
 		if (!getPlayer(name, game).getLeaderCards().isEmpty()
-				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty())
+				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty()) {
 			System.out.printf("%-30s|%n", "| Table leader cards:");
-		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-			System.out.printf("%-30s|%n", "| " + ld.getName());
-		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
-			System.out.printf("%-30s|%n", "| " + ld.getName());
-		showMsg("|_____________________________|");
+			for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+				System.out.printf("%-30s|%n", "| " + ld.getName());
+			for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
+				System.out.printf("%-30s|%n", "| " + ld.getName());
+			showMsg("|_____________________________|");
+		}
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
 			System.out.printf("%-30s|%n", "| Building cards:");
@@ -660,7 +668,6 @@ public class CLIinterface extends AbstractUI {
 
 		}
 		// palazzo del consiglio
-		showMsg("");
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Council Palace members: ");
 		int i = 1;
@@ -668,21 +675,8 @@ public class CLIinterface extends AbstractUI {
 			System.out.printf("%-30s|%n", "| " + i + ":" + fm.getPlayer().getNickname());
 			i++;
 		}
-		// mercato
 		showMsg("|_____________________________|");
-		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Market spaces: ");
-		showMsg("|_____________________________|");
-		for (MarketSpace ms : game.getBoardgame().getMarket()) {
-			if (ms.getMember() == null) {
-				System.out.printf("%-30s|%n", "| Reward:");
-				System.out.printf("- " + ms.getReward().getInfo().replaceAll("%n", "%n- "));
-				System.out.printf("%s%n", "PdC: " + ms.getCouncilPrivilege());
-				System.out.printf("%-30s|%n", "| Requirement:" + ms.getSpaceRequirement());
-			} else
-				System.out.printf("%-30s|%n", "| " + ms.getMember().getPlayer().getNickname());
-			showMsg("|_____________________________|");
-		}
+		showMarketSpaces();
 		showBoardTracks(game);
 		showMsg("______________________________");
 		showPersonalBoard(game);
@@ -690,6 +684,64 @@ public class CLIinterface extends AbstractUI {
 		/*
 		 * personal board altri giocatori?
 		 */
+	}
+
+	private void showMarketSpaces() {
+		// mercato
+		showMsg("______________________________");
+		System.out.printf("%-30s|%n", "| Market spaces: ");
+		showMsg("|_____________________________|______________________________________________________");
+		System.out.print("| ");
+		for (MarketSpace ms : game.getBoardgame().getMarket())
+			if (ms.getMember() == null)
+				System.out.printf("%-19s| ", "Reward:");
+			else
+				System.out.printf("%-19s| ", "Occupied by:");
+		showMsg("");
+
+		System.out.print("| ");
+		// visualizzo la prima risorsa
+		for (MarketSpace ms : game.getBoardgame().getMarket()) {
+			String res[] = ms.getReward().getInfo().split("%n");
+			if (ms.getMember() == null)
+				System.out.printf("%-19s| ", "-" + res[0]);
+			else
+				System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
+		}
+		showMsg("");
+
+		System.out.print("| ");
+		// visualizzo l'eventuale seconda risorsa
+		for (MarketSpace ms : game.getBoardgame().getMarket()) {
+			String res[] = ms.getReward().getInfo().split("%n");
+			if (ms.getMember() == null && res.length == 2)
+				System.out.printf("%-19s| ", "-" + res[1]);
+			else if (ms.getMember() != null)
+				System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
+			else
+				System.out.printf("%-19s| ", " ");
+		}
+		showMsg("");
+
+		System.out.print("| ");
+		// visualizzo il privilegio del consiglio solo se non è 0
+		for (MarketSpace ms : game.getBoardgame().getMarket())
+			if (ms.getMember() == null && !ms.getCouncilPrivilege().equals(0))
+				System.out.printf("%-19s| ", "-PdC: " + ms.getCouncilPrivilege());
+			else
+				System.out.printf("%-19s| ", " ");
+		showMsg("");
+
+		System.out.print("| ");
+		// visualizzo il dice requirement solo se non è occupato
+		for (MarketSpace ms : game.getBoardgame().getMarket())
+			if (ms.getMember() == null)
+				System.out.printf("%-19s| ", "Requirement:" + ms.getSpaceRequirement());
+			else
+				System.out.printf("%-19s| ", " ");
+		showMsg("");
+		showMsg("|____________________|____________________|____________________|____________________|");
+
 	}
 
 	@Override
@@ -817,6 +869,22 @@ public class CLIinterface extends AbstractUI {
 		default:
 			printInvalidInput();
 			return printDoubleChangeMenu(effect);
+		}
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
+		showMsg("Choose the card from which you want to copy the effect:");
+		int i;
+		for (i = 0; i < lcards.size(); i++) {
+			showMsg((i + 1) + ": " + lcards.get(i).getName());
+		}
+		int option = in.nextInt();
+		if (option <= i)
+			return lcards.get(option - 1).getName();
+		else {
+			printInvalidInput();
+			return askToPlayerForEffectToCopy(lcards);
 		}
 	}
 }

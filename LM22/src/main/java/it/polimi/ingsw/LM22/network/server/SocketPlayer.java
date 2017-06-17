@@ -5,11 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class SocketPlayer implements IPlayer {
@@ -145,6 +148,19 @@ public class SocketPlayer implements IPlayer {
 		out.flush();
 
 		return in.readInt();
+	}
+
+	@Override
+	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws IOException {
+		out.writeUTF("askCopy");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(lcards);
+		out.flush();
+
+		return in.readUTF();
 	}
 
 }
