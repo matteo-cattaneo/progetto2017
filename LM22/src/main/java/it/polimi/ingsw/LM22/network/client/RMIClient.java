@@ -122,4 +122,9 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
 		return UI.askToPlayerForEffectToCopy(lcards);
 	}
+
+	@Override
+	public Integer selectPersonalTile(Game game) throws RemoteException {
+		return UI.selectPersonalTile(game);
+	}
 }

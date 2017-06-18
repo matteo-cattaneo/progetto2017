@@ -48,4 +48,6 @@ public interface IClient extends Remote {
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException;
 
 	public void showMsg(String msg) throws RemoteException;
+
+	public Integer selectPersonalTile(Game game) throws RemoteException;
 }

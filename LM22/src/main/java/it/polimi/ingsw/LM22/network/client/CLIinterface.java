@@ -509,7 +509,7 @@ public class CLIinterface extends AbstractUI {
 	 * 
 	 * WIP
 	 */
-	private void showPersonalBoard(Game game) throws RemoteException {
+	private void showPersonalBoard() throws RemoteException {
 		System.out.printf("%-30s|%n", "| Period: " + game.getPeriod());
 		System.out.printf("%-30s|%n", "| Round: " + game.getRound());
 		System.out.printf("%-30s|%n", "| ");
@@ -542,6 +542,10 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
 		System.out.printf("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
 		showMsg("|___________|___________|___________|___________|");
+
+	}
+
+	private void showPersonalCards() throws RemoteException {
 		// Hand LeaderCard
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
 			System.out.printf("%-30s|%n", "| Hand leader cards:");
@@ -590,27 +594,26 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
-	private void showBoardTracks(Game game) throws RemoteException {
+	private void showBoardTracks() throws RemoteException {
 		ArrayList<String> faith = new ArrayList<String>();
 		ArrayList<String> military = new ArrayList<String>();
 		ArrayList<String> victory = new ArrayList<String>();
-		// trovo il massimo victory
+		// trovo il massimo faith
 		int maxF = 0;
 		for (Player p : game.getPlayers())
 			if (p.getPersonalBoard().getResources().getFaith() > maxF)
 				maxF = p.getPersonalBoard().getResources().getFaith();
-		// stampo lista player
+		// genero classifica faith
 		for (int j = maxF; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getFaith() == j)
 					faith.add(j + " " + p.getNickname());
-		// System.out.printf("%-30s|%n", "| " + j + " " + p.getNickname());
-		// trovo il massimo victory
+		// trovo il massimo military
 		int maxM = 0;
 		for (Player p : game.getPlayers())
 			if (p.getPersonalBoard().getResources().getMilitary() > maxM)
 				maxM = p.getPersonalBoard().getResources().getMilitary();
-		// stampo lista player
+		// genero classifica military
 		for (int j = maxM; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getMilitary() == j)
@@ -620,7 +623,7 @@ public class CLIinterface extends AbstractUI {
 		for (Player p : game.getPlayers())
 			if (p.getPersonalBoard().getResources().getVictory() > maxV)
 				maxV = p.getPersonalBoard().getResources().getVictory();
-		// stampo lista player
+		// genero classifica victory
 		for (int j = maxV; j >= 0; j--)
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getVictory() == j)
@@ -640,7 +643,10 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
-		// Towers
+		/*
+		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
+		 * mostro le informazioni del player che ha preso la carta
+		 */
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Towers: ");
 		showMsg("|_____________________________|");
@@ -677,9 +683,10 @@ public class CLIinterface extends AbstractUI {
 		}
 		showMsg("|_____________________________|");
 		showMarketSpaces();
-		showBoardTracks(game);
+		showBoardTracks();
 		showMsg("______________________________");
-		showPersonalBoard(game);
+		showPersonalBoard();
+		showPersonalCards();
 		showMsg("");
 		/*
 		 * personal board altri giocatori?
@@ -687,7 +694,9 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	private void showMarketSpaces() {
-		// mercato
+		/*
+		 * mostro il mercato in blocchi in parallelo
+		 */
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Market spaces: ");
 		System.out.print("|_____________________________|____________");
@@ -768,6 +777,10 @@ public class CLIinterface extends AbstractUI {
 			showMsg("");
 	}
 
+	/*
+	 * metodo che permette alla utente di selezionare il bonus che vuole in
+	 * cambio del privilegio del consiglio (PdC)
+	 */
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
 		ArrayList<String> list = new ArrayList<String>();
@@ -775,6 +788,7 @@ public class CLIinterface extends AbstractUI {
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
 		for (int k = 0; k < number;) {
 			showMsg("Choose the Council Privilege reward:");
+			// permetto di selezionare solo PdC con bonus differenti
 			if (!list.contains("wood&stone"))
 				showMsg("1: one stone & one wood");
 			if (!list.contains("servants"))
@@ -909,6 +923,32 @@ public class CLIinterface extends AbstractUI {
 		else {
 			printInvalidInput();
 			return askToPlayerForEffectToCopy(lcards);
+		}
+	}
+
+	@Override
+	public Integer selectPersonalTile(Game game) throws RemoteException {
+		this.game = game;
+		showMsg("");
+		showMsg("Choose a personal bonus tile:");
+		int i;
+		for (i = 0; i < game.getPersonalBonusTile().length; i++) {
+			if (game.getPersonalBonusTile()[i] != null) {
+				showMsg((i + 1) + ": ");
+				showMsg("Harvest effect:");
+				System.out.printf(
+						game.getPersonalBonusTile()[i].getHarvestEffect().getInfo().replaceAll("You earn%n", ""));
+				showMsg("Production effect:");
+				System.out.printf(
+						game.getPersonalBonusTile()[i].getProductionEffect().getInfo().replaceAll("You earn%n", ""));
+			}
+		}
+		int option = in.nextInt();
+		if (option <= i)
+			return option - 1;
+		else {
+			printInvalidInput();
+			return selectPersonalTile(game);
 		}
 	}
 }

@@ -190,4 +190,10 @@ public class GUIinterface extends AbstractUI {
 		return null;
 	}
 
+	@Override
+	public Integer selectPersonalTile(Game game) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

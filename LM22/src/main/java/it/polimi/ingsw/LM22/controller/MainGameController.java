@@ -53,8 +53,28 @@ public class MainGameController implements Runnable {
 	@Override
 	public void run() {
 		// distribuzione personal tile
+		personalTileSelection();
 		// distribuzione carte leader
+		// inizio della partita
 		startGame();
+	}
+
+	/*
+	 * permetto al giocatore di scegliere una personal bonus tile in ordine di
+	 * gioco inverso
+	 */
+	private void personalTileSelection() {
+		for (int i = game.getPlayersOrder().size() - 1; i >= 0; i--) {
+			Player p = game.getPlayersOrder().get(i);
+			int selection = 0;
+			try {
+				selection = getIPlayer(p).selectPersonalTile(game);
+				p.getPersonalBoard().setBonusBoard(game.getPersonalBonusTile()[selection]);
+				game.getPersonalBonusTile()[selection] = null;
+			} catch (IOException e) {
+				disconnectPlayer(p);
+			}
+		}
 	}
 
 	private void startGame() {
@@ -311,7 +331,7 @@ public class MainGameController implements Runnable {
 				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer())))
 					playerRoom.get(j).getIplayer().showMsg(msg);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Error sending " + msg + " to all!", e);
+				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!");
 			}
 		System.out.println(msg);
 	}

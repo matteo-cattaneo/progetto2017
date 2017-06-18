@@ -169,4 +169,17 @@ public class SocketPlayer implements IPlayer {
 		return in.readUTF();
 	}
 
+	@Override
+	public Integer selectPersonalTile(Game game) throws IOException {
+		out.writeUTF("personalTile");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(game);
+		out.flush();
+
+		return in.readInt();
+	}
+
 }

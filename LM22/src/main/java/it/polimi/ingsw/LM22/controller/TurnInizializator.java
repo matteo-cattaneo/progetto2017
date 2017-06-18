@@ -81,10 +81,10 @@ public class TurnInizializator {
 	private void cleanBoardGame(Game game) {
 		for (Tower tower : game.getBoardgame().getTowers()) {
 			tower.setOccupied(false);
-//			for (Floor f : tower.getFloor())
-//				// TODO qui potremmo avere problemi (Settaggio a null
-//				// pericoloso)
-//				f.setCard(null);
+			// for (Floor f : tower.getFloor())
+			// // TODO qui potremmo avere problemi (Settaggio a null
+			// // pericoloso)
+			// f.setCard(null);
 			// settaggio a null dello spazio delle carte
 		}
 		retireMembers(game);
@@ -239,15 +239,12 @@ public class TurnInizializator {
 		List<FamilyMember> members = game.getBoardgame().getCouncilPalace().getMembers();
 		List<Player> newOrder = new ArrayList<Player>();
 		for (FamilyMember m : members) {
-			System.out.println("C");
 			if (!newOrder.contains(m.getPlayer()))
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
 		}
-		System.out.println("B");
 		for (int i = 0; i < members.size(); i++)
 			members.remove(members.get(i));
-		System.out.println("A");
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
 				newOrder.add(p);

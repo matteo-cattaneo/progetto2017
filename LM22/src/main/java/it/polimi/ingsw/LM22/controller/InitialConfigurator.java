@@ -72,7 +72,7 @@ public class InitialConfigurator extends TurnInizializator {
 		mixCards(game);
 		distributeDevelopmentCards(game);
 		leaderDistribution(game);
-		personalBoardTileDistribution(game);
+		// personalBoardTileDistribution(game);
 	}
 
 	/*
@@ -86,6 +86,7 @@ public class InitialConfigurator extends TurnInizializator {
 			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);
 			List<FamilyMember> members = new ArrayList<FamilyMember>();
 			int j;
+			// assegno i 3 familiari colorari ad ogni player
 			for (j = 0; j < 3; j++) {
 				FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
 				fm.setValue(game.getBoardgame().getDice(MEMBER_COLOR[j]));
@@ -95,6 +96,7 @@ public class InitialConfigurator extends TurnInizializator {
 			FamilyMember fm = new FamilyMember(players[i], MEMBER_COLOR[j]);
 			fm.setValue(UNCOLORED_VALUE);
 			members.add(fm);
+
 			players[i].setMembers(members);
 			i++;
 		}
@@ -110,25 +112,14 @@ public class InitialConfigurator extends TurnInizializator {
 		Random random = new Random();
 		List<Player> p = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
-			// i put the new item in the list randomly
 			p.add(random.nextInt(p.size() + 1), player);
 		}
 		game.setPlayersOrder(p);
 	}
 
 	/*
-	 * metodo che consente di istanziare tutto il model con i relativi
-	 * caricamenti da file, in modo da ottenere tutti gli oggetti utili alla
-	 * partita --> tendenzialmente una delle prime cose da fare alla creazione
-	 * di una nuova partita
-	 */
-	private void gameCreation() {
-
-	}
-
-	/*
 	 * metodo che costruisce il Model con i parametri principali per poter
-	 * iniziare la partita
+	 * iniziare la partita caricandoli da file
 	 */
 	private void loadConfiguration(Game game) throws IOException {
 		fileParser.getDevCards(game);

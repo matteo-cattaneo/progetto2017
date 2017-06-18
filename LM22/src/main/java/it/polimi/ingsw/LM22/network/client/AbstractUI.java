@@ -79,4 +79,6 @@ public abstract class AbstractUI {
 
 	public abstract void printCouncilMoveMenu() throws RemoteException;
 
+	public abstract Integer selectPersonalTile(Game game) throws RemoteException;
+
 }

@@ -112,4 +112,9 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws IOException {
 		return client.askToPlayerForEffectToCopy(lcards);
 	}
+
+	@Override
+	public Integer selectPersonalTile(Game game) throws IOException {
+		return client.selectPersonalTile(game);
+	}
 }

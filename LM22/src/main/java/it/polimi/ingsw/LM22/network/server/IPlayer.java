@@ -48,4 +48,6 @@ public interface IPlayer extends Remote {
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws IOException;
 
 	public void showMsg(String msg) throws IOException;
+
+	public Integer selectPersonalTile(Game game) throws IOException;
 }

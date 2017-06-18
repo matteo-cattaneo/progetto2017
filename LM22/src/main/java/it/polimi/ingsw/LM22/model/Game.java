@@ -20,7 +20,7 @@ public class Game implements Serializable {
 	private transient ArrayList<BuildingCard> buildingCards;
 	private transient ArrayList<VentureCard> ventureCards;
 	private transient ArrayList<LeaderCard> leaderCards;
-	private transient PersonalBonusTile personalBonusTile[];
+	private PersonalBonusTile personalBonusTile[];
 	private long moveTimer; // caricabile da file (secondi)
 
 	public long getMoveTimer() {

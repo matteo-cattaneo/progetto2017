@@ -53,9 +53,12 @@ public class SocketClient implements IClient {
 			socketOut.flush();
 			while (!socket.isClosed()) {
 				// ricevo il comando dal server
+				// effettuo uno switch sulla prima parte del comando ricevuto
+				// ed eseguo la relativa procedura
 				String[] socketLine = socketIn.readUTF().split("@");
 				switch (socketLine[0]) {
 				case "msg":
+					// messaggio visualizzato sulla UI del giocatore
 					UI.showMsg(socketLine[1]);
 					break;
 				case "board":
@@ -108,7 +111,7 @@ public class SocketClient implements IClient {
 					List<LeaderCard> lcards = new ArrayList<LeaderCard>();
 					// ottengo lunghezza lista
 					int N = socketIn.readInt();
-					
+
 					// ottengo i singoli elementi della lista
 					for (int i = 0; i < N; i++)
 						lcards.add((LeaderCard) socketIn.readObject());
@@ -116,6 +119,9 @@ public class SocketClient implements IClient {
 					socketOut.writeUTF(UI.askToPlayerForEffectToCopy(lcards));
 					socketOut.flush();
 					break;
+				case "personalTile":
+					socketOut.writeInt(UI.selectPersonalTile((Game) socketIn.readObject()));
+					socketOut.flush();
 				}
 			}
 		} catch (ClassNotFoundException | IOException e) {
@@ -203,6 +209,12 @@ public class SocketClient implements IClient {
 
 	@Override
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer selectPersonalTile(Game game) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
