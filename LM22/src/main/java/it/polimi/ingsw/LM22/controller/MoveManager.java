@@ -286,7 +286,7 @@ public class MoveManager {
 		for (Effect e : cardMove.getPlayer().getEffects()) {
 			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType() == tower)
 				resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
-			else if (e instanceof CoinsDiscountEffect){
+			else if (e instanceof CoinsDiscountEffect) {
 				resourceHandler.cardDiscounted(res, ((CoinsDiscountEffect) e).getDiscount());
 			}
 		}
@@ -342,7 +342,7 @@ public class MoveManager {
 	/*
 	 * gestisce una mossa di tipo CardMove
 	 */
-	public void cardmoveHandle(CardMove cardMove) {
+	public void cardmoveHandle(CardMove cardMove) throws InvalidMoveException {
 		CardSpace space = searchCardSpace(cardMove.getTowerSelected(), cardMove.getLevelSelected());
 		Tower t = game.getBoardgame().getTowers()[cardMove.getTowerSelected()];
 		space.setMember(cardMove.getMemberUsed());
@@ -369,7 +369,7 @@ public class MoveManager {
 	 * (le carte character che hanno un effetto permanente devono anche
 	 * aggiornare la lista degli effetti presente nel Player
 	 */
-	private void cardGetter(CardMove cardMove, Tower t) {
+	private void cardGetter(CardMove cardMove, Tower t) throws InvalidMoveException {
 		Integer level = cardMove.getLevelSelected();
 		switch (cardMove.getTowerSelected()) {
 		case 0:
@@ -717,7 +717,7 @@ public class MoveManager {
 	 * comportamento differente se l'effetto è una volta per turno oppure se è
 	 * un effetto permanente
 	 */
-	public void leadercardactivationHandle(LeaderCardActivation move) {
+	public void leadercardactivationHandle(LeaderCardActivation move) throws InvalidMoveException {
 		if (!(move.getLeaderCard().getEffect() instanceof LeaderResourceEffect)
 				&& !(move.getLeaderCard().getEffect() instanceof MemberChangeEffect
 						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember() == "COLORED")

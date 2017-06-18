@@ -53,7 +53,7 @@ public class EffectManager {
 		this.moveManager = moveManager;
 	}
 
-	public void manageEffect(Effect effect, Player player, MainGameController mainGC) {
+	public void manageEffect(Effect effect, Player player, MainGameController mainGC) throws InvalidMoveException {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
@@ -74,6 +74,7 @@ public class EffectManager {
 	 * metodo che gestisce l'effetto in ingresso come effetto immediato di una
 	 * carta
 	 */
+	// TODO qui manca "Resource sum" come parametro ( da errore su harvest handle)
 	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
@@ -179,7 +180,7 @@ public class EffectManager {
 	/*
 	 * gestisce un effetto di tipo CardAction
 	 */
-	public void cardactioneffectManage(CardActionEffect effect) throws IOException {
+	public void cardactioneffectManage(CardActionEffect effect) throws IOException, InvalidMoveException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
@@ -192,18 +193,11 @@ public class EffectManager {
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
 		CardMove move = new CardMove(player, other, servants, tower, floor);
-		try {
-			moveManager.manageMove(move);
-		} catch (InvalidMoveException e) {
-			/*
-			 * qualcosa per far notare al player che la mossa non era valida (fa
-			 * perdere la mossa comunque, non si ripete)
-			 */
-			return;
-		}
+
+		moveManager.manageMove(move);
 	}
 
-	public void workactioneffectManage(WorkActionEffect effect) throws IOException {
+	public void workactioneffectManage(WorkActionEffect effect) throws IOException, InvalidMoveException {
 		r.addResource(player.getPersonalBoard().getResources(),
 				r.calculateResource(effect.getResource().clone(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
@@ -213,15 +207,9 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		try {
-			moveManager.manageMove(move);
-		} catch (InvalidMoveException e) {
-			/*
-			 * qualcosa per far notare al player che la mossa non era valida (fa
-			 * perdere la mossa comunque, non si ripete)
-			 */
-			return;
-		}
+
+		moveManager.manageMove(move);
+
 	}
 
 	/*
@@ -272,21 +260,15 @@ public class EffectManager {
 	 * metodo che permette di gestire una nuova mossa work proveniente
 	 * dall'attivazione di una carta leader
 	 */
-	public void workactionManage(WorkAction effect) throws IOException {
+	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException {
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-		try {
-			moveManager.manageMove(move);
-		} catch (InvalidMoveException e) {
-			/*
-			 * qualcosa per far notare al player che la mossa non era valida (fa
-			 * perdere la mossa comunque, non si ripete)
-			 */
-			return;
-		}
+
+		moveManager.manageMove(move);
+
 	}
 
 	/*
@@ -382,13 +364,12 @@ public class EffectManager {
 		}
 		String choice = mainGC.askToPlayerForEffectToCopy(player, lcards);
 		/*
-		 * qui va modificato il comportamento in base al tipo di effetto 
-		 * che è stato scelto
-		 * POSSIBILI SOLUZIONI
-		 * - modifico l'effetto della carta da CopyEffect a quello nuovo richiesto 
-		 * (necessita di avere la carta leader attivata e va bene per effetti permanenti)
-		 * - aggiungo alla lista degli effetti attivi quello rchiesto 
-		 * (a patto che non sia un effetto valido una volta per turno)
+		 * qui va modificato il comportamento in base al tipo di effetto che è
+		 * stato scelto POSSIBILI SOLUZIONI - modifico l'effetto della carta da
+		 * CopyEffect a quello nuovo richiesto (necessita di avere la carta
+		 * leader attivata e va bene per effetti permanenti) - aggiungo alla
+		 * lista degli effetti attivi quello rchiesto (a patto che non sia un
+		 * effetto valido una volta per turno)
 		 */
 		for (LeaderCard chosen : lcards) {
 			if (chosen.getName() == choice) {

@@ -58,6 +58,8 @@ public class MainGameController implements Runnable {
 	}
 
 	private void startGame() {
+		// invio a tutti il nuovo model
+		sendAll();
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
 			// inizio turno
 			for (Player p : game.getPlayersOrder()) {
@@ -82,8 +84,6 @@ public class MainGameController implements Runnable {
 		AbstractMove aMove;
 		for (String sMove = ""; !sMove.startsWith("End@");) {
 			try {
-				// invio a tutti il nuovo model
-				sendAll();
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
 			} catch (IOException e) {
@@ -96,6 +96,7 @@ public class MainGameController implements Runnable {
 			// provo ad eseguire la mossa richiesta
 			try {
 				moveManager.manageMove(aMove);
+				sendAll();
 			} catch (InvalidMoveException e) {
 				// il player ha fatto una mossa non valida
 				try {
@@ -141,11 +142,16 @@ public class MainGameController implements Runnable {
 	/*
 	 * invio il model a tutti i clients connessi
 	 */
-	private void sendAll() throws IOException {
-		for (int j = 0; j < playerRoom.size(); j++) {
-			if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer()))
-					&& game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
-				playerRoom.get(j).getIplayer().showBoard(game);
+	private void sendAll() {
+		try {
+			for (int j = 0; j < playerRoom.size(); j++) {
+
+				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer()))
+						&& game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
+					playerRoom.get(j).getIplayer().showBoard(game);
+			}
+		} catch (IOException e) {
+
 		}
 	}
 

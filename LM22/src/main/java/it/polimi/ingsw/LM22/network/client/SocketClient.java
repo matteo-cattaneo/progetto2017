@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,7 +105,15 @@ public class SocketClient implements IClient {
 					socketOut.flush();
 					break;
 				case "askCopy":
-					socketOut.writeUTF(UI.askToPlayerForEffectToCopy((List<LeaderCard>) socketIn.readObject()));
+					List<LeaderCard> lcards = new ArrayList<LeaderCard>();
+					// ottengo lunghezza lista
+					int N = socketIn.readInt();
+					
+					// ottengo i singoli elementi della lista
+					for (int i = 0; i < N; i++)
+						lcards.add((LeaderCard) socketIn.readObject());
+
+					socketOut.writeUTF(UI.askToPlayerForEffectToCopy(lcards));
 					socketOut.flush();
 					break;
 				}

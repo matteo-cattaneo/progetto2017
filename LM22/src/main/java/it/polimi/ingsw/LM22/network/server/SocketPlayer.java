@@ -155,10 +155,16 @@ public class SocketPlayer implements IPlayer {
 		out.writeUTF("askCopy");
 		out.flush();
 
-		out.reset();
-
-		out.writeObject(lcards);
+		// invio lunghezza lista
+		out.writeInt(lcards.size());
 		out.flush();
+
+		// inivio tutti gli elementi della lista
+		for (int i = 0; i < lcards.size(); i++) {
+			out.reset();
+			out.writeObject(lcards.get(i));
+			out.flush();
+		}
 
 		return in.readUTF();
 	}

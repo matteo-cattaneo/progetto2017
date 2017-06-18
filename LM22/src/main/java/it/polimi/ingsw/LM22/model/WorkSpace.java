@@ -1,6 +1,7 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkSpace extends AbstractSpace implements Serializable {
@@ -8,8 +9,8 @@ public class WorkSpace extends AbstractSpace implements Serializable {
 	private static final long serialVersionUID = -4179895781015044439L;
 	private String workType;
 	private final Integer MALUS = 3;
-	private List<FamilyMember> members;
-	private List<String> coloredMemberOnIt;
+	private List<FamilyMember> members = new ArrayList<FamilyMember>();
+	private List<String> coloredMemberOnIt = new ArrayList<String>();
 
 	public List<FamilyMember> getMembers() {
 		return members;

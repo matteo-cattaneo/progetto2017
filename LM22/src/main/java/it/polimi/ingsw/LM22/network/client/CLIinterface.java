@@ -672,7 +672,7 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|%n", "| Council Palace members: ");
 		int i = 1;
 		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
-			System.out.printf("%-30s|%n", "| " + i + ":" + fm.getPlayer().getNickname());
+			System.out.printf("%-30s|%n", "| " + i + ": " + fm.getPlayer().getNickname());
 			i++;
 		}
 		showMsg("|_____________________________|");
@@ -690,58 +690,82 @@ public class CLIinterface extends AbstractUI {
 		// mercato
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Market spaces: ");
-		showMsg("|_____________________________|______________________________________________________");
+		System.out.print("|_____________________________|____________");
+		if (game.getPlayers().length == 4)
+			showMsg("__________________________________________");
+		else
+			showMsg("");
 		System.out.print("| ");
+		int nMark = 0;
 		for (MarketSpace ms : game.getBoardgame().getMarket())
-			if (ms.getMember() == null)
-				System.out.printf("%-19s| ", "Reward:");
-			else
-				System.out.printf("%-19s| ", "Occupied by:");
+			if (game.getPlayers().length == 4 || nMark < 2) {
+				if (ms.getMember() == null)
+					System.out.printf("%-19s| ", "Reward:");
+				else
+					System.out.printf("%-19s| ", "Occupied by:");
+				nMark++;
+			}
 		showMsg("");
-
+		nMark = 0;
 		System.out.print("| ");
 		// visualizzo la prima risorsa
-		for (MarketSpace ms : game.getBoardgame().getMarket()) {
-			String res[] = ms.getReward().getInfo().split("%n");
-			if (ms.getMember() == null)
-				System.out.printf("%-19s| ", "-" + res[0]);
-			else
-				System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
-		}
-		showMsg("");
+		for (MarketSpace ms : game.getBoardgame().getMarket())
+			if (game.getPlayers().length == 4 || nMark < 2) {
+				String res[] = ms.getReward().getInfo().split("%n");
+				if (ms.getMember() == null)
+					System.out.printf("%-19s| ", "-" + res[0]);
+				else
+					System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
+				nMark++;
+			}
 
+		showMsg("");
+		nMark = 0;
 		System.out.print("| ");
 		// visualizzo l'eventuale seconda risorsa
-		for (MarketSpace ms : game.getBoardgame().getMarket()) {
-			String res[] = ms.getReward().getInfo().split("%n");
-			if (ms.getMember() == null && res.length == 2)
-				System.out.printf("%-19s| ", "-" + res[1]);
-			else if (ms.getMember() != null)
-				System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
-			else
-				System.out.printf("%-19s| ", " ");
-		}
-		showMsg("");
+		for (MarketSpace ms : game.getBoardgame().getMarket())
+			if (game.getPlayers().length == 4 || nMark < 2) {
+				String res[] = ms.getReward().getInfo().split("%n");
+				if (ms.getMember() == null && res.length == 2)
+					System.out.printf("%-19s| ", "-" + res[1]);
+				else
+					System.out.printf("%-19s| ", " ");
+				nMark++;
+			}
 
+		showMsg("");
+		nMark = 0;
 		System.out.print("| ");
 		// visualizzo il privilegio del consiglio solo se non è 0
 		for (MarketSpace ms : game.getBoardgame().getMarket())
-			if (ms.getMember() == null && !ms.getCouncilPrivilege().equals(0))
-				System.out.printf("%-19s| ", "-PdC: " + ms.getCouncilPrivilege());
-			else
-				System.out.printf("%-19s| ", " ");
-		showMsg("");
+			if (game.getPlayers().length == 4 || nMark < 2) {
+				if (ms.getMember() == null && !ms.getCouncilPrivilege().equals(0))
+					System.out.printf("%-19s| ", "-PdC: " + ms.getCouncilPrivilege());
+				else
+					System.out.printf("%-19s| ", " ");
+				nMark++;
+			}
 
+		showMsg("");
+		nMark = 0;
 		System.out.print("| ");
 		// visualizzo il dice requirement solo se non è occupato
 		for (MarketSpace ms : game.getBoardgame().getMarket())
-			if (ms.getMember() == null)
-				System.out.printf("%-19s| ", "Requirement:" + ms.getSpaceRequirement());
-			else
-				System.out.printf("%-19s| ", " ");
-		showMsg("");
-		showMsg("|____________________|____________________|____________________|____________________|");
+			if (game.getPlayers().length == 4 || nMark < 2) {
+				if (ms.getMember() == null)
+					System.out.printf("%-19s| ", "Requirement:" + ms.getSpaceRequirement());
+				else
+					System.out.printf("%-19s| ", " ");
+				nMark++;
+			}
 
+		showMsg("");
+
+		System.out.print("|____________________|____________________|");
+		if (game.getPlayers().length == 4)
+			showMsg("____________________|____________________|");
+		else
+			showMsg("");
 	}
 
 	@Override
