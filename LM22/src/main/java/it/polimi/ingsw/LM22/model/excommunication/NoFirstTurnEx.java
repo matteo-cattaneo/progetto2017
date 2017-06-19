@@ -8,7 +8,7 @@ public class NoFirstTurnEx extends ExEffect implements Serializable{
 
 	@Override
 	public String getInfo() {
-		return "You cannot do your first turn of each round, you will recover it at the end of the round%n";
+		return "You cannot do your first turn of each round, you will recover it at the end of the round";
 	}
 
 }

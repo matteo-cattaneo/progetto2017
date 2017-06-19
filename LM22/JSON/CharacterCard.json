@@ -40,7 +40,7 @@
     },
     "immediateEffect": {
         "type": "CardActionEffect",
-        "cardType": -1,
+        "cardType": 1,
         "diceValue": 4,
         "resource": {
             "wood": 0,
@@ -51,7 +51,16 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 0
+        "councilPrivilege": 0,
+        "cardDiscount": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
     },
     "permanentEffect": {
         "type": "NoPermanentEffect"
@@ -118,7 +127,7 @@
         "cardDiscount": {
             "wood": 0,
             "stone": 0,
-            "coins": -1,
+            "coins": 1,
             "servants": 0,
             "faith": 0,
             "military": 0,
@@ -145,8 +154,8 @@
         "cardType": 2,
         "diceBonus": 2,
         "cardDiscount": {
-            "wood": -1,
-            "stone": -1,
+            "wood": 1,
+            "stone": 1,
             "coins": 0,
             "servants": 0,
             "faith": 0,
@@ -290,7 +299,7 @@
         "cardDiscount": {
             "wood": 0,
             "stone": 0,
-            "coins": -2,
+            "coins": 2,
             "servants": 0,
             "faith": 0,
             "military": 0,
@@ -434,8 +443,8 @@
         },
         "councilPrivilege": 0,
         "cardDiscount": {
-            "wood": -1,
-            "stone": -1,
+            "wood": 1,
+            "stone": 1,
             "coins": 0,
             "servants": 0,
             "faith": 0,
@@ -471,7 +480,16 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 1
+        "councilPrivilege": 1,
+        "cardDiscount": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
     },
     "permanentEffect": {
         "type": "NoPermanentEffect"
@@ -709,7 +727,16 @@
             "military": 0,
             "victory": 0
         },
-        "councilPrivilege": 1
+        "councilPrivilege": 1,
+        "cardDiscount": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 0,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        }
     },
     "permanentEffect": {
         "type": "NoPermanentEffect"

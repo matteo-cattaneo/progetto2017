@@ -248,7 +248,6 @@ public class MoveManager {
 		Resource additionalCost = NOTHING;
 		boolean occupied = t.isOccupied();
 		boolean hasBrunelleschi = containsClass(move.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
-		System.out.println(occupied + " " + !hasBrunelleschi);
 		if (occupied && !hasBrunelleschi)
 			additionalCost = THREE_COINS;
 		return additionalCost;

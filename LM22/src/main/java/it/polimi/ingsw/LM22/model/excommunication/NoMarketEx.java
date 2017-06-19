@@ -8,7 +8,7 @@ public class NoMarketEx extends ExEffect implements Serializable{
 
 	@Override
 	public String getInfo() {
-		return "You won't be able anymore to do Market Move%n";
+		return "You won't be able anymore to do Market Move";
 	}
 
 }

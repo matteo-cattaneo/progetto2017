@@ -84,6 +84,7 @@ public class TurnInizializator {
 	private void cleanBoardGame(Game game) {
 		for (Tower tower : game.getBoardgame().getTowers()) {
 			tower.setOccupied(false);
+			tower.setColoredMembersOnIt(new ArrayList<String>());
 			for (Floor f : tower.getFloor())
 				f.getSpace().setMember(null);
 		}
@@ -101,14 +102,13 @@ public class TurnInizializator {
 			}
 		}
 		for (MarketSpace space : game.getBoardgame().getMarket()) {
-			// TODO qui potremmo avere problemi quando poi ci devo mettere un
-			// familiare
 			space.setMember(null);
 		}
 		for (int cont = 0; cont < WORKSPACES; cont++) {
 			// TODO qui potremmo avere problemi quando poi ci devo mettere un
 			// familiare
 			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(new ArrayList<FamilyMember>());
+			game.getBoardgame().getWorkSpace(workType[cont]).setColoredMemberOnIt(new ArrayList<String>());
 		}
 	}
 

@@ -13,7 +13,7 @@ public class DiceMalusEx extends ExEffect implements Serializable{
 	
 	public String getInfo() {
 		String info = "";
-		info = info + "You get a malus of " + malus + "for all your colored Members";
+		info = info + "You get a malus of " + malus + " for all your colored Members";
 		return info;
 	}
 	

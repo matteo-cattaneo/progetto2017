@@ -26,6 +26,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
@@ -81,7 +82,6 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "";
-		timeout = game.getMoveTimer();
 		time = System.currentTimeMillis() / 1000;
 		/*
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
@@ -101,11 +101,14 @@ public class CLIinterface extends AbstractUI {
 			// client
 			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			move = "End@Disconnect@";
-			System.out.println("Move time expired, now you have been disconnected!");
+			System.err.println("Move time expired, now you have been disconnected!");
 			// System.exit(0);
 		}
+		// calcolo il timeout da cui dovrò partire alla possima mossa
+		if (!getMove().equals("End@"))
+			timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
 	}
 
 	private void showPrincipalMenu() throws RemoteException {
@@ -154,17 +157,17 @@ public class CLIinterface extends AbstractUI {
 		case 5:
 			setMove("End");
 			memberMove = false;
+			timeout = game.getMoveTimer();
 			break;
 		default:
 			printInvalidInput();
 			showPrincipalMenu();
 			break;
 		}
-		// calcolo il timeout da cui dovrò partire alla possima mossa
-		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
 	}
 
 	private void showCard() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Insert the card name: (no case sensitive)");
 		in.nextLine();
 		String name = in.nextLine();
@@ -227,6 +230,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMemberMoveMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		memberMove = true;
 		showMsg("Choose your move:");
 		showMsg("1: Card");
@@ -256,6 +260,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCardMoveMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(CARDMOVE);
 		printFamilyMemberMenu();
 		setMove(printServantsAddictionMenu());
@@ -409,6 +414,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove("LeaderSell");
 		showMsg("Choose the Leader card to sell:");
 		int i;
@@ -426,17 +432,19 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
 		Collections.copy(ld, getPlayer(name, game).getLeaderCards());
+		ld.addAll(getPlayer(name, game).getHandLeaderCards());
 		setMove("LeaderAct");
 		showMsg("Choose the Leader card to activate:");
 		int i;
-		for (i = 0; i < getPlayer(name, game).getLeaderCards().size(); i++) {
-			showMsg((i + 1) + ": " + getPlayer(name, game).getLeaderCards().get(i).getName());
+		for (i = 0; i < ld.size(); i++) {
+			showMsg((i + 1) + ": " + ld.get(i).getName());
 		}
 		int option = in.nextInt();
 		if (option <= i)
-			setMove(getPlayer(name, game).getLeaderCards().get(option).getName());
+			setMove(ld.get(option).getName());
 		else {
 			printInvalidInput();
 			printActivateLeaderCardMenu();
@@ -644,6 +652,8 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
+		if (timeout == 0)
+			timeout = game.getMoveTimer();
 		/*
 		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
 		 * mostro le informazioni del player che ha preso la carta
@@ -678,6 +688,12 @@ public class CLIinterface extends AbstractUI {
 			showMsg("        |_______________________|_______________________|_______________________|_______________________|");
 
 		}
+		// scomuniche
+		showMsg("______________________________");
+		System.out.printf("%-30s|%n", "| Excommunication tile:");
+		showMsg("|_____________________________|");
+		for (ExCommunication ex : game.getBoardgame().getFaithGrid().getExCommunicationTiles())
+			showMsg(" - " + ex.getEffect().getInfo());
 		// palazzo del consiglio
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Council Palace members: ");
@@ -949,7 +965,7 @@ public class CLIinterface extends AbstractUI {
 			}
 		}
 		int option = in.nextInt();
-		if (option <= i)
+		if (game.getPersonalBonusTile()[option - 1] != null)
 			return option - 1;
 		else {
 			printInvalidInput();

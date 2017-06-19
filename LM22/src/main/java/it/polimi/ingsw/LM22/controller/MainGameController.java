@@ -134,6 +134,7 @@ public class MainGameController implements Runnable {
 				sendAll();
 			} catch (InvalidMoveException e) {
 				// il player ha fatto una mossa non valida
+				// LOGGER.log(Level.SEVERE, "Invalid Move!", e);
 				try {
 					getIPlayer(p).showMsg("Invalid move!!!");
 				} catch (IOException e1) {
@@ -224,13 +225,14 @@ public class MainGameController implements Runnable {
 	}
 
 	/*
-	 * gestisce la fase di rimozione dei player dalla lista della room che conteneva la partita terminata
+	 * gestisce la fase di rimozione dei player dalla lista della room che
+	 * conteneva la partita terminata
 	 */
 	private void disconnectRoomPlayers(Game game) {
-		for (int i = 0; i < playerRoom.size() ;){
+		for (int i = 0; i < playerRoom.size();) {
 			playerRoom.remove(i);
 		}
-		
+
 	}
 
 	/*
