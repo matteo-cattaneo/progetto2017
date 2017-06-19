@@ -38,13 +38,16 @@ public class TurnInizializator {
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = { "PRODUCTION", "HARVEST" };
 	private final Integer NOTHING = 0;
+	private final Resource ZERO = new Resource(0, 0, 0, 0, 0, 0, 0);
 
+	private MainGameController mainGC;
 	private EffectManager effectManager;
 	private ResourceHandler r;
 
-	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler) {
+	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler, MainGameController mainGC) {
 		this.effectManager = effectManager;
 		this.r = resourceHandler;
+		this.mainGC = mainGC;
 	}
 
 	/*
@@ -81,11 +84,8 @@ public class TurnInizializator {
 	private void cleanBoardGame(Game game) {
 		for (Tower tower : game.getBoardgame().getTowers()) {
 			tower.setOccupied(false);
-			// for (Floor f : tower.getFloor())
-			// // TODO qui potremmo avere problemi (Settaggio a null
-			// // pericoloso)
-			// f.setCard(null);
-			// settaggio a null dello spazio delle carte
+			for (Floor f : tower.getFloor())
+				f.getSpace().setMember(null);
 		}
 		retireMembers(game);
 	}
@@ -223,9 +223,9 @@ public class TurnInizializator {
 		for (Player p : game.getPlayersOrder())
 			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {
-					effectManager.memberchangeeffectManage(((MemberChangeEffect) e), p);
+					effectManager.manageEffect(e, p, ZERO, mainGC);
 				} else if (e instanceof MemberBonusEffect) {
-					effectManager.memberbonuseffectManage(((MemberBonusEffect) e), p);
+					effectManager.memberbonuseffectManage((MemberBonusEffect) e);
 				}
 			}
 	}

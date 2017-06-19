@@ -53,14 +53,14 @@ public class EffectManager {
 		this.moveManager = moveManager;
 	}
 
-	public void manageEffect(Effect effect, Player player, MainGameController mainGC) throws InvalidMoveException {
+	public void manageEffect(Effect effect, Player player, Resource sum, MainGameController mainGC) {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
 			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
-			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass() });
+			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), sum.getClass() });
 			if (metodo != null)
-				metodo.invoke(this, new Object[] { effect });
+				metodo.invoke(this, new Object[] { effect, sum });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
@@ -74,11 +74,9 @@ public class EffectManager {
 	 * metodo che gestisce l'effetto in ingresso come effetto immediato di una
 	 * carta
 	 */
-	// TODO qui manca "Resource sum" come parametro ( da errore su harvest handle)
-	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect) throws IOException {
-		r.addResource(player.getPersonalBoard().getResources(),
-				r.calculateResource(effect.getResource().clone(), player));
-		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
+	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect, Resource sum) throws IOException {
+		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
 
@@ -99,9 +97,9 @@ public class EffectManager {
 		}
 	}
 
-	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource resource) throws IOException {
-		r.subResource(resource, effect.getExchangedResource());
-		r.addResource(resource, r.calculateResource(
+	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource sum) throws IOException {
+		r.subResource(sum, effect.getExchangedResource());
+		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
 
@@ -110,10 +108,10 @@ public class EffectManager {
 	 * Privilegi del Consiglio)
 	 */
 	public void changeeffectManage(ChangeEffect effect, Resource sum) throws IOException {
-		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
+		if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
+			r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
 		}
 		return;
 	}
@@ -127,25 +125,25 @@ public class EffectManager {
 	public void doublechangeeffectManage(DoubleChangeEffect effect, Resource sum) throws IOException {
 		// se entrambi i change sono disponibili chiedo quale effettuare
 		// dovrei chiedere se lo vuole fare
-		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
-				&& r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])) {
+		if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
+				&& r.enoughResources(sum, effect.getExchangeEffect2()[NEEDED])) {
 			// metodo che chiede quale dei due cambi si vole effettuare
 			Integer choice = mainGC.askForDoubleChange(player, effect);
 			if (choice == FIRST_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
+				r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
 			} else if (choice == SECOND_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
-				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
+				r.subResource(sum, effect.getExchangeEffect2()[NEEDED]);
 			}
-		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
+		} else if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
-		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])
+			r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
+		} else if (r.enoughResources(sum, effect.getExchangeEffect2()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect2())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
-			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
+			r.subResource(sum, effect.getExchangeEffect2()[NEEDED]);
 		}
 	}
 
@@ -170,20 +168,19 @@ public class EffectManager {
 	/*
 	 * gestisce l'effetto del Generale (carta Character)
 	 */
-	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect) {
-		Integer points = player.getPersonalBoard().getResources().getMilitary() / effect.getRequirement().getMilitary();
+	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect, Resource sum) {
+		Integer points = sum.getMilitary() / effect.getRequirement().getMilitary();
 		Resource bonus = r.resourceMultiplication(effect.getReward().clone(), points);
 		bonus = r.calculateResource(bonus, player);
-		r.addResource(player.getPersonalBoard().getResources(), bonus);
+		r.addResource(sum, bonus);
 	}
 
 	/*
 	 * gestisce un effetto di tipo CardAction
 	 */
-	public void cardactioneffectManage(CardActionEffect effect) throws IOException, InvalidMoveException {
-		r.addResource(player.getPersonalBoard().getResources(),
-				r.calculateResource(effect.getResource().clone(), player));
-		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
+	public void cardactioneffectManage(CardActionEffect effect, Resource sum) throws IOException {
+		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);
@@ -194,13 +191,16 @@ public class EffectManager {
 		other.setUsed(false);
 		CardMove move = new CardMove(player, other, servants, tower, floor);
 
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			mainGC.getIPlayer(player).showMsg("Effect lost!");
+		}
 	}
 
-	public void workactioneffectManage(WorkActionEffect effect) throws IOException, InvalidMoveException {
-		r.addResource(player.getPersonalBoard().getResources(),
-				r.calculateResource(effect.getResource().clone(), player));
-		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
+	public void workactioneffectManage(WorkActionEffect effect, Resource sum) throws IOException {
+		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
@@ -208,7 +208,11 @@ public class EffectManager {
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
 
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			mainGC.getIPlayer(player).showMsg("Work lost!");
+		}
 
 	}
 
@@ -218,7 +222,7 @@ public class EffectManager {
 	 * invece è un effetto permanente devo poterlo sommare alla risorsa
 	 * sommatrice della produzione
 	 */
-	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource resource) {
+	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource sum) {
 		Resource bonus = NOTHING;
 		switch (effect.getCardRequired()) {
 		case "TERRITORY":
@@ -238,16 +242,29 @@ public class EffectManager {
 					player.getPersonalBoard().getVenturesCards().size());
 			break;
 		}
-		r.addResource(resource, r.calculateResource(bonus.clone(), player));
+		r.addResource(sum, r.calculateResource(bonus.clone(), player));
 	}
 
-	public void noeffectManage(NoEffect effect) {
+	public void noeffectManage(NoEffect effect, Resource sum) {
 		return;
 	}
 
 	/*
 	 * LEADER CARDS' EFFECTS
 	 */
+
+	public void leaderEffectManage(Effect effect, Player player, MainGameController mainGC) {
+		this.player = player;
+		this.mainGC = mainGC;
+		try {
+			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
+			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass() });
+			if (metodo != null)
+				metodo.invoke(this, new Object[] { effect });
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+	}
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
@@ -260,14 +277,18 @@ public class EffectManager {
 	 * metodo che permette di gestire una nuova mossa work proveniente
 	 * dall'attivazione di una carta leader
 	 */
-	public void workactionManage(WorkAction effect) throws IOException, InvalidMoveException {
+	public void workactionManage(WorkAction effect) throws IOException {
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
 
-		moveManager.manageMove(move);
+		try {
+			moveManager.manageMove(move);
+		} catch (InvalidMoveException e) {
+			mainGC.getIPlayer(player).showMsg("Work lost!");
+		}
 
 	}
 
@@ -275,27 +296,27 @@ public class EffectManager {
 	 * metodo che gestisce il metodo di modifica dei valori dei familiari in
 	 * base all'effetto
 	 */
-	public void memberchangeeffectManage(MemberChangeEffect e, Player p) throws IOException {
+	public void memberchangeeffectManage(MemberChangeEffect e) throws IOException {
 		String color = e.getTypeOfMember();
 		switch (color) {
 		case "ALL":
-			for (FamilyMember m : p.getMembers()) {
+			for (FamilyMember m : player.getMembers()) {
 				if (m.getColor() != UNCOLORED)
 					m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
 			}
-			p.getEffects().add(e);
+			player.getEffects().add(e);
 			break;
 		case "UNCOLORED":
-			for (FamilyMember m : p.getMembers())
+			for (FamilyMember m : player.getMembers())
 				if (m.getColor() == UNCOLORED) {
 					m.setValue(e.getNewValueOfMember());
-					p.getEffects().add(e);
+					player.getEffects().add(e);
 					break;
 				}
 			break;
 		case "COLORED": {
-			String choice = mainGC.askForColor(p);
-			for (FamilyMember m : p.getMembers())
+			String choice = mainGC.askForColor(player);
+			for (FamilyMember m : player.getMembers())
 				if (m.getColor() == choice) {
 					m.setValue(e.getNewValueOfMember());
 					break;
@@ -308,16 +329,16 @@ public class EffectManager {
 	 * metodo che gestisce tale effetto, ossia l'aumento del valore del proprio
 	 * familiare
 	 */
-	public void memberbonuseffectManage(MemberBonusEffect e, Player p) {
+	public void memberbonuseffectManage(MemberBonusEffect e) {
 		String color = e.getTypeOfMember();
 		switch (color) {
 		case "ALL": {
-			for (FamilyMember f : p.getMembers()) {
+			for (FamilyMember f : player.getMembers()) {
 				f.setValue(f.getValue() + e.getValueOfBonus());
 			}
 		}
 		}
-		p.getEffects().add(e);
+		player.getEffects().add(e);
 	}
 
 	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {

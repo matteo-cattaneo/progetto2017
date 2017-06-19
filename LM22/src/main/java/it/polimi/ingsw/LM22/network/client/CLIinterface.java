@@ -101,6 +101,7 @@ public class CLIinterface extends AbstractUI {
 			// client
 			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
 			move = "End@Disconnect@";
 			System.out.println("Move time expired, now you have been disconnected!");
 			// System.exit(0);
@@ -108,8 +109,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	private void showPrincipalMenu() throws RemoteException {
-		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
-		System.out.println("Timeout: " + timeout);
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Choose your Move:");
 		if (memberMove == false)
 			showMsg("1: Move a Member");
@@ -171,8 +171,9 @@ public class CLIinterface extends AbstractUI {
 		DevelopmentCard card = null;
 		for (int j = 0; j < 4; j++)
 			for (Tower t : game.getBoardgame().getTowers())
-				if (t.getFloor()[j].getCard().getName().toLowerCase().equals(name.toLowerCase()))
-					card = t.getFloor()[j].getCard();
+				if (t.getFloor()[j].getCard().getName() != null)
+					if (t.getFloor()[j].getCard().getName().toLowerCase().equals(name.toLowerCase()))
+						card = t.getFloor()[j].getCard();
 		showMsg("");
 		if (card != null) {
 			showMsg("Name: " + card.getName());
@@ -565,30 +566,30 @@ public class CLIinterface extends AbstractUI {
 		}
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Building cards:");
+			System.out.printf("%-30s|", "| Building cards:");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
-				System.out.printf("%-30s| ", "| " + c.getName());
+				System.out.printf("%n%-30s|", "| " + c.getName());
 			showMsg("");
 			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Territory cards:");
+			System.out.printf("%-30s|", "| Territory cards:");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
-				System.out.printf("%-30s| ", "| " + c.getName());
+				System.out.printf("%n%-30s|", "| " + c.getName());
 			showMsg("");
 			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Character cards:");
+			System.out.printf("%-30s|", "| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
-				System.out.printf("%-30s| ", "| " + c.getName());
+				System.out.printf("%n%-30s|", "| " + c.getName());
 			showMsg("");
 			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Ventures cards:");
+			System.out.printf("%-30s|", "| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
-				System.out.printf("%-30s| ", "| " + c.getName());
+				System.out.printf("%n%-30s|", "| " + c.getName());
 			showMsg("");
 			showMsg("|_____________________________|");
 		}
@@ -666,9 +667,13 @@ public class CLIinterface extends AbstractUI {
 				if (t.getFloor()[j].getCard().getName() != null)
 					System.out.printf("%-22s| ",
 							t.getFloor()[j].getSpace().getReward().getInfo().replaceAll("%n", " "));
-				else
-					System.out.printf("%-22s| ",
-							"#Color: " + t.getFloor()[j].getSpace().getMember().getPlayer().getColor());
+				else {
+					if (t.getFloor()[j].getSpace().getMember().getColor().equals(MEMBER_COLOR[3]))
+						System.out.printf("%-22s| ", "#Color: " + MEMBER_COLOR[3]);
+					else
+						System.out.printf("%-22s| ",
+								"#Color: " + t.getFloor()[j].getSpace().getMember().getPlayer().getColor());
+				}
 			showMsg("");
 			showMsg("        |_______________________|_______________________|_______________________|_______________________|");
 

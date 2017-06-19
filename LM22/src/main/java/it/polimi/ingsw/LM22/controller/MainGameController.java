@@ -41,12 +41,12 @@ public class MainGameController implements Runnable {
 	private MoveManager moveManager = new MoveManager(game, this);
 	private EffectManager effectManager = new EffectManager(moveManager);
 	private InitialConfigurator initConf;
-	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler);
+	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
-		initConf = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager);
+		initConf = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager, this);
 		initConf.initializeTurn(game);
 	}
 
@@ -152,7 +152,7 @@ public class MainGameController implements Runnable {
 	/*
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
-	private IPlayer getIPlayer(Player p) throws RemoteException {
+	public IPlayer getIPlayer(Player p) throws RemoteException {
 		for (int j = 0; j < playerRoom.size(); j++)
 			if (p.getNickname().equals(playerRoom.get(j).getName()))
 				return playerRoom.get(j).getIplayer();

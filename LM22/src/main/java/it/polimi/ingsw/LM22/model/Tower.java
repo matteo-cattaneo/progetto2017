@@ -9,7 +9,7 @@ public class Tower implements Serializable {
 	private static final long serialVersionUID = -7964586559793879706L;
 	private final Integer LEVELS = 4;
 	private final Floor floor[] = new Floor[LEVELS];
-	private boolean occupied;
+	private boolean occupied = false;
 	private List<String> coloredMembersOnIt = new ArrayList<String>();
 
 	public Floor[] getFloor() {

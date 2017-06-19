@@ -248,6 +248,7 @@ public class MoveManager {
 		Resource additionalCost = NOTHING;
 		boolean occupied = t.isOccupied();
 		boolean hasBrunelleschi = containsClass(move.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
+		System.out.println(occupied + " " + !hasBrunelleschi);
 		if (occupied && !hasBrunelleschi)
 			additionalCost = THREE_COINS;
 		return additionalCost;
@@ -347,11 +348,6 @@ public class MoveManager {
 		Tower t = game.getBoardgame().getTowers()[cardMove.getTowerSelected()];
 		space.setMember(cardMove.getMemberUsed());
 		cardMove.getMemberUsed().setUsed(true);
-		if (!t.isOccupied() /*
-							 * && non si tratta di una mossa per effetto di una
-							 * CardMove
-							 */)
-			t.setOccupied(true);
 		if (cardMove.getMemberUsed().getColor() != UNCOLORED)
 			t.getColoredMembersOnIt().add(cardMove.getPlayer().getColor());
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
@@ -360,6 +356,11 @@ public class MoveManager {
 				resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer()));
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
 		resourceHandler.subResource(playerResource, calculateCardCost(cardMove, cardMove.getTowerSelected()));
+		if (!t.isOccupied() /*
+							 * && non si tratta di una mossa per effetto di una
+							 * CardMove
+							 */)
+			t.setOccupied(true);
 		cardGetter(cardMove, t);
 	}
 
@@ -377,14 +378,16 @@ public class MoveManager {
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add(card0);
 			t.getFloor()[level].setCard(new TerritoryCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
-			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(), mainGame);
+			effectManager.manageEffect(card0.getImmediateEffect(), cardMove.getPlayer(),
+					cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 			break;
 		case 1:
 			CharacterCard card1 = (CharacterCard) (t.getFloor()[level].getCard());
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add(card1);
 			t.getFloor()[level].setCard(new CharacterCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
-			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(), mainGame);
+			effectManager.manageEffect(card1.getImmediateEffect(), cardMove.getPlayer(),
+					cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 			if (card1.getPermanentEffect().getClass() != NoPermanentEffect.class)
 				cardMove.getPlayer().getEffects().add(card1.getPermanentEffect());
 			break;
@@ -393,7 +396,8 @@ public class MoveManager {
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add(card2);
 			t.getFloor()[level].setCard(new BuildingCard());
 			// metodo chiamante l'effectManager per l'effetto immediato
-			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(), mainGame);
+			effectManager.manageEffect(card2.getImmediateEffect(), cardMove.getPlayer(),
+					cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 			break;
 		case 3:
 			VentureCard card3 = (VentureCard) (t.getFloor()[level].getCard());
@@ -401,7 +405,8 @@ public class MoveManager {
 			t.getFloor()[level].setCard(new BuildingCard());
 			// metodo chiamante l'effectManager per l'effetto immediato != da
 			// NoEffect
-			effectManager.manageEffect(card3.getImmediateEffect(), cardMove.getPlayer(), mainGame);
+			effectManager.manageEffect(card3.getImmediateEffect(), cardMove.getPlayer(),
+					cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 			break;
 		}
 		/*
@@ -724,7 +729,7 @@ public class MoveManager {
 				&& !(move.getLeaderCard().getEffect() instanceof WorkAction)) {
 			move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
 		}
-		effectManager.manageEffect(move.getLeaderCard().getEffect(), move.getPlayer(), mainGame);
+		effectManager.leaderEffectManage(move.getLeaderCard().getEffect(), move.getPlayer(), mainGame);
 		move.getPlayer().getActivatedLeaderCards().add(move.getLeaderCard());
 		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
