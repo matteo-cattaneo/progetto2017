@@ -109,6 +109,14 @@ public class StartServer {
 	}
 
 	private boolean playerExist(PlayerInfo player) throws IOException {
+		//pulizia dalla lista delle room delle room vuote (partite già terminate)
+		for (int i = 0; i<serverInfo.size(); ){
+			if (serverInfo.get(i).isEmpty()){
+				serverInfo.remove(i);
+			}
+			else 
+				i++;
+		}
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {

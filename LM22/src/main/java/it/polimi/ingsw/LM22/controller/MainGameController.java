@@ -220,6 +220,17 @@ public class MainGameController implements Runnable {
 		manageVictoryPointDueToCards(game);
 		electWinner(game);
 		LOGGER.log(Level.INFO, "Game ended");
+		disconnectRoomPlayers(game);
+	}
+
+	/*
+	 * gestisce la fase di rimozione dei player dalla lista della room che conteneva la partita terminata
+	 */
+	private void disconnectRoomPlayers(Game game) {
+		for (int i = 0; i < playerRoom.size() ;){
+			playerRoom.remove(i);
+		}
+		
 	}
 
 	/*
@@ -376,8 +387,21 @@ public class MainGameController implements Runnable {
 		return resource;
 	}
 
+	/*
+	 * show the message to all the players of the game
+	 */
 	private void electWinner(Game game) {
-		// TODO
+		Integer max = 0;
+		for (Player p : game.getPlayersOrder()) {
+			if (p.getPersonalBoard().getResources().getVictory() > max)
+				max = p.getPersonalBoard().getResources().getVictory();
+		}
+		for (Player p : game.getPlayersOrder()) {
+			if (p.getPersonalBoard().getResources().getVictory() == max) {
+				showMsgAll("The winner is " + p.getNickname() + "with a total of "
+						+ p.getPersonalBoard().getResources().getVictory() + "victory Points!!");
+			}
+		}
 	}
 
 	private HashMap<String, Resource> initializeCouncilMap() {
