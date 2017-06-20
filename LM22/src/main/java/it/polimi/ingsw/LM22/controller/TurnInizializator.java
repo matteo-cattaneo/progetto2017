@@ -19,6 +19,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DiceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
@@ -224,7 +225,7 @@ public class TurnInizializator {
 		for (Player p : game.getPlayersOrder())
 			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {
-					effectManager.manageEffect(e, p, ZERO, mainGC);
+					effectManager.manageEffect(e, p, ZERO.clone(), mainGC);
 				} else if (e instanceof MemberBonusEffect) {
 					effectManager.memberbonuseffectManage((MemberBonusEffect) e);
 				}

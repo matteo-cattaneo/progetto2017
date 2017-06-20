@@ -47,6 +47,8 @@ public class MainGameController implements Runnable {
 			new Resource(0, 0, 0, 0, 0, 0, 15), new Resource(0, 0, 0, 0, 0, 0, 21) };
 	private final Integer BUILDING = 2;
 	private final Integer VENTURE = 3;
+	private final Resource FIVE_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 5);
+	private final Resource TWO_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 2);
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
@@ -243,7 +245,34 @@ public class MainGameController implements Runnable {
 	 * classifica dei punti militari
 	 */
 	private void manageMilitaryStandingPoints(Game game) {
-		sortMilitaryRanking(createMilitaryHashMap(game));
+		int max1 = 0;
+		int max2 = 0;
+		for (Player p : game.getPlayersOrder()) {
+			if (p.getPersonalBoard().getResources().getMilitary() > max1) {
+				max2 = max1;
+				max1 = p.getPersonalBoard().getResources().getMilitary();
+			} else if (p.getPersonalBoard().getResources().getMilitary() < max1
+					&& p.getPersonalBoard().getResources().getMilitary() > max2)
+				max2 = p.getPersonalBoard().getResources().getMilitary();
+		}
+		int cont1 = 0;
+		for (Player p : game.getPlayersOrder()) {
+			if (p.getPersonalBoard().getResources().getMilitary() == max1) {
+				resourceHandler.addResource(p.getPersonalBoard().getResources(),
+						resourceHandler.calculateResource(FIVE_VICTORY, p));
+				cont1++;
+			}
+		}
+		if (cont1 > 1)
+			return;
+		for (Player p : game.getPlayersOrder()) {
+			if (p.getPersonalBoard().getResources().getMilitary() == max2) {
+				resourceHandler.addResource(p.getPersonalBoard().getResources(),
+						resourceHandler.calculateResource(TWO_VICTORY, p));
+			}
+		}
+		return;
+		/* sortMilitaryRanking(createMilitaryHashMap(game)); */
 	}
 
 	private HashMap<Player, Integer> createMilitaryHashMap(Game game) {
