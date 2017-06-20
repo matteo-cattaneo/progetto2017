@@ -80,23 +80,6 @@ public class EffectManager {
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
 
-	/*
-	 * metodo che gestisce la produzione per una singola carta e che in base
-	 * all'effetto che si vuole attivare invoca il metodo giusto
-	 */
-	public void productionHandle(Effect effect, Resource sum, Player player, MainGameController mainGC) {
-		this.player = player;
-		this.mainGC = mainGC;
-		try {
-			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
-			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), sum.getClass() });
-			if (metodo != null)
-				metodo.invoke(this, new Object[] { effect, sum });
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-		}
-	}
-
 	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource sum) throws IOException {
 		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangedResource());
 		r.addResource(sum, r.calculateResource(

@@ -569,11 +569,11 @@ public class MoveManager {
 		Resource total = NOTHING;
 		for (BuildingCard card : move.getPlayer().getPersonalBoard().getBuildingsCards()) {
 			if (valueOfAction >= card.getRequirement()) {
-				effectManager.productionHandle(card.getPermanentEffect(), total, move.getPlayer(), mainGame);
+				effectManager.manageEffect(card.getPermanentEffect(), move.getPlayer(), total, mainGame);
 			}
 		}
-		effectManager.productionHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(), total,
-				move.getPlayer(), mainGame);
+		effectManager.manageEffect(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(), move.getPlayer(),
+				total, mainGame);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
