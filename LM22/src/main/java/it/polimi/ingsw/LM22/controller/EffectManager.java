@@ -21,7 +21,6 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
 import it.polimi.ingsw.LM22.model.WorkActionEffect;
-import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
 import it.polimi.ingsw.LM22.model.leader.CopyEffect;

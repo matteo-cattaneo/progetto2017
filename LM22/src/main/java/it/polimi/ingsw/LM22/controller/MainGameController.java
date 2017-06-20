@@ -63,7 +63,7 @@ public class MainGameController implements Runnable {
 
 	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
-		initConf = new InitialConfigurator(game, playerRoom, resourceHandler, effectManager, this);
+		initConf = new InitialConfigurator(playerRoom, resourceHandler, effectManager, this);
 		initConf.initializeTurn(game);
 	}
 

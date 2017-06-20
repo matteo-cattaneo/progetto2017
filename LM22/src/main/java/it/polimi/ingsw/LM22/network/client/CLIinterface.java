@@ -28,7 +28,6 @@ import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
-import it.polimi.ingsw.LM22.model.excommunication.ExEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
@@ -129,7 +128,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg("4: Activate a LeaderCard");
 		showMsg("5: End turn");
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 			if (!memberMove) {
@@ -250,7 +250,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("3: Work");
 		showMsg("4: Council");
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 			printCardMoveMenu();
@@ -296,7 +297,8 @@ public class CLIinterface extends AbstractUI {
 			i++;
 		}
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -322,7 +324,7 @@ public class CLIinterface extends AbstractUI {
 	public String printServantsAddictionMenu() throws RemoteException {
 		showMsg("Insert how many servants you want to use");
 		showMsg("Please insert a positive number or zero");
-		Integer servants = in.nextInt();
+		Integer servants = input();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
 			return servants.toString();
 		} else {
@@ -338,7 +340,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("2: " + CHARACTER);
 		showMsg("3: " + BUILDING);
 		showMsg("4: " + VENTURE);
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -354,13 +357,14 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public String printLevelsMenu() throws RemoteException {
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
-		Integer level = in.nextInt();
-		switch (level) {
+
+		int option = input();
+		switch (option) {
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-			return String.valueOf(level - 1);
+			return String.valueOf(option - 1);
 		default:
 			printInvalidInput();
 			return printLevelsMenu();
@@ -386,7 +390,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg("4: Two different counsil privilege");
 		}
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -426,7 +431,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("1: Production");
 		showMsg("2: Harvest");
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 			setMove(PRODUCTION);
@@ -463,7 +469,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 		}
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		if (option <= i && option > 0)
 			setMove(getPlayer(name, game).getHandLeaderCards().get(option - 1).getName());
 		else if (option == 0) {
@@ -488,7 +495,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg((i + 1) + ": " + ld.get(i).getName());
 		}
 		showMsg("0: Restart");
-		int option = in.nextInt();
+
+		int option = input();
 		if (option <= i && option > 0)
 			setMove(ld.get(option).getName());
 		else if (option == 0) {
@@ -510,13 +518,10 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public int showConnectionSelection() {
-		int connType = 0;
-		while (connType != 1 && connType != 2) {
-			showMsg("Connection type: ");
-			showMsg("1: RMI");
-			showMsg("2: Socket");
-			connType = Integer.parseInt(in.nextLine());
-		}
+		showMsg("Connection type: ");
+		showMsg("1: RMI");
+		showMsg("2: Socket");
+		int connType = input();
 		return connType;
 	}
 
@@ -623,7 +628,9 @@ public class CLIinterface extends AbstractUI {
 		}
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			System.out.printf("%-30s|" + "____________________________________________________________________________________", "| Territory cards:");
+			System.out.printf(
+					"%-30s|____________________________________________________________________________________",
+					"| Territory cards:");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
 				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
@@ -633,7 +640,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf("%-30s|" + "______________________________________________________________" , "| Character cards:");
+			System.out.printf("%-30s|______________________________________________________________",
+					"| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
 				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
@@ -642,7 +650,9 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			System.out.printf("%-30s|" + "____________________________________________________________________________________", "| Building cards:");
+			System.out.printf(
+					"%-30s|____________________________________________________________________________________",
+					"| Building cards:");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
 				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
@@ -652,8 +662,9 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf("%-30s|" + "______________________________________________________________", "| Ventures cards:");
-			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()){
+			System.out.printf("%-30s|______________________________________________________________",
+					"| Ventures cards:");
+			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
 				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
@@ -885,8 +896,8 @@ public class CLIinterface extends AbstractUI {
 				showMsg("4: two military points");
 			if (!list.contains("faith"))
 				showMsg("5: one faith point");
-			int option = in.nextInt();
 
+			int option = input();
 			if (!list.contains(council[option - 1])) {
 				list.add(council[option - 1]);
 				k++;
@@ -904,7 +915,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Do you want support the Vatican?: ");
 		showMsg("1: Yes");
 		showMsg("2: No");
-		Integer option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 			return true;
@@ -922,7 +934,8 @@ public class CLIinterface extends AbstractUI {
 		for (int i = 0; i < 3; i++) {
 			showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
 		}
-		Integer option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -942,7 +955,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("2: Military points cost");
 		System.out.println("Requirement: " + vc.getCardCost2()[0].getMilitary() + "military points");
 		System.out.println("Cost: " + vc.getCardCost2()[1].getMilitary() + "military points");
-		Integer option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -961,7 +975,8 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf(exchange[1].getInfo());
 		showMsg("1: Yes");
 		showMsg("2: No");
-		Integer option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 			return true;
@@ -985,7 +1000,8 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf(effect.getExchangeEffect2()[0].getInfo());
 		showMsg("With");
 		System.out.printf(effect.getExchangeEffect2()[1].getInfo());
-		Integer option = in.nextInt();
+
+		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
@@ -1003,7 +1019,8 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < lcards.size(); i++) {
 			showMsg((i + 1) + ": " + lcards.get(i).getName());
 		}
-		int option = in.nextInt();
+
+		int option = input();
 		if (option <= i)
 			return lcards.get(option - 1).getName();
 		else {
@@ -1029,12 +1046,24 @@ public class CLIinterface extends AbstractUI {
 						game.getPersonalBonusTile()[i].getProductionEffect().getInfo().replaceAll("You earn%n", ""));
 			}
 		}
-		int option = in.nextInt();
+		int option = input();
 		if (game.getPersonalBonusTile()[option - 1] != null)
 			return option - 1;
 		else {
 			printInvalidInput();
 			return selectPersonalTile(game);
 		}
+	}
+
+	private Integer input() {
+		int option = -1;
+		while (option == -1)
+			try {
+				option = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid input");
+				option = -1;
+			}
+		return option;
 	}
 }

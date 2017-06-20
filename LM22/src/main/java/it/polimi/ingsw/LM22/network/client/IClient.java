@@ -6,18 +6,14 @@ import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
- * Interfaccia estesa da RMI e SOCKET client
- * necessaria alla gestione lato cliente delle connessioni
+ * Interfaccia estesa da RMIClient necessaria per la gestione della logica di gioco
  */
 public interface IClient extends Remote {
-
-	public void connect(String name, String ip) throws RemoteException;
 
 	public void play() throws RemoteException;
 

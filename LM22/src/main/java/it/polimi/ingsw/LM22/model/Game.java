@@ -9,7 +9,6 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 public class Game implements Serializable {
 
 	private static final long serialVersionUID = -4098227091469224262L;
-	private transient final Integer NUM_BONUS_TILE = 4;
 	private final BoardGame boardgame = new BoardGame();
 	private Integer period;
 	private Integer round;

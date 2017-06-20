@@ -1,7 +1,6 @@
 package it.polimi.ingsw.LM22.controller;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +36,7 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(Game game, ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m,
+	public InitialConfigurator(ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m,
 			MainGameController mainGC) {
 		super(m, r, mainGC);
 		this.playerRoom = playerRoom;

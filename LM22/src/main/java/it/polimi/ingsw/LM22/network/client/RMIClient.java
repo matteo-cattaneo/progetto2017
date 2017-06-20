@@ -9,13 +9,12 @@ import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
-public class RMIClient extends UnicastRemoteObject implements IClient {
+public class RMIClient extends UnicastRemoteObject implements IClient, IConnection {
 	private final transient Logger LOGGER = Logger.getLogger(RMIClient.class.getClass().getSimpleName());
 	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
@@ -26,17 +25,20 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 		this.UI = UI;
 	}
 
+	@Override
 	public String getName() throws RemoteException {
 		return name;
 	}
 
+	@Override
 	public String getMove() throws RemoteException {
 		return move;
 	}
+
 	/*
 	 * metodo che permettee la connessione con il server RMI
 	 */
-
+	@Override
 	public void connect(String name, String ip) throws RemoteException {
 		try {
 			this.name = name;
@@ -53,7 +55,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 	/*
 	 * metodo invocato da remoto quando è il proprio turno
 	 */
-
+	@Override
 	public void play() throws RemoteException {
 		UI.printMoveMenu();
 		move = UI.getMove();

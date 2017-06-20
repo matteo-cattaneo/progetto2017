@@ -8,7 +8,6 @@ public class WorkSpace extends AbstractSpace implements Serializable {
 
 	private static final long serialVersionUID = -4179895781015044439L;
 	private String workType;
-	private final Integer MALUS = 3;
 	private List<FamilyMember> members = new ArrayList<FamilyMember>();
 	private List<String> coloredMemberOnIt = new ArrayList<String>();
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,17 +11,19 @@ import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
-public class SocketClient implements IClient {
+public class SocketClient implements IConnection {
 	private final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
 	private final int SOCKET_PORT = 1337;
 	private Socket socket;
 	private AbstractUI UI;
 	private String name;
+	String[] socketLine;
+	ObjectOutputStream socketOut;
+	ObjectInputStream socketIn;
 
 	public String getName() {
 		return name;
@@ -31,11 +32,10 @@ public class SocketClient implements IClient {
 	public SocketClient(AbstractUI UI) {
 		this.UI = UI;
 	}
-	/*
-	 * metodo che effectuala connessione con il server Socket e gestisce la
-	 * varie richieste inviate dal server
-	 */
 
+	/*
+	 * metodo che effectuala connessione con il server Socket
+	 */
 	public void connect(String name, String ip) {
 		this.name = name;
 		try {
@@ -43,22 +43,38 @@ public class SocketClient implements IClient {
 			socket = new Socket(ip, SOCKET_PORT);
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Socket connection error!", e);
+			return;
 		}
 		UI.connectionOK();
+		// inizializzo gli stream di input e output
 		try {
-			// inizializzo gli stream di input e output
-			ObjectOutputStream socketOut = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+			socketOut = new ObjectOutputStream(socket.getOutputStream());
+			socketIn = new ObjectInputStream(socket.getInputStream());
+			// comunico il mio nome al server
 			socketOut.writeUTF(getName());
 			socketOut.flush();
+		} catch (IOException e) {
+			UI.showMsg("Socket connection error!");
+		}
+		play();
+	}
+
+	/*
+	 * metodo che gestisce la varie richieste inviate dal server
+	 */
+	@Override
+	public void play() {
+		try {
+			// finche la connessione è attiva
 			while (!socket.isClosed()) {
 				// ricevo il comando dal server
 				// effettuo uno switch sulla prima parte del comando ricevuto
 				// ed eseguo la relativa procedura
-				String[] socketLine = socketIn.readUTF().split("@");
+
+				socketLine = socketIn.readUTF().split("@");
 				switch (socketLine[0]) {
 				case "msg":
-					// messaggio visualizzato sulla UI del giocatore
+					// visualizzo sulla UI un messaggio
 					if (socketLine[1].contains("member"))
 						UI.setMemberMove(false);
 					UI.showMsg(socketLine[1]);
@@ -110,115 +126,30 @@ public class SocketClient implements IClient {
 					socketOut.flush();
 					break;
 				case "askCopy":
-					List<LeaderCard> lcards = new ArrayList<LeaderCard>();
-					// ottengo lunghezza lista
-					int N = socketIn.readInt();
-
-					// ottengo i singoli elementi della lista
-					for (int i = 0; i < N; i++)
-						lcards.add((LeaderCard) socketIn.readObject());
-
-					socketOut.writeUTF(UI.askToPlayerForEffectToCopy(lcards));
-					socketOut.flush();
+					copyEffect();
 					break;
 				case "personalTile":
 					socketOut.writeInt(UI.selectPersonalTile((Game) socketIn.readObject()));
 					socketOut.flush();
+					break;
 				}
 			}
-		} catch (ClassNotFoundException | IOException e) {
-			LOGGER.log(Level.SEVERE, "Connessione chiusa", e);
+
+		} catch (IOException | ClassNotFoundException e) {
+			UI.showMsg("Socket communication error!");
 		}
-
 	}
 
-	@Override
-	public void play() throws RemoteException {
-		// TODO Auto-generated method stub
+	private void copyEffect() throws IOException, ClassNotFoundException {
+		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
+		// ottengo lunghezza lista
+		int N = socketIn.readInt();
 
+		// ottengo i singoli elementi della lista
+		for (int i = 0; i < N; i++)
+			lcards.add((LeaderCard) socketIn.readObject());
+
+		socketOut.writeUTF(UI.askToPlayerForEffectToCopy(lcards));
+		socketOut.flush();
 	}
-
-	@Override
-	public String getMove() throws RemoteException {
-		return null;
-	}
-
-	@Override
-	public void showBoard(Game game) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String councilRequest(Integer number) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String servantsRequest() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String towerRequest() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String floorRequest() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void showMsg(String msg) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean supportRequest() throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String colorRequest() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer ventureCostRequest(VentureCard vc) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean changeRequest(Resource[] exchange) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer selectPersonalTile(Game game) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

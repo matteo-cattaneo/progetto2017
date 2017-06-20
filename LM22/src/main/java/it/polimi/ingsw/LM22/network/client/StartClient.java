@@ -30,7 +30,7 @@ public class StartClient {
 		// stampo la selezione dell'intefaccia
 		AbstractUI UI = printUISelection();
 		// richiedo tipo connessione
-		IClient client = selectConnectionType(UI);
+		IConnection client = selectConnectionType(UI);
 		/*
 		 * con i metodi relativi alla prpria connessione e UI, effettuo la
 		 * connessione
@@ -57,7 +57,14 @@ public class StartClient {
 		System.out.println("Choose you UI type:");
 		System.out.println("1: GUI");
 		System.out.println("2: CLI");
-		int option = stdin.nextInt();
+		int option = -1;
+		while (option == -1)
+			try {
+				option = Integer.parseInt(stdin.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid input");
+				option = -1;
+			}
 		switch (option) {
 		case 1:
 			System.err.println("GUI - WIP");
@@ -71,11 +78,12 @@ public class StartClient {
 			UI = printUISelection();
 			break;
 		}
+		stdin.close();
 		return UI;
 	}
 
-	private IClient selectConnectionType(AbstractUI UI) {
-		IClient client = null;
+	private IConnection selectConnectionType(AbstractUI UI) {
+		IConnection client = null;
 		/*
 		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
 		 * e inizializzo con il giusto tipo dinamico
