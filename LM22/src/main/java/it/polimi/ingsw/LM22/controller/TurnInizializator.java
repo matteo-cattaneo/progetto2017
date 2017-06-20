@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.google.gson.Gson;
+
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.Effect;
@@ -58,6 +60,7 @@ public class TurnInizializator {
 	 * - calcolo nuovo ordine di turno -
 	 */
 	public void initializeTurn(Game game) throws IOException {
+		Gson gson = new Gson();
 		setGameTurn(game);
 		setNewPlayersOrder(game);
 		cleanBoardGame(game);
@@ -67,6 +70,8 @@ public class TurnInizializator {
 		distributeDevelopmentCards(game);
 		if (game.getPlayersOrder().size() == FIVE_PLAYERS)
 			distributeNewResources(game);
+		System.out.println(gson.toJson(game.getBoardgame().getTowers(), Tower[].class));
+		
 	}
 
 	private void setGameTurn(Game game) {
@@ -138,7 +143,6 @@ public class TurnInizializator {
 			game.getTerritoryCards().remove(c);
 			i++;
 		}
-
 	}
 
 	protected void distributeCharacterCards(Game game) {

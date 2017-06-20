@@ -136,7 +136,10 @@ public class MainGameController implements Runnable {
 				// il player ha fatto una mossa non valida
 				// LOGGER.log(Level.SEVERE, "Invalid Move!", e);
 				try {
-					getIPlayer(p).showMsg("Invalid move!!!");
+					if (sMove.startsWith("Leader"))
+						getIPlayer(p).showMsg("Invalid leader move!!!");
+					else
+						getIPlayer(p).showMsg("Invalid member move!!!");
 				} catch (IOException e1) {
 					// player mossa errata + client disconnesso
 					disconnectPlayer(p);

@@ -52,6 +52,7 @@ public class InitialConfigurator extends TurnInizializator {
 		game.setPeriod(INIT);
 		game.setRound(INIT);
 
+		// inizializzazione workspace
 		WorkSpace harv = new WorkSpace();
 		harv.setSpaceRequirement(1);
 		harv.setWorkType("HARVEST");
@@ -158,7 +159,7 @@ public class InitialConfigurator extends TurnInizializator {
 		}
 	}
 
-	// distribuzione casuale delle personal tile
+	// distribuzione casuale delle personal tile (deprecated)
 	private void personalBoardTileDistribution(Game game) {
 		Random random = new Random();
 		int num;

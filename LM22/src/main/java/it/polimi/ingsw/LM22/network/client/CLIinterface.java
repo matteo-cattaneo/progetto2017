@@ -18,6 +18,7 @@ import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
 import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
+import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.MarketSpace;
@@ -27,6 +28,7 @@ import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
+import it.polimi.ingsw.LM22.model.excommunication.ExEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /*
@@ -60,6 +62,10 @@ public class CLIinterface extends AbstractUI {
 	private boolean memberMove = false;
 	private long timeout = 0;
 	private long time;
+
+	public void setMemberMove(boolean memberMove) {
+		this.memberMove = memberMove;
+	}
 
 	/*
 	 * costruisco la stringa mossa per poi poterla inviare al server
@@ -114,7 +120,7 @@ public class CLIinterface extends AbstractUI {
 	private void showPrincipalMenu() throws RemoteException {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Choose your Move:");
-		if (memberMove == false)
+		if (!memberMove)
 			showMsg("1: Move a Member");
 		showMsg("2: Show card");
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
@@ -126,7 +132,7 @@ public class CLIinterface extends AbstractUI {
 		option = in.nextInt();
 		switch (option) {
 		case 1:
-			if (memberMove == false) {
+			if (!memberMove) {
 				printMemberMoveMenu();
 				break;
 			} else {
@@ -343,6 +349,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMarketMoveMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
 		setMove(printServantsAddictionMenu());
@@ -379,6 +386,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printWorkMoveMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(WORKMOVE);
 		printFamilyMemberMenu();
 		setMove(printServantsAddictionMenu());
@@ -407,6 +415,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
+		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
 		setMove(printServantsAddictionMenu());
@@ -692,8 +701,14 @@ public class CLIinterface extends AbstractUI {
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Excommunication tile:");
 		showMsg("|_____________________________|");
-		for (ExCommunication ex : game.getBoardgame().getFaithGrid().getExCommunicationTiles())
-			showMsg(" - " + ex.getEffect().getInfo());
+		for (ExCommunication ex : game.getBoardgame().getFaithGrid().getExCommunicationTiles()) {
+			System.out.print(" - " + ex.getEffect().getInfo());
+			for (Player p : game.getPlayersOrder())
+				for (Effect e : p.getEffects())
+					if (e.getClass().equals(ex.getEffect().getClass()))
+						System.out.print(" ( " + p.getNickname() + " )");
+			showMsg("");
+		}
 		// palazzo del consiglio
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Council Palace members: ");

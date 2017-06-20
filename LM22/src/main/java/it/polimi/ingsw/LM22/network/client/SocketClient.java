@@ -59,6 +59,8 @@ public class SocketClient implements IClient {
 				switch (socketLine[0]) {
 				case "msg":
 					// messaggio visualizzato sulla UI del giocatore
+					if (socketLine[1].contains("member"))
+						UI.setMemberMove(false);
 					UI.showMsg(socketLine[1]);
 					break;
 				case "board":

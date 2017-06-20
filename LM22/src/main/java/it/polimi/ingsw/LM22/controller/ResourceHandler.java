@@ -15,16 +15,17 @@ public class ResourceHandler {
 	 */
 
 	/*
-	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba essere ridotto
+	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba
+	 * essere ridotto
 	 */
 	public Resource calculateResource(Resource res, Player p) {
-		for (Effect e: p.getEffects())
-			if (e instanceof ResourceMalusEx){
+		for (Effect e : p.getEffects())
+			if (e instanceof ResourceMalusEx) {
 				res = cardDiscounted(res, ((ResourceMalusEx) e).getMalus());
 			}
 		return res;
 	}
-	
+
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
 		Resource cost = cardDiscounted(cardCost, bonus);
 		if (!enoughResources(diffResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded()),
@@ -39,7 +40,7 @@ public class ResourceHandler {
 	 * costo che con costo singolo normale o con costo in punti militari
 	 */
 	public boolean manageVentureCost(Player p, Resource[] cost2) {
-		//TODO
+		// TODO
 		return false;
 
 	}
@@ -183,8 +184,8 @@ public class ResourceHandler {
 		bonus.setVictory(victory);
 		return bonus;
 	}
-	
-	public boolean equalResources(Resource s1, Resource s2){
+
+	public boolean equalResources(Resource s1, Resource s2) {
 		if (s1.getWood() != s2.getWood())
 			return false;
 		if (s1.getStone() != s2.getStone())

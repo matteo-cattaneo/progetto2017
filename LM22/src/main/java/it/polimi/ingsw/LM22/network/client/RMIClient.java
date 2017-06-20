@@ -90,6 +90,8 @@ public class RMIClient extends UnicastRemoteObject implements IClient {
 
 	@Override
 	public void showMsg(String msg) throws RemoteException {
+		if (msg.contains("member"))
+			UI.setMemberMove(false);
 		UI.showMsg(msg);
 	}
 

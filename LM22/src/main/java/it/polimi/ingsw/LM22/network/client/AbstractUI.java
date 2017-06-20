@@ -81,4 +81,6 @@ public abstract class AbstractUI {
 
 	public abstract Integer selectPersonalTile(Game game) throws RemoteException;
 
+	public abstract void setMemberMove(boolean memberMove);
+
 }

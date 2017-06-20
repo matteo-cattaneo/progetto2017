@@ -196,4 +196,10 @@ public class GUIinterface extends AbstractUI {
 		return null;
 	}
 
+	@Override
+	public void setMemberMove(boolean memberMove) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

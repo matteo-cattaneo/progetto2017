@@ -85,17 +85,18 @@ public class StartServer {
 			PlayerInfo player = new PlayerInfo();
 			if (conn.getSocket().isConnected()) {
 				player.setIplayer(new SocketPlayer(conn.getSocket()));
-				System.out.println("Socket: Connected client " + i);
+				System.out.print("Socket-> ");
 				conn = new SocketConnection(serverSocket);
 				executor.submit(conn);
 			} else if (serverRMI.getClient() != null) {
 				player.setIplayer(serverRMI);
-				System.out.println("RMI: Connected client " + i);
+				System.out.print("RMI-> ");
 				serverRMI = new RMIPlayer();
 				Naming.rebind("rmi://localhost/MSG", serverRMI);
 			}
 			// ottengo il nome del player
 			player.setName(player.getIplayer().getName());
+			System.out.println("Connected client: " + player.getName());
 			// agiungo il player alla lista della room adatta
 			if (!playerExist(player)) {
 				playerRoom.add(player);
@@ -105,27 +106,37 @@ public class StartServer {
 		// avvio thread della partita (controller) passandogli la lista dei
 		// giocatori
 		executor.submit(new MainGameController(playerRoom));
+		cleanServer();
 		start();
 	}
 
+	/*
+	 * verifico se un player è già stato inserito in una partita in corso
+	 */
 	private boolean playerExist(PlayerInfo player) throws IOException {
-		//pulizia dalla lista delle room delle room vuote (partite già terminate)
-//		for (int i = 0; i<serverInfo.size(); ){
-//			if (serverInfo.get(i).isEmpty()){
-//				serverInfo.remove(i);
-//			}
-//			else 
-//				i++;
-//		}
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {
-					pi.getIplayer().showMsg("You are now disconnected, new session established!");
+					// se player ri effettua l accesso trasferisco la partita
+					// sulla nuova sessione
+					if (pi.getConnected())
+						pi.getIplayer().showMsg("You are now disconnected, new session established!");
 					pi.setIplayer(player.getIplayer());
 					pi.setConnected(true);
 					return true;
 				}
 		return false;
+	}
+
+	private void cleanServer() {
+		// pulizia dalla lista delle room delle room vuote (partite già
+		// terminate)
+		// for (int i = 0; i < serverInfo.size();) {
+		// if (serverInfo.get(i).isEmpty()) {
+		// serverInfo.remove(i);
+		// } else
+		// i++;
+		// }
 	}
 
 	// verifica la connessione di un client con timeout
