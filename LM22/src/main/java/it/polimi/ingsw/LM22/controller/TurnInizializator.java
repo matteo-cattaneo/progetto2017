@@ -244,8 +244,8 @@ public class TurnInizializator {
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
 		}
-		for (int i = 0; i < members.size(); i++)
-			members.remove(members.get(i));
+		while (members.size() != 0)
+			members.remove(members.get(0));
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
 				newOrder.add(p);

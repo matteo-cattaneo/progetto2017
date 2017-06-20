@@ -368,12 +368,12 @@ public class MainGameController implements Runnable {
 						+ ((FinalResourceMalusEx) e).getResource().getStone()
 						+ ((FinalResourceMalusEx) e).getResource().getCoins()
 						+ ((FinalResourceMalusEx) e).getResource().getServants();
-				resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
+				resourceHandler.subResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
 			}
 		}
 		Integer total = p.getPersonalBoard().getResources().getWood() + p.getPersonalBoard().getResources().getStone()
 				+ p.getPersonalBoard().getResources().getCoins() + p.getPersonalBoard().getResources().getServants();
-		resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total / 5));
 	}
 
 	/*

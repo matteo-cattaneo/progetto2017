@@ -235,7 +235,7 @@ public class MoveManager {
 		Resource bonus;
 		CardSpace space = searchCardSpace(move.getTowerSelected(), move.getLevelSelected());
 		if (containsClass(move.getPlayer().getEffects(), NoCardSpaceBonusEffect.class))
-			bonus = NOTHING;
+			bonus = NOTHING.clone();
 		else {
 			bonus = space.getReward().clone();
 		}
@@ -248,11 +248,11 @@ public class MoveManager {
 	 * essere pagato con il bonus dello spazio azione
 	 */
 	private Resource calculateAdditionalCost(Tower t, CardMove move) {
-		Resource additionalCost = NOTHING;
+		Resource additionalCost = NOTHING.clone();
 		boolean occupied = t.isOccupied();
 		boolean hasBrunelleschi = containsClass(move.getPlayer().getEffects(), NoOccupiedTowerEffect.class);
 		if (occupied && !hasBrunelleschi)
-			additionalCost = THREE_COINS;
+			additionalCost = THREE_COINS.clone();
 		return additionalCost;
 	}
 
@@ -261,7 +261,7 @@ public class MoveManager {
 	 * in ingresso contando anche eventuali sconti sulle carte
 	 */
 	private Resource calculateCardCost(CardMove cardMove, Integer tower) {
-		Resource cost = NOTHING;
+		Resource cost = NOTHING.clone();
 		DevelopmentCard card = game.getBoardgame().getTowers()[tower].getFloor()[cardMove.getLevelSelected()].getCard();
 		switch (tower) {
 		case 0:
@@ -574,7 +574,7 @@ public class MoveManager {
 		if (move.getMemberUsed().getColor() != UNCOLORED)
 			game.getBoardgame().getProductionSpace().getColoredMemberOnIt().add(move.getPlayer().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
-		Resource total = NOTHING;
+		Resource total = NOTHING.clone();
 		for (BuildingCard card : move.getPlayer().getPersonalBoard().getBuildingsCards()) {
 			if (valueOfAction >= card.getRequirement()) {
 				effectManager.manageEffect(card.getPermanentEffect(), move.getPlayer(), total, mainGame);
@@ -599,7 +599,7 @@ public class MoveManager {
 		if (move.getMemberUsed().getColor() != UNCOLORED)
 			game.getBoardgame().getHarvestSpace().getColoredMemberOnIt().add(move.getMemberUsed().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
-		Resource total = NOTHING;
+		Resource total = NOTHING.clone();
 		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
 			if (valueOfAction >= card.getRequirement())
 				effectManager.harvestHandle(card.getPermanentEffect(), total, move.getPlayer(), mainGame);
