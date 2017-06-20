@@ -237,9 +237,7 @@ public class CLIinterface extends AbstractUI {
 			}
 		} else
 			showMsg("Card not found!");
-
 		showMsg("");
-
 	}
 
 	@Override
@@ -624,33 +622,43 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|");
 		}
 		// player dev cards
-		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			System.out.printf("%-30s|", "| Building cards:");
-			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards())
-				System.out.printf("%n%-30s|", "| " + c.getName());
-			showMsg("");
-			showMsg("|_____________________________|");
-		}
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			System.out.printf("%-30s|", "| Territory cards:");
-			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards())
-				System.out.printf("%n%-30s|", "| " + c.getName());
+			System.out.printf("%-30s|" + "____________________________________________________________________________________", "| Territory cards:");
+			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards()) {
+				System.out.printf("%n%-30s| ", "| " + c.getName());
+				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				System.out.printf("%-20s| ", "Requirement: " + c.getRequirement());
+			}
 			showMsg("");
-			showMsg("|_____________________________|");
+			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf("%-30s|", "| Character cards:");
-			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards())
-				System.out.printf("%n%-30s|", "| " + c.getName());
+			System.out.printf("%-30s|" + "______________________________________________________________" , "| Character cards:");
+			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
+				System.out.printf("%n%-30s| ", "| " + c.getName());
+				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+			}
 			showMsg("");
-			showMsg("|_____________________________|");
+			showMsg("|_____________________________|_____________________________________________________________|");
+		}
+		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
+			System.out.printf("%-30s|" + "____________________________________________________________________________________", "| Building cards:");
+			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards()) {
+				System.out.printf("%n%-30s| ", "| " + c.getName());
+				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				System.out.printf("%-20s| ", "Requirement: " + c.getRequirement());
+			}
+			showMsg("");
+			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf("%-30s|", "| Ventures cards:");
-			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards())
-				System.out.printf("%n%-30s|", "| " + c.getName());
+			System.out.printf("%-30s|" + "______________________________________________________________", "| Ventures cards:");
+			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()){
+				System.out.printf("%n%-30s| ", "| " + c.getName());
+				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+			}
 			showMsg("");
-			showMsg("|_____________________________|");
+			showMsg("|_____________________________|_____________________________________________________________|");
 		}
 	}
 
