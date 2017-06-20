@@ -129,15 +129,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("4: Activate a LeaderCard");
 		showMsg("5: End turn");
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try{
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			showPrincipalMenu();
-		}
+		int option = in.nextInt();
 		switch (option) {
 		case 1:
 			if (!memberMove) {
@@ -197,7 +189,7 @@ public class CLIinterface extends AbstractUI {
 		for (int j = 0; j < 4; j++)
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
-					if (t.getFloor()[j].getCard().getName().toLowerCase().equals(name.toLowerCase()))
+					if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(name.toLowerCase()))
 						card = t.getFloor()[j].getCard();
 		showMsg("");
 		if (card != null) {
@@ -260,15 +252,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("3: Work");
 		showMsg("4: Council");
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try{
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printMemberMoveMenu();
-		}
+		int option = in.nextInt();
 		switch (option) {
 		case 1:
 			printCardMoveMenu();
@@ -314,15 +298,7 @@ public class CLIinterface extends AbstractUI {
 			i++;
 		}
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try{
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printFamilyMemberMenu();
-		}
+		int option = in.nextInt();
 		switch (option) {
 		case 1:
 		case 2:
@@ -330,8 +306,7 @@ public class CLIinterface extends AbstractUI {
 		case 4:
 			if (!getPlayer(name, game).getMembers().get(option - 1).isUsed()) {
 				setMove(MEMBER_COLOR[option - 1]);
-			}
-			else {
+			} else {
 				printInvalidInput();
 				printFamilyMemberMenu();
 			}
@@ -413,15 +388,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("4: Two different counsil privilege");
 		}
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try{
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printMarketSelectionMenu();
-		}
+		int option = in.nextInt();
 		switch (option) {
 		case 1:
 		case 2:
@@ -431,8 +398,7 @@ public class CLIinterface extends AbstractUI {
 		case 4:
 			if (game.getPlayers().length == 4) {
 				setMove(String.valueOf(option - 1));
-			}
-			else {
+			} else {
 				printInvalidInput();
 				printMarketSelectionMenu();
 			}
@@ -462,15 +428,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("1: Production");
 		showMsg("2: Harvest");
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try {
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printWorkSelectionMenu();
-		}
+		int option = in.nextInt();
 		switch (option) {
 		case 1:
 			setMove(PRODUCTION);
@@ -507,22 +465,13 @@ public class CLIinterface extends AbstractUI {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 		}
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try {
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printWorkSelectionMenu();
-		}
+		int option = in.nextInt();
 		if (option <= i && option > 0)
 			setMove(getPlayer(name, game).getHandLeaderCards().get(option - 1).getName());
-		else if (option == 0){
+		else if (option == 0) {
 			move = new String();
 			showPrincipalMenu();
-		}
-		else {
+		} else {
 			printInvalidInput();
 			printSellLeaderCardMenu();
 		}
@@ -541,22 +490,13 @@ public class CLIinterface extends AbstractUI {
 			showMsg((i + 1) + ": " + ld.get(i).getName());
 		}
 		showMsg("0: Restart");
-		int option = 0;
-		String choice = in.nextLine();
-		try {
-			option = Integer.parseInt(choice);
-		}
-		catch (NumberFormatException e){
-			pleaseInsertNumber();
-			printWorkSelectionMenu();
-		}
+		int option = in.nextInt();
 		if (option <= i && option > 0)
 			setMove(ld.get(option).getName());
-		else if (option == 0){
+		else if (option == 0) {
 			move = new String();
 			showPrincipalMenu();
-		}
-		else {
+		} else {
 			printInvalidInput();
 			printActivateLeaderCardMenu();
 		}
@@ -577,14 +517,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("Connection type: ");
 			showMsg("1: RMI");
 			showMsg("2: Socket");
-			String choice = in.nextLine();
-			try {
-				connType = Integer.parseInt(choice);
-			}
-			catch (NumberFormatException e){
-				pleaseInsertNumber();
-				connType = 0;
-			}
+			connType = Integer.parseInt(in.nextLine());
 		}
 		return connType;
 	}

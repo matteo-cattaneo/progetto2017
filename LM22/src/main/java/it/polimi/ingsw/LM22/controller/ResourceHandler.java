@@ -28,10 +28,13 @@ public class ResourceHandler {
 
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
 		Resource cost = cardDiscounted(cardCost, bonus);
+
+		System.out.println("E2");
 		if (!enoughResources(diffResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded()),
 				sumResource(additionalCost, cost))) {
 			return false;
 		}
+		System.out.println("E2 true");
 		return true;
 	}
 
@@ -80,10 +83,13 @@ public class ResourceHandler {
 			return false;
 		if (r.getVictory() < resource.getVictory())
 			return false;
+		System.out.println("E1 true");
 		return true;
 	}
 
 	public Resource cardDiscounted(Resource s1, Resource s2) {
+		System.out.printf("Card disco");
+		System.out.printf(s1.getInfo() + s2.getInfo());
 		Integer wood = 0;
 		Integer stone = 0;
 		Integer coins = 0;
@@ -148,6 +154,9 @@ public class ResourceHandler {
 	}
 
 	public Resource sumResource(Resource s1, Resource s2) {
+
+		System.out.printf("Sum");
+		System.out.printf(s1.getInfo() + s2.getInfo());
 		Integer wood = 0;
 		Integer stone = 0;
 		Integer coins = 0;

@@ -201,6 +201,8 @@ public class MoveManager {
 		Resource bonus = resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer());
 		Resource additionalCost = calculateAdditionalCost(t, cardMove);
 		Resource cardCost = calculateCardCost(cardMove, tower);
+
+		System.out.println("Card check cost");
 		switch (tower) {
 		case 3:
 			Integer choice = mainGame.askForCost(cardMove);
@@ -216,6 +218,7 @@ public class MoveManager {
 				return false;
 			break;
 		case 0:
+			System.out.println("Territory");
 			if (!militaryPointsAvailable(cardMove, bonus)
 					|| !resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
@@ -234,7 +237,7 @@ public class MoveManager {
 		if (containsClass(move.getPlayer().getEffects(), NoCardSpaceBonusEffect.class))
 			bonus = NOTHING;
 		else {
-			bonus = space.getReward();
+			bonus = space.getReward().clone();
 		}
 		return bonus;
 	}
@@ -299,29 +302,34 @@ public class MoveManager {
 	 * attivata la carta Leader che annulla questo controllo
 	 */
 	private boolean militaryPointsAvailable(CardMove cardMove, Resource bonus) {
+		System.out.println("Military");
 		if (!containsClass(cardMove.getPlayer().getEffects(), NoMilitaryRequestEffect.class)) {
 			switch (cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().size()) {
 			case 0:
 			case 1:
+				System.out.println("Military true");
 				return true;
 			case 2:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary() < THIRD_TERRITORY)
+				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary()) < THIRD_TERRITORY) {
+					System.out.println("Military false");
 					return false;
+				}
+				System.out.println("Military true");
 				return true;
 			case 3:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary() < FOURTH_TERRITORY)
+				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary()) < FOURTH_TERRITORY)
 					return false;
 				return true;
 			case 4:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary() < FIFTH_TERRITORY)
+				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary()) < FIFTH_TERRITORY)
 					return false;
 				return true;
 			case 5:
-				if (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary() < SIXTH_TERRITORY)
+				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary()) < SIXTH_TERRITORY)
 					return false;
 				return true;
 			default:
@@ -572,8 +580,8 @@ public class MoveManager {
 				effectManager.manageEffect(card.getPermanentEffect(), move.getPlayer(), total, mainGame);
 			}
 		}
-		effectManager.manageEffect(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(), move.getPlayer(),
-				total, mainGame);
+		effectManager.manageEffect(move.getPlayer().getPersonalBoard().getBonusBoard().getProductionEffect(),
+				move.getPlayer(), total, mainGame);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
