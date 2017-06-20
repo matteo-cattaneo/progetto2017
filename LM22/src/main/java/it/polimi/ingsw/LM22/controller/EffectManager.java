@@ -98,7 +98,7 @@ public class EffectManager {
 	}
 
 	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource sum) throws IOException {
-		r.subResource(sum, effect.getExchangedResource());
+		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangedResource());
 		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
@@ -108,10 +108,10 @@ public class EffectManager {
 	 * Privilegi del Consiglio)
 	 */
 	public void changeeffectManage(ChangeEffect effect, Resource sum) throws IOException {
-		if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
+		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-			r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
+			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 		}
 		return;
 	}
@@ -125,25 +125,25 @@ public class EffectManager {
 	public void doublechangeeffectManage(DoubleChangeEffect effect, Resource sum) throws IOException {
 		// se entrambi i change sono disponibili chiedo quale effettuare
 		// dovrei chiedere se lo vuole fare
-		if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
-				&& r.enoughResources(sum, effect.getExchangeEffect2()[NEEDED])) {
+		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
+				&& r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])) {
 			// metodo che chiede quale dei due cambi si vole effettuare
 			Integer choice = mainGC.askForDoubleChange(player, effect);
 			if (choice == FIRST_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-				r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
+				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 			} else if (choice == SECOND_CHANGE) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
-				r.subResource(sum, effect.getExchangeEffect2()[NEEDED]);
+				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 			}
-		} else if (r.enoughResources(sum, effect.getExchangeEffect1()[NEEDED])
+		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
-			r.subResource(sum, effect.getExchangeEffect1()[NEEDED]);
-		} else if (r.enoughResources(sum, effect.getExchangeEffect2()[NEEDED])
+			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
+		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect2())) {
 			r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
-			r.subResource(sum, effect.getExchangeEffect2()[NEEDED]);
+			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 		}
 	}
 
@@ -179,8 +179,9 @@ public class EffectManager {
 	 * gestisce un effetto di tipo CardAction
 	 */
 	public void cardactioneffectManage(CardActionEffect effect, Resource sum) throws IOException {
-		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
-		r.addResource(sum, r.calculateResource(
+		r.addResource(player.getPersonalBoard().getResources(),
+				r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);

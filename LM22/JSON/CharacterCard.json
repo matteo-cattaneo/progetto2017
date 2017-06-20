@@ -40,7 +40,7 @@
     },
     "immediateEffect": {
         "type": "CardActionEffect",
-        "cardType": 1,
+        "cardType": -1,
         "diceValue": 4,
         "resource": {
             "wood": 0,

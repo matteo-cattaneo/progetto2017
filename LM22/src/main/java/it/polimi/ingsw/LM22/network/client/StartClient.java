@@ -53,12 +53,18 @@ public class StartClient {
 			public void close() {
 			}
 		});
-		int option;
 		// richiedo di selezionare la UI
 		System.out.println("Choose you UI type:");
 		System.out.println("1: GUI");
 		System.out.println("2: CLI");
-		option = Integer.parseInt(stdin.nextLine());
+		int option = 0;
+		String choice = stdin.nextLine();
+		try {
+			option = Integer.parseInt(choice);
+		} catch (NumberFormatException e) {
+			System.out.println("Please insert a number!");
+			return printUISelection();
+		}
 		switch (option) {
 		case 1:
 			System.err.println("GUI - WIP");
@@ -72,7 +78,6 @@ public class StartClient {
 			UI = printUISelection();
 			break;
 		}
-		stdin.close();
 		return UI;
 	}
 
