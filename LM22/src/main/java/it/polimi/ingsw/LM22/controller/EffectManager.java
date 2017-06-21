@@ -286,8 +286,8 @@ public class EffectManager {
 		switch (color) {
 		case "ALL":
 			for (FamilyMember m : player.getMembers()) {
-				if (m.getColor() != UNCOLORED)
-					m.setValue(((MemberChangeEffect) e).getNewValueOfMember());
+				if (!m.getColor().equals(UNCOLORED))
+					m.setValue(e.getNewValueOfMember());
 			}
 			player.getEffects().add(e);
 			break;
@@ -303,6 +303,7 @@ public class EffectManager {
 			String choice = mainGC.askForColor(player);
 			for (FamilyMember m : player.getMembers())
 				if (m.getColor().equals(choice)) {
+					player.getEffects().add(e);
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}

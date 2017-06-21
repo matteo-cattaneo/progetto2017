@@ -437,6 +437,9 @@ public class MainGameController implements Runnable {
 						+ p.getPersonalBoard().getResources().getVictory() + "victory Points!!");
 			}
 		}
+		for (Player p : game.getPlayersOrder()) {
+			showMsgAll(p.getNickname() + " has ended the game with " + p.getPersonalBoard().getResources().getInfo());
+		}
 	}
 
 	private HashMap<String, Resource> initializeCouncilMap() {
