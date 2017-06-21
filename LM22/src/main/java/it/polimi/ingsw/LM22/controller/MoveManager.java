@@ -50,6 +50,8 @@ public class MoveManager {
 	private final Integer FIFTH_TERRITORY = 12;
 	private final Integer SIXTH_TERRITORY = 18;
 	private final Integer MAX_NUM_CARDS = 6;
+	private final Integer REQUIRED = 0;
+	private Integer doubleCostChoice;
 	private Game game;
 	private MainGameController mainGame;
 	private ResourceHandler resourceHandler = new ResourceHandler();
@@ -203,9 +205,10 @@ public class MoveManager {
 		Resource cardCost = calculateCardCost(cardMove, tower);
 		switch (tower) {
 		case 3:
-			Integer choice = mainGame.askForCost(cardMove);
-			if (choice == 2
-					&& !resourceHandler.manageVentureCost(cardMove.getPlayer(), ((VentureCard) card).getCardCost2()))
+			doubleCostChoice = mainGame.askForCost(cardMove);
+			if (doubleCostChoice == 1
+					&& !resourceHandler.enoughResources((((VentureCard) card).getCardCost2()[REQUIRED].clone()),
+							cardMove, additionalCost, bonus))
 				return false;
 			else if (!resourceHandler.enoughResources(cardCost, cardMove, additionalCost, bonus))
 				return false;
@@ -351,11 +354,22 @@ public class MoveManager {
 		if (cardMove.getMemberUsed().getColor() != UNCOLORED)
 			t.getColoredMembersOnIt().add(cardMove.getPlayer().getColor());
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
+		/* sottraggo i servitori usati */
 		resourceHandler.subResource(playerResource, cardMove.getServantsAdded());
+		/* sommo il bonus */
 		resourceHandler.addResource(playerResource,
 				resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer()));
+		/* sottraggo il costo addizionale */
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
-		resourceHandler.subResource(playerResource, calculateCardCost(cardMove, cardMove.getTowerSelected()));
+		Resource cardCost;
+		if (cardMove.getTowerSelected() == 3 && doubleCostChoice == 1)
+			cardCost = discountCard(
+					((VentureCard) (t.getFloor()[cardMove.getLevelSelected()].getCard())).getCardCost2()[REQUIRED + 1],
+					cardMove, cardMove.getLevelSelected());
+		else
+			cardCost = calculateCardCost(cardMove, cardMove.getTowerSelected());
+		/* sottraggo il costo effettivo della carta */
+		resourceHandler.subResource(playerResource, cardCost);
 		if (!t.isOccupied() /*
 							 * && non si tratta di una mossa per effetto di una
 							 * CardMove

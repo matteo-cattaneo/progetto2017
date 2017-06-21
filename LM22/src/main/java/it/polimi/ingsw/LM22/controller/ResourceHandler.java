@@ -36,16 +36,6 @@ public class ResourceHandler {
 	}
 
 	/*
-	 * metodo che gestisce il controllo delle carte Venture, sia con doppio
-	 * costo che con costo singolo normale o con costo in punti militari
-	 */
-	public boolean manageVentureCost(Player p, Resource[] cost2) {
-		// TODO
-		return false;
-
-	}
-
-	/*
 	 * metodo che controlla se il Player ha sufficienti risorse per comprare una
 	 * carta invocato da MoveManager per controllare l'acquistabilità
 	 * 

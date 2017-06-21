@@ -40,6 +40,8 @@ public class EffectManager {
 	private final Integer FIRST_CHANGE = 1;
 	private final Integer SECOND_CHANGE = 2;
 	private final Integer NEEDED = 0;
+	private final Integer TOWER = 0;
+	private final Integer FLOOR = 0;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final String UNCOLORED = "Uncolored";
 	private Player player;
@@ -167,8 +169,8 @@ public class EffectManager {
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);
-		Integer tower = info[0];
-		Integer floor = info[1];
+		Integer tower = info[TOWER];
+		Integer floor = info[FLOOR];
 		FamilyMember other = new FamilyMember(player, UNCOLORED);
 		other.setValue(effect.getDiceValue());
 		other.setUsed(false);
