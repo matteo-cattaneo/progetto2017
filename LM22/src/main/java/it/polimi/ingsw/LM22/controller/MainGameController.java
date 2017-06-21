@@ -39,7 +39,7 @@ public class MainGameController implements Runnable {
 	private final Integer LAST_PERIOD = 3;
 
 	private final Integer TERRITORY = 0;
-	private final Resource[] territoryReward = { NOTHING, NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
+	private final Resource[] territoryReward = { NOTHING, NOTHING, NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
 			new Resource(0, 0, 0, 0, 0, 0, 4), new Resource(0, 0, 0, 0, 0, 0, 10), new Resource(0, 0, 0, 0, 0, 0, 20) };
 	private final Integer CHARACTER = 1;
 	private final Resource[] characterReward = { NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
@@ -120,6 +120,7 @@ public class MainGameController implements Runnable {
 	private void playTurn(Player p) {
 		AbstractMove aMove;
 		for (String sMove = ""; !sMove.startsWith("End@");) {
+			// inizio di una mossa
 			try {
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
@@ -136,7 +137,6 @@ public class MainGameController implements Runnable {
 				sendAll();
 			} catch (InvalidMoveException e) {
 				// il player ha fatto una mossa non valida
-				// LOGGER.log(Level.SEVERE, "Invalid Move!", e);
 				try {
 					if (sMove.startsWith("Leader"))
 						getIPlayer(p).showMsg("Invalid leader move!!!");
@@ -147,6 +147,7 @@ public class MainGameController implements Runnable {
 					disconnectPlayer(p);
 				}
 			}
+			// fine di una mossa
 		}
 	}
 
@@ -257,7 +258,7 @@ public class MainGameController implements Runnable {
 		}
 		int cont1 = 0;
 		for (Player p : game.getPlayersOrder()) {
-			if (p.getPersonalBoard().getResources().getMilitary() == max1) {
+			if (p.getPersonalBoard().getResources().getMilitary().equals(max1)) {
 				resourceHandler.addResource(p.getPersonalBoard().getResources(),
 						resourceHandler.calculateResource(FIVE_VICTORY, p));
 				cont1++;
@@ -266,7 +267,7 @@ public class MainGameController implements Runnable {
 		if (cont1 > 1)
 			return;
 		for (Player p : game.getPlayersOrder()) {
-			if (p.getPersonalBoard().getResources().getMilitary() == max2) {
+			if (p.getPersonalBoard().getResources().getMilitary().equals(max2)) {
 				resourceHandler.addResource(p.getPersonalBoard().getResources(),
 						resourceHandler.calculateResource(TWO_VICTORY, p));
 			}
@@ -335,7 +336,7 @@ public class MainGameController implements Runnable {
 
 	private void manageFinalVentureCards(Player p) {
 		for (Effect e : p.getEffects()) {
-			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == VENTURE)
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType().equals(VENTURE))
 				return;
 		}
 		Resource total = NOTHING;
@@ -347,7 +348,7 @@ public class MainGameController implements Runnable {
 
 	private void manageFinalBuildingCards(Player p) {
 		for (Effect e : p.getEffects())
-			if (e instanceof FinalCardCostMalusEx && ((FinalCardCostMalusEx) e).getCardType() == BUILDING) {
+			if (e instanceof FinalCardCostMalusEx && ((FinalCardCostMalusEx) e).getCardType().equals(BUILDING)) {
 				Integer total = 0;
 				for (BuildingCard card : p.getPersonalBoard().getBuildingsCards()) {
 					total = total + card.getCost().getStone() + card.getCost().getStone();
@@ -358,7 +359,7 @@ public class MainGameController implements Runnable {
 
 	private void manageFinalCharacterCards(Player p) {
 		for (Effect e : p.getEffects()) {
-			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == CHARACTER)
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType().equals(CHARACTER))
 				return;
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
@@ -367,7 +368,7 @@ public class MainGameController implements Runnable {
 
 	private void manageFinalTerritoryCards(Player p) {
 		for (Effect e : p.getEffects()) {
-			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType() == TERRITORY)
+			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType().equals(TERRITORY))
 				return;
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
@@ -383,11 +384,11 @@ public class MainGameController implements Runnable {
 	 */
 	private void manageVictoryPointsDueToResource(Player p) {
 		for (Effect e : p.getEffects()) {
-			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getMilitary() == 1) {
+			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getMilitary().equals(1)) {
 				resourceHandler.subResource(p.getPersonalBoard().getResources(),
 						new Resource(0, 0, 0, 0, 0, 0, p.getPersonalBoard().getResources().getMilitary()));
 			}
-			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getVictory() == 5) {
+			if (e instanceof FinalResourceMalusEx && ((FinalResourceMalusEx) e).getResource().getVictory().equals(5)) {
 				resourceHandler.subResource(p.getPersonalBoard().getResources(),
 						new Resource(0, 0, 0, 0, 0, 0, p.getPersonalBoard().getResources().getVictory() / 5));
 			}
@@ -431,7 +432,7 @@ public class MainGameController implements Runnable {
 				max = p.getPersonalBoard().getResources().getVictory();
 		}
 		for (Player p : game.getPlayersOrder()) {
-			if (p.getPersonalBoard().getResources().getVictory() == max) {
+			if (p.getPersonalBoard().getResources().getVictory().equals(max)) {
 				showMsgAll("The winner is " + p.getNickname() + "with a total of "
 						+ p.getPersonalBoard().getResources().getVictory() + "victory Points!!");
 			}

@@ -113,10 +113,10 @@ public class EffectManager {
 				&& r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])) {
 			// metodo che chiede quale dei due cambi si vole effettuare
 			Integer choice = mainGC.askForDoubleChange(player, effect);
-			if (choice == FIRST_CHANGE) {
+			if (choice.equals(FIRST_CHANGE)) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
-			} else if (choice == SECOND_CHANGE) {
+			} else if (choice.equals(SECOND_CHANGE)) {
 				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 			}
@@ -293,7 +293,7 @@ public class EffectManager {
 			break;
 		case "UNCOLORED":
 			for (FamilyMember m : player.getMembers())
-				if (m.getColor() == UNCOLORED) {
+				if (m.getColor().equals(UNCOLORED)) {
 					m.setValue(e.getNewValueOfMember());
 					player.getEffects().add(e);
 					break;
@@ -302,7 +302,7 @@ public class EffectManager {
 		case "COLORED": {
 			String choice = mainGC.askForColor(player);
 			for (FamilyMember m : player.getMembers())
-				if (m.getColor() == choice) {
+				if (m.getColor().equals(choice)) {
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}
@@ -378,7 +378,7 @@ public class EffectManager {
 		 * effetto valido una volta per turno)
 		 */
 		for (LeaderCard chosen : lcards) {
-			if (chosen.getName() == choice) {
+			if (chosen.getName().equals(choice)) {
 				player.getEffects().add(chosen.getEffect());
 			}
 		}

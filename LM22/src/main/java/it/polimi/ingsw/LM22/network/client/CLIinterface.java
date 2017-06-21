@@ -2,7 +2,6 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -106,7 +105,7 @@ public class CLIinterface extends AbstractUI {
 			// client
 			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			// System.exit(0);
@@ -293,7 +292,6 @@ public class CLIinterface extends AbstractUI {
 
 	public String printServantsAddictionMenu() throws RemoteException {
 		showMsg("Insert how many servants you want to use");
-		showMsg("Please insert a positive number or zero");
 		Integer servants = input();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
 			return servants.toString();
@@ -589,7 +587,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|");
 		}
 		// Activated LeaderCard
-		if (!getPlayer(name, game).getLeaderCards().isEmpty()) {
+		if (!getPlayer(name, game).getActivatedLeaderCards().isEmpty()) {
 			System.out.printf("%-30s|%n", "| Activated leader cards:");
 			for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
 				System.out.printf("%-30s|%n", "| " + ld.getName());
@@ -1023,7 +1021,7 @@ public class CLIinterface extends AbstractUI {
 			}
 		}
 		int option = input();
-		if (game.getPersonalBonusTile()[option - 1] != null)
+		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null)
 			return option - 1;
 		else {
 			printInvalidInput();
@@ -1037,7 +1035,7 @@ public class CLIinterface extends AbstractUI {
 			try {
 				option = Integer.parseInt(in.nextLine());
 			} catch (NumberFormatException e) {
-				System.out.println("Invalid input");
+				pleaseInsertNumber();
 				option = -1;
 			}
 		return option;

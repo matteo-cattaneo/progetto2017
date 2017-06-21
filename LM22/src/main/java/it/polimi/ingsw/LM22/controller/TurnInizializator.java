@@ -22,6 +22,7 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberBonusEffect;
 import it.polimi.ingsw.LM22.model.leader.MemberChangeEffect;
+import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class TurnInizializator {
 
@@ -243,7 +244,7 @@ public class TurnInizializator {
 			m.setUsed(false);
 		}
 		while (members.size() != 0)
-			members.remove(members.get(0));
+			members.remove(0);
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
 				newOrder.add(p);
@@ -261,8 +262,10 @@ public class TurnInizializator {
 	private void manageLeaderCards(Game game) {
 		for (Player p : game.getPlayersOrder()) {
 			for (LeaderCard card : p.getActivatedLeaderCards()) {
-				if (card.getEffect() instanceof LeaderResourceEffect || (card.getEffect() instanceof MemberChangeEffect
-						&& card.getName() == "Federico di Montefeltro")) {
+				if (card.getEffect() instanceof LeaderResourceEffect
+						|| (card.getEffect() instanceof MemberChangeEffect
+								&& card.getName().equals("Federico di Montefeltro"))
+						|| card.getEffect() instanceof WorkAction) {
 					p.getLeaderCards().add(card);
 					p.getActivatedLeaderCards().remove(card);
 				}

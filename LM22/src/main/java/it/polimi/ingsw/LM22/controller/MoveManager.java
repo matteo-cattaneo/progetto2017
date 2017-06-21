@@ -206,7 +206,7 @@ public class MoveManager {
 		switch (tower) {
 		case 3:
 			doubleCostChoice = mainGame.askForCost(cardMove);
-			if (doubleCostChoice == 1
+			if (doubleCostChoice.equals(1)
 					&& !resourceHandler.enoughResources((((VentureCard) card).getCardCost2()[REQUIRED].clone()),
 							cardMove, additionalCost, bonus))
 				return false;
@@ -287,7 +287,7 @@ public class MoveManager {
 	private Resource discountCard(Resource cost, CardMove cardMove, Integer tower) {
 		Resource res = cost.clone();
 		for (Effect e : cardMove.getPlayer().getEffects()) {
-			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType() == tower)
+			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType().equals(tower))
 				resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
 			else if (e instanceof CoinsDiscountEffect) {
 				resourceHandler.cardDiscounted(res, ((CoinsDiscountEffect) e).getDiscount());
@@ -362,7 +362,7 @@ public class MoveManager {
 		/* sottraggo il costo addizionale */
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
 		Resource cardCost;
-		if (cardMove.getTowerSelected() == 3 && doubleCostChoice == 1)
+		if (cardMove.getTowerSelected().equals(3) && doubleCostChoice.equals(1))
 			cardCost = discountCard(
 					((VentureCard) (t.getFloor()[cardMove.getLevelSelected()].getCard())).getCardCost2()[REQUIRED + 1],
 					cardMove, cardMove.getLevelSelected());
@@ -491,15 +491,18 @@ public class MoveManager {
 	private boolean checkWorkSpace(WorkMove workMove) {
 		Integer power = findWorkEffects(workMove);
 		Integer servants = calculateEffectiveServants(workMove);
-		switch (game.getPlayers().length) {
+		switch (game.getPlayersOrder().size()) {
 		case 2:
-			if (workMove.getWorkType() == "PRODUCTION") {
+			if (workMove.getWorkType().equals("PRODUCTION")) {
+				System.out.println("0");
 				if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
 						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 					return false;
+				System.out.println("1");
 				if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
 					return false;
+				System.out.println("2");
 				break;
 			} else {
 				if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
@@ -512,7 +515,7 @@ public class MoveManager {
 			}
 		case 3:
 		case 4:
-			if (workMove.getWorkType() == "PRODUCTION") {
+			if (workMove.getWorkType().equals("PRODUCTION")) {
 				if (game.getBoardgame().getProductionSpace().getColoredMemberOnIt()
 						.contains(workMove.getPlayer().getColor()))
 					return false;
@@ -533,6 +536,7 @@ public class MoveManager {
 		default:
 			return false;
 		}
+		System.out.println("OK");
 		return true;
 	}
 
@@ -544,9 +548,9 @@ public class MoveManager {
 		Integer total = 0;
 		String type = move.getWorkType();
 		for (Effect e : move.getPlayer().getEffects()) {
-			if (e instanceof WorkMalusEx && type == ((WorkMalusEx) e).getTypeOfWork())
+			if (e instanceof WorkMalusEx && type.equals(((WorkMalusEx) e).getTypeOfWork()))
 				total = total - ((WorkMalusEx) e).getValueOfMalus();
-			if (e instanceof WorkBonusEffect && type == ((WorkBonusEffect) e).getTypeOfWork())
+			if (e instanceof WorkBonusEffect && type.equals(((WorkBonusEffect) e).getTypeOfWork()))
 				total = total + ((WorkBonusEffect) e).getWorkBonusValue();
 		}
 		return total;
@@ -556,7 +560,7 @@ public class MoveManager {
 	 * gestisce una mossa del tipo WorkMove
 	 */
 	public void workmoveHandle(WorkMove workMove) throws IOException {
-		if (workMove.getWorkType() == PRODUCTION)
+		if (workMove.getWorkType().equals(PRODUCTION))
 			productionHandle(workMove);
 		else
 			harvestHandle(workMove);
@@ -679,7 +683,7 @@ public class MoveManager {
 	 */
 	public boolean leadercardactivationAllowed(LeaderCardActivation move) {
 		LeaderCardRequest req = move.getLeaderCard().getRequest();
-		if (move.getLeaderCard().getName() == "Lucrezia Borgia") {
+		if (move.getLeaderCard().getName().equals("Lucrezia Borgia")) {
 			CardRequest r = ((CardRequest) move.getLeaderCard().getRequest());
 			if (r.getTerritoryCards() <= move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
 					|| r.getCharacterCards() <= move.getPlayer().getPersonalBoard().getCharactersCards().size()
@@ -736,10 +740,10 @@ public class MoveManager {
 	 * comportamento differente se l'effetto è una volta per turno oppure se è
 	 * un effetto permanente
 	 */
-	public void leadercardactivationHandle(LeaderCardActivation move) throws InvalidMoveException {
+	public void leadercardactivationHandle(LeaderCardActivation move) {
 		if (!(move.getLeaderCard().getEffect() instanceof LeaderResourceEffect)
 				&& !(move.getLeaderCard().getEffect() instanceof MemberChangeEffect
-						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember() == "COLORED")
+						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember().equals("COLORED"))
 				&& !(move.getLeaderCard().getEffect() instanceof WorkAction)) {
 			move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
 		}

@@ -14,7 +14,7 @@ public class ChangeEffect extends ImmediateEffect implements Serializable {
 	}
 	
 	public String getInfo(){
-		String info = ("You can exchange" + exchangeEffect1[0].getInfo() + "to" + exchangeEffect1[1].getInfo());
+		String info = ("You can exchange " + exchangeEffect1[0].getInfo() + " to " + exchangeEffect1[1].getInfo());
 		return info;
 	}
 
