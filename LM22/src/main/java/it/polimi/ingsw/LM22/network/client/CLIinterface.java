@@ -127,7 +127,7 @@ public class CLIinterface extends AbstractUI {
 		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
 			showMsg("4: Activate a LeaderCard");
 		showMsg("5: End turn");
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -165,10 +165,10 @@ public class CLIinterface extends AbstractUI {
 			memberMove = false;
 			timeout = game.getMoveTimer();
 			break;
-		case 0:
-			move = new String();
-			showPrincipalMenu();
-			break;
+//		case 0:
+//			move = new String();
+//			showPrincipalMenu();
+//			break;
 		default:
 			printInvalidInput();
 			showPrincipalMenu();
@@ -219,7 +219,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("2: Market");
 		showMsg("3: Work");
 		showMsg("4: Council");
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -235,11 +235,11 @@ public class CLIinterface extends AbstractUI {
 		case 4:
 			printCouncilMoveMenu();
 			break;
-		case 0:
-			move = new String();
-			pleaseInsertNumber();
-			showPrincipalMenu();
-			break;
+//		case 0:
+//			move = new String();
+//			pleaseInsertNumber();
+//			showPrincipalMenu();
+//			break;
 		default:
 			printInvalidInput();
 			printMemberMoveMenu();
@@ -266,7 +266,7 @@ public class CLIinterface extends AbstractUI {
 				showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
 			i++;
 		}
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -281,10 +281,10 @@ public class CLIinterface extends AbstractUI {
 				printFamilyMemberMenu();
 			}
 			break;
-		case 0:
-			move = new String();
-			showPrincipalMenu();
-			break;
+//		case 0:
+//			move = new String();
+//			showPrincipalMenu();
+//			break;
 		default:
 			printInvalidInput();
 			printFamilyMemberMenu();
@@ -359,7 +359,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("3: Three military points + two coins");
 			showMsg("4: Two different counsil privilege");
 		}
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -376,9 +376,9 @@ public class CLIinterface extends AbstractUI {
 				printMarketSelectionMenu();
 			}
 			break;
-		case 0:
-			move = new String();
-			showPrincipalMenu();
+//		case 0:
+//			move = new String();
+//			showPrincipalMenu();
 		default:
 			printInvalidInput();
 			printMarketSelectionMenu();
@@ -400,7 +400,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Choose the Work type:");
 		showMsg("1: Production");
 		showMsg("2: Harvest");
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -438,7 +438,7 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < getPlayer(name, game).getHandLeaderCards().size(); i++) {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 		}
-		showMsg("0: Restart");
+//		showMsg("0: Restart");
 
 		int option = input();
 		if (option <= i && option > 0)
@@ -468,7 +468,7 @@ public class CLIinterface extends AbstractUI {
 
 		int option = input();
 		if (option <= i && option > 0)
-			setMove(ld.get(option).getName());
+			setMove(ld.get(option-1).getName());
 		else if (option == 0) {
 			move = new String();
 			showPrincipalMenu();
