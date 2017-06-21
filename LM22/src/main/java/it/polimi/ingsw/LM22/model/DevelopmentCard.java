@@ -2,7 +2,7 @@ package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
 
-public abstract class DevelopmentCard  implements Serializable {
+public abstract class DevelopmentCard implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
@@ -21,4 +21,5 @@ public abstract class DevelopmentCard  implements Serializable {
 		return immediateEffect;
 	}
 
+	public abstract String getInfo();
 }

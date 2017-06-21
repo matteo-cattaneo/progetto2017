@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import it.polimi.ingsw.LM22.model.Resource;
 
-public class ResourceRequest extends LeaderCardRequest implements Serializable{
+public class ResourceRequest extends LeaderCardRequest implements Serializable {
 
 	private static final long serialVersionUID = -1162076774362932936L;
 	private Resource resource;
@@ -12,7 +12,12 @@ public class ResourceRequest extends LeaderCardRequest implements Serializable{
 	public Resource getResource() {
 		return resource;
 	}
-	
-	
-	
+
+	@Override
+	public String getInfo() {
+		String info;
+		info = "You must have%n" + getResource().getInfo();
+		return info;
+	}
+
 }

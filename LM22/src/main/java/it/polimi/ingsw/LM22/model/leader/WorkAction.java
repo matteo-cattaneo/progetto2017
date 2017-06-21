@@ -16,7 +16,7 @@ public class WorkAction extends LeaderEffect implements Serializable{
 	}
 	@Override
 	public String getInfo() {
-		return "You are able to do a " + typeOfWork + " action with a value of " + valueOfWork;
+		return "You are able to do a " + typeOfWork + " action with a value of " + valueOfWork + "%n";
 	}
 	
 	

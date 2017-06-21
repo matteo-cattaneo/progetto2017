@@ -106,7 +106,7 @@ public class CLIinterface extends AbstractUI {
 			// client
 			future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			// System.exit(0);
@@ -183,59 +183,29 @@ public class CLIinterface extends AbstractUI {
 	private void showCard() throws RemoteException {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Insert the card name: (no case sensitive)");
-		in.nextLine();
-		String name = in.nextLine();
+		String cardName = in.nextLine();
 		DevelopmentCard card = null;
 		for (int j = 0; j < 4; j++)
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
-					if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(name.toLowerCase()))
+					if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
 						card = t.getFloor()[j].getCard();
+		LeaderCard lcard = null;
+		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
+		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
+		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
 		showMsg("");
-		if (card != null) {
-			showMsg("Name: " + card.getName());
-			showMsg("Period: " + card.getPeriod());
-			if (card instanceof TerritoryCard) {
-				showMsg("Immediate effect: ");
-				System.out.printf(card.getImmediateEffect().getInfo());
-				showMsg("Permament effect:");
-				System.out.printf("Requirement: " + ((TerritoryCard) card).getRequirement().toString() + "%n"
-						+ ((TerritoryCard) card).getPermanentEffect().getInfo());
-				showMsg("Card type: Territory");
-			}
-			if (card instanceof CharacterCard) {
-				showMsg("Card cost: ");
-				System.out.printf(((CharacterCard) card).getCost().getInfo());
-				showMsg("Immediate effect: ");
-				System.out.printf(card.getImmediateEffect().getInfo());
-				showMsg("Permament effect:");
-				System.out.printf(((CharacterCard) card).getPermanentEffect().getInfo());
-				showMsg("Card type: Character");
-			}
-			if (card instanceof BuildingCard) {
-				showMsg("Card cost: ");
-				System.out.printf(((BuildingCard) card).getCost().getInfo());
-				showMsg("Immediate effect: ");
-				System.out.printf(card.getImmediateEffect().getInfo());
-				showMsg("Permament effect:");
-				System.out.printf(((BuildingCard) card).getPermanentEffect().getInfo());
-				showMsg("Card type: Building");
-			}
-			if (card instanceof VentureCard) {
-				showMsg("Card cost: ");
-				System.out.printf(((VentureCard) card).getCardCost1().getInfo());
-				showMsg("Second card cost: ");
-				showMsg("Require: ");
-				System.out.printf(((VentureCard) card).getCardCost2()[0].getInfo());
-				showMsg("Cost: ");
-				System.out.printf(((VentureCard) card).getCardCost2()[1].getInfo());
-				showMsg("Immediate effect: ");
-				System.out.printf(card.getImmediateEffect().getInfo());
-				showMsg("Permament effect:");
-				System.out.printf(((VentureCard) card).getPermanentEffect().getInfo());
-				showMsg("Card type: Venture");
-			}
-		} else
+		if (card != null)
+			System.out.printf(card.getInfo());
+		else if (lcard != null)
+			System.out.printf(lcard.getInfo());
+		else
 			showMsg("Card not found!");
 		showMsg("");
 	}

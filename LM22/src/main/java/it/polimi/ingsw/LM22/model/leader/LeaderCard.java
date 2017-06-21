@@ -21,4 +21,12 @@ public class LeaderCard implements Serializable {
 		return effect;
 	}
 
+	public String getInfo() {
+		String info;
+		info = "Name: " + getName() + "%n";
+		info = info + "Request:%n" + getRequest().getInfo();
+		info = info + "Effect:%n" + getEffect().getInfo();
+		info = info + "Card type: Leader%n";
+		return info;
+	}
 }

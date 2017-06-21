@@ -538,7 +538,12 @@ public class MainGameController implements Runnable {
 	public Integer askForCost(CardMove cardMove) throws IOException {
 		VentureCard vc = (VentureCard) game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getFloor()[cardMove
 				.getLevelSelected()].getCard();
-		return getIPlayer(cardMove.getPlayer()).ventureCostRequest(vc);
+		if (vc.getCardCost1().getInfo().equals("No resource%n"))
+			return 1;
+		else if (vc.getCardCost2()[0].getInfo().equals("No resource%n"))
+			return 0;
+		else
+			return getIPlayer(cardMove.getPlayer()).ventureCostRequest(vc);
 	}
 
 	/*
