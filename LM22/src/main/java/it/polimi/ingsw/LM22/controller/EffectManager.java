@@ -320,7 +320,8 @@ public class EffectManager {
 		switch (color) {
 		case "ALL":
 			for (FamilyMember f : player.getMembers()) {
-				f.setValue(f.getValue() + e.getValueOfBonus());
+				if (!f.getColor().equals(UNCOLORED))
+					f.setValue(f.getValue() + e.getValueOfBonus());
 			}
 		}
 		player.getEffects().add(e);

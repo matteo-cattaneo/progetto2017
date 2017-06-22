@@ -2,9 +2,11 @@ package it.polimi.ingsw.LM22.controller;
 
 import java.io.IOException;
 
+import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 
 public class VaticanReportManager {
 	private final Integer MAX_FAITH_GRID = 15;
@@ -15,6 +17,7 @@ public class VaticanReportManager {
 			new Resource(0, 0, 0, 0, 5, 0, 0) };
 	private final ResourceHandler resourceHandler = new ResourceHandler();
 	private Game game;
+	private MainGameController mainGame;
 
 	/*
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti del periodo
@@ -58,6 +61,7 @@ public class VaticanReportManager {
 	 */
 	public void manageVaticanReport(Game game, MainGameController mainGame) throws IOException {
 		this.game = game;
+		this.mainGame = mainGame;
 		Integer period = game.getPeriod();
 		for (Player p : game.getPlayersOrder()) {
 			if (canGiveSupport(p, period)) {
@@ -67,6 +71,10 @@ public class VaticanReportManager {
 					exCommunicate(p, period);
 				} else
 					giveResourceDueToChurchSubstain(p);
+					for (Effect e : p.getEffects()){
+						if (e instanceof ChurchSubstainEffect)
+							resourceHandler.addResource(p.getPersonalBoard().getResources(), ((ChurchSubstainEffect) e).getReward());
+					}
 			} else {
 				exCommunicate(p, period);
 				giveResourceDueToChurchSubstain(p);
