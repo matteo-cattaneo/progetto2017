@@ -131,7 +131,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[TERRITORY].getFloor()) {
 			int i = 0;
 			TerritoryCard c = game.getTerritoryCards().get(i);
-			for (; c.getPeriod() != game.getPeriod();) {
+			for (; !c.getPeriod().equals(game.getPeriod());) {
 				i++;
 				c = game.getTerritoryCards().get(i);
 			}
@@ -145,7 +145,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[CHARACTER].getFloor()) {
 			int i = 0;
 			CharacterCard c = game.getCharacterCards().get(i);
-			for (; c.getPeriod() != game.getPeriod();) {
+			for (; !c.getPeriod().equals(game.getPeriod());) {
 				i++;
 				c = game.getCharacterCards().get(i);
 			}
@@ -159,7 +159,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[BUILDING].getFloor()) {
 			int i = 0;
 			BuildingCard c = game.getBuildingCards().get(i);
-			for (; c.getPeriod() != game.getPeriod();) {
+			for (; !c.getPeriod().equals(game.getPeriod());) {
 				i++;
 				c = game.getBuildingCards().get(i);
 			}
@@ -173,7 +173,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[VENTURE].getFloor()) {
 			int i = 0;
 			VentureCard c = game.getVentureCards().get(i);
-			for (; c.getPeriod() != game.getPeriod();) {
+			for (; !c.getPeriod().equals(game.getPeriod());) {
 				i++;
 				c = game.getVentureCards().get(i);
 			}
@@ -205,10 +205,8 @@ public class TurnInizializator {
 				if (e instanceof DiceMalusEx)
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
-				if (m.getColor() != "Uncolored")
+				if (!m.getColor().equals("Uncolored"))
 					m.setValue(game.getBoardgame().getDice(m.getColor()) + malus);
-				else
-					m.setValue(UNCOLORED_MEMBER);
 			}
 		}
 		updateFamilyMembersValue(game);
@@ -223,9 +221,9 @@ public class TurnInizializator {
 		for (Player p : game.getPlayersOrder())
 			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {
-					effectManager.manageEffect(e, p, ZERO.clone(), mainGC);
+					effectManager.leaderEffectManage(e, p, mainGC);
 				} else if (e instanceof MemberBonusEffect) {
-					effectManager.memberbonuseffectManage((MemberBonusEffect) e);
+					effectManager.leaderEffectManage(e, p, mainGC);
 				}
 			}
 	}
@@ -261,15 +259,18 @@ public class TurnInizializator {
 	 */
 	private void manageLeaderCards(Game game) {
 		for (Player p : game.getPlayersOrder()) {
+			ArrayList<LeaderCard> removeLD = new ArrayList<LeaderCard>();
 			for (LeaderCard card : p.getActivatedLeaderCards()) {
 				if (card.getEffect() instanceof LeaderResourceEffect
 						|| (card.getEffect() instanceof MemberChangeEffect
 								&& card.getName().equals("Federico di Montefeltro"))
 						|| card.getEffect() instanceof WorkAction) {
 					p.getLeaderCards().add(card);
-					p.getActivatedLeaderCards().remove(card);
+					// p.getActivatedLeaderCards().remove(card);
+					removeLD.add(card);
 				}
 			}
+			p.getActivatedLeaderCards().removeAll(removeLD);
 		}
 	}
 

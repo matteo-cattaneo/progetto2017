@@ -259,7 +259,7 @@
                 "military": 1,
                 "victory": 0
             },
-            "concilPrivilege": 0
+            "councilPrivilege": 0
         }
     }, {
         "name": "Eremo",

@@ -523,7 +523,6 @@ public class MainGameController implements Runnable {
 	 * punti vittoria + deve controllare se ha Sisto VI attivato
 	 */
 	public boolean askSupport(Player player) throws IOException {
-		System.out.println(player.getNickname() + ": ask support");
 		return getIPlayer(player).supportRequest();
 	}
 

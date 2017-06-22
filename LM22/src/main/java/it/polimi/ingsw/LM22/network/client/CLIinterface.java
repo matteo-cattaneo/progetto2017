@@ -179,26 +179,34 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Please insert a number!");
 	}
 
+	/*
+	 * metodo che permette all utente di visualizzare i dettagli di una carta,
+	 * inserendo anche solo una parte del nome della carta
+	 */
 	private void showCard() throws RemoteException {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Insert the card name: (no case sensitive)");
 		String cardName = in.nextLine();
-		DevelopmentCard card = null;
-		for (int j = 0; j < 4; j++)
-			for (Tower t : game.getBoardgame().getTowers())
-				if (t.getFloor()[j].getCard().getName() != null)
-					if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
-						card = t.getFloor()[j].getCard();
 		LeaderCard lcard = null;
-		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-				lcard = ld;
-		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-				lcard = ld;
-		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
-			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-				lcard = ld;
+		DevelopmentCard card = null;
+		if (!cardName.equals("")) {
+			// verificose è una development card
+			for (int j = 0; j < 4; j++)
+				for (Tower t : game.getBoardgame().getTowers())
+					if (t.getFloor()[j].getCard().getName() != null)
+						if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
+							card = t.getFloor()[j].getCard();
+			// verifico se è una leader card
+			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+					lcard = ld;
+			for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+					lcard = ld;
+			for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
+				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+					lcard = ld;
+		}
 		showMsg("");
 		if (card != null)
 			System.out.printf(card.getInfo());
@@ -408,10 +416,9 @@ public class CLIinterface extends AbstractUI {
 		case 2:
 			setMove(HARVEST);
 			break;
-		case 0:
-			move = new String();
-			showPrincipalMenu();
-			break;
+		/*
+		 * case 0: move = new String(); showPrincipalMenu(); break;
+		 */
 		default:
 			printInvalidInput();
 			printWorkSelectionMenu();
@@ -441,10 +448,9 @@ public class CLIinterface extends AbstractUI {
 		int option = input();
 		if (option <= i && option > 0)
 			setMove(getPlayer(name, game).getHandLeaderCards().get(option - 1).getName());
-		else if (option == 0) {
-			move = new String();
-			showPrincipalMenu();
-		} else {
+		/*
+		 * else if (option == 0) { move = new String(); showPrincipalMenu(); }
+		 */else {
 			printInvalidInput();
 			printSellLeaderCardMenu();
 		}
@@ -464,15 +470,14 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < ld.size(); i++) {
 			showMsg((i + 1) + ": " + ld.get(i).getName());
 		}
-		showMsg("0: Restart");
+		/* showMsg("0: Restart"); */
 
 		int option = input();
 		if (option <= i && option > 0)
 			setMove(ld.get(option - 1).getName());
-		else if (option == 0) {
-			move = new String();
-			showPrincipalMenu();
-		} else {
+		/*
+		 * else if (option == 0) { move = new String(); showPrincipalMenu(); }
+		 */else {
 			printInvalidInput();
 			printActivateLeaderCardMenu();
 		}
@@ -974,9 +979,10 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf(effect.getExchangeEffect2()[0].getInfo());
 		showMsg("With");
 		System.out.printf(effect.getExchangeEffect2()[1].getInfo());
-
+		showMsg("0: Don't activate effect");
 		int option = input();
 		switch (option) {
+		case 0:
 		case 1:
 		case 2:
 			return option;

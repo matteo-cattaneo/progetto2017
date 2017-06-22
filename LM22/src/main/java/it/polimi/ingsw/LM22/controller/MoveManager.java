@@ -102,7 +102,7 @@ public class MoveManager {
 			return false;
 		if (!checkCardSpace(cardMove))
 			return false;
-		if (cardMove.getMemberUsed().getColor() != UNCOLORED
+		if (!cardMove.getMemberUsed().getColor().equals(UNCOLORED)
 				&& game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getColoredMembersOnIt()
 						.contains(cardMove.getPlayer().getColor()))
 			return false;
@@ -351,7 +351,7 @@ public class MoveManager {
 		Tower t = game.getBoardgame().getTowers()[cardMove.getTowerSelected()];
 		space.setMember(cardMove.getMemberUsed());
 		cardMove.getMemberUsed().setUsed(true);
-		if (cardMove.getMemberUsed().getColor() != UNCOLORED)
+		if (!cardMove.getMemberUsed().getColor().equals(UNCOLORED))
 			t.getColoredMembersOnIt().add(cardMove.getPlayer().getColor());
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
 		/* sottraggo i servitori usati */
@@ -494,15 +494,12 @@ public class MoveManager {
 		switch (game.getPlayersOrder().size()) {
 		case 2:
 			if (workMove.getWorkType().equals("PRODUCTION")) {
-				System.out.println("0");
 				if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
 						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
 					return false;
-				System.out.println("1");
 				if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
 					return false;
-				System.out.println("2");
 				break;
 			} else {
 				if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
@@ -536,7 +533,6 @@ public class MoveManager {
 		default:
 			return false;
 		}
-		System.out.println("OK");
 		return true;
 	}
 
@@ -582,7 +578,7 @@ public class MoveManager {
 			valueOfAction = valueOfAction - WORK_MALUS;
 		game.getBoardgame().getProductionSpace().getMembers().add(move.getMemberUsed());
 		move.getMemberUsed().setUsed(true);
-		if (move.getMemberUsed().getColor() != UNCOLORED)
+		if (!move.getMemberUsed().getColor().equals(UNCOLORED))
 			game.getBoardgame().getProductionSpace().getColoredMemberOnIt().add(move.getPlayer().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING.clone();
@@ -607,7 +603,7 @@ public class MoveManager {
 			valueOfAction = valueOfAction - WORK_MALUS;
 		game.getBoardgame().getHarvestSpace().getMembers().add(move.getMemberUsed());
 		move.getMemberUsed().setUsed(true);
-		if (move.getMemberUsed().getColor() != UNCOLORED)
+		if (!move.getMemberUsed().getColor().equals(UNCOLORED))
 			game.getBoardgame().getHarvestSpace().getColoredMemberOnIt().add(move.getMemberUsed().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING.clone();
@@ -741,6 +737,9 @@ public class MoveManager {
 	 * un effetto permanente
 	 */
 	public void leadercardactivationHandle(LeaderCardActivation move) {
+		/*
+		 * TODO gli effetti vengono aggiunti due volte
+		 */
 		if (!(move.getLeaderCard().getEffect() instanceof LeaderResourceEffect)
 				&& !(move.getLeaderCard().getEffect() instanceof MemberChangeEffect
 						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember().equals("COLORED"))
@@ -757,9 +756,11 @@ public class MoveManager {
 	 * metodo che dice se la lista di effetti di un player contiene un elemento
 	 * di quella classe
 	 */
-	public boolean containsClass(List<Effect> list, Object o) {
+	public boolean containsClass(List<Effect> list, Class<?> o) {
+		System.out.println("Cerco: " + o);
 		for (Effect e : list) {
-			if (e.getClass().equals(o.getClass())) {
+			System.out.println(e.getClass());
+			if (e.getClass().equals(o)) {
 				return true;
 			}
 		}

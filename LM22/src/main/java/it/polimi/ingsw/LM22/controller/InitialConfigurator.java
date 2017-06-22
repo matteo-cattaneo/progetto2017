@@ -187,7 +187,7 @@ public class InitialConfigurator extends TurnInizializator {
 		int cont = 0;
 		for (Player p : game.getPlayersOrder()) {
 			p.getPersonalBoard().setResources(new Resource(BASE_WOOD_STONE+50, BASE_WOOD_STONE+50, BASE_SERVANTS+50,
-					BASE_COINS + cont+50, NO_RESOURCE+5, NO_RESOURCE, NO_RESOURCE));
+					BASE_COINS + cont+50, NO_RESOURCE+15, NO_RESOURCE, NO_RESOURCE));
 			cont++;
 		}
 	}

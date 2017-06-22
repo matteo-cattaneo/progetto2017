@@ -318,15 +318,17 @@ public class EffectManager {
 	public void memberbonuseffectManage(MemberBonusEffect e) {
 		String color = e.getTypeOfMember();
 		switch (color) {
-		case "ALL": {
+		case "ALL":
 			for (FamilyMember f : player.getMembers()) {
 				f.setValue(f.getValue() + e.getValueOfBonus());
 			}
 		}
-		}
 		player.getEffects().add(e);
 	}
 
+	/*
+	 * TODO gli effetti vengono aggiunti due volte alla lista
+	 */
 	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {
 		player.getEffects().add(effect);
 	}

@@ -7,7 +7,7 @@ import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 
 public class VaticanReportManager {
-
+	private final Integer MAX_FAITH_GRID = 15;
 	/*
 	 * risorse richieste sono da caricare da file oppure no?
 	 */
@@ -42,7 +42,11 @@ public class VaticanReportManager {
 	 * o per essere scomunicati
 	 */
 	public void giveResourceDueToChurchSubstain(Player p) {
-		Resource bonus = game.getBoardgame().getFaithGrid().getReward(p.getPersonalBoard().getResources().getFaith());
+		Resource bonus;
+		if (p.getPersonalBoard().getResources().getFaith() < MAX_FAITH_GRID)
+			bonus = game.getBoardgame().getFaithGrid().getReward(p.getPersonalBoard().getResources().getFaith());
+		else
+			bonus = game.getBoardgame().getFaithGrid().getReward(MAX_FAITH_GRID);
 		Resource faith = new Resource(0, 0, 0, 0, p.getPersonalBoard().getResources().getFaith(), 0, 0);
 		resourceHandler.subResource(p.getPersonalBoard().getResources(), faith);
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), bonus);
