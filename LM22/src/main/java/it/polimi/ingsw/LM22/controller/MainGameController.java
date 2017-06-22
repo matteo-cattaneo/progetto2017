@@ -72,7 +72,9 @@ public class MainGameController implements Runnable {
 		// distribuzione personal tile
 		personalTileSelection();
 		// distribuzione carte leader
+		leaderSelection();
 		// inizio della partita
+		showMsgAll("Game started!");
 		startGame();
 	}
 
@@ -84,13 +86,93 @@ public class MainGameController implements Runnable {
 		for (int i = game.getPlayersOrder().size() - 1; i >= 0; i--) {
 			Player p = game.getPlayersOrder().get(i);
 			int selection = 0;
-			try {
-				selection = getIPlayer(p).selectPersonalTile(game);
-				p.getPersonalBoard().setBonusBoard(game.getPersonalBonusTile()[selection]);
-				game.getPersonalBonusTile()[selection] = null;
-			} catch (IOException e) {
-				disconnectPlayer(p);
+			if (checkPlayer(p))
+				try {
+					selection = getIPlayer(p).selectPersonalTile(game);
+					p.getPersonalBoard().setBonusBoard(game.getPersonalBonusTile()[selection]);
+					game.getPersonalBonusTile()[selection] = null;
+				} catch (IOException e) {
+					disconnectPlayer(p);
+				}
+		}
+	}
+
+	/*
+	 * consente ad ogni giocatore di scegliere le proprire carte leader
+	 */
+	private void leaderSelection() {
+		// per tutte le 4 carte leader
+		for (int i = 0; i < 3;) {
+			// mostro a tutti i player la scelta della prima carta
+			// la seguente operazione non è bloccante per il server
+			playersLeaderCard();
+			// per ogni player
+			int counter = 0;
+			String leaderSelected[] = new String[4];
+			for (int j = 0; j < game.getPlayersOrder().size(); j++) {
+				Player p = game.getPlayersOrder().get(j);
+				// se il giocatore è connesso e non ha ancora scelto
+				if (checkPlayer(p))
+					try {
+						// ottengo il valore della carta >la carta selezionata
+						leaderSelected[j] = getIPlayer(p).getLeaderCard();
+						counter++;
+					} catch (IOException e) {
+						System.out.println(p.getNickname() + ": non ha ancora scelto");
+					}
 			}
+			// se tutti i player hanno selezionato la carta
+			if (counter == game.getPlayersOrder().size()) {
+				// applico le modifiche alle liste delle carte
+				for (int j = 0; j < game.getPlayersOrder().size(); j++) {
+					Player p = game.getPlayersOrder().get(j);
+					// sposto la carta selezionata nella lista HandLeaderCard
+					p.getHandLeaderCards().add(leaderByName(leaderSelected[j], p));
+					p.getLeaderCards().remove(leaderByName(leaderSelected[j], p));
+					// player successivo
+					Player pNext;
+					if (game.getPlayersOrder().size() == j + 1)
+						pNext = game.getPlayersOrder().get(0);
+					else
+						pNext = game.getPlayersOrder().get(j + 1);
+					// inserisco temporanemente nella lista activatedLeaderCards
+					// le carte rimanenti
+					pNext.getActivatedLeaderCards().addAll(p.getLeaderCards());
+					// svuoto la lista LeaderCards
+					p.setLeaderCards(new ArrayList<LeaderCard>());
+				}
+				// trasferico le carte dalla lista leaderCards alla lista
+				// ActivateLeaderCard per ogni Player
+				for (Player p : game.getPlayersOrder()) {
+					p.setLeaderCards(p.getActivatedLeaderCards());
+					p.setActivatedLeaderCards(new ArrayList<LeaderCard>());
+				}
+				// mostro di nuovo il menu di selezione delle carte
+				i++;
+			}
+		}
+		// assegno d'ufficio l'ultima carta al player
+		for (Player p : game.getPlayersOrder()) {
+			p.getHandLeaderCards().addAll(p.getLeaderCards());
+			p.setLeaderCards(new ArrayList<LeaderCard>());
+		}
+	}
+
+	private LeaderCard leaderByName(String cardName, Player p) {
+		for (LeaderCard ld : p.getLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				return ld;
+		return null;
+	}
+
+	private void playersLeaderCard() {
+		for (Player p : game.getPlayersOrder()) {
+			if (checkPlayer(p))
+				try {
+					getIPlayer(p).selectLeaderCard(game);
+				} catch (IOException e) {
+					disconnectPlayer(p);
+				}
 		}
 	}
 

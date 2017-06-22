@@ -83,4 +83,7 @@ public abstract class AbstractUI {
 
 	public abstract void setMemberMove(boolean memberMove);
 
+	public abstract void selectLeaderCard(Game game) throws RemoteException;
+
+	public abstract String getLeaderCard() throws RemoteException;
 }

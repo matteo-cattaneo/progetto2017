@@ -35,6 +35,10 @@ public class Player implements Serializable {
 		this.members = members;
 	}
 
+	public void setActivatedLeaderCards(List<LeaderCard> activatedLeaderCards) {
+		this.activatedLeaderCards = activatedLeaderCards;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}

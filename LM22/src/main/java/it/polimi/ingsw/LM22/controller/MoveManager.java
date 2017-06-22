@@ -757,9 +757,7 @@ public class MoveManager {
 	 * di quella classe
 	 */
 	public boolean containsClass(List<Effect> list, Class<?> o) {
-		System.out.println("Cerco: " + o);
 		for (Effect e : list) {
-			System.out.println(e.getClass());
 			if (e.getClass().equals(o)) {
 				return true;
 			}

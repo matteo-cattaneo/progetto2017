@@ -132,6 +132,13 @@ public class SocketClient implements IConnection {
 					socketOut.writeInt(UI.selectPersonalTile((Game) socketIn.readObject()));
 					socketOut.flush();
 					break;
+				case "leader":
+					UI.selectLeaderCard((Game) socketIn.readObject());
+					break;
+				case "getLeader":
+					socketOut.writeUTF(UI.getLeaderCard());
+					socketOut.flush();
+					break;
 				}
 			}
 

@@ -146,14 +146,17 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	/*
-	 * metodo che implementa la fase di distribuzione random delle carte leader
-	 * con relativo passaggio al giocatore successivo delle carte rimanenti
+	 * metodo che implementa la fase di distribuzione random delle carte leader,
+	 * cosi da poi poterne consentire la scelta tramite la procedura iniziale
 	 */
 	private void leaderDistribution(Game game) {
 		Random random = new Random();
 		for (Player p : game.getPlayers()) {
 			for (int i = 0; i < 4; i++) {
-				p.getHandLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
+				// salvo le carte leader nella lista LeaderCards temporanemante
+				// poi le carte selezionate del player verranno inserite man
+				// mano nella lista HandLeaderCards per l'inizio della partita
+				p.getLeaderCards().add(game.getLeaderCards().remove(random.nextInt(game.getLeaderCards().size())));
 			}
 		}
 	}
@@ -171,14 +174,6 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	/*
-	 * consente di far scegliere ad ogni giocatore la carta leader e inserirla
-	 * nella sua PersonalBoard //RANDOM (VEDI SOPRA)
-	 */
-	private void leaderSelection() {
-
-	}
-
-	/*
 	 * metodo invocato direttamente nel costruttore di questa classe che
 	 * permette di distribuire le risorse con cui i player iniziano la partita
 	 * in base all'ordine random generato nella creazione della partita stessa
@@ -186,8 +181,8 @@ public class InitialConfigurator extends TurnInizializator {
 	private void giveInitialResources(Game game) {
 		int cont = 0;
 		for (Player p : game.getPlayersOrder()) {
-			p.getPersonalBoard().setResources(new Resource(BASE_WOOD_STONE+50, BASE_WOOD_STONE+50, BASE_SERVANTS+50,
-					BASE_COINS + cont+50, NO_RESOURCE+15, NO_RESOURCE, NO_RESOURCE));
+			p.getPersonalBoard().setResources(new Resource(BASE_WOOD_STONE + 50, BASE_WOOD_STONE + 50,
+					BASE_SERVANTS + 50, BASE_COINS + cont + 50, NO_RESOURCE + 15, NO_RESOURCE, NO_RESOURCE));
 			cont++;
 		}
 	}

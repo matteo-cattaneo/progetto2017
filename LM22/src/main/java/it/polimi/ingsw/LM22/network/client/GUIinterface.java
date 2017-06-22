@@ -199,7 +199,19 @@ public class GUIinterface extends AbstractUI {
 	@Override
 	public void setMemberMove(boolean memberMove) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void selectLeaderCard(Game game) throws RemoteException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getLeaderCard() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

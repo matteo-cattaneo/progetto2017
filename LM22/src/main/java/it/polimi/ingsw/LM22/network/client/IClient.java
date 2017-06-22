@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -46,4 +47,8 @@ public interface IClient extends Remote {
 	public void showMsg(String msg) throws RemoteException;
 
 	public Integer selectPersonalTile(Game game) throws RemoteException;
+
+	public void selectLeaderCard(Game game) throws RemoteException;
+
+	public String getLeaderCard() throws RemoteException;
 }

@@ -116,4 +116,15 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public Integer selectPersonalTile(Game game) throws IOException {
 		return client.selectPersonalTile(game);
 	}
+
+	@Override
+	public void selectLeaderCard(Game game) throws IOException {
+		client.selectLeaderCard(game);
+
+	}
+
+	@Override
+	public String getLeaderCard() throws IOException {
+		return client.getLeaderCard();
+	}
 }

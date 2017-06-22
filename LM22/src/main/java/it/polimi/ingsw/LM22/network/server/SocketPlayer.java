@@ -181,4 +181,23 @@ public class SocketPlayer implements IPlayer {
 		return in.readInt();
 	}
 
+	@Override
+	public void selectLeaderCard(Game game) throws IOException {
+		out.writeUTF("leader");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(game);
+		out.flush();
+	}
+
+	@Override
+	public String getLeaderCard() throws IOException {
+		out.writeUTF("getLeader");
+		out.flush();
+		
+		return in.readUTF();
+	}
+
 }

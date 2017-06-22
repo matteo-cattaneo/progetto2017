@@ -131,4 +131,14 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	public Integer selectPersonalTile(Game game) throws RemoteException {
 		return UI.selectPersonalTile(game);
 	}
+
+	@Override
+	public void selectLeaderCard(Game game) throws RemoteException {
+		UI.selectLeaderCard(game);
+	}
+
+	@Override
+	public String getLeaderCard() throws RemoteException {
+		return UI.getLeaderCard();
+	}
 }

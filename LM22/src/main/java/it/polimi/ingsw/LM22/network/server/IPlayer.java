@@ -49,4 +49,8 @@ public interface IPlayer extends Remote {
 	public void showMsg(String msg) throws IOException;
 
 	public Integer selectPersonalTile(Game game) throws IOException;
+
+	public void selectLeaderCard(Game game) throws IOException;
+
+	public String getLeaderCard() throws IOException;
 }

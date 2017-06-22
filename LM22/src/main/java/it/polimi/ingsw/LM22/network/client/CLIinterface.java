@@ -60,6 +60,7 @@ public class CLIinterface extends AbstractUI {
 	private boolean memberMove = false;
 	private long timeout = 0;
 	private long time;
+	private String leaderSelected;
 
 	public void setMemberMove(boolean memberMove) {
 		this.memberMove = memberMove;
@@ -1027,14 +1028,19 @@ public class CLIinterface extends AbstractUI {
 			}
 		}
 		int option = input();
-		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null)
+		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null) {
+			showMsg("Wait other player...");
 			return option - 1;
-		else {
+		} else {
 			printInvalidInput();
 			return selectPersonalTile(game);
 		}
 	}
 
+	/*
+	 * permette all utente di inserire in input solo numeri gestendo le
+	 * eccezzioni di convesione da stringa
+	 */
 	private Integer input() {
 		int option = -1;
 		while (option == -1)
@@ -1045,5 +1051,43 @@ public class CLIinterface extends AbstractUI {
 				option = -1;
 			}
 		return option;
+	}
+
+	@Override
+	public void selectLeaderCard(Game game) throws RemoteException {
+		leaderSelected = "";
+		this.game = game;
+		showMsg("");
+
+		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
+			showMsg("______________________________");
+			System.out.printf("%-30s|%n", "| Selected leader cards:");
+			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+				System.out.printf("%-30s|%n", "| " + ld.getName());
+			showMsg("|_____________________________|");
+		}
+		showMsg("");
+
+		int i = 1;
+		showMsg("______________________________");
+		System.out.printf("%-30s|%n", "| Choose a Leader card:");
+		for (LeaderCard ld : getPlayer(name, game).getLeaderCards()) {
+			System.out.printf("%-30s|%n", "| " + i + ": " + ld.getName());
+			i++;
+		}
+		showMsg("|_____________________________|");
+		int option = input();
+		if (option <= i && option > 0) {
+			showMsg("Wait other player...");
+			leaderSelected = getPlayer(name, game).getLeaderCards().get(option - 1).getName();
+		} else {
+			printInvalidInput();
+			selectLeaderCard(game);
+		}
+	}
+
+	@Override
+	public String getLeaderCard() throws RemoteException {
+		return leaderSelected;
 	}
 }
