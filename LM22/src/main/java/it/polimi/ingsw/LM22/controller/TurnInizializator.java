@@ -261,7 +261,7 @@ public class TurnInizializator {
 			for (LeaderCard card : p.getActivatedLeaderCards()) {
 				if (card.getEffect() instanceof LeaderResourceEffect
 						|| (card.getEffect() instanceof MemberChangeEffect
-								&& card.getName().equals("Federico di Montefeltro"))
+								&& card.getName().equals("Federico da Montefeltro"))
 						|| card.getEffect() instanceof WorkAction) {
 					p.getLeaderCards().add(card);
 					removeLD.add(card);

@@ -41,7 +41,7 @@ public class EffectManager {
 	private final Integer SECOND_CHANGE = 2;
 	private final Integer NEEDED = 0;
 	private final Integer TOWER = 0;
-	private final Integer FLOOR = 0;
+	private final Integer FLOOR = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final String UNCOLORED = "Uncolored";
 	private Player player;

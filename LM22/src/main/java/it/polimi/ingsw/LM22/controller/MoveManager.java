@@ -529,6 +529,7 @@ public class MoveManager {
 						&& game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
 								+ workMove.getMemberUsed().getValue() + servants - WORK_MALUS)
 					return false;
+				break;
 			}
 		default:
 			return false;

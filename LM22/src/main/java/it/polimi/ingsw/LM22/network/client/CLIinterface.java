@@ -164,6 +164,7 @@ public class CLIinterface extends AbstractUI {
 				break;
 			default:
 				printInvalidInput();
+				move = "Restart@";
 				break;
 			}
 		}
@@ -383,6 +384,7 @@ public class CLIinterface extends AbstractUI {
 			break;
 		case 0:
 			move = "Restart@";
+			memberMove = false;
 			break;
 		default:
 			printInvalidInput();
@@ -419,6 +421,7 @@ public class CLIinterface extends AbstractUI {
 			break;
 		case 0:
 			move = "Restart@";
+			memberMove = false;
 			break;
 		default:
 			printInvalidInput();
@@ -550,6 +553,7 @@ public class CLIinterface extends AbstractUI {
 	 * WIP
 	 */
 	private void showPersonalBoard() throws RemoteException {
+		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Period: " + game.getPeriod());
 		System.out.printf("%-30s|%n", "| Round: " + game.getRound());
 		System.out.printf("%-30s|%n", "| ");
@@ -572,14 +576,14 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf("%-13s| ",
 						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
 			else
-				System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": ");
+				System.out.printf("%-13s| ", "");
 		System.out.printf("%n| ");
 		for (int i = 2; i < 4; i++)
 			if (!getPlayer(name, game).getMembers().get(i).isUsed())
 				System.out.printf("%-13s| ",
 						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
 			else
-				System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": ");
+				System.out.printf("%-13s| ", "");
 		System.out.printf("%n|_____________________________|__________________%n");
 		System.out.printf("%-12s", "| Coins");
 		System.out.printf("%-12s", "| Wood");
@@ -771,14 +775,37 @@ public class CLIinterface extends AbstractUI {
 		showMarketSpaces();
 		showBoardTracks();
 		showWorkSpaces();
-		showMsg("______________________________");
 		showPersonalBoard();
 		showPersonalCards();
 		showMsg("");
 	}
 
-	private void showWorkSpaces() {
-		//TODO
+	private void showWorkSpaces() throws RemoteException {
+		showMsg("");
+		showMsg("Production bonus: " + getPlayer(name, game).getPersonalBoard().getBonusBoard().getProductionEffect()
+				.getInfo().replaceAll("%n", " "));
+		showMsg("Harvest bonus: " + getPlayer(name, game).getPersonalBoard().getBonusBoard().getHarvestEffect()
+				.getInfo().replaceAll("%n", " "));
+		if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
+				|| !game.getBoardgame().getProductionSpace().getMembers().isEmpty()) {
+			showMsg("______________________________________________________________");
+			System.out.printf("%-30s|%-30s|%n", "| Production players:", " Harvest players:");
+			for (int i = 0; i < game.getBoardgame().getProductionSpace().getMembers().size()
+					|| i < game.getBoardgame().getHarvestSpace().getMembers().size(); i++) {
+				List<FamilyMember> production = game.getBoardgame().getProductionSpace().getMembers();
+				List<FamilyMember> harvest = game.getBoardgame().getHarvestSpace().getMembers();
+				if (game.getBoardgame().getProductionSpace().getMembers().size() > i)
+					System.out.printf("%-30s|", "| " + production.get(i).getPlayer().getNickname());
+				else
+					System.out.printf("%-30s|", "|");
+				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i)
+					System.out.printf("%-30s|%n", " " + harvest.get(i).getPlayer().getNickname());
+				else
+					System.out.printf("%-30s|%n", " ");
+			}
+			showMsg("|_____________________________|______________________________|");
+		}
+
 	}
 
 	private void showMarketSpaces() {
