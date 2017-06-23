@@ -17,6 +17,10 @@ public class LeaderCard implements Serializable {
 		return request;
 	}
 
+	public void setEffect(LeaderEffect effect) {
+		this.effect = effect;
+	}
+
 	public LeaderEffect getEffect() {
 		return effect;
 	}

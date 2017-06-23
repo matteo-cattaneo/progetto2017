@@ -69,12 +69,14 @@ public class VaticanReportManager {
 				// e in base alla risposta si procede diversamente
 				if (!mainGame.askSupport(p)) {
 					exCommunicate(p, period);
-				} else
+				} else {
 					giveResourceDueToChurchSubstain(p);
-					for (Effect e : p.getEffects()){
+					for (Effect e : p.getEffects()) {
 						if (e instanceof ChurchSubstainEffect)
-							resourceHandler.addResource(p.getPersonalBoard().getResources(), ((ChurchSubstainEffect) e).getReward());
+							resourceHandler.addResource(p.getPersonalBoard().getResources(),
+									((ChurchSubstainEffect) e).getReward());
 					}
+				}
 			} else {
 				exCommunicate(p, period);
 				giveResourceDueToChurchSubstain(p);

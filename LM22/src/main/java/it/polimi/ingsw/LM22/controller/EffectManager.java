@@ -238,14 +238,19 @@ public class EffectManager {
 	 * LEADER CARDS' EFFECTS
 	 */
 
-	public void leaderEffectManage(Effect effect, Player player, MainGameController mainGC) {
+	public void leaderEffectManage(Effect effect, Player player, LeaderCard ld, MainGameController mainGC) {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
 			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
-			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass() });
-			if (metodo != null)
+			Method metodo;
+			if (effect instanceof CopyEffect) {
+				metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), ld.getClass() });
+				metodo.invoke(this, new Object[] { effect, ld });
+			} else {
+				metodo = this.getClass().getMethod(name, new Class[] { effect.getClass() });
 				metodo.invoke(this, new Object[] { effect });
+			}
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
@@ -284,14 +289,14 @@ public class EffectManager {
 	public void memberchangeeffectManage(MemberChangeEffect e) throws IOException {
 		String color = e.getTypeOfMember();
 		switch (color) {
-		case "ALL":
+		case "ALL":// ludovico il modo
 			for (FamilyMember m : player.getMembers()) {
 				if (!m.getColor().equals(UNCOLORED))
 					m.setValue(e.getNewValueOfMember());
 			}
 			player.getEffects().add(e);
 			break;
-		case "UNCOLORED":
+		case "UNCOLORED":// malatesta
 			for (FamilyMember m : player.getMembers())
 				if (m.getColor().equals(UNCOLORED)) {
 					m.setValue(e.getNewValueOfMember());
@@ -299,15 +304,14 @@ public class EffectManager {
 					break;
 				}
 			break;
-		case "COLORED": {
+		case "COLORED": // montefeltro (one time)
 			String choice = mainGC.askForColor(player);
 			for (FamilyMember m : player.getMembers())
 				if (m.getColor().equals(choice)) {
-					player.getEffects().add(e);
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}
-		}
+
 		}
 	}
 
@@ -318,7 +322,7 @@ public class EffectManager {
 	public void memberbonuseffectManage(MemberBonusEffect e) {
 		String color = e.getTypeOfMember();
 		switch (color) {
-		case "ALL":
+		case "ALL":// lucrezia
 			for (FamilyMember f : player.getMembers()) {
 				if (!f.getColor().equals(UNCOLORED))
 					f.setValue(f.getValue() + e.getValueOfBonus());
@@ -327,9 +331,6 @@ public class EffectManager {
 		player.getEffects().add(e);
 	}
 
-	/*
-	 * TODO gli effetti vengono aggiunti due volte alla lista
-	 */
 	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {
 		player.getEffects().add(effect);
 	}
@@ -360,7 +361,7 @@ public class EffectManager {
 	 * raccolta la lista si chiede al player richiedente quale carta di vuole
 	 * copiare
 	 */
-	public void copyeffectManage(CopyEffect effect) throws IOException {
+	public void copyeffectManage(CopyEffect effect, LeaderCard ld) throws IOException {
 		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
 		for (Player p : mainGC.getGame().getPlayersOrder()) {
 			if (p != player) {
@@ -381,9 +382,11 @@ public class EffectManager {
 		 * lista degli effetti attivi quello rchiesto (a patto che non sia un
 		 * effetto valido una volta per turno)
 		 */
+
 		for (LeaderCard chosen : lcards) {
 			if (chosen.getName().equals(choice)) {
-				player.getEffects().add(chosen.getEffect());
+				ld.setEffect(chosen.getEffect());
+				leaderEffectManage(ld.getEffect(), player, ld, mainGC);
 			}
 		}
 

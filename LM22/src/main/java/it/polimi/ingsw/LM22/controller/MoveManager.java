@@ -737,16 +737,8 @@ public class MoveManager {
 	 * un effetto permanente
 	 */
 	public void leadercardactivationHandle(LeaderCardActivation move) {
-		/*
-		 * TODO gli effetti vengono aggiunti due volte
-		 */
-		if (!(move.getLeaderCard().getEffect() instanceof LeaderResourceEffect)
-				&& !(move.getLeaderCard().getEffect() instanceof MemberChangeEffect
-						&& ((MemberChangeEffect) move.getLeaderCard().getEffect()).getTypeOfMember().equals("COLORED"))
-				&& !(move.getLeaderCard().getEffect() instanceof WorkAction)) {
-			move.getPlayer().getEffects().add(move.getLeaderCard().getEffect());
-		}
-		effectManager.leaderEffectManage(move.getLeaderCard().getEffect(), move.getPlayer(), mainGame);
+		effectManager.leaderEffectManage(move.getLeaderCard().getEffect(), move.getPlayer(), move.getLeaderCard(),
+				mainGame);
 		move.getPlayer().getActivatedLeaderCards().add(move.getLeaderCard());
 		move.getPlayer().getLeaderCards().remove(move.getLeaderCard());
 		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());

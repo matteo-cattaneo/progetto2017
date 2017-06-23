@@ -70,8 +70,8 @@ public class SocketClient implements IConnection {
 				// ricevo il comando dal server
 				// effettuo uno switch sulla prima parte del comando ricevuto
 				// ed eseguo la relativa procedura
-
 				socketLine = socketIn.readUTF().split("@");
+
 				switch (socketLine[0]) {
 				case "msg":
 					// visualizzo sulla UI un messaggio
@@ -141,7 +141,6 @@ public class SocketClient implements IConnection {
 					break;
 				}
 			}
-
 		} catch (IOException | ClassNotFoundException e) {
 			UI.showMsg("Socket communication error!");
 		}

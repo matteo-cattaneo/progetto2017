@@ -208,11 +208,11 @@
         "reward": {
             "wood": 0,
             "stone": 0,
-            "coins": 5,
+            "coins": 0,
             "servants": 0,
             "faith": 0,
             "military": 0,
-            "victory": 0
+            "victory": 5
         }
     },
     "request": {

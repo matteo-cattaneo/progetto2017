@@ -86,7 +86,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public void printMoveMenu() throws RemoteException {
-		move = "";
+		move = "Restart@";
 		time = System.currentTimeMillis() / 1000;
 		/*
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
@@ -109,70 +109,63 @@ public class CLIinterface extends AbstractUI {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
-			// System.exit(0);
+			System.err.println("You can close this window");
 		}
-		// calcolo il timeout da cui dovrò partire alla possima mossa
+		// calcolo il timeout da cui dovrò partire alla possima mossa dello
+		// stesso turno
 		if (!getMove().equals("End@"))
 			timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
 	}
 
 	private void showPrincipalMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
-		showMsg("Choose your Move:");
-		if (!memberMove)
-			showMsg("1: Move a Member");
-		showMsg("2: Show card");
-		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
-			showMsg("3: Sell a LeaderCard");
-		if (!getPlayer(name, game).getLeaderCards().isEmpty() || !getPlayer(name, game).getHandLeaderCards().isEmpty())
-			showMsg("4: Activate a LeaderCard");
-		showMsg("5: End turn");
-		// showMsg("0: Restart");
-
-		int option = input();
-		switch (option) {
-		case 1:
-			if (!memberMove) {
-				printMemberMoveMenu();
-				break;
-			} else {
-				printInvalidInput();
-				showPrincipalMenu();
-			}
-		case 2:
-			showCard();
-			showPrincipalMenu();
-			break;
-		case 3:
+		// mostro il menu se l utente ha richiesto di rieffettuare la mossa
+		while (move.equals("Restart@")) {
+			move = "";
+			System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+			showMsg("Choose your Move:");
+			if (!memberMove)
+				showMsg("1: Move a Member");
+			showMsg("2: Show card");
 			if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
-				printSellLeaderCardMenu();
-			else {
-				printInvalidInput();
-				showPrincipalMenu();
-			}
-			break;
-		case 4:
+				showMsg("3: Sell a LeaderCard");
 			if (!getPlayer(name, game).getLeaderCards().isEmpty()
 					|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
-				printActivateLeaderCardMenu();
-			else {
+				showMsg("4: Activate a LeaderCard");
+			showMsg("5: End turn");
+
+			int option = input();
+			switch (option) {
+			case 1:
+				if (!memberMove)
+					printMemberMoveMenu();
+				else
+					printInvalidInput();
+				break;
+			case 2:
+				showCard();
+				break;
+			case 3:
+				if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
+					printSellLeaderCardMenu();
+				else
+					printInvalidInput();
+				break;
+			case 4:
+				if (!getPlayer(name, game).getLeaderCards().isEmpty()
+						|| !getPlayer(name, game).getHandLeaderCards().isEmpty())
+					printActivateLeaderCardMenu();
+				else
+					printInvalidInput();
+				break;
+			case 5:
+				setMove("End");
+				memberMove = false;
+				timeout = game.getMoveTimer();
+				break;
+			default:
 				printInvalidInput();
-				showPrincipalMenu();
+				break;
 			}
-			break;
-		case 5:
-			setMove("End");
-			memberMove = false;
-			timeout = game.getMoveTimer();
-			break;
-		// case 0:
-		// move = new String();
-		// showPrincipalMenu();
-		// break;
-		default:
-			printInvalidInput();
-			showPrincipalMenu();
-			break;
 		}
 	}
 
@@ -191,7 +184,7 @@ public class CLIinterface extends AbstractUI {
 		LeaderCard lcard = null;
 		DevelopmentCard card = null;
 		if (!cardName.equals("")) {
-			// verificose è una development card
+			// verifico se è una development card
 			for (int j = 0; j < 4; j++)
 				for (Tower t : game.getBoardgame().getTowers())
 					if (t.getFloor()[j].getCard().getName() != null)
@@ -216,6 +209,7 @@ public class CLIinterface extends AbstractUI {
 		else
 			showMsg("Card not found!");
 		showMsg("");
+		move = "Restart@";
 	}
 
 	@Override
@@ -227,7 +221,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("2: Market");
 		showMsg("3: Work");
 		showMsg("4: Council");
-		// showMsg("0: Restart");
+		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -243,11 +237,10 @@ public class CLIinterface extends AbstractUI {
 		case 4:
 			printCouncilMoveMenu();
 			break;
-		// case 0:
-		// move = new String();
-		// pleaseInsertNumber();
-		// showPrincipalMenu();
-		// break;
+		case 0:
+			move = "Restart@";
+			memberMove = false;
+			break;
 		default:
 			printInvalidInput();
 			printMemberMoveMenu();
@@ -260,9 +253,12 @@ public class CLIinterface extends AbstractUI {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(CARDMOVE);
 		printFamilyMemberMenu();
-		setMove(printServantsAddictionMenu());
-		setMove(printTowersMenu());
-		setMove(printLevelsMenu());
+		if (!move.equals("Restart@"))
+			setMove(printServantsAddictionMenu());
+		if (!move.equals("Restart@"))
+			setMove(printTowersMenu());
+		if (!move.equals("Restart@"))
+			setMove(printLevelsMenu());
 	}
 
 	@Override
@@ -274,7 +270,7 @@ public class CLIinterface extends AbstractUI {
 				showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
 			i++;
 		}
-		// showMsg("0: Restart");
+		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -289,10 +285,10 @@ public class CLIinterface extends AbstractUI {
 				printFamilyMemberMenu();
 			}
 			break;
-		// case 0:
-		// move = new String();
-		// showPrincipalMenu();
-		// break;
+		case 0:
+			move = "Restart@";
+			memberMove = false;
+			break;
 		default:
 			printInvalidInput();
 			printFamilyMemberMenu();
@@ -353,8 +349,10 @@ public class CLIinterface extends AbstractUI {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
-		setMove(printServantsAddictionMenu());
-		printMarketSelectionMenu();
+		if (!move.equals("Restart@"))
+			setMove(printServantsAddictionMenu());
+		if (!move.equals("Restart@"))
+			printMarketSelectionMenu();
 	}
 
 	@Override
@@ -366,7 +364,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("3: Three military points + two coins");
 			showMsg("4: Two different counsil privilege");
 		}
-		// showMsg("0: Restart");
+		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -383,9 +381,9 @@ public class CLIinterface extends AbstractUI {
 				printMarketSelectionMenu();
 			}
 			break;
-		// case 0:
-		// move = new String();
-		// showPrincipalMenu();
+		case 0:
+			move = "Restart@";
+			break;
 		default:
 			printInvalidInput();
 			printMarketSelectionMenu();
@@ -398,8 +396,10 @@ public class CLIinterface extends AbstractUI {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(WORKMOVE);
 		printFamilyMemberMenu();
-		setMove(printServantsAddictionMenu());
-		printWorkSelectionMenu();
+		if (!move.equals("Restart@"))
+			setMove(printServantsAddictionMenu());
+		if (!move.equals("Restart@"))
+			printWorkSelectionMenu();
 	}
 
 	@Override
@@ -407,7 +407,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Choose the Work type:");
 		showMsg("1: Production");
 		showMsg("2: Harvest");
-		// showMsg("0: Restart");
+		showMsg("0: Restart");
 
 		int option = input();
 		switch (option) {
@@ -417,9 +417,9 @@ public class CLIinterface extends AbstractUI {
 		case 2:
 			setMove(HARVEST);
 			break;
-		/*
-		 * case 0: move = new String(); showPrincipalMenu(); break;
-		 */
+		case 0:
+			move = "Restart@";
+			break;
 		default:
 			printInvalidInput();
 			printWorkSelectionMenu();
@@ -432,7 +432,8 @@ public class CLIinterface extends AbstractUI {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
-		setMove(printServantsAddictionMenu());
+		if (!move.equals("Restart@"))
+			setMove(printServantsAddictionMenu());
 	}
 
 	@Override
@@ -444,14 +445,14 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < getPlayer(name, game).getHandLeaderCards().size(); i++) {
 			showMsg((i + 1) + ": " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 		}
-		// showMsg("0: Restart");
+		showMsg("0: Restart");
 
 		int option = input();
 		if (option <= i && option > 0)
 			setMove(getPlayer(name, game).getHandLeaderCards().get(option - 1).getName());
-		/*
-		 * else if (option == 0) { move = new String(); showPrincipalMenu(); }
-		 */else {
+		else if (option == 0) {
+			move = "Restart@";
+		} else {
 			printInvalidInput();
 			printSellLeaderCardMenu();
 		}
@@ -471,14 +472,14 @@ public class CLIinterface extends AbstractUI {
 		for (i = 0; i < ld.size(); i++) {
 			showMsg((i + 1) + ": " + ld.get(i).getName());
 		}
-		/* showMsg("0: Restart"); */
+		showMsg("0: Restart");
 
 		int option = input();
 		if (option <= i && option > 0)
 			setMove(ld.get(option - 1).getName());
-		/*
-		 * else if (option == 0) { move = new String(); showPrincipalMenu(); }
-		 */else {
+		else if (option == 0) {
+			move = "Restart@";
+		} else {
 			printInvalidInput();
 			printActivateLeaderCardMenu();
 		}

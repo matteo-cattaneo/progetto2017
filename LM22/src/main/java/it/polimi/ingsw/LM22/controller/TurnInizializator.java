@@ -106,8 +106,6 @@ public class TurnInizializator {
 			space.setMember(null);
 		}
 		for (int cont = 0; cont < WORKSPACES; cont++) {
-			// TODO qui potremmo avere problemi quando poi ci devo mettere un
-			// familiare
 			game.getBoardgame().getWorkSpace(workType[cont]).setMembers(new ArrayList<FamilyMember>());
 			game.getBoardgame().getWorkSpace(workType[cont]).setColoredMemberOnIt(new ArrayList<String>());
 		}
@@ -221,9 +219,9 @@ public class TurnInizializator {
 		for (Player p : game.getPlayersOrder())
 			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {
-					effectManager.leaderEffectManage(e, p, mainGC);
+					effectManager.leaderEffectManage(e, p, new LeaderCard(), mainGC);
 				} else if (e instanceof MemberBonusEffect) {
-					effectManager.leaderEffectManage(e, p, mainGC);
+					effectManager.leaderEffectManage(e, p, new LeaderCard(), mainGC);
 				}
 			}
 	}
@@ -266,7 +264,6 @@ public class TurnInizializator {
 								&& card.getName().equals("Federico di Montefeltro"))
 						|| card.getEffect() instanceof WorkAction) {
 					p.getLeaderCards().add(card);
-					// p.getActivatedLeaderCards().remove(card);
 					removeLD.add(card);
 				}
 			}
