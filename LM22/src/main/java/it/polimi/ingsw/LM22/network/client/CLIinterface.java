@@ -565,13 +565,21 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
 		System.out.printf("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
 		System.out.printf("%-30s|%n", "| ");
-		// visualizzo i familiari su due righe
+		// visualizzo i familiari su due righe se non ancora utilizzati
 		System.out.printf("%-30s|%n| ", "| Family members:");
 		for (int i = 0; i < 2; i++)
-			System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+			if (!getPlayer(name, game).getMembers().get(i).isUsed())
+				System.out.printf("%-13s| ",
+						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+			else
+				System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": ");
 		System.out.printf("%n| ");
 		for (int i = 2; i < 4; i++)
-			System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+			if (!getPlayer(name, game).getMembers().get(i).isUsed())
+				System.out.printf("%-13s| ",
+						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+			else
+				System.out.printf("%-13s| ", MEMBER_COLOR[i] + ": ");
 		System.out.printf("%n|_____________________________|__________________%n");
 		System.out.printf("%-12s", "| Coins");
 		System.out.printf("%-12s", "| Wood");
@@ -762,13 +770,15 @@ public class CLIinterface extends AbstractUI {
 		showMsg("|_____________________________|");
 		showMarketSpaces();
 		showBoardTracks();
+		showWorkSpaces();
 		showMsg("______________________________");
 		showPersonalBoard();
 		showPersonalCards();
 		showMsg("");
-		/*
-		 * personal board altri giocatori?
-		 */
+	}
+
+	private void showWorkSpaces() {
+		//TODO
 	}
 
 	private void showMarketSpaces() {

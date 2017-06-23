@@ -294,13 +294,15 @@ public class EffectManager {
 				if (!m.getColor().equals(UNCOLORED))
 					m.setValue(e.getNewValueOfMember());
 			}
-			player.getEffects().add(e);
+			if (!player.getEffects().contains(e))
+				player.getEffects().add(e);
 			break;
 		case "UNCOLORED":// malatesta
 			for (FamilyMember m : player.getMembers())
 				if (m.getColor().equals(UNCOLORED)) {
 					m.setValue(e.getNewValueOfMember());
-					player.getEffects().add(e);
+					if (!player.getEffects().contains(e))
+						player.getEffects().add(e);
 					break;
 				}
 			break;
@@ -328,7 +330,8 @@ public class EffectManager {
 					f.setValue(f.getValue() + e.getValueOfBonus());
 			}
 		}
-		player.getEffects().add(e);
+		if (!player.getEffects().contains(e))
+			player.getEffects().add(e);
 	}
 
 	public void nooccupiedtowereffectManage(NoOccupiedTowerEffect effect) {
