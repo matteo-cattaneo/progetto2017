@@ -359,11 +359,11 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
 		showMsg("Choose the Market space:");
-		showMsg("1: Five coins");
-		showMsg("2: Five servants");
+		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo());
+		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo());
 		if (game.getPlayers().length == 4) {
-			showMsg("3: Three military points + two coins");
-			showMsg("4: Two different counsil privilege");
+			showMsg("3: " + game.getBoardgame().getMarket()[2].getReward().getInfo());
+			showMsg("4: " + game.getBoardgame().getMarket()[3].getCouncilPrivilege() + "different council Privilege(s)");
 		}
 		showMsg("0: Restart");
 
@@ -633,14 +633,14 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf("%-30s|______________________________________________________________",
+			System.out.printf("%-30s|____________________________________________________________________________________",
 					"| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				System.out.printf("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|_____________________________________________________________|");
+			showMsg("|_____________________________|___________________________________________________________________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
 			System.out.printf(
@@ -655,14 +655,14 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf("%-30s|______________________________________________________________",
+			System.out.printf("%-30s|____________________________________________________________________________________",
 					"| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				System.out.printf("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|_____________________________________________________________|");
+			showMsg("|_____________________________|___________________________________________________________________________________|");
 		}
 	}
 
@@ -788,22 +788,36 @@ public class CLIinterface extends AbstractUI {
 				.getInfo().replaceAll("%n", " "));
 		if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
 				|| !game.getBoardgame().getProductionSpace().getMembers().isEmpty()) {
-			showMsg("______________________________________________________________");
-			System.out.printf("%-30s|%-30s|%n", "| Production players:", " Harvest players:");
+			showMsg("_________________________________________________________________________________");
+			System.out.printf("%-40s|%-40s|%n", "| Production players:", " Harvest players:");
 			for (int i = 0; i < game.getBoardgame().getProductionSpace().getMembers().size()
 					|| i < game.getBoardgame().getHarvestSpace().getMembers().size(); i++) {
 				List<FamilyMember> production = game.getBoardgame().getProductionSpace().getMembers();
 				List<FamilyMember> harvest = game.getBoardgame().getHarvestSpace().getMembers();
-				if (game.getBoardgame().getProductionSpace().getMembers().size() > i)
-					System.out.printf("%-30s|", "| " + production.get(i).getPlayer().getNickname());
+//				da sistemare, deve stampare il colore del player se il familiare è colorato
+//				altrimenti deve stampare uncolored --> per adesso stampa sempre il colore del player
+				if (game.getBoardgame().getProductionSpace().getMembers().size() > i){
+					String prodColor;
+					if (!production.get(i).getColor().equals("Uncolored"))
+						prodColor = production.get(i).getPlayer().getColor();
+					else
+						prodColor = "Uncolored";
+					System.out.printf("%-40s|", "| " + production.get(i).getPlayer().getNickname() + " - " + prodColor);
+				}
 				else
-					System.out.printf("%-30s|", "|");
-				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i)
-					System.out.printf("%-30s|%n", " " + harvest.get(i).getPlayer().getNickname());
+					System.out.printf("%-40s|", "|");
+				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i){
+					String harvColor;
+					if (!harvest.get(i).getColor().equals("Uncolored"))
+						harvColor = harvest.get(i).getPlayer().getColor();
+					else
+						harvColor = "Uncolored";
+					System.out.printf("%-40s|%n", " " + harvest.get(i).getPlayer().getNickname() + " - " + harvColor);
+				}
 				else
-					System.out.printf("%-30s|%n", " ");
+					System.out.printf("%-40s|%n", " ");
 			}
-			showMsg("|_____________________________|______________________________|");
+			showMsg("|_______________________________________|________________________________________|");
 		}
 
 	}
@@ -864,7 +878,7 @@ public class CLIinterface extends AbstractUI {
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				if (ms.getMember() == null && !ms.getCouncilPrivilege().equals(0))
-					System.out.printf("%-19s| ", "-PdC: " + ms.getCouncilPrivilege());
+					System.out.printf("%-19s| ", "-Privilege: " + ms.getCouncilPrivilege());
 				else
 					System.out.printf("%-19s| ", " ");
 				nMark++;
@@ -877,7 +891,7 @@ public class CLIinterface extends AbstractUI {
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				if (ms.getMember() == null)
-					System.out.printf("%-19s| ", "Requirement:" + ms.getSpaceRequirement());
+					System.out.printf("%-19s| ", "Requirement: " + ms.getSpaceRequirement());
 				else
 					System.out.printf("%-19s| ", " ");
 				nMark++;
@@ -971,8 +985,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("1: Resource cost");
 		System.out.printf(vc.getCardCost1().getInfo());
 		showMsg("2: Military points cost");
-		System.out.println("Requirement: " + vc.getCardCost2()[0].getMilitary() + "military points");
-		System.out.println("Cost: " + vc.getCardCost2()[1].getMilitary() + "military points");
+		System.out.println("Requirement: " + vc.getCardCost2()[0].getMilitary() + " military points");
+		System.out.println("Cost: " + vc.getCardCost2()[1].getMilitary() + " military points");
 
 		int option = input();
 		switch (option) {
@@ -1053,6 +1067,8 @@ public class CLIinterface extends AbstractUI {
 		this.game = game;
 		showMsg("");
 		showMsg("Choose a personal bonus tile:");
+//		sarebbe bello mostrarle in colonna se possibile tipo così...
+//		System.out.printf("%-20s|%-20s|%-20s|%-20s|%n", "| Number 1:", "| Number 2:", "| Number 3:", "| Number 4:" );
 		int i;
 		for (i = 0; i < game.getPersonalBonusTile().length; i++) {
 			if (game.getPersonalBonusTile()[i] != null) {
