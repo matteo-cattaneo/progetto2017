@@ -21,6 +21,7 @@ import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.FamilyMember;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.MarketSpace;
+import it.polimi.ingsw.LM22.model.PersonalBonusTile;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
@@ -363,7 +364,8 @@ public class CLIinterface extends AbstractUI {
 		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo());
 		if (game.getPlayers().length == 4) {
 			showMsg("3: " + game.getBoardgame().getMarket()[2].getReward().getInfo());
-			showMsg("4: " + game.getBoardgame().getMarket()[3].getCouncilPrivilege() + "different council Privilege(s)");
+			showMsg("4: " + game.getBoardgame().getMarket()[3].getCouncilPrivilege()
+					+ "different council Privilege(s)");
 		}
 		showMsg("0: Restart");
 
@@ -633,7 +635,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf("%-30s|____________________________________________________________________________________",
+			System.out.printf(
+					"%-30s|____________________________________________________________________________________",
 					"| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
@@ -655,7 +658,8 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf("%-30s|____________________________________________________________________________________",
+			System.out.printf(
+					"%-30s|____________________________________________________________________________________",
 					"| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
 				System.out.printf("%n%-30s| ", "| " + c.getName());
@@ -794,27 +798,23 @@ public class CLIinterface extends AbstractUI {
 					|| i < game.getBoardgame().getHarvestSpace().getMembers().size(); i++) {
 				List<FamilyMember> production = game.getBoardgame().getProductionSpace().getMembers();
 				List<FamilyMember> harvest = game.getBoardgame().getHarvestSpace().getMembers();
-//				da sistemare, deve stampare il colore del player se il familiare è colorato
-//				altrimenti deve stampare uncolored --> per adesso stampa sempre il colore del player
-				if (game.getBoardgame().getProductionSpace().getMembers().size() > i){
+				if (game.getBoardgame().getProductionSpace().getMembers().size() > i) {
 					String prodColor;
 					if (!production.get(i).getColor().equals("Uncolored"))
 						prodColor = production.get(i).getPlayer().getColor();
 					else
 						prodColor = "Uncolored";
 					System.out.printf("%-40s|", "| " + production.get(i).getPlayer().getNickname() + " - " + prodColor);
-				}
-				else
+				} else
 					System.out.printf("%-40s|", "|");
-				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i){
+				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i) {
 					String harvColor;
 					if (!harvest.get(i).getColor().equals("Uncolored"))
 						harvColor = harvest.get(i).getPlayer().getColor();
 					else
 						harvColor = "Uncolored";
 					System.out.printf("%-40s|%n", " " + harvest.get(i).getPlayer().getNickname() + " - " + harvColor);
-				}
-				else
+				} else
 					System.out.printf("%-40s|%n", " ");
 			}
 			showMsg("|_______________________________________|________________________________________|");
@@ -1062,25 +1062,140 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
+	/*
+	 * visualisso all utente la scelta delle personal tile in colonna
+	 */
 	@Override
 	public Integer selectPersonalTile(Game game) throws RemoteException {
 		this.game = game;
-		showMsg("");
-		showMsg("Choose a personal bonus tile:");
-//		sarebbe bello mostrarle in colonna se possibile tipo così...
-//		System.out.printf("%-20s|%-20s|%-20s|%-20s|%n", "| Number 1:", "| Number 2:", "| Number 3:", "| Number 4:" );
 		int i;
-		for (i = 0; i < game.getPersonalBonusTile().length; i++) {
-			if (game.getPersonalBonusTile()[i] != null) {
-				showMsg((i + 1) + ": ");
-				showMsg("Harvest effect:");
-				System.out.printf(
-						game.getPersonalBonusTile()[i].getHarvestEffect().getInfo().replaceAll("You earn%n", ""));
-				showMsg("Production effect:");
-				System.out.printf(
-						game.getPersonalBonusTile()[i].getProductionEffect().getInfo().replaceAll("You earn%n", ""));
-			}
+		PersonalBonusTile pbt[] = game.getPersonalBonusTile();
+		for (i = 0; i < pbt.length; i++)
+			if (pbt[i] != null)
+				System.out.print("______________________");
+		System.out.printf("%n| ");
+		// intestazione generale
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				System.out.printf("%-20s| ", "Number " + (i + 1) + ":");
 		}
+		System.out.printf("%n|");
+		for (i = 0; i < pbt.length; i++)
+			if (pbt[i] != null)
+				System.out.print("_____________________|");
+		System.out.printf("%n| ");
+		// intestazione Harvest
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				System.out.printf("%-20s| ", "Harvest effect:");
+		}
+		System.out.printf("%n| ");
+		// Harvest effect wood
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getHarvestEffect().getResource().getWood().equals(0))
+					System.out.printf("%-20s| ", "Woods: " + pbt[i].getHarvestEffect().getResource().getWood());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Harvest effect stone
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getHarvestEffect().getResource().getStone().equals(0))
+					System.out.printf("%-20s| ", "Stones: " + pbt[i].getHarvestEffect().getResource().getStone());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Harvest effect coins
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getHarvestEffect().getResource().getCoins().equals(0))
+					System.out.printf("%-20s| ", "Coins: " + pbt[i].getHarvestEffect().getResource().getCoins());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Harvest effect servants
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getHarvestEffect().getResource().getServants().equals(0))
+					System.out.printf("%-20s| ", "Servants: " + pbt[i].getHarvestEffect().getResource().getServants());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Harvest effect military
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getHarvestEffect().getResource().getMilitary().equals(0))
+					System.out.printf("%-20s| ", "Military: " + pbt[i].getHarvestEffect().getResource().getMilitary());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n|");
+		for (i = 0; i < pbt.length; i++)
+			if (pbt[i] != null)
+				System.out.print("_____________________|");
+		System.out.printf("%n| ");
+		// intestazione Production
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				System.out.printf("%-20s| ", "Production effect:");
+		}
+		System.out.printf("%n| ");
+		// Production effect wood
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getProductionEffect().getResource().getWood().equals(0))
+					System.out.printf("%-20s| ", "Woods: " + pbt[i].getProductionEffect().getResource().getWood());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Production effect stone
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getProductionEffect().getResource().getStone().equals(0))
+					System.out.printf("%-20s| ", "Stones: " + pbt[i].getProductionEffect().getResource().getStone());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Production effect coins
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getProductionEffect().getResource().getCoins().equals(0))
+					System.out.printf("%-20s| ", "Coins: " + pbt[i].getProductionEffect().getResource().getCoins());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Production effect servants
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getProductionEffect().getResource().getServants().equals(0))
+					System.out.printf("%-20s| ",
+							"Servants: " + pbt[i].getProductionEffect().getResource().getServants());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n| ");
+		// Production effect military
+		for (i = 0; i < pbt.length; i++) {
+			if (pbt[i] != null)
+				if (!pbt[i].getProductionEffect().getResource().getMilitary().equals(0))
+					System.out.printf("%-20s| ",
+							"Military: " + pbt[i].getProductionEffect().getResource().getMilitary());
+				else
+					System.out.printf("%-20s| ", "");
+		}
+		System.out.printf("%n|");
+		for (i = 0; i < pbt.length; i++)
+			if (pbt[i] != null)
+				System.out.print("_____________________|");
+		System.out.printf("%nChoose a personal bonus tile:%n");
 		int option = input();
 		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null) {
 			showMsg("Wait other player...");
@@ -1111,8 +1226,6 @@ public class CLIinterface extends AbstractUI {
 	public void selectLeaderCard(Game game) throws RemoteException {
 		leaderSelected = "";
 		this.game = game;
-		showMsg("");
-
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
 			showMsg("______________________________");
 			System.out.printf("%-30s|%n", "| Selected leader cards:");
@@ -1120,16 +1233,15 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf("%-30s|%n", "| " + ld.getName());
 			showMsg("|_____________________________|");
 		}
-		showMsg("");
-
 		int i = 1;
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Choose a Leader card:");
+		System.out.printf("%-30s|%n", "| LeaderCard to be selected");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards()) {
 			System.out.printf("%-30s|%n", "| " + i + ": " + ld.getName());
 			i++;
 		}
 		showMsg("|_____________________________|");
+		showMsg("Choose a Leader card:");
 		int option = input();
 		if (option <= i && option > 0) {
 			showMsg("Wait other player...");
