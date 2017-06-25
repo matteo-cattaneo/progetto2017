@@ -74,7 +74,7 @@ public class StartServer {
 				// verifico se si è connesso un client su una delle due
 				// connessioni
 				while (serverRMI.getClient() == null && !conn.getSocket().isConnected()) {
-					System.out.print("");
+					Thread.sleep(1);
 				}
 			}
 			/*
@@ -131,12 +131,12 @@ public class StartServer {
 	private void cleanServer() {
 		// pulizia dalla lista delle room delle room vuote (partite già
 		// terminate)
-		// for (int i = 0; i < serverInfo.size();) {
-		// if (serverInfo.get(i).isEmpty()) {
-		// serverInfo.remove(i);
-		// } else
-		// i++;
-		// }
+		for (int i = 0; i < serverInfo.size();) {
+			if (serverInfo.get(i).isEmpty()) {
+				serverInfo.remove(i);
+			} else
+				i++;
+		}
 	}
 
 	// verifica la connessione di un client con timeout

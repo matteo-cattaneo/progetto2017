@@ -3,15 +3,8 @@ package it.polimi.ingsw.LM22.controller;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -355,50 +348,8 @@ public class MainGameController implements Runnable {
 			}
 		}
 		return;
-		/* sortMilitaryRanking(createMilitaryHashMap(game)); */
 	}
-
-	private HashMap<Player, Integer> createMilitaryHashMap(Game game) {
-		HashMap<Player, Integer> map = new HashMap<Player, Integer>();
-		for (Player p : game.getPlayers()) {
-			map.put(p, p.getPersonalBoard().getResources().getMilitary());
-		}
-		return map;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void sortMilitaryRanking(HashMap<Player, Integer> hmap) {
-		HashMap<Integer, Player> map = sortByValues(hmap);
-		Set set2 = map.entrySet();
-		Iterator iterator2 = set2.iterator();
-		while (iterator2.hasNext()) {
-			Map.Entry me2 = (Map.Entry) iterator2.next();
-		}
-
-		// chiamata per distribuzione punti vittoria in base a classifica
-		// militare
-		// givePointsDueToMilitaryStanding()
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private HashMap sortByValues(HashMap<Player, Integer> map) {
-		List list = new LinkedList(map.entrySet());
-		// Defined Custom Comparator here
-		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());
-			}
-		});
-		// Here I am copying the sorted list in HashMap
-		// using LinkedHashMap to preserve the insertion order
-		HashMap sortedHashMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			sortedHashMap.put(entry.getKey(), entry.getValue());
-		}
-		return sortedHashMap;
-	}
-
+	
 	/*
 	 * metodo che gestisce l'attribuzione dei punti vittoria in base al numero
 	 * di carte territorio o personaggio che ogni player ha ottenuto +
@@ -515,12 +466,13 @@ public class MainGameController implements Runnable {
 		}
 		for (Player p : game.getPlayersOrder()) {
 			if (p.getPersonalBoard().getResources().getVictory().equals(max)) {
-				showMsgAll("The winner is " + p.getNickname() + "with a total of "
-						+ p.getPersonalBoard().getResources().getVictory() + "victory Points!!");
+				showMsgAll("The winner is " + p.getNickname() + " with a total of "
+						+ p.getPersonalBoard().getResources().getVictory() + " victory Points!!");
 			}
 		}
 		for (Player p : game.getPlayersOrder()) {
-			showMsgAll(p.getNickname() + " has ended the game with " + p.getPersonalBoard().getResources().getInfo());
+			showMsgAll(p.getNickname() + " has ended the game with "
+					+ p.getPersonalBoard().getResources().getInfo().replace("%n", " "));
 		}
 	}
 

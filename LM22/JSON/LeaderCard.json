@@ -360,6 +360,28 @@
         "buildingCards": 4,
         "ventureCards": 0
     }
+},{
+    "name": "Pico della Mirandola",
+    "effect": {
+        "type": "CoinsDiscountEffect",
+        "discount": {
+            "wood": 0,
+            "stone": 0,
+            "coins": 3,
+            "servants": 0,
+            "faith": 0,
+            "military": 0,
+            "victory": 0
+        },
+        "councilPrivilege": 0
+    },
+    "request": {
+        "type": "CardRequest",
+        "territoryCards": 0,
+        "characterCards": 0,
+        "buildingCards": 2,
+        "ventureCards": 4
+    }
 }, {
     "name": "Bartolomeo Colleoni",
     "effect": {

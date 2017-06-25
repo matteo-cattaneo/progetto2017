@@ -44,6 +44,7 @@ public class EffectManager {
 	private final Integer FLOOR = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final String UNCOLORED = "Uncolored";
+	private final String ACTION = "Action";
 	private Player player;
 	private MainGameController mainGC;
 	private MoveManager moveManager;
@@ -188,7 +189,7 @@ public class EffectManager {
 		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 		Resource servants = mainGC.askForServants(player);
-		FamilyMember other = new FamilyMember(player, UNCOLORED);
+		FamilyMember other = new FamilyMember(player, ACTION);
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
@@ -269,7 +270,7 @@ public class EffectManager {
 	 */
 	public void workactionManage(WorkAction effect) throws IOException {
 		Resource servants = mainGC.askForServants(player);
-		FamilyMember other = new FamilyMember(player, UNCOLORED);
+		FamilyMember other = new FamilyMember(player, ACTION);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
@@ -376,23 +377,16 @@ public class EffectManager {
 				}
 			}
 		}
-		String choice = mainGC.askToPlayerForEffectToCopy(player, lcards);
-		/*
-		 * qui va modificato il comportamento in base al tipo di effetto che è
-		 * stato scelto POSSIBILI SOLUZIONI - modifico l'effetto della carta da
-		 * CopyEffect a quello nuovo richiesto (necessita di avere la carta
-		 * leader attivata e va bene per effetti permanenti) - aggiungo alla
-		 * lista degli effetti attivi quello rchiesto (a patto che non sia un
-		 * effetto valido una volta per turno)
-		 */
-
-		for (LeaderCard chosen : lcards) {
-			if (chosen.getName().equals(choice)) {
-				ld.setEffect(chosen.getEffect());
-				leaderEffectManage(ld.getEffect(), player, ld, mainGC);
+		String choice = "";
+		if (!lcards.isEmpty()) {
+			mainGC.askToPlayerForEffectToCopy(player, lcards);
+			for (LeaderCard chosen : lcards) {
+				if (chosen.getName().equals(choice)) {
+					ld.setEffect(chosen.getEffect());
+					leaderEffectManage(ld.getEffect(), player, ld, mainGC);
+				}
 			}
 		}
-
 	}
 
 }

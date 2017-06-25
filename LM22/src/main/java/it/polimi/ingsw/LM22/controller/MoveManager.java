@@ -40,6 +40,7 @@ import it.polimi.ingsw.LM22.model.WorkBonusEffect;
 public class MoveManager {
 	private static final Logger LOGGER = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
 	private final String UNCOLORED = "Uncolored";
+	private final String ACTION = "Action";
 	private final Integer SINGLE_PRIVILEGE = 1;
 	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
@@ -288,9 +289,9 @@ public class MoveManager {
 		Resource res = cost.clone();
 		for (Effect e : cardMove.getPlayer().getEffects()) {
 			if (e instanceof ColorCardBonusEffect && ((ColorCardBonusEffect) e).getCardType().equals(tower))
-				resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
+				res = resourceHandler.cardDiscounted(res, ((ColorCardBonusEffect) e).getCardDiscount());
 			else if (e instanceof CoinsDiscountEffect) {
-				resourceHandler.cardDiscounted(res, ((CoinsDiscountEffect) e).getDiscount());
+				res = resourceHandler.cardDiscounted(res, ((CoinsDiscountEffect) e).getDiscount());
 			}
 		}
 		return res;
@@ -494,16 +495,18 @@ public class MoveManager {
 		switch (game.getPlayersOrder().size()) {
 		case 2:
 			if (workMove.getWorkType().equals("PRODUCTION")) {
-				if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
-						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
+				if (!(game.getBoardgame().getProductionSpace().getMembers().isEmpty()
+						|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
+						|| workMove.getMemberUsed().getColor().equals(ACTION)))
 					return false;
 				if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
 					return false;
 				break;
 			} else {
-				if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
-						&& !containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class))
+				if (!(game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
+						|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
+						|| workMove.getMemberUsed().getColor().equals(ACTION)))
 					return false;
 				if (game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
 						+ workMove.getMemberUsed().getValue() + servants)
@@ -577,9 +580,10 @@ public class MoveManager {
 		Integer valueOfAction = move.getMemberUsed().getValue() + servants + power;
 		if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty())
 			valueOfAction = valueOfAction - WORK_MALUS;
-		game.getBoardgame().getProductionSpace().getMembers().add(move.getMemberUsed());
+		if (!move.getMemberUsed().getColor().equals(ACTION))
+			game.getBoardgame().getProductionSpace().getMembers().add(move.getMemberUsed());
 		move.getMemberUsed().setUsed(true);
-		if (!move.getMemberUsed().getColor().equals(UNCOLORED))
+		if (!move.getMemberUsed().getColor().equals(UNCOLORED) && !move.getMemberUsed().getColor().equals(ACTION))
 			game.getBoardgame().getProductionSpace().getColoredMemberOnIt().add(move.getPlayer().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING.clone();
@@ -602,9 +606,10 @@ public class MoveManager {
 		Integer valueOfAction = move.getMemberUsed().getValue() + power + servants;
 		if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty())
 			valueOfAction = valueOfAction - WORK_MALUS;
-		game.getBoardgame().getHarvestSpace().getMembers().add(move.getMemberUsed());
+		if (!move.getMemberUsed().getColor().equals(ACTION))
+			game.getBoardgame().getHarvestSpace().getMembers().add(move.getMemberUsed());
 		move.getMemberUsed().setUsed(true);
-		if (!move.getMemberUsed().getColor().equals(UNCOLORED))
+		if (!move.getMemberUsed().getColor().equals(UNCOLORED) && !move.getMemberUsed().getColor().equals(ACTION))
 			game.getBoardgame().getHarvestSpace().getColoredMemberOnIt().add(move.getMemberUsed().getColor());
 		resourceHandler.subResource(move.getPlayer().getPersonalBoard().getResources(), move.getServantsAdded());
 		Resource total = NOTHING.clone();

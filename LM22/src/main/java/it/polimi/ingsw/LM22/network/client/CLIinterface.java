@@ -183,8 +183,9 @@ public class CLIinterface extends AbstractUI {
 		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		showMsg("Insert the card name: (no case sensitive)");
 		String cardName = in.nextLine();
-		LeaderCard lcard = null;
 		DevelopmentCard card = null;
+		boolean leader = false;
+		showMsg("");
 		if (!cardName.equals("")) {
 			// verifico se è una development card
 			for (int j = 0; j < 4; j++)
@@ -192,26 +193,33 @@ public class CLIinterface extends AbstractUI {
 					if (t.getFloor()[j].getCard().getName() != null)
 						if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
 							card = t.getFloor()[j].getCard();
-			// verifico se è una leader card
-			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-					lcard = ld;
-			for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-					lcard = ld;
-			for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
-				if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
-					lcard = ld;
+			leader = showLeader(cardName);
 		}
-		showMsg("");
 		if (card != null)
 			System.out.printf(card.getInfo());
-		else if (lcard != null)
-			System.out.printf(lcard.getInfo());
-		else
+		else if (!leader)
 			showMsg("Card not found!");
 		showMsg("");
 		move = "Restart@";
+	}
+
+	private boolean showLeader(String cardName) throws RemoteException {
+		LeaderCard lcard = null;
+		// verifico se è una leader card
+		for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
+		for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
+		for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
+			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
+				lcard = ld;
+		if (lcard != null) {
+			System.out.printf(lcard.getInfo());
+			return true;
+		} else
+			return false;
 	}
 
 	@Override
@@ -360,10 +368,10 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
 		showMsg("Choose the Market space:");
-		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo());
-		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo());
+		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo().replaceAll("%n", " "));
+		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo().replaceAll("%n", " "));
 		if (game.getPlayers().length == 4) {
-			showMsg("3: " + game.getBoardgame().getMarket()[2].getReward().getInfo());
+			showMsg("3: " + game.getBoardgame().getMarket()[2].getReward().getInfo().replaceAll("%n", " "));
 			showMsg("4: " + game.getBoardgame().getMarket()[3].getCouncilPrivilege()
 					+ "different council Privilege(s)");
 		}
@@ -595,31 +603,40 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
 		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
 		System.out.printf("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
-		showMsg("|___________|___________|___________|___________|");
+		showMsg("|___________|___________|___________|___________|_____________________________________________");
 
 	}
 
 	private void showPersonalCards() throws RemoteException {
-		// Hand LeaderCard
-		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Hand leader cards:");
-			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-				System.out.printf("%-30s|%n", "| " + ld.getName());
-			showMsg("|_____________________________|");
-		}
-		// Activated LeaderCard
-		if (!getPlayer(name, game).getActivatedLeaderCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Activated leader cards:");
-			for (LeaderCard ld : getPlayer(name, game).getActivatedLeaderCards())
-				System.out.printf("%-30s|%n", "| " + ld.getName());
-			showMsg("|_____________________________|");
-		}
-		// LeaderCard
-		if (!getPlayer(name, game).getLeaderCards().isEmpty()) {
-			System.out.printf("%-30s|%n", "| Table leader cards:");
-			for (LeaderCard ld : getPlayer(name, game).getLeaderCards())
-				System.out.printf("%-30s|%n", "| " + ld.getName());
-			showMsg("|_____________________________|");
+		// Leader cards
+		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()
+				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty()
+				|| !getPlayer(name, game).getLeaderCards().isEmpty()) {
+			System.out.printf("|%-30s|", " Hand leader cards:");
+			System.out.printf("%-30s|", " Table leader cards:");
+			System.out.printf("%-30s|%n|", " Activated leader cards:");
+			// calcolo il massimo numero di righe della tabella
+			int max = getPlayer(name, game).getHandLeaderCards().size();
+			if (getPlayer(name, game).getLeaderCards().size() > max)
+				max = getPlayer(name, game).getLeaderCards().size();
+			if (getPlayer(name, game).getActivatedLeaderCards().size() > max)
+				max = getPlayer(name, game).getActivatedLeaderCards().size();
+			for (int i = 0; i < max; i++) {
+				if (i < getPlayer(name, game).getHandLeaderCards().size())
+					System.out.printf("%-30s|", " " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
+				else
+					System.out.printf("%-30s|", "");
+				if (i < getPlayer(name, game).getLeaderCards().size())
+					System.out.printf("%-30s|", " " + getPlayer(name, game).getLeaderCards().get(i).getName());
+				else
+					System.out.printf("%-30s|", "");
+				if (i < getPlayer(name, game).getActivatedLeaderCards().size())
+					System.out.printf("%-30s|", " " + getPlayer(name, game).getActivatedLeaderCards().get(i).getName());
+				else
+					System.out.printf("%-30s|", "");
+				System.out.printf("%n|", "");
+			}
+			showMsg("______________________________|______________________________|______________________________|");
 		}
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
@@ -1054,7 +1071,7 @@ public class CLIinterface extends AbstractUI {
 		}
 
 		int option = input();
-		if (option <= i)
+		if (option <= i && option > 0)
 			return lcards.get(option - 1).getName();
 		else {
 			printInvalidInput();
@@ -1233,19 +1250,25 @@ public class CLIinterface extends AbstractUI {
 				System.out.printf("%-30s|%n", "| " + ld.getName());
 			showMsg("|_____________________________|");
 		}
-		int i = 1;
+		int i = 0;
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| LeaderCard to be selected");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards()) {
-			System.out.printf("%-30s|%n", "| " + i + ": " + ld.getName());
+			System.out.printf("%-30s|%n", "| " + (i + 1) + ": " + ld.getName());
 			i++;
 		}
+		System.out.printf("%-30s|%n", "| 0: Show card info");
 		showMsg("|_____________________________|");
 		showMsg("Choose a Leader card:");
 		int option = input();
 		if (option <= i && option > 0) {
 			showMsg("Wait other player...");
 			leaderSelected = getPlayer(name, game).getLeaderCards().get(option - 1).getName();
+		} else if (option == 0) {
+			showMsg("Insert the card name: (no case sensitive)");
+			String cardName = in.nextLine();
+			showLeader(cardName);
+			selectLeaderCard(game);
 		} else {
 			printInvalidInput();
 			selectLeaderCard(game);
