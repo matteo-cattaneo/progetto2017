@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 import it.polimi.ingsw.LM22.controller.MainGameController;
 import it.polimi.ingsw.LM22.model.FileParser;
 
+/**
+ * classe principale del server, attende la connessione dei giocatori e crea le room di gioco
+ */
 public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
 	private final static int SOCKET_PORT = 1337;
@@ -53,8 +56,10 @@ public class StartServer {
 		Naming.rebind("rmi://localhost/MSG", serverRMI);
 	}
 
-	// metodo che attende la connessione del client su entrambe le connessioni e
-	// al raggiungimento dei requisiti crea una partita
+	/**
+	 * metodo che attende la connessione del client su entrambe le connessioni e
+	 * al raggiungimento dei requisiti crea una partita
+	 */
 
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
@@ -71,13 +76,15 @@ public class StartServer {
 				if (t == 0)
 					break;
 			} else {
-				// verifico se si è connesso un client su una delle due
-				// connessioni
+				/**
+				 * verifico se si è connesso un client su una delle
+				 * dueconnessioni
+				 */
 				while (serverRMI.getClient() == null && !conn.getSocket().isConnected()) {
 					Thread.sleep(1);
 				}
 			}
-			/*
+			/**
 			 * a secondo del tipo di client connesso effettuo la giusta
 			 * inizializzazione del player e la reinizializzazione dell' oggetto
 			 * di connessione
@@ -103,14 +110,16 @@ public class StartServer {
 				i++;
 			}
 		}
-		// avvio thread della partita (controller) passandogli la lista dei
-		// giocatori
+		/**
+		 * avvio thread della partita (controller) passandogli la lista dei
+		 * giocatori
+		 */
 		executor.submit(new MainGameController(playerRoom));
 		cleanServer();
 		start();
 	}
 
-	/*
+	/**
 	 * verifico se un player è già stato inserito in una partita in corso
 	 */
 	private boolean playerExist(PlayerInfo player) throws IOException {
@@ -128,9 +137,10 @@ public class StartServer {
 		return false;
 	}
 
+	/**
+	 * pulizia dalla lista delle room delle room vuote (partite giàterminate)
+	 */
 	private void cleanServer() {
-		// pulizia dalla lista delle room delle room vuote (partite già
-		// terminate)
 		for (int i = 0; i < serverInfo.size();) {
 			if (serverInfo.get(i).isEmpty()) {
 				serverInfo.remove(i);
@@ -139,7 +149,9 @@ public class StartServer {
 		}
 	}
 
-	// verifica la connessione di un client con timeout
+	/**
+	 * verifica la connessione di un client con timeout
+	 */
 	public Integer attesaLogin(Integer t, SocketConnection conn) throws RemoteException, InterruptedException {
 		for (; t > 0; t--) {
 			System.out.println("Mancano " + t + " secondi");
@@ -153,7 +165,9 @@ public class StartServer {
 	}
 }
 
-// classe che gestisce le connessoni socket
+/**
+ * classe che gestisce le connessoni socket
+ */
 class SocketConnection implements Runnable {
 	private Socket socket = new Socket();
 	private ServerSocket serverSocket;

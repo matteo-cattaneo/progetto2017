@@ -2,7 +2,7 @@ package it.polimi.ingsw.LM22.network.client;
 
 import java.rmi.RemoteException;
 
-/*
+/**
  * Interfaccia estesa da RMIClient e SOCKETclient
  * interfaccia dedicata esclusivamente alla gestione della comunicazione lato clinet
  */

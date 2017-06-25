@@ -10,6 +10,9 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * classe principale del client, chiede all'utente le informazioni necessarie alla connessione e all'inizio della partita
+ */
 public class StartClient {
 	private static final Logger LOGGER = Logger.getLogger(StartClient.class.getClass().getSimpleName());
 
@@ -31,7 +34,7 @@ public class StartClient {
 		AbstractUI UI = printUISelection();
 		// richiedo tipo connessione
 		IConnection client = selectConnectionType(UI);
-		/*
+		/**
 		 * con i metodi relativi alla prpria connessione e UI, effettuo la
 		 * connessione
 		 */
@@ -42,7 +45,8 @@ public class StartClient {
 			LOGGER.log(Level.SEVERE, "Connection server error!", e);
 		}
 	}
-	/*
+
+	/**
 	 * permette la scelta dell' interfaccia da utilizzare durante la partita e
 	 * inizializza con il giusto tipo dinamico
 	 */
@@ -69,6 +73,8 @@ public class StartClient {
 		case 1:
 			System.err.println("GUI - WIP");
 			UI = new GUIinterface();
+			System.out.println("CLI interface automatically selected!");
+			UI = new CLIinterface();
 			break;
 		case 2:
 			UI = new CLIinterface();
@@ -84,7 +90,7 @@ public class StartClient {
 
 	private IConnection selectConnectionType(AbstractUI UI) {
 		IConnection client = null;
-		/*
+		/**
 		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
 		 * e inizializzo con il giusto tipo dinamico
 		 */

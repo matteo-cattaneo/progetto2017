@@ -32,7 +32,7 @@ public class InitialConfigurator extends TurnInizializator {
 	// Colori familiari
 	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
-	/*
+	/**
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
@@ -42,7 +42,7 @@ public class InitialConfigurator extends TurnInizializator {
 		this.playerRoom = playerRoom;
 	}
 
-	/*
+	/**
 	 * metodo in override perchè la prima volta quando viene istanziata la
 	 * partita devo fare cose diverse rispetto a TurnInizializator
 	 */
@@ -76,7 +76,7 @@ public class InitialConfigurator extends TurnInizializator {
 		// personalBoardTileDistribution(game);
 	}
 
-	/*
+	/**
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
 	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) {
@@ -103,7 +103,7 @@ public class InitialConfigurator extends TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * setta il primo ordine da seguire senza osservare il CouncilSpace -->
 	 * prende l'array dei Player in game e setta la lista del turno (che è vuota
 	 * inizialmente)
@@ -118,7 +118,7 @@ public class InitialConfigurator extends TurnInizializator {
 		game.setPlayersOrder(p);
 	}
 
-	/*
+	/**
 	 * metodo che costruisce il Model con i parametri principali per poter
 	 * iniziare la partita caricandoli da file
 	 */
@@ -134,7 +134,7 @@ public class InitialConfigurator extends TurnInizializator {
 		fileParser.getMoveTimeouts(game);
 	}
 
-	/*
+	/**
 	 * metodo che mischia le carte utilizzando applicando il metodo shuffle
 	 * sulle 4 liste di carte
 	 */
@@ -145,7 +145,7 @@ public class InitialConfigurator extends TurnInizializator {
 		Collections.shuffle(game.getVentureCards());
 	}
 
-	/*
+	/**
 	 * metodo che implementa la fase di distribuzione random delle carte leader,
 	 * cosi da poi poterne consentire la scelta tramite la procedura iniziale
 	 */
@@ -173,7 +173,7 @@ public class InitialConfigurator extends TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo invocato direttamente nel costruttore di questa classe che
 	 * permette di distribuire le risorse con cui i player iniziano la partita
 	 * in base all'ordine random generato nella creazione della partita stessa

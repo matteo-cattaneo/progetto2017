@@ -35,7 +35,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 		return move;
 	}
 
-	/*
+	/**
 	 * metodo che permettee la connessione con il server RMI
 	 */
 	@Override
@@ -52,7 +52,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 		UI.connectionOK();
 	}
 
-	/*
+	/**
 	 * metodo invocato da remoto quando è il proprio turno
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 		move = UI.getMove();
 	}
 
-	/*
+	/**
 	 * metodo invocato da remoto per visualizzre la board
 	 */
 

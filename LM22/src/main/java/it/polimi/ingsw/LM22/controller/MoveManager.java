@@ -63,7 +63,7 @@ public class MoveManager {
 		this.mainGame = mainGame;
 	}
 
-	/*
+	/**
 	 * metodo che utilizzando la reflection chiama il metodo di check giusto e
 	 * successivamente (se il check dà esito positivo) anche il metodo di manage
 	 * della mossa giusto
@@ -95,7 +95,7 @@ public class MoveManager {
 		return;
 	}
 
-	/*
+	/**
 	 * controlla se una mossa del tipo CardMove è ammessa o no
 	 */
 	public boolean cardmoveAllowed(CardMove cardMove) throws IOException {
@@ -112,7 +112,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * controlla se ho già sei carte di quel tipo nella PersonalBoard
 	 */
 	private boolean checkMaxNumCardLimit(CardMove cardMove) {
@@ -139,7 +139,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * esegue una serie di controlli sul posizionamento del familiare e se lo
 	 * posso mettere guadagno l'ipotetico bonus relativo allo specifico spazio
 	 * azione
@@ -154,7 +154,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * calcola il valore effettivo del familiare contando anche il numero di
 	 * servitori aggiunti, i vari effetti presenti sia come scomuniche che come
 	 * effetti di carte personaggio
@@ -175,7 +175,7 @@ public class MoveManager {
 		return total;
 	}
 
-	/*
+	/**
 	 * metodo che calcola l'effettivo aumento di potere grazie all'utilizzo di
 	 * servitori durante un qualsiasi tipo di mossa che implica il movimento di
 	 * un familiare
@@ -186,13 +186,13 @@ public class MoveManager {
 		return move.getServantsAdded().getServants();
 	}
 
-	/*
+	/**
 	 * metodo che gestisce il controllo del costo di una carta, gestendo anche
 	 * tutti i relativi effetti che possono essere applicati ad una mossa di
 	 * tipo CardMove
 	 */
 	private boolean checkCardCost(CardMove cardMove) throws IOException {
-		/*
+		/**
 		 * importante tenere conto per il check sul costo i servitori che un
 		 * player può già aver giocato sottraendoli nella disequazione di
 		 * controllo del costo
@@ -228,7 +228,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo che calcola il bonus ottenuto dallo spazio azione del floor
 	 * relativo
 	 */
@@ -243,7 +243,7 @@ public class MoveManager {
 		return bonus;
 	}
 
-	/*
+	/**
 	 * calcola il possibile costo addizionale dovuto alla torre occupata -->
 	 * gestisce anche l'effetto di Filippo Brunelleschi questo prezzo non può
 	 * essere pagato con il bonus dello spazio azione
@@ -257,7 +257,7 @@ public class MoveManager {
 		return additionalCost;
 	}
 
-	/*
+	/**
 	 * metodo che calcola il costo della carta in base alla mossa e alla torre
 	 * in ingresso contando anche eventuali sconti sulle carte
 	 */
@@ -282,7 +282,7 @@ public class MoveManager {
 		return cost;
 	}
 
-	/*
+	/**
 	 * calcola il costo della carta scontandola in base agli effetti presenti
 	 */
 	private Resource discountCard(Resource cost, CardMove cardMove, Integer tower) {
@@ -297,7 +297,7 @@ public class MoveManager {
 		return res;
 	}
 
-	/*
+	/**
 	 * controlla (solo per una CardMove per una TERRITORY) se il player soddisfa
 	 * i requisiti relativi ai punti militari --> controlla anche se è stata
 	 * attivata la carta Leader che annulla questo controllo
@@ -336,7 +336,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo che restituisce il CardSpace relativo al numero della torre
 	 * selezionata e al numero del floor selezionato
 	 */
@@ -344,7 +344,7 @@ public class MoveManager {
 		return game.getBoardgame().getTowers()[towerSelected].getFloor()[floorSelected].getSpace();
 	}
 
-	/*
+	/**
 	 * gestisce una mossa di tipo CardMove
 	 */
 	public void cardmoveHandle(CardMove cardMove) throws InvalidMoveException {
@@ -355,12 +355,12 @@ public class MoveManager {
 		if (!cardMove.getMemberUsed().getColor().equals(UNCOLORED))
 			t.getColoredMembersOnIt().add(cardMove.getPlayer().getColor());
 		Resource playerResource = cardMove.getPlayer().getPersonalBoard().getResources();
-		/* sottraggo i servitori usati */
+		/** sottraggo i servitori usati */
 		resourceHandler.subResource(playerResource, cardMove.getServantsAdded());
-		/* sommo il bonus */
+		/** sommo il bonus */
 		resourceHandler.addResource(playerResource,
 				resourceHandler.calculateResource(calculateBonus(cardMove).clone(), cardMove.getPlayer()));
-		/* sottraggo il costo addizionale */
+		/** sottraggo il costo addizionale */
 		resourceHandler.subResource(playerResource, calculateAdditionalCost(t, cardMove));
 		Resource cardCost;
 		if (cardMove.getTowerSelected().equals(3) && doubleCostChoice.equals(1))
@@ -369,9 +369,9 @@ public class MoveManager {
 					cardMove, cardMove.getLevelSelected());
 		else
 			cardCost = calculateCardCost(cardMove, cardMove.getTowerSelected());
-		/* sottraggo il costo effettivo della carta */
+		/** sottraggo il costo effettivo della carta */
 		resourceHandler.subResource(playerResource, cardCost);
-		if (!t.isOccupied() /*
+		if (!t.isOccupied() /**
 							 * && non si tratta di una mossa per effetto di una
 							 * CardMove
 							 */)
@@ -379,7 +379,7 @@ public class MoveManager {
 		cardGetter(cardMove, t);
 	}
 
-	/*
+	/**
 	 * metodo che gestisce lo smistamento della carta da prendere nella
 	 * PersonalBoard del player e gestisce le varie carte in maniera different
 	 * (le carte character che hanno un effetto permanente devono anche
@@ -424,7 +424,7 @@ public class MoveManager {
 					cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 			break;
 		}
-		/*
+		/**
 		 * parte di codice che sistemerebbe il problema di effetti presenti sia
 		 * come immediati di carte character che come permanenti nelle carte
 		 * building
@@ -437,7 +437,7 @@ public class MoveManager {
 		// cardMove.getPlayer().getPersonalBoard().getResources());
 	}
 
-	/*
+	/**
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
 	public boolean marketmoveAllowed(MarketMove marketMove) {
@@ -454,7 +454,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * gestisce una mossa del tipo MarketMove
 	 */
 	public void marketmoveHandle(MarketMove marketMove) throws IOException {
@@ -463,7 +463,7 @@ public class MoveManager {
 		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				marketMove.getServantsAdded());
 		marketMove.getMemberUsed().setUsed(true);
-		/*
+		/**
 		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
 		 */
 		Resource bonus = resourceHandler.calculateResource(game.getBoardgame().getMarket()[opt].getReward().clone(),
@@ -476,14 +476,14 @@ public class MoveManager {
 						marketMove.getPlayer()));
 	}
 
-	/*
+	/**
 	 * controlla se una mossa del tipo WorkMove è ammessa o no
 	 */
 	public boolean workmoveAllowed(WorkMove workMove) {
 		return checkWorkSpace(workMove);
 	}
 
-	/*
+	/**
 	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
 	 * requisito relativo allo spazio azione selezionato per la mossa + se il
 	 * primo spazio è già occupato effettua una diminuzione del valore
@@ -540,7 +540,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * calcola il valore totale di eventuali bonus o malus provenienti da
 	 * scomuniche o effetti permanenti di carte leader
 	 */
@@ -556,7 +556,7 @@ public class MoveManager {
 		return total;
 	}
 
-	/*
+	/**
 	 * gestisce una mossa del tipo WorkMove
 	 */
 	public void workmoveHandle(WorkMove workMove) throws IOException {
@@ -566,7 +566,7 @@ public class MoveManager {
 			harvestHandle(workMove);
 	}
 
-	/*
+	/**
 	 * metodo che si occupa della gestione di una azione di produzione --> devo
 	 * sempre controllare le carte del player singolarmente ma solo alla fine
 	 * della produzione darò tutti i bonus al player perchè alcuni effetti vanno
@@ -597,7 +597,7 @@ public class MoveManager {
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
-	/*
+	/**
 	 * gestisce la fase di Raccolto
 	 */
 	private void harvestHandle(WorkMove move) throws IOException {
@@ -622,7 +622,7 @@ public class MoveManager {
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 
-	/*
+	/**
 	 * controlla se una mossa del tipo CouncilMove è ammessa o no
 	 */
 	public boolean councilmoveAllowed(CouncilMove councilMove) {
@@ -633,7 +633,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * gestisce una mossa del tipo CouncilMove prendendo i relativi bonus
 	 */
 	public void councilmoveHandle(CouncilMove councilMove) throws IOException {
@@ -651,7 +651,7 @@ public class MoveManager {
 						councilMove.getPlayer()));
 	}
 
-	/*
+	/**
 	 * metodo che controlla se la carta Leader che il player vuole vendere è già
 	 * stata attivata (per adesso non può venderla se è già stata attivata nel
 	 * turno mentre se l'aveva attivata in passato ma non risulta
@@ -666,7 +666,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * gestisce la vendita di una carta leader e consentirà la scelta del
 	 * privilegio del consiglio --> posso solo vendere carte non attive
 	 */
@@ -677,7 +677,7 @@ public class MoveManager {
 						mainGame.selectCouncilPrivilege(SINGLE_PRIVILEGE, move.getPlayer()).clone(), move.getPlayer()));
 	}
 
-	/*
+	/**
 	 * controlla se i requisiti della carta leader che il player vuole attivare
 	 * sono effettivmanete soddisfatti e nel caso indica quella carta come
 	 * attivata --> sarà poi gestita dai vari controlli comunque interni a
@@ -737,7 +737,7 @@ public class MoveManager {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo che gestisce la procedura di attivazione di una carta -->
 	 * comportamento differente se l'effetto è una volta per turno oppure se è
 	 * un effetto permanente
@@ -750,7 +750,7 @@ public class MoveManager {
 		move.getPlayer().getHandLeaderCards().remove(move.getLeaderCard());
 	}
 
-	/*
+	/**
 	 * metodo che dice se la lista di effetti di un player contiene un elemento
 	 * di quella classe
 	 */
@@ -763,15 +763,11 @@ public class MoveManager {
 		return false;
 	}
 
-	// private Effect giveIfContainedClass(List<Effect> list, Object o){
-	//
-	// }
-
 	public boolean endmoveAllowed(EndMove move) {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo invocato se: - player dice intenzionalmente di aver finito il suo
 	 * turno - timer per effettuare il proprio turno scade
 	 */

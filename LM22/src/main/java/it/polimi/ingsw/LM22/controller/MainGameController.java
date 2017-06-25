@@ -71,7 +71,7 @@ public class MainGameController implements Runnable {
 		startGame();
 	}
 
-	/*
+	/**
 	 * permetto al giocatore di scegliere una personal bonus tile in ordine di
 	 * gioco inverso
 	 */
@@ -90,7 +90,7 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	/*
+	/**
 	 * consente ad ogni giocatore di scegliere le proprire carte leader
 	 */
 	private void leaderSelection() {
@@ -226,7 +226,7 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	/*
+	/**
 	 * verifico se il player in questione è connesso
 	 */
 	private boolean checkPlayer(Player p) {
@@ -236,7 +236,7 @@ public class MainGameController implements Runnable {
 		return false;
 	}
 
-	/*
+	/**
 	 * restituisco il giocatore corrispondente al client newtwork fornito
 	 */
 	private Player getPlayer(IPlayer ip) throws RemoteException {
@@ -246,7 +246,7 @@ public class MainGameController implements Runnable {
 		return null;
 	}
 
-	/*
+	/**
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
 	public IPlayer getIPlayer(Player p) throws RemoteException {
@@ -256,7 +256,7 @@ public class MainGameController implements Runnable {
 		return null;
 	}
 
-	/*
+	/**
 	 * invio il model a tutti i clients connessi
 	 */
 	private void sendAll() {
@@ -272,7 +272,7 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	/*
+	/**
 	 * metodo chiamato dal controller per gestire il rapporto con il Vaticano
 	 */
 	private void vaticanReport() {
@@ -294,7 +294,7 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	/*
+	/**
 	 * permette di gestire tutta la fase di conteggio dei Punti Finali
 	 */
 	private void manageEndGame(Game game) {
@@ -305,7 +305,7 @@ public class MainGameController implements Runnable {
 		disconnectRoomPlayers(game);
 	}
 
-	/*
+	/**
 	 * gestisce la fase di rimozione dei player dalla lista della room che
 	 * conteneva la partita terminata
 	 */
@@ -316,7 +316,7 @@ public class MainGameController implements Runnable {
 
 	}
 
-	/*
+	/**
 	 * metodo che gestisce l'attribuzione dei punti vittoria finali in base alla
 	 * classifica dei punti militari
 	 */
@@ -350,7 +350,7 @@ public class MainGameController implements Runnable {
 		return;
 	}
 	
-	/*
+	/**
 	 * metodo che gestisce l'attribuzione dei punti vittoria in base al numero
 	 * di carte territorio o personaggio che ogni player ha ottenuto +
 	 * attribuzione dei punti vittoria dati dalle VentureCards --> in questo
@@ -408,7 +408,7 @@ public class MainGameController implements Runnable {
 				.calculateResource(territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].clone(), p));
 	}
 
-	/*
+	/**
 	 * metodo che gestisce l'attribuzione di punti vittoria in base al numero di
 	 * risorse possedute da ogni player (1 punto vittoria per ogni 5 risorse
 	 * wood-stone-coins-servants del player contate tutte insieme ) --> qui
@@ -439,7 +439,7 @@ public class MainGameController implements Runnable {
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total / 5));
 	}
 
-	/*
+	/**
 	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente
 	 * x councilPrivilege e permette di scegliere x councilPrivilege diversi, si
 	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
@@ -455,7 +455,7 @@ public class MainGameController implements Runnable {
 		return resource;
 	}
 
-	/*
+	/**
 	 * show the message to all the players of the game
 	 */
 	private void electWinner(Game game) {
@@ -487,7 +487,7 @@ public class MainGameController implements Runnable {
 		return map;
 	}
 
-	/*
+	/**
 	 * sospendo i client che sono disconnessi o non hanno effettuato la mossa in
 	 * tempo utile
 	 */
@@ -500,7 +500,7 @@ public class MainGameController implements Runnable {
 		showMsgAll(player.getNickname() + " disconnected!");
 	}
 
-	/*
+	/**
 	 * visualizzo un messaggio sul display di tutti i client
 	 */
 	private void showMsgAll(String msg) {
@@ -514,7 +514,7 @@ public class MainGameController implements Runnable {
 		System.out.println(msg);
 	}
 
-	/*
+	/**
 	 * metodo che gestisce la richiesta del numero di servitori che il player
 	 * vuole aggiungere ad un effetto (sia di cardAction che di WorkAction)
 	 */
@@ -525,7 +525,7 @@ public class MainGameController implements Runnable {
 		return servants;
 	}
 
-	/*
+	/**
 	 * metodo che chiede torre e piano per una nuova mossa ritorna come primo
 	 * parametro la torre e come secondo il floor
 	 */
@@ -542,7 +542,7 @@ public class MainGameController implements Runnable {
 		return param;
 	}
 
-	/*
+	/**
 	 * metodo che chiama il player giocante e chiede se vuole effettuare questo
 	 * scambio (nel caso abbia effettivamente le risorse disponibili)
 	 */
@@ -550,7 +550,7 @@ public class MainGameController implements Runnable {
 		return getIPlayer(p).changeRequest(exchange);
 	}
 
-	/*
+	/**
 	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
 	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
 	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
@@ -560,7 +560,7 @@ public class MainGameController implements Runnable {
 		return getIPlayer(player).supportRequest();
 	}
 
-	/*
+	/**
 	 * metodo che richiede al player il colore su cui vuole attivare un
 	 * determinato effetto
 	 */
@@ -568,7 +568,7 @@ public class MainGameController implements Runnable {
 		return getIPlayer(player).colorRequest();
 	}
 
-	/*
+	/**
 	 * Chiedo al player quale costo vuole usare: 0 -> primo costo(risorse), 1 ->
 	 * secondo costo (punti militari)
 	 */
@@ -583,7 +583,7 @@ public class MainGameController implements Runnable {
 			return getIPlayer(cardMove.getPlayer()).ventureCostRequest(vc);
 	}
 
-	/*
+	/**
 	 * Chiedo al player quale effetto vuole attivare: 1 -> primo effetto, 2 ->
 	 * secondo effetto
 	 */
@@ -595,7 +595,7 @@ public class MainGameController implements Runnable {
 		return game;
 	}
 
-	/*
+	/**
 	 * chiedo al player da quale card vuole copiare l'effetto e restituisco il
 	 * nome
 	 */

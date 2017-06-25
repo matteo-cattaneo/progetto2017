@@ -68,11 +68,11 @@ public class EffectManager {
 		}
 	}
 
-	/*
+	/**
 	 * DEVELOPMENT CARDS' EFFECTS
 	 */
 
-	/*
+	/**
 	 * metodo che gestisce l'effetto in ingresso come effetto immediato di una
 	 * carta
 	 */
@@ -88,7 +88,7 @@ public class EffectManager {
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
 
-	/*
+	/**
 	 * metodo che gestisce l'effetto rappresentante uno scambio di risorse (non
 	 * Privilegi del Consiglio)
 	 */
@@ -101,7 +101,7 @@ public class EffectManager {
 		return;
 	}
 
-	/*
+	/**
 	 * metodo che gestisce l'effetto con due possibili scambi --> controlla se
 	 * almeno uno dei due è fattibile (altrimenti esce) --> se solo uno è
 	 * fattibile usa askChangeToPlayer() --> altrimenti usa un altro metodo
@@ -132,7 +132,7 @@ public class EffectManager {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che gestisce il raccolto per ogni singola carta e che in base
 	 * all'effetto che si vuole attivare invoca il metodo giusto
 	 */
@@ -150,7 +150,7 @@ public class EffectManager {
 		}
 	}
 
-	/*
+	/**
 	 * gestisce l'effetto del Generale (carta Character)
 	 */
 	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect, Resource sum) {
@@ -160,7 +160,7 @@ public class EffectManager {
 		r.addResource(sum, bonus);
 	}
 
-	/*
+	/**
 	 * gestisce un effetto di tipo CardAction
 	 */
 	public void cardactioneffectManage(CardActionEffect effect, Resource sum) throws IOException {
@@ -202,7 +202,7 @@ public class EffectManager {
 
 	}
 
-	/*
+	/**
 	 * metodo che gestisce tale effetto PROBLEMA - se è un effetto immediato
 	 * allora posso subito aggiungere il reward alle risorse del player - se
 	 * invece è un effetto permanente devo poterlo sommare alla risorsa
@@ -235,7 +235,7 @@ public class EffectManager {
 		return;
 	}
 
-	/*
+	/**
 	 * LEADER CARDS' EFFECTS
 	 */
 
@@ -264,7 +264,7 @@ public class EffectManager {
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
 	}
 
-	/*
+	/**
 	 * metodo che permette di gestire una nuova mossa work proveniente
 	 * dall'attivazione di una carta leader
 	 */
@@ -283,7 +283,7 @@ public class EffectManager {
 
 	}
 
-	/*
+	/**
 	 * metodo che gestisce il metodo di modifica dei valori dei familiari in
 	 * base all'effetto
 	 */
@@ -318,7 +318,7 @@ public class EffectManager {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che gestisce tale effetto, ossia l'aumento del valore del proprio
 	 * familiare
 	 */
@@ -359,7 +359,7 @@ public class EffectManager {
 		player.getEffects().add(effect);
 	}
 
-	/*
+	/**
 	 * metodo che raggruppa tutte le carte leader giocate o attive attualmente
 	 * da tutti i giocatori diversi dal richiedente di questo metodo -->
 	 * raccolta la lista si chiede al player richiedente quale carta di vuole

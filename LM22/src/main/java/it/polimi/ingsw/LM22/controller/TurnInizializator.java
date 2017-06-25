@@ -51,7 +51,7 @@ public class TurnInizializator {
 		this.mainGC = mainGC;
 	}
 
-	/*
+	/**
 	 * metodo generale che gestisce tutta la parte iniziale di preparazione di
 	 * un nuovo turno --> invocherà tutti i metodi minori in grado di svolgere
 	 * le varie funzionalità richieste per la preparazione di un turno e la
@@ -79,7 +79,7 @@ public class TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che ritira tutte le carte non prese e ritira tutti i familiari
 	 */
 	private void cleanBoardGame(Game game) {
@@ -92,7 +92,7 @@ public class TurnInizializator {
 		retireMembers(game);
 	}
 
-	/*
+	/**
 	 * metodo che si occupa di riportare tutti i familiari al Player e settare
 	 * il loro flag used a false pulendo tutti i vari AbstractSpace
 	 */
@@ -111,7 +111,7 @@ public class TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che consente di distribuire tutte le carte sviluppo
 	 */
 	protected void distributeDevelopmentCards(Game game) {
@@ -121,7 +121,7 @@ public class TurnInizializator {
 		distributeVentureCards(game);
 	}
 
-	/*
+	/**
 	 * ognuno dei seguenti metodi cerca la prima carta del periodo attuale per
 	 * ogni piano della propria torre
 	 */
@@ -181,7 +181,7 @@ public class TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che reinizializza i valori dei dadi
 	 */
 	protected void throwDices(Game game) {
@@ -191,7 +191,7 @@ public class TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo che in base al valore dei dadi tirati conferisce ai familiari il
 	 * loro valore --> qui avviene anche il controllo per le scomuniche che
 	 * danno dei malus ai dadi + carta leader che aumenta il familiare neutro
@@ -210,7 +210,7 @@ public class TurnInizializator {
 		updateFamilyMembersValue(game);
 	}
 
-	/*
+	/**
 	 * metodo che gestisce gli effetti di carte leader che modificano il valore
 	 * dei familiari del giocatore che l'ha attivata NON GESTISCE FEDERICO DI
 	 * MONTEFELTRO
@@ -226,7 +226,7 @@ public class TurnInizializator {
 			}
 	}
 
-	/*
+	/**
 	 * metodo che presi in ingresso l'ordine del turno appena finito e la lista
 	 * dei famiiari inseriti nel CouncilSpace e genera l'ordine per il nuovo
 	 * turno pulendo già il CouncilSpace
@@ -249,7 +249,7 @@ public class TurnInizializator {
 		game.setPlayersOrder(newOrder);
 	}
 
-	/*
+	/**
 	 * metodo che consente di redistribuire le carte leader attivate tra
 	 * activated e leaderCard in base al tipo di effetto che la carta ha NB
 	 * stare attento anche alle carte leader che aggiungono un effetto alla
@@ -271,7 +271,7 @@ public class TurnInizializator {
 		}
 	}
 
-	/*
+	/**
 	 * metodo ipotizzato per la modalità con il quinto giocatore --> IDEA sarebe
 	 * quella di distribuire delle risorse in modo prefissato e decrescente in
 	 * base all'ordine inverso di turno di quello che è stato appena calcolato

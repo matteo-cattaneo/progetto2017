@@ -33,7 +33,7 @@ public class SocketClient implements IConnection {
 		this.UI = UI;
 	}
 
-	/*
+	/**
 	 * metodo che effectuala connessione con il server Socket
 	 */
 	public void connect(String name, String ip) {
@@ -59,7 +59,7 @@ public class SocketClient implements IConnection {
 		play();
 	}
 
-	/*
+	/**
 	 * metodo che gestisce la varie richieste inviate dal server
 	 */
 	@Override

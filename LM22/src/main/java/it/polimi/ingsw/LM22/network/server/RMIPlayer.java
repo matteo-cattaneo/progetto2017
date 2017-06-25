@@ -11,7 +11,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
-/*
+/**
  * classe utilizzata da remoto per le azioni sul client RMI
  */
 
@@ -25,7 +25,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 
 	}
 
-	/*
+	/**
 	 * indica al client quando è il suo turno e restituisce la mossa da lui
 	 * effettuata
 	 */

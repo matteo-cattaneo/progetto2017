@@ -1,6 +1,5 @@
 package it.polimi.ingsw.LM22.network.client;
 
-import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -11,7 +10,7 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
-/*
+/**
  * Interfaccia estesa da RMIClient necessaria per la gestione della logica di gioco
  */
 public interface IClient extends Remote {

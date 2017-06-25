@@ -6,14 +6,14 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 
 public class ResourceHandler {
-	/*
+	/**
 	 * in questa classe bisognerà tenere conto: degli effetti che danno sia
 	 * risorse maggiori --> (vedi santa Rita) oppure delle scomuniche che
 	 * tolgono risorse...
 	 * 
 	 */
 
-	/*
+	/**
 	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba
 	 * essere ridotto
 	 */
@@ -35,7 +35,7 @@ public class ResourceHandler {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo che controlla se il Player ha sufficienti risorse per comprare una
 	 * carta invocato da MoveManager per controllare l'acquistabilità
 	 * 
@@ -51,7 +51,7 @@ public class ResourceHandler {
 		return true;
 	}
 
-	/*
+	/**
 	 * metodo in grado di controllare se la prima risorsa è >= della seconda
 	 * (true)
 	 */
@@ -98,7 +98,7 @@ public class ResourceHandler {
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 
-	/*
+	/**
 	 * aggiunge la risorsa ricevuta come secondo parametro alla risorsa ricevuta
 	 * come primo parametro
 	 */
@@ -112,7 +112,7 @@ public class ResourceHandler {
 		playerResource.setVictory(playerResource.getVictory() + addingResource.getVictory());
 	}
 
-	/*
+	/**
 	 * toglie la risorsa ricevuta come secondo parametro alla risorsa ricevuta
 	 * come primo parametro
 	 */

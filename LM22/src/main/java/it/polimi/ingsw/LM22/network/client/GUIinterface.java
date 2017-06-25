@@ -5,9 +5,8 @@ import java.util.List;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
-/*
- * Classe che contiene tutti i metodi che permettono all'utente 
-di interfacciarsi con la GUI 
+/**
+ * Classe che contiene tutti i metodi che permettono all'utente di interfacciarsi con la GUI 
 */
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.VentureCard;

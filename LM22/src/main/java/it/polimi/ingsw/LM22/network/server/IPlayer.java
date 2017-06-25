@@ -12,8 +12,8 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
-/*
- * interfaccia implementata da RMi e SOCKET player che gestisce le connessionicon il client
+/**
+ * interfaccia implementata da RMI e SOCKET player che gestisce le connessionicon il client
  */
 
 public interface IPlayer extends Remote {

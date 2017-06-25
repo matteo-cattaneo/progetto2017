@@ -1,5 +1,8 @@
 package it.polimi.ingsw.LM22.network.server;
 
+/**
+ * classe che contiene tutte le informazioni di una giocatore
+ */
 public class PlayerInfo {
 	private String name;
 	private String password;

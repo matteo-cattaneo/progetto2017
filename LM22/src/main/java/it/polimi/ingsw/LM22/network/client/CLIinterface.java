@@ -30,10 +30,10 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
-/*
- * Classe che contiene tutti i metodi che permettono all'utente 
-di interfacciarsi con la CLI
-*/
+/**
+ * Classe che contiene tutti i metodi che permettono all'utente di
+ * interfacciarsi con la CLI
+ */
 public class CLIinterface extends AbstractUI {
 	private final Logger LOGGER = Logger.getLogger(CLIinterface.class.getClass().getSimpleName());
 
@@ -63,18 +63,21 @@ public class CLIinterface extends AbstractUI {
 	private long time;
 	private String leaderSelected;
 
+	/**
+	 * permette di indicare se è possibile muovere un familiare
+	 */
 	public void setMemberMove(boolean memberMove) {
 		this.memberMove = memberMove;
 	}
 
-	/*
+	/**
 	 * costruisco la stringa mossa per poi poterla inviare al server
 	 */
 	private void setMove(String add) {
 		move = move + add + "@";
 	}
 
-	/*
+	/**
 	 * restituisce al chiamante la mossa creata in precedenza tramite il menu
 	 */
 	@Override
@@ -82,14 +85,14 @@ public class CLIinterface extends AbstractUI {
 		return move;
 	}
 
-	/*
+	/**
 	 * menu principale da cui parte la costruzione guidata della mossa
 	 */
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "Restart@";
 		time = System.currentTimeMillis() / 1000;
-		/*
+		/**
 		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
 		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
 		 */
@@ -175,7 +178,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Please insert a number!");
 	}
 
-	/*
+	/**
 	 * metodo che permette all utente di visualizzare i dettagli di una carta,
 	 * inserendo anche solo una parte del nome della carta
 	 */
@@ -498,12 +501,15 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
+	/**
+	 * stampo messaggio d errore di default
+	 */
 	@Override
 	public void printInvalidInput() {
 		showMsg("Invalid input");
 	}
 
-	/*
+	/**
 	 * permette di selezionare la connessione desiderata
 	 */
 	@Override
@@ -515,7 +521,7 @@ public class CLIinterface extends AbstractUI {
 		return connType;
 	}
 
-	/*
+	/**
 	 * richiede il nome del giocatore e lo restituisce al chiamante
 	 */
 	@Override
@@ -529,7 +535,7 @@ public class CLIinterface extends AbstractUI {
 		return name;
 	}
 
-	/*
+	/**
 	 * richiede l'IP del server a cui connettersi e lo restituisce al chiamante
 	 */
 	@Override
@@ -542,7 +548,7 @@ public class CLIinterface extends AbstractUI {
 		return ip;
 	}
 
-	/*
+	/**
 	 * metodo che semplicemente permette di visualizzare messaggi all'utente
 	 */
 	@Override
@@ -556,11 +562,10 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Attendi il tuo turno...");
 	}
 
-	/*
+	/**
 	 * ricevuto il model lo analizza e visualizza il tabellone e le informazioni
 	 * necessarie all'utente per poter giocare
 	 * 
-	 * WIP
 	 */
 	private void showPersonalBoard() throws RemoteException {
 		showMsg("______________________________");
@@ -607,6 +612,9 @@ public class CLIinterface extends AbstractUI {
 
 	}
 
+	/**
+	 * stampo le carte leader e le carte sviluppo del player
+	 */
 	private void showPersonalCards() throws RemoteException {
 		// Leader cards
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()
@@ -634,7 +642,7 @@ public class CLIinterface extends AbstractUI {
 					System.out.printf("%-30s|", " " + getPlayer(name, game).getActivatedLeaderCards().get(i).getName());
 				else
 					System.out.printf("%-30s|", "");
-				System.out.printf("%n|", "");
+				System.out.printf("%n|%s", "");
 			}
 			showMsg("______________________________|______________________________|______________________________|");
 		}
@@ -687,6 +695,9 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
+	/**
+	 * visualizzo le classifiche in colonna ordinate
+	 */
 	private void showBoardTracks() throws RemoteException {
 		ArrayList<String> faith = new ArrayList<String>();
 		ArrayList<String> military = new ArrayList<String>();
@@ -733,12 +744,15 @@ public class CLIinterface extends AbstractUI {
 		showMsg("|_______________________|_______________________|_______________________|");
 	}
 
+	/**
+	 * metodo di riferimento per mostrare la board
+	 */
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
 		if (timeout == 0)
 			timeout = game.getMoveTimer();
-		/*
+		/**
 		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
 		 * mostro le informazioni del player che ha preso la carta
 		 */
@@ -801,6 +815,9 @@ public class CLIinterface extends AbstractUI {
 		showMsg("");
 	}
 
+	/**
+	 * metodo che visualizza gli spazi harvest e production in colonna
+	 */
 	private void showWorkSpaces() throws RemoteException {
 		showMsg("");
 		showMsg("Production bonus: " + getPlayer(name, game).getPersonalBoard().getBonusBoard().getProductionEffect()
@@ -839,10 +856,10 @@ public class CLIinterface extends AbstractUI {
 
 	}
 
+	/**
+	 * metodo che mostra il mercato in blocchi in parallelo
+	 */
 	private void showMarketSpaces() {
-		/*
-		 * mostro il mercato in blocchi in parallelo
-		 */
 		showMsg("______________________________");
 		System.out.printf("%-30s|%n", "| Market spaces: ");
 		System.out.print("|_____________________________|____________");
@@ -923,7 +940,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("");
 	}
 
-	/*
+	/**
 	 * metodo che permette alla utente di selezionare il bonus che vuole in
 	 * cambio del privilegio del consiglio (PdC)
 	 */
@@ -1079,8 +1096,8 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
-	/*
-	 * visualisso all utente la scelta delle personal tile in colonna
+	/**
+	 * visualizzo all utente la scelta delle personal tile in colonna
 	 */
 	@Override
 	public Integer selectPersonalTile(Game game) throws RemoteException {
@@ -1223,7 +1240,7 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
-	/*
+	/**
 	 * permette all utente di inserire in input solo numeri gestendo le
 	 * eccezzioni di convesione da stringa
 	 */
