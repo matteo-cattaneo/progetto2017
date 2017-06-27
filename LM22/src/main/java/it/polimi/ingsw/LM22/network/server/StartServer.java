@@ -16,7 +16,8 @@ import it.polimi.ingsw.LM22.controller.MainGameController;
 import it.polimi.ingsw.LM22.model.FileParser;
 
 /**
- * classe principale del server, attende la connessione dei giocatori e crea le room di gioco
+ * classe principale del server, attende la connessione dei giocatori e crea le
+ * room di gioco
  */
 public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
@@ -126,12 +127,16 @@ public class StartServer {
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {
-					// se player ri effettua l accesso trasferisco la partita
-					// sulla nuova sessione
-					if (pi.getConnected())
-						pi.getIplayer().showMsg("You are now disconnected, new session established!");
-					pi.setIplayer(player.getIplayer());
-					pi.setConnected(true);
+					if (pi.getConnected()) {
+						// se player rieffettua l'accesso con una sessione
+						// valida attiva viene disconnesso
+						player.getIplayer().showMsg("You are already connected to another session");
+						player.getIplayer().showMsg("Disconnected!");
+					} else {
+						// altrimenti viene reinserito nella room
+						pi.setIplayer(player.getIplayer());
+						pi.setConnected(true);
+					}
 					return true;
 				}
 		return false;

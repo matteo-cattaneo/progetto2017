@@ -91,41 +91,11 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "Restart@";
-		time = System.currentTimeMillis() / 1000;
-		/**
-		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
-		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
-		 */
-		ExecutorService exe = Executors.newFixedThreadPool(1);
-		Future<?> future = exe.submit(() -> {
-			try {
-				showPrincipalMenu();
-			} catch (RemoteException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			}
-		});
-		try {
-			// eseguo l interfaccia di comunicazione in un thread con timeout
-			// allo scadere del timeout termino il thread e disconnetto il
-			// client
-			future.get(timeout, TimeUnit.SECONDS);
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			move = "End@Disconnect@";
-			System.err.println("Move time expired, now you have been disconnected!");
-			System.err.println("You can close this window");
-		}
-		// calcolo il timeout da cui dovrò partire alla possima mossa dello
-		// stesso turno
-		if (!getMove().equals("End@"))
-			timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
-	}
-
-	private void showPrincipalMenu() throws RemoteException {
-		// mostro il menu se l utente ha richiesto di rieffettuare la mossa
+		timeout = game.getMoveTimer();
+		// mostro il menu se l'utente ha richiesto di rieffettuare la mossa
 		while (move.equals("Restart@")) {
 			move = "";
-			System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+			System.out.println("Timeout: " + timeout);
 			showMsg("Choose your Move:");
 			if (!memberMove)
 				showMsg("1: Move a Member");
@@ -183,7 +153,7 @@ public class CLIinterface extends AbstractUI {
 	 * inserendo anche solo una parte del nome della carta
 	 */
 	private void showCard() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+		System.out.println("Timeout: " + timeout);
 		showMsg("Insert the card name: (no case sensitive)");
 		String cardName = in.nextLine();
 		DevelopmentCard card = null;
@@ -227,7 +197,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMemberMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+		System.out.println("Timeout: " + timeout);
 		memberMove = true;
 		showMsg("Choose your move:");
 		showMsg("1: Card");
@@ -263,7 +233,6 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCardMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(CARDMOVE);
 		printFamilyMemberMenu();
 		if (!move.equals("Restart@"))
@@ -276,6 +245,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printFamilyMemberMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose your Family Member you want to move:");
 		int i = 0;
 		for (FamilyMember fm : getPlayer(name, game).getMembers()) {
@@ -309,6 +279,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	public String printServantsAddictionMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Insert how many servants you want to use");
 		Integer servants = input();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
@@ -321,6 +292,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printTowersMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the Tower:");
 		showMsg("1: " + TERRITORY);
 		showMsg("2: " + CHARACTER);
@@ -342,6 +314,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printLevelsMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
 
 		int option = input();
@@ -359,7 +332,6 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMarketMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
 		if (!move.equals("Restart@"))
@@ -370,6 +342,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the Market space:");
 		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo().replaceAll("%n", " "));
 		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo().replaceAll("%n", " "));
@@ -408,7 +381,6 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printWorkMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
 		setMove(WORKMOVE);
 		printFamilyMemberMenu();
 		if (!move.equals("Restart@"))
@@ -419,6 +391,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printWorkSelectionMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the Work type:");
 		showMsg("1: Production");
 		showMsg("2: Harvest");
@@ -445,7 +418,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+		System.out.println("Timeout: " + timeout);
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
 		if (!move.equals("Restart@"))
@@ -454,7 +427,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+		System.out.println("Timeout: " + timeout);
 		setMove("LeaderSell");
 		showMsg("Choose the Leader card to sell:");
 		int i;
@@ -476,7 +449,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
-		System.out.println("Timeout: " + (timeout - (System.currentTimeMillis() / 1000 - time)));
+		System.out.println("Timeout: " + timeout);
 		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
 		if (!getPlayer(name, game).getLeaderCards().isEmpty())
 			ld.addAll(getPlayer(name, game).getLeaderCards());
@@ -517,8 +490,15 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Connection type: ");
 		showMsg("1: RMI");
 		showMsg("2: Socket");
-		int connType = input();
-		return connType;
+		Integer option = -1;
+		while (option == -1)
+			try {
+				option = Integer.parseInt(in.nextLine());
+			} catch (NumberFormatException e) {
+				pleaseInsertNumber();
+				option = -1;
+			}
+		return option;
 	}
 
 	/**
@@ -750,8 +730,6 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
-		if (timeout == 0)
-			timeout = game.getMoveTimer();
 		/**
 		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
 		 * mostro le informazioni del player che ha preso la carta
@@ -946,6 +924,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		ArrayList<String> list = new ArrayList<String>();
 		String result = new String();
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
@@ -996,6 +975,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printColorMenu() throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the family member that you want improve: ");
 		for (int i = 0; i < 3; i++) {
 			showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
@@ -1015,6 +995,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printVentureCostMenu(VentureCard vc) throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Which cost do you want pay?: ");
 		showMsg("1: Resource cost");
 		System.out.printf(vc.getCardCost1().getInfo());
@@ -1035,6 +1016,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public boolean printChangeMenu(Resource[] exchange) throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Do you want change");
 		System.out.printf(exchange[0].getInfo());
 		showMsg("with");
@@ -1056,6 +1038,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the effect that you want activate: ");
 		showMsg("1: Change");
 		System.out.printf(effect.getExchangeEffect1()[0].getInfo());
@@ -1081,6 +1064,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
+		System.out.println("Timeout: " + timeout);
 		showMsg("Choose the card from which you want to copy the effect:");
 		int i;
 		for (i = 0; i < lcards.size(); i++) {
@@ -1102,8 +1086,10 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public Integer selectPersonalTile(Game game) throws RemoteException {
 		this.game = game;
+		timeout = game.getMoveTimer();
 		int i;
 		PersonalBonusTile pbt[] = game.getPersonalBonusTile();
+		System.out.println("Timeout: " + timeout);
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				System.out.print("______________________");
@@ -1242,24 +1228,53 @@ public class CLIinterface extends AbstractUI {
 
 	/**
 	 * permette all utente di inserire in input solo numeri gestendo le
-	 * eccezzioni di convesione da stringa
+	 * eccezioni di convesione da stringa e il timeout della mossa
 	 */
 	private Integer input() {
-		int option = -1;
-		while (option == -1)
-			try {
-				option = Integer.parseInt(in.nextLine());
-			} catch (NumberFormatException e) {
-				pleaseInsertNumber();
-				option = -1;
-			}
-		return option;
+		Integer result = -1;
+		time = System.currentTimeMillis() / 1000;
+		/**
+		 * Verifico che la mossa venga eseguita nel tempo prestabilito. Se non è
+		 * trascorsa l'intera durata del tempo concesso, la mossa è valida
+		 */
+		ExecutorService exe = Executors.newFixedThreadPool(1);
+		Future<Integer> future = exe.submit(() -> {
+			Integer option = -1;
+			while (option == -1)
+				try {
+					option = Integer.parseInt(in.nextLine());
+				} catch (NumberFormatException e) {
+					pleaseInsertNumber();
+					option = -1;
+				}
+			return option;
+		});
+		try {
+			// eseguo l'interfaccia di comunicazione in un thread con timeout
+			// allo scadere del timeout termino il thread e disconnetto il
+			// client
+			result = future.get(timeout, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			move = "End@Disconnect@";
+			System.err.println("Move time expired, now you have been disconnected!");
+			System.err.println("You can close this window");
+			System.exit(0);
+		}
+		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
+		return result;
 	}
 
+	/**
+	 * permetto all utente di selezionare le carte leader desiderate tramite
+	 * l'appropriata procedura di scambio carta con gli altri giocatori
+	 */
 	@Override
 	public void selectLeaderCard(Game game) throws RemoteException {
 		leaderSelected = "";
 		this.game = game;
+		timeout = game.getMoveTimer();
+		System.out.println("Timeout: " + timeout);
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
 			showMsg("______________________________");
 			System.out.printf("%-30s|%n", "| Selected leader cards:");
