@@ -6,83 +6,68 @@ import junit.framework.TestCase;
 
 public class TestResource extends TestCase {
 	Resource prova;
-
+	Resource nothing;
+	String info;
+	
 	// assigning the values
 	public void setUp() {
-		prova = new Resource(0, 2, 3, 4, 8, 1, 4);
+		prova = new Resource(1, 2, 3, 4, 8, 1, 4);
+		nothing = new Resource(0,0,0,0,0,0,0);
 	}
 
 	@Test
 	public void testResource() {
-		/*
+		/**
 		 * getInfo() testing
 		 */
-		String info = prova.getInfo();
-		//testa anche che non si stampi un attributo se <=0
-		assertEquals("stone: 2%nservants: 3%ncoins: 4%nfaith: 8%nmilitary: 1%nvictory: 4%n", info);
-		/*assertEquals(copia, prova);*/
 		
-		/*
+		info = prova.getInfo();
+		//testa anche che non si stampi un attributo se <=0
+		assertEquals("wood: 1%nstone: 2%nservants: 3%ncoins: 4%nfaith: 8%nmilitary: 1%nvictory: 4%n", info);
+		/*assertEquals(copia, prova);*/
+		info = nothing.getInfo();
+		assertEquals("No resource%n", info);
+		
+		
+		/**
 		 * Getters' test
 		 */
-		int a = prova.getWood();
-		assertEquals(0, a);
-		int b = prova.getStone();
-		assertEquals(2, b);
-		int c = prova.getServants();
-		assertEquals(3, c);
-		int d = prova.getCoins();
-		assertEquals(4, d);
-		int e = prova.getFaith();
-		assertEquals(8, e);
-		int f = prova.getMilitary();
-		assertEquals(1, f);
-		int g = prova.getVictory();
-		assertEquals(4, g);
+		assertEquals(1, prova.getWood().intValue());
+		assertEquals(2, prova.getStone().intValue());
+		assertEquals(3, prova.getServants().intValue());
+		assertEquals(4, prova.getCoins().intValue());
+		assertEquals(8, prova.getFaith().intValue());
+		assertEquals(1, prova.getMilitary().intValue());
+		assertEquals(4, prova.getVictory().intValue());
 
-		/*
+		/**
 		 * clone() test
 		 */
 		Resource copia=prova.clone();
-		int a1 = copia.getWood();
-		assertEquals(a1, a);
-		int b1 = copia.getStone();
-		assertEquals(b1, b);
-		int c1 = copia.getServants();
-		assertEquals(c1, c);
-		int d1 = copia.getCoins();
-		assertEquals(d1, d);
-		int e1 = copia.getFaith();
-		assertEquals(e1, e);
-		int f1 = copia.getMilitary();
-		assertEquals(f1, f);
-		int g1 = copia.getVictory();
-		assertEquals(g1, g);
+		assertEquals(prova.getWood(), copia.getWood());
+		assertEquals(prova.getStone(), copia.getStone());
+		assertEquals(prova.getServants(), copia.getServants()); 
+		assertEquals(prova.getCoins(), copia.getCoins());
+		assertEquals(prova.getFaith(), copia.getFaith()); 
+		assertEquals(prova.getMilitary(), copia.getMilitary()); 
+		assertEquals(prova.getVictory(), copia.getVictory());
 		
-		/*
+		/**
 		 * Setters' test
 		 */
 		prova.setWood(6);
-		a = prova.getWood();
-		assertEquals(6, a);
+		assertEquals(6, prova.getWood().intValue());
 		prova.setStone(1);
-		b = prova.getStone();
-		assertEquals(1, b);
+		assertEquals(1, prova.getStone().intValue());
 		prova.setServants(11);
-		c = prova.getServants();
-		assertEquals(11, c);
+		assertEquals(11, prova.getServants().intValue());
 		prova.setCoins(5);
-		d = prova.getCoins();
-		assertEquals(5, d);
+		assertEquals(5, prova.getCoins().intValue());
 		prova.setFaith(0);
-		e = prova.getFaith();
-		assertEquals(0, e);
+		assertEquals(0, prova.getFaith().intValue());
 		prova.setMilitary(6);
-		f = prova.getMilitary();
-		assertEquals(6, f);
+		assertEquals(6, prova.getMilitary().intValue());
 		prova.setVictory(7);
-		g = prova.getVictory();
-		assertEquals(7, g);
+		assertEquals(7, prova.getVictory().intValue());
 	}
-
 }
