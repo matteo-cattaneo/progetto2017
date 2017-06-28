@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class TestCouncilSpace extends TestCase{
+public class TestCouncilSpace extends TestCase {
 
 	CouncilSpace prova;
 	Player p1;
@@ -32,9 +32,9 @@ public class TestCouncilSpace extends TestCase{
 		prova.setSpaceRequirement(1);
 		assertEquals(1, prova.getSpaceRequirement().intValue());
 	}
-	
+
 	@Test
-	public void testFamilyMemberList(){
+	public void testFamilyMemberList() {
 		/**
 		 * FamilyMember list test
 		 */
@@ -43,9 +43,9 @@ public class TestCouncilSpace extends TestCase{
 		list.add(fm1);
 		assertEquals(1, list.size());
 		list.add(fm2);
-		prova.getMembers().addAll(list);
+		prova.setMembers(list);
 		assertEquals(list, prova.getMembers());
 		assertEquals(true, prova.getMembers().containsAll(list));
 	}
-	
+
 }

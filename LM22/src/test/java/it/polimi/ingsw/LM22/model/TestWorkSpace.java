@@ -43,7 +43,7 @@ public class TestWorkSpace extends TestCase{
 		list.add(fm1);
 		assertEquals(1, list.size());
 		list.add(fm2);
-		prova.getMembers().addAll(list);
+		prova.setMembers(list);
 		assertEquals(list, prova.getMembers());
 		assertEquals(true, prova.getMembers().containsAll(list));
 	}
