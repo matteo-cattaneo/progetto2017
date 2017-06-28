@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class FamilyMember implements Serializable {
 
 	private static final long serialVersionUID = -4684293272659060314L;
-	private final Integer UNCOLORED_PAWN_VALUE = 0;
 	private final Player player;
 	private final String color; // "UNCOLORED" means that is uncolored
 	private Integer value;
@@ -18,9 +17,7 @@ public class FamilyMember implements Serializable {
 	}
 
 	public Integer getValue() {
-		if (color != "UNCOLORED")
-			return value;
-		return UNCOLORED_PAWN_VALUE;
+		return value;
 	}
 
 	public void setValue(Integer value) {

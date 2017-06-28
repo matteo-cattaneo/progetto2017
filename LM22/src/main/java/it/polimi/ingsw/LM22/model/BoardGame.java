@@ -6,13 +6,6 @@ import java.util.HashMap;
 public class BoardGame implements Serializable {
 
 	private static final long serialVersionUID = 3178699533089217722L;
-	/*
-	 * costanti da mettere forse nel controller?
-	 */
-	private final String TERRITORY = "TERRITORY";
-	private final String CHARACTER = "CHARACTER";
-	private final String BUILDING = "BUILDING";
-	private final String VENTURE = "VENTURE";
 	private final String PRODUCTION = "PRODUCTION";
 	private final String HARVEST = "HARVEST";
 	private final Integer NUM_TOWERS = 4;
