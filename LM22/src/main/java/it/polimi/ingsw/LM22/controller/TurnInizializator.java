@@ -215,7 +215,7 @@ public class TurnInizializator {
 	 * dei familiari del giocatore che l'ha attivata NON GESTISCE FEDERICO DI
 	 * MONTEFELTRO
 	 */
-	public void updateFamilyMembersValue(Game game) throws IOException {
+	private void updateFamilyMembersValue(Game game) throws IOException {
 		for (Player p : game.getPlayersOrder())
 			for (Effect e : p.getEffects()) {
 				if (e instanceof MemberChangeEffect) {

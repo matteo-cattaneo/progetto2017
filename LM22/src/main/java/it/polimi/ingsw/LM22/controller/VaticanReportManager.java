@@ -23,7 +23,7 @@ public class VaticanReportManager {
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti del periodo
 	 * corrente per la Chiesa
 	 */
-	public boolean canGiveSupport(Player p, Integer period) {
+	private boolean canGiveSupport(Player p, Integer period) {
 		if (resourceHandler.enoughResources(p.getPersonalBoard().getResources(), goal[period - 1])) {
 			return true;
 		}
@@ -44,7 +44,7 @@ public class VaticanReportManager {
 	 * metodo che distribuisce i reward derivati dall'aver supportato la chiesa
 	 * o per essere scomunicati
 	 */
-	public void giveResourceDueToChurchSubstain(Player p) {
+	private void giveResourceDueToChurchSubstain(Player p) {
 		Resource bonus;
 		if (p.getPersonalBoard().getResources().getFaith() < MAX_FAITH_GRID)
 			bonus = game.getBoardgame().getFaithGrid().getReward(p.getPersonalBoard().getResources().getFaith());

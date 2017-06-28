@@ -4,7 +4,7 @@ import org.junit.Test;
 import it.polimi.ingsw.LM22.model.Resource;
 import junit.framework.TestCase;
 
-public class ResourceHandlerTest extends TestCase {
+public class TestResourceHandler extends TestCase {
 	ResourceHandler rh = new ResourceHandler();
 	Resource firstResource, secondResource, nothing, result, temp;
 	Integer molt;
