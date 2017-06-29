@@ -160,19 +160,6 @@ public class InitialConfigurator extends TurnInizializator {
 		}
 	}
 
-	// distribuzione casuale delle personal tile (deprecated)
-	@SuppressWarnings("unused")
-	private void personalBoardTileDistribution(Game game) {
-		Random random = new Random();
-		int num;
-		for (Player p : game.getPlayers()) {
-			for (num = random.nextInt(4); game.getPersonalBonusTile()[num] == null; num = random.nextInt(4))
-				;
-			p.getPersonalBoard().setBonusBoard(game.getPersonalBonusTile()[num]);
-			game.getPersonalBonusTile()[num] = null;
-		}
-	}
-
 	/**
 	 * metodo invocato direttamente nel costruttore di questa classe che
 	 * permette di distribuire le risorse con cui i player iniziano la partita
