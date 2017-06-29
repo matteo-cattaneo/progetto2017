@@ -162,6 +162,7 @@ public class InitialConfigurator extends TurnInizializator {
 	}
 
 	// distribuzione casuale delle personal tile (deprecated)
+	@SuppressWarnings("unused")
 	private void personalBoardTileDistribution(Game game) {
 		Random random = new Random();
 		int num;

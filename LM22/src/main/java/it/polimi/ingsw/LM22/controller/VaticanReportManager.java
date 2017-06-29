@@ -17,7 +17,6 @@ public class VaticanReportManager {
 			new Resource(0, 0, 0, 0, 5, 0, 0) };
 	private final ResourceHandler resourceHandler = new ResourceHandler();
 	private Game game;
-	private MainGameController mainGame;
 
 	/**
 	 * metodo che controlla se un giocatore ha raggiunto i requisiti del periodo
@@ -36,7 +35,7 @@ public class VaticanReportManager {
 	 * (giveSupport()-->false) - su richiesta del giocatore se askPlayer mi dice
 	 * che il giocatore decide autonomamente di non dare il sostegno alla Chiesa
 	 */
-	public void exCommunicate(Player player, Integer period) {
+	private void exCommunicate(Player player, Integer period) {
 		player.getEffects().add(game.getBoardgame().getFaithGrid().getExCommunication(period).getEffect());
 	}
 
@@ -61,7 +60,6 @@ public class VaticanReportManager {
 	 */
 	public void manageVaticanReport(Game game, MainGameController mainGame) throws IOException {
 		this.game = game;
-		this.mainGame = mainGame;
 		Integer period = game.getPeriod();
 		for (Player p : game.getPlayersOrder()) {
 			if (canGiveSupport(p, period)) {
