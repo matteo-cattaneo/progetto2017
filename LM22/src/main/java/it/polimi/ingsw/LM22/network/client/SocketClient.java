@@ -54,6 +54,7 @@ public class SocketClient implements IConnection {
 			socketOut.writeUTF(getName());
 			socketOut.flush();
 		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,  "Socket connection Problems!!");
 			UI.showMsg("Socket connection error!");
 		}
 		play();
@@ -142,6 +143,7 @@ public class SocketClient implements IConnection {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
+			LOGGER.log(Level.SEVERE,  "Socket connection Problems!!");
 			UI.showMsg("Socket communication error!");
 		}
 	}

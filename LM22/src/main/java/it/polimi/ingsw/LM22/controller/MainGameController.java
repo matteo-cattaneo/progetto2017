@@ -111,7 +111,7 @@ public class MainGameController implements Runnable {
 						leaderSelected[j] = getIPlayer(p).getLeaderCard();
 						counter++;
 					} catch (IOException e) {
-						System.out.println(p.getNickname() + ": non ha ancora scelto");
+						LOGGER.log(Level.INFO, p.getNickname() + " has not chosen yet");
 					}
 			}
 			// se tutti i player hanno selezionato la carta
@@ -164,6 +164,7 @@ public class MainGameController implements Runnable {
 				try {
 					getIPlayer(p).selectLeaderCard(game);
 				} catch (IOException e) {
+					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected");
 					disconnectPlayer(p);
 				}
 		}
@@ -200,6 +201,7 @@ public class MainGameController implements Runnable {
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
 			} catch (IOException e) {
+				LOGGER.log(Level.INFO, "Lost connection with " + p.getNickname());
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
@@ -211,6 +213,7 @@ public class MainGameController implements Runnable {
 				moveManager.manageMove(aMove);
 				sendAll();
 			} catch (InvalidMoveException e) {
+				LOGGER.log(Level.INFO, p.getNickname() + " has done an invalid move");
 				// il player ha fatto una mossa non valida
 				try {
 					if (sMove.startsWith("Leader"))
@@ -219,6 +222,7 @@ public class MainGameController implements Runnable {
 						getIPlayer(p).showMsg("Invalid member move!!!");
 				} catch (IOException e1) {
 					// player mossa errata + client disconnesso
+					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected");
 					disconnectPlayer(p);
 				}
 			}
@@ -268,7 +272,7 @@ public class MainGameController implements Runnable {
 					playerRoom.get(j).getIplayer().showBoard(game);
 			}
 		} catch (IOException e) {
-
+			LOGGER.log(Level.SEVERE, "Connection Problems due to IOException");
 		}
 	}
 

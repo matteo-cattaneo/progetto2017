@@ -181,6 +181,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
 		}
 	}
 
@@ -198,6 +199,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
 		}
 
 	}
@@ -227,6 +229,8 @@ public class EffectManager {
 			bonus = r.resourceMultiplication(effect.getReward().clone(),
 					player.getPersonalBoard().getVenturesCards().size());
 			break;
+		default:
+			return;
 		}
 		r.addResource(sum, r.calculateResource(bonus.clone(), player));
 	}
@@ -279,6 +283,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
 		}
 
 	}
@@ -330,6 +335,9 @@ public class EffectManager {
 				if (!f.getColor().equals(UNCOLORED))
 					f.setValue(f.getValue() + e.getValueOfBonus());
 			}
+			break;
+		default:
+			return;
 		}
 		if (!player.getEffects().contains(e))
 			player.getEffects().add(e);
