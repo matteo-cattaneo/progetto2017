@@ -8,23 +8,23 @@ import org.junit.Test;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import junit.framework.TestCase;
 
-public class TestPlayer extends TestCase{
-	
+public class TestPlayer extends TestCase {
+
 	Player prova;
-	
-	public void setUp(){
+
+	public void setUp() {
 		prova = new Player("Nicola", "Green");
 	}
-	
+
 	@Test
-	public void testConstructor(){
+	public void testConstructor() {
 		assertEquals("Nicola", prova.getNickname());
 		assertEquals("Green", prova.getColor());
-		
+
 	}
-	
+
 	@Test
-	public void testHandLaderCards(){
+	public void testHandLaderCards() {
 		List<LeaderCard> list = new ArrayList<LeaderCard>();
 		LeaderCard l1 = new LeaderCard();
 		LeaderCard l2 = new LeaderCard();
@@ -35,9 +35,9 @@ public class TestPlayer extends TestCase{
 		prova.setHandLeaderCards(list);
 		assertEquals(list, prova.getHandLeaderCards());
 	}
-	
+
 	@Test
-	public void testActivatedLeaderCards(){
+	public void testActivatedLeaderCards() {
 		List<LeaderCard> list = new ArrayList<LeaderCard>();
 		LeaderCard l1 = new LeaderCard();
 		LeaderCard l2 = new LeaderCard();
@@ -48,9 +48,9 @@ public class TestPlayer extends TestCase{
 		prova.setActivatedLeaderCards(list);
 		assertEquals(list, prova.getActivatedLeaderCards());
 	}
-	
+
 	@Test
-	public void testLeaderCards(){
+	public void testLeaderCards() {
 		List<LeaderCard> list = new ArrayList<LeaderCard>();
 		LeaderCard l1 = new LeaderCard();
 		LeaderCard l2 = new LeaderCard();
@@ -61,9 +61,9 @@ public class TestPlayer extends TestCase{
 		prova.setLeaderCards(list);
 		assertEquals(list, prova.getLeaderCards());
 	}
-	
+
 	@Test
-	public void testFamilyMembers(){
+	public void testFamilyMembers() {
 		FamilyMember m1 = new FamilyMember(prova, "Orange");
 		FamilyMember m2 = new FamilyMember(prova, "White");
 		FamilyMember m3 = new FamilyMember(prova, "Black");
@@ -75,5 +75,11 @@ public class TestPlayer extends TestCase{
 		list.add(m4);
 		prova.setMembers(list);
 		assertEquals(list, prova.getMembers());
+	}
+
+	@Test
+	public void testPlayerLists() {
+		assertNotNull(prova.getPersonalBoard());
+		assertNotNull(prova.getEffects());
 	}
 }

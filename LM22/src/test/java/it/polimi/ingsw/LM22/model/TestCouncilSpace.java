@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class TestCouncilSpace extends TestCase {
 	Player p2;
 	FamilyMember fm1;
 	FamilyMember fm2;
+	FileParser fp;
+	Game game;
 
 	// assigning the values
 	public void setUp() {
@@ -22,6 +25,8 @@ public class TestCouncilSpace extends TestCase {
 		p2 = new Player("Name2", "Green");
 		fm1 = new FamilyMember(p1, "Orange");
 		fm2 = new FamilyMember(p2, "Uncolored");
+		fp = new FileParser();
+		game = new Game();
 	}
 
 	@Test
@@ -48,4 +53,12 @@ public class TestCouncilSpace extends TestCase {
 		assertEquals(true, prova.getMembers().containsAll(list));
 	}
 
+	@Test
+	public void testCouncilSpace() throws IOException {
+		fp.getCouncilSpace(game);
+		assertNotNull(game.getBoardgame().getCouncilPalace());
+		assertEquals(1, game.getBoardgame().getCouncilPalace().getSpaceRequirement().intValue());
+		assertEquals(1, game.getBoardgame().getCouncilPalace().getCouncilPrivilege().intValue());
+		assertNotNull(game.getBoardgame().getCouncilPalace().getReward());
+	}
 }

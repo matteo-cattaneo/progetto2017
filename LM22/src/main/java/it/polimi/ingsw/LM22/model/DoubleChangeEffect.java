@@ -13,8 +13,8 @@ public class DoubleChangeEffect extends ChangeEffect implements Serializable {
 
 	public String getInfo() {
 		String info;
-		info = "You can exchange " + exchangeEffect1[0].getInfo() + "to " + exchangeEffect1[1].getInfo() + " OR ";
-		info = info + "You can exchange " + exchangeEffect2[0].getInfo() + "to " + exchangeEffect2[1].getInfo();
+		info = super.getInfo() + " OR ";
+		info = info + "You can exchange " + exchangeEffect2[0].getInfo() + " to " + exchangeEffect2[1].getInfo();
 		return info;
 	}
 

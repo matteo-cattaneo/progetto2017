@@ -32,7 +32,7 @@ public class WorkActionEffect extends ImmediateEffect  implements Serializable {
 		info = info + "You earn " + resource.getInfo();
 		if (councilPrivilege > 0)
 			info = info + "You eard also " + councilPrivilege + "councilPrivilege(s)%n";
-		info = info + "You can do a " + typeOfWork + "Action with a value of " + workActionValue;
+		info = info + "You can do a " + typeOfWork + " Action with a value of " + workActionValue;
 		return info;
 	}
 }
