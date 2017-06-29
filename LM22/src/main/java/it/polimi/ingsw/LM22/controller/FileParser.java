@@ -1,4 +1,4 @@
-package it.polimi.ingsw.LM22.model;
+package it.polimi.ingsw.LM22.controller;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -14,6 +14,32 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
+import it.polimi.ingsw.LM22.model.BuildingCard;
+import it.polimi.ingsw.LM22.model.CardActionEffect;
+import it.polimi.ingsw.LM22.model.CardToResourceEffect;
+import it.polimi.ingsw.LM22.model.ChangeEffect;
+import it.polimi.ingsw.LM22.model.ChangeToPrivilegeEffect;
+import it.polimi.ingsw.LM22.model.CharacterCard;
+import it.polimi.ingsw.LM22.model.ColorCardBonusEffect;
+import it.polimi.ingsw.LM22.model.CouncilSpace;
+import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
+import it.polimi.ingsw.LM22.model.FaithGrid;
+import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.ImmediateEffect;
+import it.polimi.ingsw.LM22.model.MarketSpace;
+import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
+import it.polimi.ingsw.LM22.model.NoEffect;
+import it.polimi.ingsw.LM22.model.NoPermanentEffect;
+import it.polimi.ingsw.LM22.model.PermanentEffect;
+import it.polimi.ingsw.LM22.model.PersonalBonusTile;
+import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
+import it.polimi.ingsw.LM22.model.ResourceToResourceEffect;
+import it.polimi.ingsw.LM22.model.TerritoryCard;
+import it.polimi.ingsw.LM22.model.Tower;
+import it.polimi.ingsw.LM22.model.VentureCard;
+import it.polimi.ingsw.LM22.model.WorkActionEffect;
+import it.polimi.ingsw.LM22.model.WorkBonusEffect;
 import it.polimi.ingsw.LM22.model.excommunication.DiceCardMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DiceMalusEx;
 import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;

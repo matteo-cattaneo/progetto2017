@@ -181,7 +181,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
 		}
 	}
 
@@ -199,7 +199,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
 		}
 
 	}
@@ -283,7 +283,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect");
+			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
 		}
 
 	}

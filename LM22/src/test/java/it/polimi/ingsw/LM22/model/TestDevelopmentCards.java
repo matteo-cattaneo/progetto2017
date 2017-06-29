@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import it.polimi.ingsw.LM22.controller.FileParser;
 import junit.framework.TestCase;
 
 public class TestDevelopmentCards extends TestCase {
@@ -86,7 +87,7 @@ public class TestDevelopmentCards extends TestCase {
 		assertNotNull(((WorkActionEffect) venture.getImmediateEffect()).getResource());
 		assertNotNull(venture.getPermanentEffect());
 		assertEquals("Name: Migliorare le Strade%nPeriod: 3%nCard cost:%nservants: 3%ncoins: 4%n"
-				+ "Immediate effect:%nYou earn No resource%nYou can do a PRODUCTION Action with a value of 3"
+				+ "Immediate effect:%nYou earn No resource%nYou can do a PRODUCTION Action with a value of 3%n"
 				+ "Permament effect:%nvictory: 5%nCard type: Venture%n", venture.getInfo());
 	}
 }

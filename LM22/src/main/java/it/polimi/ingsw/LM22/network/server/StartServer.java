@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.polimi.ingsw.LM22.controller.FileParser;
 import it.polimi.ingsw.LM22.controller.MainGameController;
-import it.polimi.ingsw.LM22.model.FileParser;
 
 /**
  * classe principale del server, attende la connessione dei giocatori e crea le
@@ -176,6 +176,7 @@ public class StartServer {
 class SocketConnection implements Runnable {
 	private Socket socket = new Socket();
 	private ServerSocket serverSocket;
+	private final Logger LOGGER = Logger.getLogger(SocketConnection.class.getClass().getSimpleName());
 
 	public SocketConnection(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
@@ -187,7 +188,7 @@ class SocketConnection implements Runnable {
 			// resto in attesa di un client connesso
 			socket = serverSocket.accept();
 		} catch (IOException e) {
-			System.err.println("Socket IOException");
+			LOGGER.log(Level.SEVERE, "Socket IOException", e);
 		}
 	}
 

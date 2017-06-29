@@ -86,6 +86,7 @@ public class MainGameController implements Runnable {
 					game.getPersonalBonusTile()[selection] = null;
 				} catch (IOException e) {
 					disconnectPlayer(p);
+					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e);
 				}
 		}
 	}
@@ -111,7 +112,7 @@ public class MainGameController implements Runnable {
 						leaderSelected[j] = getIPlayer(p).getLeaderCard();
 						counter++;
 					} catch (IOException e) {
-						LOGGER.log(Level.INFO, p.getNickname() + " has not chosen yet");
+						LOGGER.log(Level.INFO, p.getNickname() + " has not chosen yet", e);
 					}
 			}
 			// se tutti i player hanno selezionato la carta
@@ -164,7 +165,7 @@ public class MainGameController implements Runnable {
 				try {
 					getIPlayer(p).selectLeaderCard(game);
 				} catch (IOException e) {
-					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected");
+					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e);
 					disconnectPlayer(p);
 				}
 		}
@@ -201,7 +202,7 @@ public class MainGameController implements Runnable {
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
 			} catch (IOException e) {
-				LOGGER.log(Level.INFO, "Lost connection with " + p.getNickname());
+				LOGGER.log(Level.INFO, "Lost connection with " + p.getNickname(), e);
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
@@ -213,7 +214,7 @@ public class MainGameController implements Runnable {
 				moveManager.manageMove(aMove);
 				sendAll();
 			} catch (InvalidMoveException e) {
-				LOGGER.log(Level.INFO, p.getNickname() + " has done an invalid move");
+				LOGGER.log(Level.INFO, p.getNickname() + " has done an invalid move", e);
 				// il player ha fatto una mossa non valida
 				try {
 					if (sMove.startsWith("Leader"))
@@ -222,7 +223,7 @@ public class MainGameController implements Runnable {
 						getIPlayer(p).showMsg("Invalid member move!!!");
 				} catch (IOException e1) {
 					// player mossa errata + client disconnesso
-					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected");
+					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e1);
 					disconnectPlayer(p);
 				}
 			}
@@ -272,7 +273,7 @@ public class MainGameController implements Runnable {
 					playerRoom.get(j).getIplayer().showBoard(game);
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Connection Problems due to IOException");
+			LOGGER.log(Level.SEVERE, "Connection Problems due to IOException", e);
 		}
 	}
 
@@ -353,7 +354,7 @@ public class MainGameController implements Runnable {
 		}
 		return;
 	}
-	
+
 	/**
 	 * metodo che gestisce l'attribuzione dei punti vittoria in base al numero
 	 * di carte territorio o personaggio che ogni player ha ottenuto +
@@ -513,7 +514,7 @@ public class MainGameController implements Runnable {
 				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer())))
 					playerRoom.get(j).getIplayer().showMsg(msg);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!");
+				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);
 			}
 		System.out.println(msg);
 	}

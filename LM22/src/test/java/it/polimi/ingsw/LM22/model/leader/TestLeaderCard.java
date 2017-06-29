@@ -1,14 +1,11 @@
-package it.polimi.ingsw.LM22.model;
+package it.polimi.ingsw.LM22.model.leader;
 
 import java.io.IOException;
 
 import org.junit.Test;
 
-import it.polimi.ingsw.LM22.model.leader.CardRequest;
-import it.polimi.ingsw.LM22.model.leader.LeaderCard;
-import it.polimi.ingsw.LM22.model.leader.LeaderResourceEffect;
-import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
-import it.polimi.ingsw.LM22.model.leader.WorkAction;
+import it.polimi.ingsw.LM22.controller.FileParser;
+import it.polimi.ingsw.LM22.model.Game;
 import junit.framework.TestCase;
 
 public class TestLeaderCard extends TestCase {
@@ -36,8 +33,8 @@ public class TestLeaderCard extends TestCase {
 		assertEquals(1, ((WorkAction) leader.getEffect()).getValueOfWork().intValue());
 		assertEquals("HARVEST", ((WorkAction) leader.getEffect()).getTypeOfWork());
 		assertEquals(
-				"Name: Francesco Sforza%nRequest:%nYou must have%nEffect:%n"
-						+ "You are able to do a HARVEST action with a value of 1%nCard type: Leader%n",
+				"Name: Francesco Sforza%nRequest:%n" + "You must have%n- 5 Venture cards%n"
+						+ "Effect:%nYou are able to do" + " a HARVEST action with a value of 1%nCard type: Leader%n",
 				leader.getInfo());
 	}
 

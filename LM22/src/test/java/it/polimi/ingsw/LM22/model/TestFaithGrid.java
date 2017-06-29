@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import it.polimi.ingsw.LM22.controller.FileParser;
 import junit.framework.TestCase;
 
 public class TestFaithGrid extends TestCase {

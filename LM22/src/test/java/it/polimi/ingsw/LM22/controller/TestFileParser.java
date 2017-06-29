@@ -1,9 +1,11 @@
-package it.polimi.ingsw.LM22.model;
+package it.polimi.ingsw.LM22.controller;
 
 import java.io.IOException;
 
 import org.junit.Test;
 
+import it.polimi.ingsw.LM22.controller.FileParser;
+import it.polimi.ingsw.LM22.model.Game;
 import junit.framework.TestCase;
 
 public class TestFileParser extends TestCase {

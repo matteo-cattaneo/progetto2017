@@ -32,11 +32,11 @@ public class CardRequest extends LeaderCardRequest implements Serializable {
 		info = "You must have%n";
 		if (!getTerritoryCards().equals(0))
 			info = info + "- " + getTerritoryCards() + " Territory cards%n";
-		if (!getTerritoryCards().equals(0))
+		if (!getCharacterCards().equals(0))
 			info = info + "- " + getCharacterCards() + " Character cards%n";
-		if (!getTerritoryCards().equals(0))
+		if (!getBuildingCards().equals(0))
 			info = info + "- " + getBuildingCards() + " Buildings cards%n";
-		if (!getTerritoryCards().equals(0))
+		if (!getVentureCards().equals(0))
 			info = info + "- " + getVentureCards() + " Venture cards%n";
 		return info;
 	}
