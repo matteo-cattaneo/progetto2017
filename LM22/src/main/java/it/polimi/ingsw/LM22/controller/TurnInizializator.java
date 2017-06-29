@@ -31,7 +31,6 @@ public class TurnInizializator {
 	private final Integer BUILDING = 2;
 	private final Integer VENTURE = 3;
 	private final Integer FIVE_PLAYERS = 5;
-	private final Integer UNCOLORED_MEMBER = 0;
 	private final Integer DICE_NUMBER = 3;
 	private final Integer DICE_MAX = 6;
 	private final Integer DICE_MIN = 1;
@@ -39,7 +38,6 @@ public class TurnInizializator {
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = { "PRODUCTION", "HARVEST" };
 	private final Integer NOTHING = 0;
-	private final Resource ZERO = new Resource(0, 0, 0, 0, 0, 0, 0);
 
 	private MainGameController mainGC;
 	private EffectManager effectManager;

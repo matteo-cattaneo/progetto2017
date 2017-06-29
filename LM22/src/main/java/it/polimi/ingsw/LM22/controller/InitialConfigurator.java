@@ -82,8 +82,7 @@ public class InitialConfigurator extends TurnInizializator {
 	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) {
 		Player players[] = new Player[playerRoom.size()];
 		game.setPlayers(players);
-		int i = 0;
-		for (Player p : game.getPlayers()) {
+		for (int i = 0; i < game.getPlayers().length;) {
 			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);
 			List<FamilyMember> members = new ArrayList<FamilyMember>();
 			int j;
