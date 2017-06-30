@@ -339,7 +339,7 @@ public class MainGameController implements Runnable {
 		for (Player p : game.getPlayersOrder()) {
 			if (p.getPersonalBoard().getResources().getMilitary().equals(max1)) {
 				resourceHandler.addResource(p.getPersonalBoard().getResources(),
-						resourceHandler.calculateResource(FIVE_VICTORY, p));
+						resourceHandler.calculateResource(FIVE_VICTORY, p, false));
 				cont1++;
 			}
 		}
@@ -348,7 +348,7 @@ public class MainGameController implements Runnable {
 		for (Player p : game.getPlayersOrder()) {
 			if (p.getPersonalBoard().getResources().getMilitary().equals(max2)) {
 				resourceHandler.addResource(p.getPersonalBoard().getResources(),
-						resourceHandler.calculateResource(TWO_VICTORY, p));
+						resourceHandler.calculateResource(TWO_VICTORY, p, false));
 			}
 		}
 		return;
@@ -378,7 +378,8 @@ public class MainGameController implements Runnable {
 		}
 		Resource total = NOTHING;
 		for (VentureCard card : p.getPersonalBoard().getVenturesCards()) {
-			resourceHandler.addResource(total, resourceHandler.calculateResource(card.getPermanentEffect().copy(), p));
+			resourceHandler.addResource(total,
+					resourceHandler.calculateResource(card.getPermanentEffect().copy(), p, false));
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), total);
 	}
@@ -400,7 +401,7 @@ public class MainGameController implements Runnable {
 				return;
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
-				.calculateResource(characterReward[p.getPersonalBoard().getCharactersCards().size()].copy(), p));
+				.calculateResource(characterReward[p.getPersonalBoard().getCharactersCards().size()].copy(), p, false));
 	}
 
 	private void manageFinalTerritoryCards(Player p) {
@@ -408,8 +409,8 @@ public class MainGameController implements Runnable {
 			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType().equals(TERRITORY))
 				return;
 		}
-		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
-				.calculateResource(territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].copy(), p));
+		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler.calculateResource(
+				territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].copy(), p, false));
 	}
 
 	/**

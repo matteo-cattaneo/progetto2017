@@ -45,8 +45,10 @@ public class TestLeaderEffects extends TestCase {
 	public void testDoubleResourceEffect() {
 		DoubleResourceEffect effect = (DoubleResourceEffect) game.getLeaderCards().get(16).getEffect();
 		assertNotNull(effect.getResourceMoltiplicator());
-		assertEquals("Everytime you earn resources due to an immediate effect of a development card you earn "
-				+ "the reward moltiplicated by wood: 2%nstone: 2%nservants: 2%ncoins: 2%n", effect.getInfo());
+		assertEquals(
+				"Everytime you earn resources due to an immediate effect of a development card you earn "
+						+ "the reward moltiplicated by wood: 2%nstone: 2%nservants: 2%ncoins: 2%nfaith: 1%nmilitary: 1%nvictory: 1%n",
+				effect.getInfo());
 	}
 
 	@Test

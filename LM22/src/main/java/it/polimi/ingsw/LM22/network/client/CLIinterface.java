@@ -92,7 +92,6 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printMoveMenu() throws RemoteException {
 		move = "Restart@";
-		timeout = game.getMoveTimer();
 		// mostro il menu se l'utente ha richiesto di rieffettuare la mossa
 		while ("Restart@".equals(move)) {
 			move = "";
@@ -1304,6 +1303,7 @@ public class CLIinterface extends AbstractUI {
 			printInvalidInput();
 			selectLeaderCard(game);
 		}
+		timeout = game.getMoveTimer();
 	}
 
 	@Override

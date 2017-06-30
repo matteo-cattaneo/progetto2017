@@ -4,6 +4,7 @@ import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
+import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
 
 public class ResourceHandler {
 	/**
@@ -17,11 +18,20 @@ public class ResourceHandler {
 	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba
 	 * essere ridotto
 	 */
-	public Resource calculateResource(Resource res, Player p) {
+	public Resource calculateResource(Resource res, Player p, boolean isDevEffect) {
 		Resource resource = res.copy();
 		for (Effect e : p.getEffects())
 			if (e instanceof ResourceMalusEx) {
 				resource = cardDiscounted(res, ((ResourceMalusEx) e).getMalus());
+			} else if (e instanceof DoubleResourceEffect && isDevEffect) {
+				Resource molt = ((DoubleResourceEffect) e).getResourceMoltiplicator();
+				resource.setCoins(resource.getCoins() * molt.getCoins());
+				resource.setWood(resource.getWood() * molt.getWood());
+				resource.setStone(resource.getStone() * molt.getStone());
+				resource.setServants(resource.getServants() * molt.getServants());
+				resource.setFaith(resource.getFaith() * molt.getFaith());
+				resource.setMilitary(resource.getMilitary() * molt.getMilitary());
+				resource.setVictory(resource.getVictory() * molt.getVictory());
 			}
 		return resource;
 	}
