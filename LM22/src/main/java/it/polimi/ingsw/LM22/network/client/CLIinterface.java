@@ -66,6 +66,7 @@ public class CLIinterface extends AbstractUI {
 	/**
 	 * permette di indicare se è possibile muovere un familiare
 	 */
+	@Override
 	public void setMemberMove(boolean memberMove) {
 		this.memberMove = memberMove;
 	}
@@ -93,9 +94,9 @@ public class CLIinterface extends AbstractUI {
 		move = "Restart@";
 		timeout = game.getMoveTimer();
 		// mostro il menu se l'utente ha richiesto di rieffettuare la mossa
-		while (move.equals("Restart@")) {
+		while ("Restart@".equals(move)) {
 			move = "";
-			System.out.println("Timeout: " + timeout);
+			showMsg("Timeout: " + timeout);
 			showMsg("Choose your Move:");
 			if (!memberMove)
 				showMsg("1: Move a Member");
@@ -153,23 +154,23 @@ public class CLIinterface extends AbstractUI {
 	 * inserendo anche solo una parte del nome della carta
 	 */
 	private void showCard() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Insert the card name: (no case sensitive)");
 		String cardName = in.nextLine();
 		DevelopmentCard card = null;
 		boolean leader = false;
 		showMsg("");
-		if (!cardName.equals("")) {
+		if (!"".equals(cardName)) {
 			// verifico se è una development card
 			for (int j = 0; j < 4; j++)
 				for (Tower t : game.getBoardgame().getTowers())
-					if (t.getFloor()[j].getCard().getName() != null)
-						if (t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
-							card = t.getFloor()[j].getCard();
+					if (t.getFloor()[j].getCard().getName() != null
+							&& t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
+						card = t.getFloor()[j].getCard();
 			leader = showLeader(cardName);
 		}
 		if (card != null)
-			System.out.printf(card.getInfo());
+			msgFormat(card.getInfo());
 		else if (!leader)
 			showMsg("Card not found!");
 		showMsg("");
@@ -189,7 +190,7 @@ public class CLIinterface extends AbstractUI {
 			if (ld.getName().toLowerCase().startsWith(cardName.toLowerCase()))
 				lcard = ld;
 		if (lcard != null) {
-			System.out.printf(lcard.getInfo());
+			msgFormat(lcard.getInfo());
 			return true;
 		} else
 			return false;
@@ -197,7 +198,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMemberMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		memberMove = true;
 		showMsg("Choose your move:");
 		showMsg("1: Card");
@@ -235,17 +236,17 @@ public class CLIinterface extends AbstractUI {
 	public void printCardMoveMenu() throws RemoteException {
 		setMove(CARDMOVE);
 		printFamilyMemberMenu();
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printServantsAddictionMenu());
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printTowersMenu());
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printLevelsMenu());
 	}
 
 	@Override
 	public void printFamilyMemberMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose your Family Member you want to move:");
 		int i = 0;
 		for (FamilyMember fm : getPlayer(name, game).getMembers()) {
@@ -278,8 +279,9 @@ public class CLIinterface extends AbstractUI {
 		}
 	}
 
+	@Override
 	public String printServantsAddictionMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Insert how many servants you want to use");
 		Integer servants = input();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
@@ -292,7 +294,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printTowersMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the Tower:");
 		showMsg("1: " + TERRITORY);
 		showMsg("2: " + CHARACTER);
@@ -314,7 +316,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printLevelsMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
 
 		int option = input();
@@ -334,15 +336,15 @@ public class CLIinterface extends AbstractUI {
 	public void printMarketMoveMenu() throws RemoteException {
 		setMove(MARKETMOVE);
 		printFamilyMemberMenu();
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printServantsAddictionMenu());
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			printMarketSelectionMenu();
 	}
 
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the Market space:");
 		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo().replaceAll("%n", " "));
 		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo().replaceAll("%n", " "));
@@ -383,15 +385,15 @@ public class CLIinterface extends AbstractUI {
 	public void printWorkMoveMenu() throws RemoteException {
 		setMove(WORKMOVE);
 		printFamilyMemberMenu();
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printServantsAddictionMenu());
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			printWorkSelectionMenu();
 	}
 
 	@Override
 	public void printWorkSelectionMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the Work type:");
 		showMsg("1: Production");
 		showMsg("2: Harvest");
@@ -418,16 +420,16 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
-		if (!move.equals("Restart@"))
+		if (!"Restart@".equals(move))
 			setMove(printServantsAddictionMenu());
 	}
 
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		setMove("LeaderSell");
 		showMsg("Choose the Leader card to sell:");
 		int i;
@@ -449,7 +451,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
 		if (!getPlayer(name, game).getLeaderCards().isEmpty())
 			ld.addAll(getPlayer(name, game).getLeaderCards());
@@ -506,12 +508,10 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public String getName() {
-		String name;
 		showMsg("Username(Player): ");
 		name = in.nextLine();
-		if (name.equals(""))
+		if ("".equals(name))
 			name = "Player";
-		this.name = name;
 		return name;
 	}
 
@@ -523,7 +523,7 @@ public class CLIinterface extends AbstractUI {
 		String ip;
 		showMsg("Indirizzo ip server(" + DEFAULT_IP + "): ");
 		ip = in.nextLine();
-		if (ip.equals(""))
+		if ("".equals(ip))
 			ip = DEFAULT_IP;
 		return ip;
 	}
@@ -534,6 +534,14 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showMsg(String s) {
 		System.out.println(s);
+	}
+
+	private void msgFormat(String form, String msg) {
+		System.out.printf(form, msg);
+	}
+
+	private void msgFormat(String msg) {
+		System.out.printf(msg);
 	}
 
 	@Override
@@ -549,45 +557,43 @@ public class CLIinterface extends AbstractUI {
 	 */
 	private void showPersonalBoard() throws RemoteException {
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Period: " + game.getPeriod());
-		System.out.printf("%-30s|%n", "| Round: " + game.getRound());
-		System.out.printf("%-30s|%n", "| ");
+		msgFormat("%-30s|%n", "| Period: " + game.getPeriod());
+		msgFormat("%-30s|%n", "| Round: " + game.getRound());
+		msgFormat("%-30s|%n", "| ");
 		// visualizzo tutti i dadi sulla stessa riga
-		System.out.printf("%-30s|%n| ", "| Dices:");
+		msgFormat("%-30s|%n| ", "| Dices:");
 		for (int i = 0; i < 3; i++)
-			System.out.printf("%-8s| ", MEMBER_COLOR[i]);
-		System.out.printf("%n| ");
+			msgFormat("%-8s| ", MEMBER_COLOR[i]);
+		msgFormat("%n| ");
 		for (int i = 0; i < 3; i++)
-			System.out.printf("%-8s| ", game.getBoardgame().getDice(MEMBER_COLOR[i]));
+			msgFormat("%-8s| ", game.getBoardgame().getDice(MEMBER_COLOR[i]).toString());
 
-		System.out.printf("%n|_____________________________|%n");
-		System.out.printf("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
-		System.out.printf("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
-		System.out.printf("%-30s|%n", "| ");
+		msgFormat("%n|_____________________________|%n");
+		msgFormat("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
+		msgFormat("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
+		msgFormat("%-30s|%n", "| ");
 		// visualizzo i familiari su due righe se non ancora utilizzati
-		System.out.printf("%-30s|%n| ", "| Family members:");
+		msgFormat("%-30s|%n| ", "| Family members:");
 		for (int i = 0; i < 2; i++)
 			if (!getPlayer(name, game).getMembers().get(i).isUsed())
-				System.out.printf("%-13s| ",
-						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+				msgFormat("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
 			else
-				System.out.printf("%-13s| ", "");
-		System.out.printf("%n| ");
+				msgFormat("%-13s| ", "");
+		msgFormat("%n| ");
 		for (int i = 2; i < 4; i++)
 			if (!getPlayer(name, game).getMembers().get(i).isUsed())
-				System.out.printf("%-13s| ",
-						MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
+				msgFormat("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
 			else
-				System.out.printf("%-13s| ", "");
-		System.out.printf("%n|_____________________________|__________________%n");
-		System.out.printf("%-12s", "| Coins");
-		System.out.printf("%-12s", "| Wood");
-		System.out.printf("%-12s", "| Stone");
-		System.out.printf("%-12s|%n", "| Servants");
-		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
-		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
-		System.out.printf("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
-		System.out.printf("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
+				msgFormat("%-13s| ", "");
+		msgFormat("%n|_____________________________|__________________%n");
+		msgFormat("%-12s", "| Coins");
+		msgFormat("%-12s", "| Wood");
+		msgFormat("%-12s", "| Stone");
+		msgFormat("%-12s|%n", "| Servants");
+		msgFormat("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getCoins());
+		msgFormat("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
+		msgFormat("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
+		msgFormat("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
 		showMsg("|___________|___________|___________|___________|_____________________________________________");
 
 	}
@@ -600,9 +606,9 @@ public class CLIinterface extends AbstractUI {
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()
 				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty()
 				|| !getPlayer(name, game).getLeaderCards().isEmpty()) {
-			System.out.printf("|%-30s|", " Hand leader cards:");
-			System.out.printf("%-30s|", " Table leader cards:");
-			System.out.printf("%-30s|%n|", " Activated leader cards:");
+			msgFormat("|%-30s|", " Hand leader cards:");
+			msgFormat("%-30s|", " Table leader cards:");
+			msgFormat("%-30s|%n|", " Activated leader cards:");
 			// calcolo il massimo numero di righe della tabella
 			int max = getPlayer(name, game).getHandLeaderCards().size();
 			if (getPlayer(name, game).getLeaderCards().size() > max)
@@ -611,64 +617,60 @@ public class CLIinterface extends AbstractUI {
 				max = getPlayer(name, game).getActivatedLeaderCards().size();
 			for (int i = 0; i < max; i++) {
 				if (i < getPlayer(name, game).getHandLeaderCards().size())
-					System.out.printf("%-30s|", " " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
+					msgFormat("%-30s|", " " + getPlayer(name, game).getHandLeaderCards().get(i).getName());
 				else
-					System.out.printf("%-30s|", "");
+					msgFormat("%-30s|", "");
 				if (i < getPlayer(name, game).getLeaderCards().size())
-					System.out.printf("%-30s|", " " + getPlayer(name, game).getLeaderCards().get(i).getName());
+					msgFormat("%-30s|", " " + getPlayer(name, game).getLeaderCards().get(i).getName());
 				else
-					System.out.printf("%-30s|", "");
+					msgFormat("%-30s|", "");
 				if (i < getPlayer(name, game).getActivatedLeaderCards().size())
-					System.out.printf("%-30s|", " " + getPlayer(name, game).getActivatedLeaderCards().get(i).getName());
+					msgFormat("%-30s|", " " + getPlayer(name, game).getActivatedLeaderCards().get(i).getName());
 				else
-					System.out.printf("%-30s|", "");
-				System.out.printf("%n|%s", "");
+					msgFormat("%-30s|", "");
+				msgFormat("%n|%s", "");
 			}
 			showMsg("______________________________|______________________________|______________________________|");
 		}
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			System.out.printf(
-					"%-30s|____________________________________________________________________________________",
+			msgFormat("%-30s|____________________________________________________________________________________",
 					"| Territory cards:");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards()) {
-				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
-				System.out.printf("%-20s| ", "Requirement: " + c.getRequirement());
+				msgFormat("%n%-30s| ", "| " + c.getName());
+				msgFormat("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%-20s| ", "Requirement: " + c.getRequirement());
 			}
 			showMsg("");
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			System.out.printf(
-					"%-30s|____________________________________________________________________________________",
+			msgFormat("%-30s|____________________________________________________________________________________",
 					"| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
-				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%n%-30s| ", "| " + c.getName());
+				msgFormat("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
 			showMsg("|_____________________________|___________________________________________________________________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			System.out.printf(
-					"%-30s|____________________________________________________________________________________",
+			msgFormat("%-30s|____________________________________________________________________________________",
 					"| Building cards:");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards()) {
-				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
-				System.out.printf("%-20s| ", "Requirement: " + c.getRequirement());
+				msgFormat("%n%-30s| ", "| " + c.getName());
+				msgFormat("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%-20s| ", "Requirement: " + c.getRequirement());
 			}
 			showMsg("");
 			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			System.out.printf(
-					"%-30s|____________________________________________________________________________________",
+			msgFormat("%-30s|____________________________________________________________________________________",
 					"| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
-				System.out.printf("%n%-30s| ", "| " + c.getName());
-				System.out.printf("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%n%-30s| ", "| " + c.getName());
+				msgFormat("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
 			showMsg("|_____________________________|___________________________________________________________________________________|");
@@ -713,13 +715,13 @@ public class CLIinterface extends AbstractUI {
 				if (p.getPersonalBoard().getResources().getVictory() == j)
 					victory.add(j + " " + p.getNickname());
 		showMsg("________________________________________________________________________");
-		System.out.printf("%-24s", "| Faith track:");
-		System.out.printf("%-24s", "| Military track:");
-		System.out.printf("%-24s|%n", "| Victory track:");
+		msgFormat("%-24s", "| Faith track:");
+		msgFormat("%-24s", "| Military track:");
+		msgFormat("%-24s|%n", "| Victory track:");
 		for (int i = 0; i < game.getPlayersOrder().size(); i++) {
-			System.out.printf("| %-22s| ", faith.get(i));
-			System.out.printf("%-22s| ", military.get(i));
-			System.out.printf("%-22s|%n", victory.get(i));
+			msgFormat("| %-22s| ", faith.get(i));
+			msgFormat("%-22s| ", military.get(i));
+			msgFormat("%-22s|%n", victory.get(i));
 		}
 		showMsg("|_______________________|_______________________|_______________________|");
 	}
@@ -735,7 +737,7 @@ public class CLIinterface extends AbstractUI {
 		 * mostro le informazioni del player che ha preso la carta
 		 */
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Towers: ");
+		msgFormat("%-30s|%n", "| Towers: ");
 		showMsg("|_____________________________|");
 		showMsg("        _________________________________________________________________________________________________");
 		for (int j = 3; j >= 0; j--) {
@@ -743,21 +745,19 @@ public class CLIinterface extends AbstractUI {
 					+ ": | ");
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
-					System.out.printf("%-22s| ", t.getFloor()[j].getCard().getName());
+					msgFormat("%-22s| ", t.getFloor()[j].getCard().getName());
 				else
-					System.out.printf("%-22s| ",
-							"#Name: " + t.getFloor()[j].getSpace().getMember().getPlayer().getNickname());
+					msgFormat("%-22s| ", "#Name: " + t.getFloor()[j].getSpace().getMember().getPlayer().getNickname());
 			showMsg("");
 			System.out.print("Reward: | ");
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
-					System.out.printf("%-22s| ",
-							t.getFloor()[j].getSpace().getReward().getInfo().replaceAll("%n", " "));
+					msgFormat("%-22s| ", t.getFloor()[j].getSpace().getReward().getInfo().replaceAll("%n", " "));
 				else {
 					if (t.getFloor()[j].getSpace().getMember().getColor().equals(MEMBER_COLOR[3]))
-						System.out.printf("%-22s| ", "#Color: " + MEMBER_COLOR[3]);
+						msgFormat("%-22s| ", "#Color: " + MEMBER_COLOR[3]);
 					else
-						System.out.printf("%-22s| ",
+						msgFormat("%-22s| ",
 								"#Color: " + t.getFloor()[j].getSpace().getMember().getPlayer().getColor());
 				}
 			showMsg("");
@@ -766,7 +766,7 @@ public class CLIinterface extends AbstractUI {
 		}
 		// scomuniche
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Excommunication tile:");
+		msgFormat("%-30s|%n", "| Excommunication tile:");
 		showMsg("|_____________________________|");
 		for (ExCommunication ex : game.getBoardgame().getFaithGrid().getExCommunicationTiles()) {
 			System.out.print(" - " + ex.getEffect().getInfo());
@@ -778,10 +778,10 @@ public class CLIinterface extends AbstractUI {
 		}
 		// palazzo del consiglio
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Council Palace members: ");
+		msgFormat("%-30s|%n", "| Council Palace members: ");
 		int i = 1;
 		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
-			System.out.printf("%-30s|%n", "| " + i + ": " + fm.getPlayer().getNickname());
+			msgFormat("%-30s|%n", "| " + i + ": " + fm.getPlayer().getNickname());
 			i++;
 		}
 		showMsg("|_____________________________|");
@@ -805,7 +805,8 @@ public class CLIinterface extends AbstractUI {
 		if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
 				|| !game.getBoardgame().getProductionSpace().getMembers().isEmpty()) {
 			showMsg("_________________________________________________________________________________");
-			System.out.printf("%-40s|%-40s|%n", "| Production players:", " Harvest players:");
+			msgFormat("%-40s|", "| Production players:");
+			msgFormat("%-40s|%n", " Harvest players:");
 			for (int i = 0; i < game.getBoardgame().getProductionSpace().getMembers().size()
 					|| i < game.getBoardgame().getHarvestSpace().getMembers().size(); i++) {
 				List<FamilyMember> production = game.getBoardgame().getProductionSpace().getMembers();
@@ -816,18 +817,18 @@ public class CLIinterface extends AbstractUI {
 						prodColor = production.get(i).getPlayer().getColor();
 					else
 						prodColor = "Uncolored";
-					System.out.printf("%-40s|", "| " + production.get(i).getPlayer().getNickname() + " - " + prodColor);
+					msgFormat("%-40s|", "| " + production.get(i).getPlayer().getNickname() + " - " + prodColor);
 				} else
-					System.out.printf("%-40s|", "|");
+					msgFormat("%-40s|", "|");
 				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i) {
 					String harvColor;
 					if (!harvest.get(i).getColor().equals("Uncolored"))
 						harvColor = harvest.get(i).getPlayer().getColor();
 					else
 						harvColor = "Uncolored";
-					System.out.printf("%-40s|%n", " " + harvest.get(i).getPlayer().getNickname() + " - " + harvColor);
+					msgFormat("%-40s|%n", " " + harvest.get(i).getPlayer().getNickname() + " - " + harvColor);
 				} else
-					System.out.printf("%-40s|%n", " ");
+					msgFormat("%-40s|%n", " ");
 			}
 			showMsg("|_______________________________________|________________________________________|");
 		}
@@ -839,7 +840,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	private void showMarketSpaces() {
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| Market spaces: ");
+		msgFormat("%-30s|%n", "| Market spaces: ");
 		System.out.print("|_____________________________|____________");
 		if (game.getPlayers().length == 4)
 			showMsg("__________________________________________");
@@ -850,9 +851,9 @@ public class CLIinterface extends AbstractUI {
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				if (ms.getMember() == null)
-					System.out.printf("%-19s| ", "Reward:");
+					msgFormat("%-19s| ", "Reward:");
 				else
-					System.out.printf("%-19s| ", "Occupied by:");
+					msgFormat("%-19s| ", "Occupied by:");
 				nMark++;
 			}
 		showMsg("");
@@ -863,9 +864,9 @@ public class CLIinterface extends AbstractUI {
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				String res[] = ms.getReward().getInfo().split("%n");
 				if (ms.getMember() == null)
-					System.out.printf("%-19s| ", "-" + res[0]);
+					msgFormat("%-19s| ", "-" + res[0]);
 				else
-					System.out.printf("%-19s| ", ms.getMember().getPlayer().getNickname());
+					msgFormat("%-19s| ", ms.getMember().getPlayer().getNickname());
 				nMark++;
 			}
 
@@ -877,9 +878,9 @@ public class CLIinterface extends AbstractUI {
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				String res[] = ms.getReward().getInfo().split("%n");
 				if (ms.getMember() == null && res.length == 2)
-					System.out.printf("%-19s| ", "-" + res[1]);
+					msgFormat("%-19s| ", "-" + res[1]);
 				else
-					System.out.printf("%-19s| ", " ");
+					msgFormat("%-19s| ", " ");
 				nMark++;
 			}
 
@@ -890,9 +891,9 @@ public class CLIinterface extends AbstractUI {
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				if (ms.getMember() == null && !ms.getCouncilPrivilege().equals(0))
-					System.out.printf("%-19s| ", "-Privilege: " + ms.getCouncilPrivilege());
+					msgFormat("%-19s| ", "-Privilege: " + ms.getCouncilPrivilege());
 				else
-					System.out.printf("%-19s| ", " ");
+					msgFormat("%-19s| ", " ");
 				nMark++;
 			}
 
@@ -903,9 +904,9 @@ public class CLIinterface extends AbstractUI {
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
 				if (ms.getMember() == null)
-					System.out.printf("%-19s| ", "Requirement: " + ms.getSpaceRequirement());
+					msgFormat("%-19s| ", "Requirement: " + ms.getSpaceRequirement());
 				else
-					System.out.printf("%-19s| ", " ");
+					msgFormat("%-19s| ", " ");
 				nMark++;
 			}
 
@@ -924,7 +925,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		ArrayList<String> list = new ArrayList<String>();
 		String result = new String();
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
@@ -975,7 +976,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printColorMenu() throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the family member that you want improve: ");
 		for (int i = 0; i < 3; i++) {
 			showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
@@ -995,19 +996,19 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printVentureCostMenu(VentureCard vc) throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Which cost do you want pay?: ");
 		showMsg("1: Resource cost");
-		System.out.printf(vc.getCardCost1().getInfo());
+		msgFormat(vc.getCardCost1().getInfo());
 		showMsg("2: Military points cost");
-		System.out.println("Requirement: " + vc.getCardCost2()[0].getMilitary() + " military points");
-		System.out.println("Cost: " + vc.getCardCost2()[1].getMilitary() + " military points");
+		showMsg("Requirement: " + vc.getCardCost2()[0].getMilitary() + " military points");
+		showMsg("Cost: " + vc.getCardCost2()[1].getMilitary() + " military points");
 
 		int option = input();
 		switch (option) {
 		case 1:
 		case 2:
-			return (option - 1);
+			return option - 1;
 		default:
 			printInvalidInput();
 			return printVentureCostMenu(vc);
@@ -1016,11 +1017,11 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public boolean printChangeMenu(Resource[] exchange) throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Do you want change");
-		System.out.printf(exchange[0].getInfo());
+		msgFormat(exchange[0].getInfo());
 		showMsg("with");
-		System.out.printf(exchange[1].getInfo());
+		msgFormat(exchange[1].getInfo());
 		showMsg("1: Yes");
 		showMsg("2: No");
 
@@ -1038,17 +1039,17 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the effect that you want activate: ");
 		showMsg("1: Change");
-		System.out.printf(effect.getExchangeEffect1()[0].getInfo());
+		msgFormat(effect.getExchangeEffect1()[0].getInfo());
 		showMsg("With");
-		System.out.printf(effect.getExchangeEffect1()[1].getInfo());
+		msgFormat(effect.getExchangeEffect1()[1].getInfo());
 		showMsg("OR");
 		showMsg("2: Change");
-		System.out.printf(effect.getExchangeEffect2()[0].getInfo());
+		msgFormat(effect.getExchangeEffect2()[0].getInfo());
 		showMsg("With");
-		System.out.printf(effect.getExchangeEffect2()[1].getInfo());
+		msgFormat(effect.getExchangeEffect2()[1].getInfo());
 		showMsg("0: Don't activate effect");
 		int option = input();
 		switch (option) {
@@ -1064,7 +1065,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		showMsg("Choose the card from which you want to copy the effect:");
 		int i;
 		for (i = 0; i < lcards.size(); i++) {
@@ -1089,133 +1090,131 @@ public class CLIinterface extends AbstractUI {
 		timeout = game.getMoveTimer();
 		int i;
 		PersonalBonusTile pbt[] = game.getPersonalBonusTile();
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				System.out.print("______________________");
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// intestazione generale
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
-				System.out.printf("%-20s| ", "Number " + (i + 1) + ":");
+				msgFormat("%-20s| ", "Number " + (i + 1) + ":");
 		}
-		System.out.printf("%n|");
+		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				System.out.print("_____________________|");
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// intestazione Harvest
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
-				System.out.printf("%-20s| ", "Harvest effect:");
+				msgFormat("%-20s| ", "Harvest effect:");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Harvest effect wood
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getHarvestEffect().getResource().getWood().equals(0))
-					System.out.printf("%-20s| ", "Woods: " + pbt[i].getHarvestEffect().getResource().getWood());
+					msgFormat("%-20s| ", "Woods: " + pbt[i].getHarvestEffect().getResource().getWood());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Harvest effect stone
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getHarvestEffect().getResource().getStone().equals(0))
-					System.out.printf("%-20s| ", "Stones: " + pbt[i].getHarvestEffect().getResource().getStone());
+					msgFormat("%-20s| ", "Stones: " + pbt[i].getHarvestEffect().getResource().getStone());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Harvest effect coins
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getHarvestEffect().getResource().getCoins().equals(0))
-					System.out.printf("%-20s| ", "Coins: " + pbt[i].getHarvestEffect().getResource().getCoins());
+					msgFormat("%-20s| ", "Coins: " + pbt[i].getHarvestEffect().getResource().getCoins());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Harvest effect servants
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getHarvestEffect().getResource().getServants().equals(0))
-					System.out.printf("%-20s| ", "Servants: " + pbt[i].getHarvestEffect().getResource().getServants());
+					msgFormat("%-20s| ", "Servants: " + pbt[i].getHarvestEffect().getResource().getServants());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Harvest effect military
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getHarvestEffect().getResource().getMilitary().equals(0))
-					System.out.printf("%-20s| ", "Military: " + pbt[i].getHarvestEffect().getResource().getMilitary());
+					msgFormat("%-20s| ", "Military: " + pbt[i].getHarvestEffect().getResource().getMilitary());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n|");
+		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				System.out.print("_____________________|");
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// intestazione Production
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
-				System.out.printf("%-20s| ", "Production effect:");
+				msgFormat("%-20s| ", "Production effect:");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Production effect wood
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getProductionEffect().getResource().getWood().equals(0))
-					System.out.printf("%-20s| ", "Woods: " + pbt[i].getProductionEffect().getResource().getWood());
+					msgFormat("%-20s| ", "Woods: " + pbt[i].getProductionEffect().getResource().getWood());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Production effect stone
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getProductionEffect().getResource().getStone().equals(0))
-					System.out.printf("%-20s| ", "Stones: " + pbt[i].getProductionEffect().getResource().getStone());
+					msgFormat("%-20s| ", "Stones: " + pbt[i].getProductionEffect().getResource().getStone());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Production effect coins
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getProductionEffect().getResource().getCoins().equals(0))
-					System.out.printf("%-20s| ", "Coins: " + pbt[i].getProductionEffect().getResource().getCoins());
+					msgFormat("%-20s| ", "Coins: " + pbt[i].getProductionEffect().getResource().getCoins());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Production effect servants
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getProductionEffect().getResource().getServants().equals(0))
-					System.out.printf("%-20s| ",
-							"Servants: " + pbt[i].getProductionEffect().getResource().getServants());
+					msgFormat("%-20s| ", "Servants: " + pbt[i].getProductionEffect().getResource().getServants());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n| ");
+		msgFormat("%n| ");
 		// Production effect military
 		for (i = 0; i < pbt.length; i++) {
 			if (pbt[i] != null)
 				if (!pbt[i].getProductionEffect().getResource().getMilitary().equals(0))
-					System.out.printf("%-20s| ",
-							"Military: " + pbt[i].getProductionEffect().getResource().getMilitary());
+					msgFormat("%-20s| ", "Military: " + pbt[i].getProductionEffect().getResource().getMilitary());
 				else
-					System.out.printf("%-20s| ", "");
+					msgFormat("%-20s| ", "");
 		}
-		System.out.printf("%n|");
+		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				System.out.print("_____________________|");
-		System.out.printf("%nChoose a personal bonus tile:%n");
+		msgFormat("%nChoose a personal bonus tile:%n");
 		int option = input();
 		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null) {
 			showMsg("Wait other player...");
@@ -1261,7 +1260,7 @@ public class CLIinterface extends AbstractUI {
 			System.err.println("You can close this window");
 			System.exit(0);
 		}
-		timeout = (timeout - (System.currentTimeMillis() / 1000 - time));
+		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
 		return result;
 	}
 
@@ -1274,22 +1273,22 @@ public class CLIinterface extends AbstractUI {
 		leaderSelected = "";
 		this.game = game;
 		timeout = game.getMoveTimer();
-		System.out.println("Timeout: " + timeout);
+		showMsg("Timeout: " + timeout);
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
 			showMsg("______________________________");
-			System.out.printf("%-30s|%n", "| Selected leader cards:");
+			msgFormat("%-30s|%n", "| Selected leader cards:");
 			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-				System.out.printf("%-30s|%n", "| " + ld.getName());
+				msgFormat("%-30s|%n", "| " + ld.getName());
 			showMsg("|_____________________________|");
 		}
 		int i = 0;
 		showMsg("______________________________");
-		System.out.printf("%-30s|%n", "| LeaderCard to be selected");
+		msgFormat("%-30s|%n", "| LeaderCard to be selected");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards()) {
-			System.out.printf("%-30s|%n", "| " + (i + 1) + ": " + ld.getName());
+			msgFormat("%-30s|%n", "| " + (i + 1) + ": " + ld.getName());
 			i++;
 		}
-		System.out.printf("%-30s|%n", "| 0: Show card info");
+		msgFormat("%-30s|%n", "| 0: Show card info");
 		showMsg("|_____________________________|");
 		showMsg("Choose a Leader card:");
 		int option = input();

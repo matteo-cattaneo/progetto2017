@@ -133,7 +133,6 @@ public class TurnInizializator {
 			}
 			f.setCard(c);
 			game.getTerritoryCards().remove(c);
-			i++;
 		}
 	}
 
@@ -147,7 +146,6 @@ public class TurnInizializator {
 			}
 			f.setCard(c);
 			game.getCharacterCards().remove(c);
-			i++;
 		}
 	}
 
@@ -161,7 +159,6 @@ public class TurnInizializator {
 			}
 			f.setCard(c);
 			game.getBuildingCards().remove(c);
-			i++;
 		}
 	}
 
@@ -175,7 +172,6 @@ public class TurnInizializator {
 			}
 			f.setCard(c);
 			game.getVentureCards().remove(c);
-			i++;
 		}
 	}
 
@@ -185,7 +181,7 @@ public class TurnInizializator {
 	protected void throwDices(Game game) {
 		Random random = new Random();
 		for (int cont = 0; cont < DICE_NUMBER; cont++) {
-			game.getBoardgame().setDice(colors[cont], (random.nextInt(DICE_MAX) + DICE_MIN));
+			game.getBoardgame().setDice(colors[cont], random.nextInt(DICE_MAX) + DICE_MIN);
 		}
 	}
 
@@ -201,7 +197,7 @@ public class TurnInizializator {
 				if (e instanceof DiceMalusEx)
 					malus = malus - ((DiceMalusEx) e).getMalus();
 			for (FamilyMember m : p.getMembers()) {
-				if (!m.getColor().equals("Uncolored"))
+				if (!"Uncolored".equals(m.getColor()))
 					m.setValue(game.getBoardgame().getDice(m.getColor()) + malus);
 			}
 		}
@@ -237,7 +233,7 @@ public class TurnInizializator {
 				newOrder.add(m.getPlayer());
 			m.setUsed(false);
 		}
-		while (members.size() != 0)
+		while (!members.isEmpty())
 			members.remove(0);
 		for (Player p : game.getPlayersOrder()) {
 			if (!newOrder.contains(p)) {
@@ -259,7 +255,7 @@ public class TurnInizializator {
 			for (LeaderCard card : p.getActivatedLeaderCards()) {
 				if (card.getEffect() instanceof LeaderResourceEffect
 						|| (card.getEffect() instanceof MemberChangeEffect
-								&& card.getName().equals("Federico da Montefeltro"))
+								&& "Federico da Montefeltro".equals(card.getName()))
 						|| card.getEffect() instanceof WorkAction) {
 					p.getLeaderCards().add(card);
 					removeLD.add(card);

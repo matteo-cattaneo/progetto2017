@@ -11,6 +11,7 @@ public class DiceMalusEx extends ExEffect implements Serializable{
 		return malus;
 	}
 	
+	@Override
 	public String getInfo() {
 		String info = "";
 		info = info + "You get a malus of " + malus + " for all your colored Members";

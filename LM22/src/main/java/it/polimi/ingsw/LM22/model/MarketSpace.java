@@ -27,12 +27,4 @@ public class MarketSpace extends AbstractSpace implements Serializable {
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}
-
-	/*
-	 * forse da mettere nel controller
-	 * 
-	 * public boolean isOccupied(){ if (member != null){ return false; } return
-	 * true; }
-	 */
-
 }

@@ -45,7 +45,7 @@ public class ResourceCardRequest extends LeaderCardRequest implements Serializab
 			info = info + "- " + getBuildingCards() + " Buildings cards%n";
 		if (!getVentureCards().equals(0))
 			info = info + "- " + getVentureCards() + " Venture cards%n";
-		if (!getResource().getInfo().equals("No resource%n"))
+		if (!"No resource%n".equals(getResource().getInfo()))
 			info = info + "- " + getResource().getInfo();
 
 		return info;

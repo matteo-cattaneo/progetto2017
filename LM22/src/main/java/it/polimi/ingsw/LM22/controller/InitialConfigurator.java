@@ -18,7 +18,7 @@ import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 public class InitialConfigurator extends TurnInizializator {
 	private final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
 	private FileParser fileParser = new FileParser();
-	private ArrayList<PlayerInfo> playerRoom;
+	private List<PlayerInfo> playerRoom;
 	private final Integer BASE_WOOD_STONE = 2;
 	private final Integer BASE_SERVANTS = 3;
 	private final Integer BASE_COINS = 5;
@@ -35,7 +35,7 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(ArrayList<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m,
+	public InitialConfigurator(List<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m,
 			MainGameController mainGC) {
 		super(m, r, mainGC);
 		this.playerRoom = playerRoom;
@@ -72,16 +72,15 @@ public class InitialConfigurator extends TurnInizializator {
 		mixCards(game);
 		distributeDevelopmentCards(game);
 		leaderDistribution(game);
-		// personalBoardTileDistribution(game);
 	}
 
 	/**
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
-	private void setupPlayers(Game game, ArrayList<PlayerInfo> playerRoom) {
+	private void setupPlayers(Game game, List<PlayerInfo> playerRoom) {
 		Player players[] = new Player[playerRoom.size()];
 		game.setPlayers(players);
-		for (int i = 0; i < game.getPlayers().length;) {
+		for (int i = 0; i < game.getPlayers().length; i++) {
 			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);
 			List<FamilyMember> members = new ArrayList<FamilyMember>();
 			int j;
@@ -97,7 +96,6 @@ public class InitialConfigurator extends TurnInizializator {
 			members.add(fm);
 
 			players[i].setMembers(members);
-			i++;
 		}
 	}
 

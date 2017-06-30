@@ -43,6 +43,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	}
 
 	// riceve l'oggetto remoto del client
+	@Override
 	public void login(IClient client) throws RemoteException {
 		this.name = client.getName();
 		this.client = client;
@@ -53,6 +54,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 		return client;
 	}
 
+	@Override
 	public String getName() throws RemoteException {
 		return name;
 	}

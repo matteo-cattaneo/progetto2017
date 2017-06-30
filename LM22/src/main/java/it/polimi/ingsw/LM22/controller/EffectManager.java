@@ -77,15 +77,15 @@ public class EffectManager {
 	 * carta
 	 */
 	public void resourceprivilegeeffectManage(ResourcePrivilegeEffect effect, Resource sum) throws IOException {
-		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(sum, r.calculateResource(effect.getResource().copy(), player));
 		r.addResource(sum, r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player));
 	}
 
 	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource sum) throws IOException {
 		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangedResource());
 		r.addResource(sum, r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player));
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class EffectManager {
 	public void changeeffectManage(ChangeEffect effect, Resource sum) throws IOException {
 		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
-			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
+			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].copy(), player));
 			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 		}
 		return;
@@ -115,19 +115,19 @@ public class EffectManager {
 			// metodo che chiede quale dei due cambi si vole effettuare
 			Integer choice = mainGC.askForDoubleChange(player, effect);
 			if (choice.equals(FIRST_CHANGE)) {
-				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
+				r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].copy(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 			} else if (choice.equals(SECOND_CHANGE)) {
-				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
+				r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].copy(), player));
 				r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 			}
 		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect1())) {
-			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].clone(), player));
+			r.addResource(sum, r.calculateResource(effect.getExchangeEffect1()[NEEDED + 1].copy(), player));
 			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect1()[NEEDED]);
 		} else if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED])
 				&& mainGC.askChangeToPlayer(player, effect.getExchangeEffect2())) {
-			r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].clone(), player));
+			r.addResource(sum, r.calculateResource(effect.getExchangeEffect2()[NEEDED + 1].copy(), player));
 			r.subResource(player.getPersonalBoard().getResources(), effect.getExchangeEffect2()[NEEDED]);
 		}
 	}
@@ -155,7 +155,7 @@ public class EffectManager {
 	 */
 	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect, Resource sum) {
 		Integer points = sum.getMilitary() / effect.getRequirement().getMilitary();
-		Resource bonus = r.resourceMultiplication(effect.getReward().clone(), points);
+		Resource bonus = r.resourceMultiplication(effect.getReward().copy(), points);
 		bonus = r.calculateResource(bonus, player);
 		r.addResource(sum, bonus);
 	}
@@ -165,9 +165,9 @@ public class EffectManager {
 	 */
 	public void cardactioneffectManage(CardActionEffect effect, Resource sum) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
-				r.calculateResource(effect.getResource().clone(), player));
+				r.calculateResource(effect.getResource().copy(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player));
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);
 		Integer tower = info[TOWER];
@@ -186,9 +186,9 @@ public class EffectManager {
 	}
 
 	public void workactioneffectManage(WorkActionEffect effect, Resource sum) throws IOException {
-		r.addResource(sum, r.calculateResource(effect.getResource().clone(), player));
+		r.addResource(sum, r.calculateResource(effect.getResource().copy(), player));
 		r.addResource(sum, r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player));
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, ACTION);
 		other.setUsed(false);
@@ -211,28 +211,28 @@ public class EffectManager {
 	 * sommatrice della produzione
 	 */
 	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource sum) {
-		Resource bonus = NOTHING;
+		Resource bonus = NOTHING.copy();
 		switch (effect.getCardRequired()) {
 		case "TERRITORY":
-			bonus = r.resourceMultiplication(effect.getReward().clone(),
+			bonus = r.resourceMultiplication(effect.getReward().copy(),
 					player.getPersonalBoard().getTerritoriesCards().size());
 			break;
 		case "CHARACTER":
-			bonus = r.resourceMultiplication(effect.getReward().clone(),
+			bonus = r.resourceMultiplication(effect.getReward().copy(),
 					player.getPersonalBoard().getCharactersCards().size());
 			break;
 		case "BUILDING":
-			bonus = r.resourceMultiplication(effect.getReward().clone(),
+			bonus = r.resourceMultiplication(effect.getReward().copy(),
 					player.getPersonalBoard().getBuildingsCards().size());
 			break;
 		case "VENTURE":
-			bonus = r.resourceMultiplication(effect.getReward().clone(),
+			bonus = r.resourceMultiplication(effect.getReward().copy(),
 					player.getPersonalBoard().getVenturesCards().size());
 			break;
 		default:
 			return;
 		}
-		r.addResource(sum, r.calculateResource(bonus.clone(), player));
+		r.addResource(sum, r.calculateResource(bonus.copy(), player));
 	}
 
 	public void noeffectManage(NoEffect effect, Resource sum) {
@@ -263,9 +263,9 @@ public class EffectManager {
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
-				r.calculateResource(effect.getResource().clone(), player));
+				r.calculateResource(effect.getResource().copy(), player));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
-				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).clone(), player));
+				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player));
 	}
 
 	/**
@@ -319,7 +319,8 @@ public class EffectManager {
 					m.setValue(e.getNewValueOfMember());
 					break;
 				}
-
+		default:
+			break;
 		}
 	}
 

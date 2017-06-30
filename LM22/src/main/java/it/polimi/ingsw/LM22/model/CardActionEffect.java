@@ -31,13 +31,14 @@ public class CardActionEffect extends ImmediateEffect implements Serializable {
 	public Integer getCouncilPrivilege() {
 		return councilPrivilege;
 	}
-	
-	public String getInfo(){
+
+	@Override
+	public String getInfo() {
 		String info = "";
-		if (cardType!=ALL)
-			info = info + "You can get a card on the " + (cardType+1) + "tower%n";
-		else 
-			info = info + "You can get a card on the tower you choose%n" ;
+		if (cardType != ALL)
+			info = info + "You can get a card on the " + (cardType + 1) + "tower%n";
+		else
+			info = info + "You can get a card on the tower you choose%n";
 		info = info + "The action has a value of " + diceValue + "%n";
 		info = info + "You get a card discount: " + cardDiscount.getInfo();
 		info = info + "You get a reward: " + resource.getInfo();

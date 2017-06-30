@@ -23,7 +23,7 @@ public class TestPersonalBoard extends TestCase {
 	@Test
 	public void testResource() {
 		Resource test = new Resource(1, 2, 3, 4, 5, 6, 7);
-		prova.setResources(test.clone());
+		prova.setResources(test.copy());
 		assertEquals(test.getWood().intValue(), prova.getResources().getWood().intValue());
 		assertEquals(test.getStone().intValue(), prova.getResources().getStone().intValue());
 		assertEquals(test.getServants().intValue(), prova.getResources().getServants().intValue());

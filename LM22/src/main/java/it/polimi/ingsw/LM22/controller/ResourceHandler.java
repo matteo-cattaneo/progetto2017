@@ -18,11 +18,12 @@ public class ResourceHandler {
 	 * essere ridotto
 	 */
 	public Resource calculateResource(Resource res, Player p) {
+		Resource resource = res.copy();
 		for (Effect e : p.getEffects())
 			if (e instanceof ResourceMalusEx) {
-				res = cardDiscounted(res, ((ResourceMalusEx) e).getMalus());
+				resource = cardDiscounted(res, ((ResourceMalusEx) e).getMalus());
 			}
-		return res;
+		return resource;
 	}
 
 	public boolean enoughResources(Resource cardCost, CardMove move, Resource additionalCost, Resource bonus) {
@@ -127,31 +128,24 @@ public class ResourceHandler {
 	}
 
 	public Resource diffResource(Resource s1, Resource s2) {
-		Integer stone = (s1.getStone() - s2.getStone());
-		Integer wood = (s1.getWood() - s2.getWood());
-		Integer coins = (s1.getCoins() - s2.getCoins());
-		Integer servants = (s1.getServants() - s2.getServants());
-		Integer military = (s1.getMilitary() - s2.getMilitary());
-		Integer faith = (s1.getFaith() - s2.getFaith());
-		Integer victory = (s1.getVictory() - s2.getVictory());
+		Integer stone = s1.getStone() - s2.getStone();
+		Integer wood = s1.getWood() - s2.getWood();
+		Integer coins = s1.getCoins() - s2.getCoins();
+		Integer servants = s1.getServants() - s2.getServants();
+		Integer military = s1.getMilitary() - s2.getMilitary();
+		Integer faith = s1.getFaith() - s2.getFaith();
+		Integer victory = s1.getVictory() - s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 
 	public Resource sumResource(Resource s1, Resource s2) {
-		Integer wood = 0;
-		Integer stone = 0;
-		Integer coins = 0;
-		Integer servants = 0;
-		Integer faith = 0;
-		Integer military = 0;
-		Integer victory = 0;
-		wood = s1.getWood() + s2.getWood();
-		stone = s1.getStone() + s2.getStone();
-		coins = s1.getCoins() + s2.getCoins();
-		servants = s1.getServants() + s2.getServants();
-		faith = s1.getFaith() + s2.getFaith();
-		military = s1.getMilitary() + s2.getMilitary();
-		victory = s1.getVictory() + s2.getVictory();
+		Integer wood = s1.getWood() + s2.getWood();
+		Integer stone = s1.getStone() + s2.getStone();
+		Integer coins = s1.getCoins() + s2.getCoins();
+		Integer servants = s1.getServants() + s2.getServants();
+		Integer faith = s1.getFaith() + s2.getFaith();
+		Integer military = s1.getMilitary() + s2.getMilitary();
+		Integer victory = s1.getVictory() + s2.getVictory();
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 

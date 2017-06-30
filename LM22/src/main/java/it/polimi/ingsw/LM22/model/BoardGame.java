@@ -2,12 +2,12 @@ package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 public class BoardGame implements Serializable {
 
 	private static final long serialVersionUID = 3178699533089217722L;
 	private final String PRODUCTION = "PRODUCTION";
-//	private final String HARVEST = "HARVEST";
 	private final Integer NUM_TOWERS = 4;
 	private final Integer NUM_MARKET = 4;
 	private Tower towers[] = new Tower[NUM_TOWERS];
@@ -16,7 +16,7 @@ public class BoardGame implements Serializable {
 	private WorkSpace harvestSpace;
 	private FaithGrid faithGrid;
 	private CouncilSpace councilPalace;
-	private HashMap<String, Integer> dices = new HashMap<String, Integer>();
+	private Map<String, Integer> dices = new HashMap<String, Integer>();
 
 	/*
 	 * i vari bonus arbitrari degli spazi saranno da caricare da file -->
@@ -78,7 +78,7 @@ public class BoardGame implements Serializable {
 		this.councilPalace = councilPalace;
 	}
 
-	public void setDices(HashMap<String, Integer> dices) {
+	public void setDices(Map<String, Integer> dices) {
 		this.dices = dices;
 	}
 

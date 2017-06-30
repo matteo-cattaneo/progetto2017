@@ -16,6 +16,7 @@ public class DiceCardMalusEx extends ExEffect implements Serializable {
 		return cardType;
 	}
 
+	@Override
 	public String getInfo() {
 		String info = "";
 		info = info + "You get a malus of " + malus + " for the " + (cardType + 1) + " tower";

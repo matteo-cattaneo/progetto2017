@@ -36,6 +36,7 @@ public class SocketClient implements IConnection {
 	/**
 	 * metodo che effectuala connessione con il server Socket
 	 */
+	@Override
 	public void connect(String name, String ip) {
 		this.name = name;
 		try {
@@ -139,6 +140,8 @@ public class SocketClient implements IConnection {
 				case "getLeader":
 					socketOut.writeUTF(UI.getLeaderCard());
 					socketOut.flush();
+					break;
+				default:
 					break;
 				}
 			}

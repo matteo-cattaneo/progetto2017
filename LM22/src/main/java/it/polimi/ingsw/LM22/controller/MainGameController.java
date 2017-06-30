@@ -45,7 +45,7 @@ public class MainGameController implements Runnable {
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
-	private ArrayList<PlayerInfo> playerRoom;
+	private List<PlayerInfo> playerRoom;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();
 	private ResourceHandler resourceHandler = new ResourceHandler();
 	private MoveManager moveManager = new MoveManager(game, this);
@@ -54,7 +54,7 @@ public class MainGameController implements Runnable {
 	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
-	public MainGameController(ArrayList<PlayerInfo> playerRoom) throws RemoteException {
+	public MainGameController(List<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
 		initConf = new InitialConfigurator(playerRoom, resourceHandler, effectManager, this);
 		initConf.initializeTurn(game);
@@ -78,7 +78,7 @@ public class MainGameController implements Runnable {
 	private void personalTileSelection() {
 		for (int i = game.getPlayersOrder().size() - 1; i >= 0; i--) {
 			Player p = game.getPlayersOrder().get(i);
-			int selection = 0;
+			int selection;
 			if (checkPlayer(p))
 				try {
 					selection = getIPlayer(p).selectPersonalTile(game);
@@ -206,7 +206,6 @@ public class MainGameController implements Runnable {
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
-			System.out.println(p.getNickname() + ": " + sMove);
 			// ottengo informazioni dalla mossa ricevuta
 			aMove = netContrAdapter.moveParser(p, sMove);
 			// provo ad eseguire la mossa richiesta
@@ -307,14 +306,14 @@ public class MainGameController implements Runnable {
 		manageVictoryPointDueToCards(game);
 		electWinner(game);
 		LOGGER.log(Level.INFO, "Game ended");
-		disconnectRoomPlayers(game);
+		disconnectRoomPlayers();
 	}
 
 	/**
 	 * gestisce la fase di rimozione dei player dalla lista della room che
 	 * conteneva la partita terminata
 	 */
-	private void disconnectRoomPlayers(Game game) {
+	private void disconnectRoomPlayers() {
 		for (int i = 0; i < playerRoom.size();) {
 			playerRoom.remove(i);
 		}
@@ -379,7 +378,7 @@ public class MainGameController implements Runnable {
 		}
 		Resource total = NOTHING;
 		for (VentureCard card : p.getPersonalBoard().getVenturesCards()) {
-			resourceHandler.addResource(total, resourceHandler.calculateResource(card.getPermanentEffect().clone(), p));
+			resourceHandler.addResource(total, resourceHandler.calculateResource(card.getPermanentEffect().copy(), p));
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), total);
 	}
@@ -401,7 +400,7 @@ public class MainGameController implements Runnable {
 				return;
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
-				.calculateResource(characterReward[p.getPersonalBoard().getCharactersCards().size()].clone(), p));
+				.calculateResource(characterReward[p.getPersonalBoard().getCharactersCards().size()].copy(), p));
 	}
 
 	private void manageFinalTerritoryCards(Player p) {
@@ -410,7 +409,7 @@ public class MainGameController implements Runnable {
 				return;
 		}
 		resourceHandler.addResource(p.getPersonalBoard().getResources(), resourceHandler
-				.calculateResource(territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].clone(), p));
+				.calculateResource(territoryReward[p.getPersonalBoard().getTerritoriesCards().size()].copy(), p));
 	}
 
 	/**
@@ -488,7 +487,7 @@ public class MainGameController implements Runnable {
 		map.put("coins", new Resource(0, 0, 0, 2, 0, 0, 0));
 		map.put("military", new Resource(0, 0, 0, 0, 0, 2, 0));
 		map.put("faith", new Resource(0, 0, 0, 0, 1, 0, 0));
-		map.put("", NOTHING.clone());
+		map.put("", NOTHING.copy());
 		return map;
 	}
 
@@ -524,7 +523,7 @@ public class MainGameController implements Runnable {
 	 * vuole aggiungere ad un effetto (sia di cardAction che di WorkAction)
 	 */
 	public Resource askForServants(Player player) throws IOException {
-		Resource servants = NOTHING.clone();
+		Resource servants = NOTHING.copy();
 		String result = getIPlayer(player).servantsRequest();
 		servants.setServants(Integer.parseInt(result));
 		return servants;
@@ -543,6 +542,7 @@ public class MainGameController implements Runnable {
 				param[0] = effect.getCardType();
 			param[1] = Integer.parseInt(getIPlayer(player).floorRequest());
 		} catch (NumberFormatException e) {
+			LOGGER.log(Level.SEVERE, "Error Number Format Exception!", e);
 		}
 		return param;
 	}
@@ -580,9 +580,9 @@ public class MainGameController implements Runnable {
 	public Integer askForCost(CardMove cardMove) throws IOException {
 		VentureCard vc = (VentureCard) game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getFloor()[cardMove
 				.getLevelSelected()].getCard();
-		if (vc.getCardCost1().getInfo().equals("No resource%n"))
+		if ("No resource%n".equals(vc.getCardCost1().getInfo()))
 			return 1;
-		else if (vc.getCardCost2()[0].getInfo().equals("No resource%n"))
+		else if ("No resource%n".equals(vc.getCardCost2()[0].getInfo()))
 			return 0;
 		else
 			return getIPlayer(cardMove.getPlayer()).ventureCostRequest(vc);

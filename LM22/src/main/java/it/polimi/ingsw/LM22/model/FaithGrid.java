@@ -2,6 +2,7 @@ package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
 
@@ -12,7 +13,7 @@ public class FaithGrid implements Serializable {
 	private ArrayList<ExCommunication> exCommunicationTiles = new ArrayList<ExCommunication>();
 	private Resource rewards[];
 
-	public ArrayList<ExCommunication> getExCommunicationTiles() {
+	public List<ExCommunication> getExCommunicationTiles() {
 		return exCommunicationTiles;
 	}
 

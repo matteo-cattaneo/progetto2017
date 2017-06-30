@@ -56,9 +56,9 @@ public class TestResource extends TestCase {
 		assertEquals("victory: 1%n", prova.getInfo());
 
 		/**
-		 * clone() test
+		 * copy() test
 		 */
-		Resource copia = prova.clone();
+		Resource copia = prova.copy();
 		assertEquals(prova.getWood(), copia.getWood());
 		assertEquals(prova.getStone(), copia.getStone());
 		assertEquals(prova.getServants(), copia.getServants());

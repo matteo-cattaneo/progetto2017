@@ -26,11 +26,11 @@ public class VentureCard extends DevelopmentCard implements Serializable {
 		String info;
 		info = "Name: " + getName() + "%n";
 		info = info + "Period: " + getPeriod() + "%n";
-		if (!getCardCost1().getInfo().equals("No resource%n"))
+		if (!"No resource%n".equals(getCardCost1().getInfo()))
 			info = info + "Card cost:%n" + getCardCost1().getInfo();
-		if (!getCardCost1().getInfo().equals("No resource%n") && !getCardCost2()[0].getInfo().equals("No resource%n"))
+		if (!"No resource%n".equals(getCardCost1().getInfo()) && !"No resource%n".equals(getCardCost2()[0].getInfo()))
 			info = info + "Second ";
-		if (!getCardCost2()[0].getInfo().equals("No resource%n"))
+		if (!"No resource%n".equals(getCardCost2()[0].getInfo()))
 			info = info + "Card cost:%nRequire:%n" + getCardCost2()[0].getInfo() + "Cost:%n"
 					+ getCardCost2()[1].getInfo();
 		info = info + "Immediate effect:%n" + getImmediateEffect().getInfo();

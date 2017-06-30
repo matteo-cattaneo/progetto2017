@@ -8,7 +8,7 @@ public class NoEffect extends ImmediateEffect implements Serializable {
 
 	@Override
 	public String getInfo() {
-		return ("No Effect%n");
+		return "No Effect%n";
 	}
 
 }

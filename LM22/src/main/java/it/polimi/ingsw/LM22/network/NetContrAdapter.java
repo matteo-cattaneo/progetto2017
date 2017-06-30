@@ -48,6 +48,9 @@ public class NetContrAdapter {
 				objMove = new EndMove(p, param[1]);
 			else
 				objMove = new EndMove(p, "noError");
+			break;
+		default:
+			break;
 		}
 		return objMove;
 	}

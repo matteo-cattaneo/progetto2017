@@ -1,7 +1,6 @@
 package it.polimi.ingsw.LM22.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
@@ -14,11 +13,11 @@ public class Game implements Serializable {
 	private Integer round;
 	private Player[] players;
 	private List<Player> playersOrder;
-	private transient ArrayList<TerritoryCard> territoryCards;
-	private transient ArrayList<CharacterCard> characterCards;
-	private transient ArrayList<BuildingCard> buildingCards;
-	private transient ArrayList<VentureCard> ventureCards;
-	private transient ArrayList<LeaderCard> leaderCards;
+	private transient List<TerritoryCard> territoryCards;
+	private transient List<CharacterCard> characterCards;
+	private transient List<BuildingCard> buildingCards;
+	private transient List<VentureCard> ventureCards;
+	private transient List<LeaderCard> leaderCards;
 	private PersonalBonusTile personalBonusTile[];
 	private long moveTimer; // caricabile da file (secondi)
 
@@ -58,23 +57,23 @@ public class Game implements Serializable {
 		this.round = round;
 	}
 
-	public void setTerritoryCards(ArrayList<TerritoryCard> territoryCards) {
+	public void setTerritoryCards(List<TerritoryCard> territoryCards) {
 		this.territoryCards = territoryCards;
 	}
 
-	public void setCharacterCards(ArrayList<CharacterCard> characterCards) {
+	public void setCharacterCards(List<CharacterCard> characterCards) {
 		this.characterCards = characterCards;
 	}
 
-	public void setBuildingCards(ArrayList<BuildingCard> buildingCards) {
+	public void setBuildingCards(List<BuildingCard> buildingCards) {
 		this.buildingCards = buildingCards;
 	}
 
-	public void setVentureCards(ArrayList<VentureCard> ventureCards) {
+	public void setVentureCards(List<VentureCard> ventureCards) {
 		this.ventureCards = ventureCards;
 	}
 
-	public void setLeaderCards(ArrayList<LeaderCard> leaderCards) {
+	public void setLeaderCards(List<LeaderCard> leaderCards) {
 		this.leaderCards = leaderCards;
 	}
 
@@ -90,23 +89,23 @@ public class Game implements Serializable {
 		this.playersOrder = playersOrder;
 	}
 
-	public ArrayList<TerritoryCard> getTerritoryCards() {
+	public List<TerritoryCard> getTerritoryCards() {
 		return territoryCards;
 	}
 
-	public ArrayList<CharacterCard> getCharacterCards() {
+	public List<CharacterCard> getCharacterCards() {
 		return characterCards;
 	}
 
-	public ArrayList<BuildingCard> getBuildingCards() {
+	public List<BuildingCard> getBuildingCards() {
 		return buildingCards;
 	}
 
-	public ArrayList<VentureCard> getVentureCards() {
+	public List<VentureCard> getVentureCards() {
 		return ventureCards;
 	}
 
-	public ArrayList<LeaderCard> getLeaderCards() {
+	public List<LeaderCard> getLeaderCards() {
 		return leaderCards;
 	}
 

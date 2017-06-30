@@ -52,7 +52,8 @@ public class SocketPlayer implements IPlayer {
 		out.flush();
 
 	}
-
+	
+	@Override
 	public String getName() {
 		return name;
 	}

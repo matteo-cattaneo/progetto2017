@@ -11,6 +11,7 @@ public class DoubleChangeEffect extends ChangeEffect implements Serializable {
 		return exchangeEffect2;
 	}
 
+	@Override
 	public String getInfo() {
 		String info;
 		info = super.getInfo() + " OR ";

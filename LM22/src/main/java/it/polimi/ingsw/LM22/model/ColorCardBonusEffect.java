@@ -8,7 +8,7 @@ public class ColorCardBonusEffect extends PermanentEffect implements Serializabl
 	private Integer cardType;
 	private Integer diceBonus;
 	private Resource cardDiscount;
-	
+
 	public Integer getCardType() {
 		return cardType;
 	}
@@ -21,9 +21,10 @@ public class ColorCardBonusEffect extends PermanentEffect implements Serializabl
 		return cardDiscount;
 	}
 
-	public String getInfo(){
+	@Override
+	public String getInfo() {
 		String info = "";
-		info = info + "You have a bonus of " + diceBonus + " on the " + (cardType+1) + " tower %n";
+		info = info + "You have a bonus of " + diceBonus + " on the " + (cardType + 1) + " tower %n";
 		info = info + "You have a card discount of " + cardDiscount.getInfo();
 		return info;
 	}
