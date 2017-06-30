@@ -23,17 +23,16 @@ public class TestTurnInitializator extends TestCase {
 		PlayerInfo pi1 = new PlayerInfo();
 		PlayerInfo pi2 = new PlayerInfo();
 		PlayerInfo pi3 = new PlayerInfo();
+		PlayerInfo pi4 = new PlayerInfo();
+		pi1.setName("Nicola");
+		pi2.setName("Matteo");
+		pi3.setName("Esempio");
+		pi4.setName("Esempio1");
+		game = new Game();
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
-		game = new Game();
-		Player p1 = new Player("Nicola", "Blue");
-		Player p2 = new Player("Matteo", "Green");
-		Player p3 = new Player("Esempio", "Red");
-		game.setPlayersOrder(new ArrayList<Player>());
-		game.getPlayersOrder().add(p1);
-		game.getPlayersOrder().add(p2);
-		game.getPlayersOrder().add(p3);
+		pinfolist.add(pi4);
 		ResourceHandler r = new ResourceHandler();
 		MainGameController mainGC = new MainGameController(pinfolist);
 		MoveManager moveManager = new MoveManager(game, mainGC);
@@ -50,7 +49,7 @@ public class TestTurnInitializator extends TestCase {
 		 * setUp period & round
 		 */
 		assertEquals(1, game.getPeriod().intValue());
-		assertEquals(1, game.getPeriod().intValue());
+		assertEquals(2, game.getRound().intValue());
 		/**
 		 * throwDices + setUpPlayers tests
 		 */
@@ -93,5 +92,8 @@ public class TestTurnInitializator extends TestCase {
 		 * assertTrue(p.getActivatedLeaderCards().isEmpty() &&
 		 * p.getHandLeaderCards().size() == 4 && p.getLeaderCards().isEmpty());
 		 */
+		turnInizializator.initializeTurn(game);
+		assertEquals(2, game.getPeriod().intValue());
+		assertEquals(1, game.getRound().intValue());
 	}
 }

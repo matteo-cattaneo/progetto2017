@@ -1,7 +1,14 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
 import org.junit.Test;
+
+import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
+import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 import junit.framework.TestCase;
 
 public class TestResourceHandler extends TestCase {
@@ -131,6 +138,32 @@ public class TestResourceHandler extends TestCase {
 		assertEquals(false, rh.enoughResources(nothing, military));
 		assertEquals(false, rh.enoughResources(nothing, victory));
 	}
+
+	/*
+	@Test
+	public void testEnoughResources2() throws RemoteException {
+		ArrayList<PlayerInfo> pinfolist = new ArrayList<PlayerInfo>();
+		PlayerInfo pi1 = new PlayerInfo();
+		PlayerInfo pi2 = new PlayerInfo();
+		pi1.setName("Nicola");
+		pi2.setName("Matteo");
+		pinfolist.add(pi1);
+		pinfolist.add(pi2);
+		Game game = new Game();
+		MainGameController mainGC = new MainGameController(pinfolist);
+		MoveManager moveManager = new MoveManager(game, mainGC);
+		EffectManager effectManager = new EffectManager(moveManager);
+		InitialConfigurator init = new InitialConfigurator(pinfolist, rh, effectManager, mainGC);
+		init.initializeTurn(game);
+		Resource additionalCost = new Resource(0, 0, 0, 3, 0, 0, 0);
+		CardMove move = new CardMove(game.getPlayersOrder().get(0), game.getPlayersOrder().get(0).getMembers().get(0),
+				new Resource(0, 0, 0, 0, 0, 0, 0), 0, 0);
+		assertTrue(rh.enoughResources(move, additionalCost));
+		Resource additionalCost2 = new Resource(0, 0, 0, 0, 1, 0, 0);
+		CardMove move2 = new CardMove(game.getPlayersOrder().get(0), game.getPlayersOrder().get(0).getMembers().get(3),
+				new Resource(0, 0, 0, 0, 0, 0, 0), 0, 1);
+		assertTrue(rh.enoughResources(move, additionalCost));
+	}*/
 
 	@Test
 	public void testDiffResource() {
