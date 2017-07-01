@@ -45,10 +45,7 @@ public class MoveManager {
 	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
 	private final String PRODUCTION = "PRODUCTION";
 	private final Integer WORK_MALUS = 3;
-	private final Integer THIRD_TERRITORY = 3;
-	private final Integer FOURTH_TERRITORY = 7;
-	private final Integer FIFTH_TERRITORY = 12;
-	private final Integer SIXTH_TERRITORY = 18;
+	private final Integer[] TERRITORY_REQUEST = { 0, 0, 3, 7, 12, 18 };
 	private final Integer MAX_NUM_CARDS = 6;
 	private final Integer REQUIRED = 0;
 	private Integer doubleCostChoice;
@@ -306,36 +303,11 @@ public class MoveManager {
 	 * attivata la carta Leader che annulla questo controllo
 	 */
 	private boolean militaryPointsAvailable(CardMove cardMove, Resource bonus) {
-		if (!containsClass(cardMove.getPlayer().getEffects(), NoMilitaryRequestEffect.class)) {
-			switch (cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().size()) {
-			case 0:
-			case 1:
-				return true;
-			case 2:
-				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary()) < THIRD_TERRITORY) {
-					return false;
-				}
-				return true;
-			case 3:
-				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary()) < FOURTH_TERRITORY)
-					return false;
-				return true;
-			case 4:
-				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary()) < FIFTH_TERRITORY)
-					return false;
-				return true;
-			case 5:
-				if ((cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
-						+ bonus.getMilitary()) < SIXTH_TERRITORY)
-					return false;
-				return true;
-			default:
-				return false;
-			}
-		}
+		if (!containsClass(cardMove.getPlayer().getEffects(), NoMilitaryRequestEffect.class)
+				&& (cardMove.getPlayer().getPersonalBoard().getResources().getMilitary()
+						+ bonus.getMilitary()) < TERRITORY_REQUEST[cardMove.getPlayer().getPersonalBoard()
+								.getTerritoriesCards().size()])
+			return false;
 		return true;
 	}
 
