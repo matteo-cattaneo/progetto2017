@@ -44,6 +44,31 @@ public class TestTurnInitializator extends TestCase {
 	@Test
 	public void testInitializeTurn() throws IOException {
 		initialConfigurator.initializeTurn(game);
+		assertEquals(1, game.getPeriod().intValue());
+		assertEquals(1, game.getRound().intValue());
+		/**
+		 * giveInitialResources test
+		 */
+		int i = 0;
+		for (Player p : game.getPlayersOrder()) {
+			assertTrue(p.getPersonalBoard().getResources().getWood().intValue() == 2);
+			assertTrue(p.getPersonalBoard().getResources().getStone().intValue() == 2);
+			assertTrue(p.getPersonalBoard().getResources().getServants().intValue() == 3);
+			assertTrue(p.getPersonalBoard().getResources().getMilitary().intValue() == 0);
+			assertTrue(p.getPersonalBoard().getResources().getVictory().intValue() == 0);
+			assertTrue(p.getPersonalBoard().getResources().getFaith().intValue() == 0);
+			assertTrue(p.getPersonalBoard().getResources().getCoins().intValue() == 5 + i);
+			i++;
+		}
+		/**
+		 * distributions tests
+		 */
+		for (int j = 0; j < 4; j++)
+			for (int k = 0; k < 4; k++) {
+				assertTrue(game.getBoardgame().getTowers()[j].getFloor()[k].getSpace() != null
+						&& game.getBoardgame().getTowers()[j].getFloor()[k].getCard() != null
+						&& game.getBoardgame().getTowers()[j].getFloor()[k].getCard().getPeriod() == 1);
+			}
 		turnInizializator.initializeTurn(game);
 		/**
 		 * setUp period & round
@@ -63,20 +88,6 @@ public class TestTurnInitializator extends TestCase {
 					assertTrue(fm.getValue() == 0);
 			}
 			assertEquals(4, p.getMembers().size());
-		}
-		/**
-		 * giveInitialResources test
-		 */
-		int i = 0;
-		for (Player p : game.getPlayersOrder()) {
-			assertTrue(p.getPersonalBoard().getResources().getWood().intValue() == 2);
-			assertTrue(p.getPersonalBoard().getResources().getStone().intValue() == 2);
-			assertTrue(p.getPersonalBoard().getResources().getServants().intValue() == 3);
-			assertTrue(p.getPersonalBoard().getResources().getMilitary().intValue() == 0);
-			assertTrue(p.getPersonalBoard().getResources().getVictory().intValue() == 0);
-			assertTrue(p.getPersonalBoard().getResources().getFaith().intValue() == 0);
-			assertTrue(p.getPersonalBoard().getResources().getCoins().intValue() == 5 + i);
-			i++;
 		}
 		/**
 		 * distributions tests

@@ -452,6 +452,8 @@ public class MainGameController implements Runnable {
 	 */
 	public Resource selectCouncilPrivilege(Integer councilNumber, Player player) throws IOException {
 		Resource resource = new Resource(0, 0, 0, 0, 0, 0, 0);
+		if (councilNumber == 0)
+			return resource;
 		String result = getIPlayer(player).councilRequest(councilNumber);
 		String[] cp = result.split("@");
 		for (String c : cp) {

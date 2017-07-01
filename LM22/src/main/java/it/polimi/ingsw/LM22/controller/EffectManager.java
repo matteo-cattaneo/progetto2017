@@ -295,7 +295,7 @@ public class EffectManager {
 	public void memberchangeeffectManage(MemberChangeEffect e) throws IOException {
 		String color = e.getTypeOfMember();
 		switch (color) {
-		case "ALL":// ludovico il modo
+		case "ALL":// ludovico il moro
 			for (FamilyMember m : player.getMembers()) {
 				if (!m.getColor().equals(UNCOLORED))
 					m.setValue(e.getNewValueOfMember());
