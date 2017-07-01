@@ -13,7 +13,6 @@ import junit.framework.TestCase;
 
 public class TestVaticanReportManager extends TestCase{
 
-	InitialConfigurator init;
 	Game game;
 	PlayerInfo pi1;
 	PlayerInfo pi2;
@@ -39,18 +38,16 @@ public class TestVaticanReportManager extends TestCase{
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
-		game = new Game();
 		r = new ResourceHandler();
 		mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		moveManager = new MoveManager(game, mainGC);
 		prova = new VaticanReportManager();
 		effectManager = new EffectManager(moveManager);
-		init = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
 	}
 	
 	@Test
 	public void testVaticanReport(){
-		init.initializeTurn(game);
 		for (Player p: game.getPlayersOrder()){
 			assertTrue(p.getEffects().isEmpty());
 		}

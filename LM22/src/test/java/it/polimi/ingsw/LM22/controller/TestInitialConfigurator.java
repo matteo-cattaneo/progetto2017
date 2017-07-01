@@ -22,19 +22,15 @@ public class TestInitialConfigurator extends TestCase {
 		PlayerInfo pi1 = new PlayerInfo();
 		PlayerInfo pi2 = new PlayerInfo();
 		PlayerInfo pi3 = new PlayerInfo();
+		pi1.setName("Nicola");
+		pi2.setName("Matteo");
+		pi3.setName("Esempio");
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
-		game = new Game();
-		Player p1 = new Player("Nicola", "Blue");
-		Player p2 = new Player("Matteo", "Green");
-		Player p3 = new Player("Esempio", "Red");
-		game.setPlayersOrder(new ArrayList<Player>());
-		game.getPlayersOrder().add(p1);
-		game.getPlayersOrder().add(p2);
-		game.getPlayersOrder().add(p3);
 		ResourceHandler r = new ResourceHandler();
 		MainGameController mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
 		prova = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
@@ -42,7 +38,6 @@ public class TestInitialConfigurator extends TestCase {
 
 	@Test
 	public void testInitializeTurn() {
-		prova.initializeTurn(game);
 		/**
 		 * setUp period & round
 		 */

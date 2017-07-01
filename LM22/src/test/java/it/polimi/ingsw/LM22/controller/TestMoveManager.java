@@ -9,7 +9,6 @@ import org.junit.Test;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.excommunication.DoubleServantsEx;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 import junit.framework.TestCase;
@@ -43,9 +42,9 @@ public class TestMoveManager extends TestCase {
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
-		game = new Game();
 		r = new ResourceHandler();
 		mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		prova = new MoveManager(game, mainGC);
 		effectManager = new EffectManager(prova);
 		init = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
@@ -54,7 +53,6 @@ public class TestMoveManager extends TestCase {
 
 	@Test
 	public void testFirstTerritoryMove() throws IOException {
-		init.initializeTurn(game);
 		f.getDevCards(game);
 		Player test = game.getPlayersOrder().get(0);
 		test.getEffects().add(new DoubleServantsEx());
@@ -107,7 +105,6 @@ public class TestMoveManager extends TestCase {
 
 	@Test
 	public void testFirstBuildingMove() throws IOException {
-		init.initializeTurn(game);
 		f.getDevCards(game);
 		Player test = game.getPlayersOrder().get(0);
 		assertTrue(test.getPersonalBoard().getResources().getCoins() == 5);
@@ -130,12 +127,10 @@ public class TestMoveManager extends TestCase {
 		assertTrue(test.getPersonalBoard().getResources().getFaith() == 1);
 	}
 
-	/*
+	
 	@Test
 	public void testFirstVentureMove() throws IOException {
-		init.initializeTurn(game);
 		f.getDevCards(game);
-//		Player test = game.getPlayersOrder().get(0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		game.getPlayersOrder().get(0).getPersonalBoard().getResources().setMilitary(4);
@@ -158,5 +153,22 @@ public class TestMoveManager extends TestCase {
 		assertEquals(9, game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary().intValue());
 		assertEquals(1, game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins().intValue());
 	}
-	*/
+	
+	@Test
+	public void testMarketMove(){
+		Player test = game.getPlayersOrder().get(0);
+		assertTrue(test.getPersonalBoard().getResources().getCoins() == 5);
+		MarketMove move = new MarketMove(test, test.getMembers().get(0), new Resource(0,0,0,0,0,0,0), 0);
+		try {
+			prova.manageMove(move);
+		} catch (InvalidMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertTrue(test.getPersonalBoard().getResources().getCoins() == 10);
+		assertNotNull(game.getBoardgame().getMarket()[0]);
+		assertTrue(game.getBoardgame().getMarket()[0].getMember().equals(test.getMembers().get(0)));
+	}
+	
+	
 }

@@ -98,10 +98,6 @@ public class MoveManager {
 	 * controlla se una mossa del tipo CardMove è ammessa o no
 	 */
 	public boolean cardmoveAllowed(CardMove cardMove) throws IOException {
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[3].getCard().getName());
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[2].getCard().getName());
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[1].getCard().getName());
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[0].getCard().getName());
 		if (!checkMaxNumCardLimit(cardMove))
 			return false;
 		if (!checkCardSpace(cardMove))
@@ -212,8 +208,6 @@ public class MoveManager {
 		switch (tower) {
 		case 3:
 			doubleCostChoice = mainGame.askForCost(cardMove);
-			System.out.println(cardMove.getLevelSelected() + " level");
-			System.out.println(cardMove.getTowerSelected() + " tower");
 			if (doubleCostChoice.equals(1)
 					&& !resourceHandler.enoughResources(((VentureCard) card).getCardCost2()[REQUIRED].copy(), cardMove,
 							additionalCost, bonus))

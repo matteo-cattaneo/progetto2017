@@ -34,13 +34,13 @@ public class TestDevEffectManager extends TestCase {
 		pi2.setName("Matteo");
 		pi3.setName("Esempio");
 		pi4.setName("Esempio1");
-		game = new Game();
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
 		r = new ResourceHandler();
 		mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		moveManager = new MoveManager(game, mainGC);
 		effectManager = new EffectManager(moveManager);
 		init = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
@@ -53,7 +53,6 @@ public class TestDevEffectManager extends TestCase {
 	public void testResourcePrivilegeEffect() {
 		TerritoryCard città = game.getTerritoryCards().get(2);
 		assertTrue(città.getName().equals("Città"));
-		init.initializeTurn(game);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getStone() == 2);
@@ -75,7 +74,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testResourceToResourcePrivilegeEffect() {
 		CharacterCard generale = game.getCharacterCards().get(17);
-		init.initializeTurn(game);
 		assertTrue(generale.getName().equals("Generale"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
@@ -100,7 +98,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testChangeEffect() {
 		BuildingCard cappella = game.getBuildingCards().get(0);
-		init.initializeTurn(game);
 		assertTrue(cappella.getName().equals("Cappella"));
 		game.getPlayersOrder().get(0).getPersonalBoard().getResources().setCoins(0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 0);
@@ -124,7 +121,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testDoubleChangeEffect() {
 		BuildingCard falegnameria = game.getBuildingCards().get(1);
-		init.initializeTurn(game);
 		assertTrue(falegnameria.getName().equals("Falegnameria"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
@@ -149,7 +145,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testCardToResourceCharEffect() {
 		BuildingCard teatro = game.getBuildingCards().get(2);
-		init.initializeTurn(game);
 		assertTrue(teatro.getName().equals("Teatro"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
@@ -172,7 +167,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testCardToResourceVentEffect() {
 		BuildingCard arcoDiTrionfo = game.getBuildingCards().get(3);
-		init.initializeTurn(game);
 		assertTrue(arcoDiTrionfo.getName().equals("Arco di Trionfo"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
@@ -195,7 +189,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testCardToResourceBuilEffect() {
 		BuildingCard zecca = game.getBuildingCards().get(4);
-		init.initializeTurn(game);
 		assertTrue(zecca.getName().equals("Zecca"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);
@@ -218,7 +211,6 @@ public class TestDevEffectManager extends TestCase {
 	@Test
 	public void testCardToResourceTerrEffect() {
 		BuildingCard esattoria = game.getBuildingCards().get(5);
-		init.initializeTurn(game);
 		assertTrue(esattoria.getName().equals("Esattoria"));
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getCoins() == 5);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getServants() == 3);

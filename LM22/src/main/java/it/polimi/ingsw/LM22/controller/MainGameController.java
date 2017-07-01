@@ -581,13 +581,8 @@ public class MainGameController implements Runnable {
 	 * secondo costo (punti militari)
 	 */
 	public Integer askForCost(CardMove cardMove) throws IOException {
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[0].getCard().getName());
 		VentureCard vc = (VentureCard) game.getBoardgame().getTowers()[cardMove.getTowerSelected()].getFloor()[cardMove
 				.getLevelSelected()].getCard();
-		System.out.println(cardMove.getLevelSelected() + " Level");
-		System.out.println(cardMove.getTowerSelected() + " Tower");
-		System.out.println(game.getBoardgame().getTowers()[3].getFloor()[0].getCard().getName());
-		System.out.println(vc.getName());
 		if ("No resource%n".equals(vc.getCardCost1().getInfo()))
 			return 1;
 		else if ("No resource%n".equals(vc.getCardCost2()[0].getInfo()))

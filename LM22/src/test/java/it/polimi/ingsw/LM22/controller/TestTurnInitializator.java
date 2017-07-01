@@ -13,7 +13,6 @@ import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 import junit.framework.TestCase;
 
 public class TestTurnInitializator extends TestCase {
-	InitialConfigurator initialConfigurator;
 	TurnInizializator turnInizializator;
 	Game game;
 	final String[] colors = { "Orange", "Black", "White" };
@@ -28,22 +27,20 @@ public class TestTurnInitializator extends TestCase {
 		pi2.setName("Matteo");
 		pi3.setName("Esempio");
 		pi4.setName("Esempio1");
-		game = new Game();
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
 		ResourceHandler r = new ResourceHandler();
 		MainGameController mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
-		initialConfigurator = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
 		turnInizializator = new TurnInizializator(effectManager, r, mainGC);
 	}
 
 	@Test
 	public void testInitializeTurn() throws IOException {
-		initialConfigurator.initializeTurn(game);
 		assertEquals(1, game.getPeriod().intValue());
 		assertEquals(1, game.getRound().intValue());
 		/**

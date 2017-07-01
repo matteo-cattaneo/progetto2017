@@ -147,8 +147,8 @@ public class TestResourceHandler extends TestCase {
 		pi2.setName("Matteo");
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
-		Game game = new Game();
 		MainGameController mainGC = new MainGameController(pinfolist);
+		Game game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
 		InitialConfigurator init = new InitialConfigurator(pinfolist, rh, effectManager, mainGC);

@@ -36,17 +36,14 @@ public class TestLeaderManageEffect extends TestCase {
 		pi2.setName("Matteo");
 		pi3.setName("Esempio");
 		pi4.setName("Esempio1");
-		game = new Game();
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
-		ResourceHandler r = new ResourceHandler();
 		mainGC = new MainGameController(pinfolist);
+		game = mainGC.getGame();
 		moveManager = new MoveManager(game, mainGC);
 		effectManager = new EffectManager(moveManager);
-		InitialConfigurator initialConfigurator = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
-		initialConfigurator.initializeTurn(game);
 		FileParser fp = new FileParser();
 		fp.getLeaderCards(game);
 	}
