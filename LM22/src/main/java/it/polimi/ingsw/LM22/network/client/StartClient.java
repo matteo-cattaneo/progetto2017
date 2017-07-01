@@ -26,7 +26,7 @@ public class StartClient {
 		// visualizzo splash screen caricandola da file
 		try {
 			System.out.println(
-					new String(Files.readAllBytes(Paths.get(".\\JSON\\SplashScreen.txt")), StandardCharsets.UTF_8));
+					new String(Files.readAllBytes(Paths.get(".//JSON//SplashScreen.txt")), StandardCharsets.UTF_8));
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Splash screen not found!", e);
 		}

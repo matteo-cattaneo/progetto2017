@@ -71,7 +71,7 @@ import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class FileParser {
-	private final static String JSONpath = ".\\JSON\\";
+	private final static String JSONpath = ".//JSON//";
 	private final Integer nExTile = 7;
 
 	public void getDevCards(Game game) throws IOException {

@@ -39,7 +39,7 @@ public class TestExcommunicationEffects extends TestCase {
 				.registerSubtype(NoFirstTurnEx.class).registerSubtype(NoMarketEx.class)
 				.registerSubtype(ResourceMalusEx.class).registerSubtype(WorkMalusEx.class);
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(".\\JSON\\ExCommunication.json")),
+		String text = new String(Files.readAllBytes(Paths.get(".//JSON//ExCommunication.json")),
 				StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(effect).create();

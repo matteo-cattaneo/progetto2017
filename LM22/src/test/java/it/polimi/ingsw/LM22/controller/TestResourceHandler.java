@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import it.polimi.ingsw.LM22.model.Game;
-import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 import junit.framework.TestCase;
@@ -139,7 +138,6 @@ public class TestResourceHandler extends TestCase {
 		assertEquals(false, rh.enoughResources(nothing, victory));
 	}
 
-	/*
 	@Test
 	public void testEnoughResources2() throws RemoteException {
 		ArrayList<PlayerInfo> pinfolist = new ArrayList<PlayerInfo>();
@@ -162,8 +160,8 @@ public class TestResourceHandler extends TestCase {
 		Resource additionalCost2 = new Resource(0, 0, 0, 0, 1, 0, 0);
 		CardMove move2 = new CardMove(game.getPlayersOrder().get(0), game.getPlayersOrder().get(0).getMembers().get(3),
 				new Resource(0, 0, 0, 0, 0, 0, 0), 0, 1);
-		assertTrue(rh.enoughResources(move, additionalCost));
-	}*/
+		assertFalse(rh.enoughResources(move2, additionalCost2));
+	}
 
 	@Test
 	public void testDiffResource() {
