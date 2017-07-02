@@ -458,7 +458,7 @@ public class MoveManager {
 		Integer servants = calculateEffectiveServants(workMove);
 		switch (game.getPlayersOrder().size()) {
 		case 2:
-			if ("PRODUCTION".equals(workMove.getWorkType())) {
+			if (PRODUCTION.equals(workMove.getWorkType())) {
 				if (!(game.getBoardgame().getProductionSpace().getMembers().isEmpty()
 						|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
 						|| workMove.getMemberUsed().getColor().equals(ACTION)))
@@ -479,7 +479,7 @@ public class MoveManager {
 			}
 		case 3:
 		case 4:
-			if ("PRODUCTION".equals(workMove.getWorkType())) {
+			if (PRODUCTION.equals(workMove.getWorkType())) {
 				if (game.getBoardgame().getProductionSpace().getColoredMemberOnIt()
 						.contains(workMove.getPlayer().getColor()))
 					return false;

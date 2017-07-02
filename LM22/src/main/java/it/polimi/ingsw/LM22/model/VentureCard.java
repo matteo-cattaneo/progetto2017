@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class VentureCard extends DevelopmentCard implements Serializable {
 
 	private static final long serialVersionUID = 5037136863567493067L;
+	private static final String NO_RESOURCE = "No resource%n";
 	private Resource cardCost1;
 	private Resource[] cardCost2;
 	private Resource permanentEffect;
@@ -26,11 +27,11 @@ public class VentureCard extends DevelopmentCard implements Serializable {
 		String info;
 		info = "Name: " + getName() + "%n";
 		info = info + "Period: " + getPeriod() + "%n";
-		if (!"No resource%n".equals(getCardCost1().getInfo()))
+		if (!NO_RESOURCE.equals(getCardCost1().getInfo()))
 			info = info + "Card cost:%n" + getCardCost1().getInfo();
-		if (!"No resource%n".equals(getCardCost1().getInfo()) && !"No resource%n".equals(getCardCost2()[0].getInfo()))
+		if (!NO_RESOURCE.equals(getCardCost1().getInfo()) && !NO_RESOURCE.equals(getCardCost2()[0].getInfo()))
 			info = info + "Second ";
-		if (!"No resource%n".equals(getCardCost2()[0].getInfo()))
+		if (!NO_RESOURCE.equals(getCardCost2()[0].getInfo()))
 			info = info + "Card cost:%nRequire:%n" + getCardCost2()[0].getInfo() + "Cost:%n"
 					+ getCardCost2()[1].getInfo();
 		info = info + "Immediate effect:%n" + getImmediateEffect().getInfo();

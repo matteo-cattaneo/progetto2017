@@ -11,7 +11,7 @@ public class FaithGrid implements Serializable {
 	private static final long serialVersionUID = -1137579846689196478L;
 	private final static Integer GRIDLENGTH = 16;
 	private ArrayList<ExCommunication> exCommunicationTiles = new ArrayList<ExCommunication>();
-	private Resource rewards[];
+	private Resource[] rewards;
 
 	public List<ExCommunication> getExCommunicationTiles() {
 		return exCommunicationTiles;

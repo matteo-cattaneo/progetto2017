@@ -10,8 +10,8 @@ public class BoardGame implements Serializable {
 	private static final String PRODUCTION = "PRODUCTION";
 	private static final Integer NUM_TOWERS = 4;
 	private static final Integer NUM_MARKET = 4;
-	private Tower towers[] = new Tower[NUM_TOWERS];
-	private MarketSpace market[] = new MarketSpace[NUM_MARKET];
+	private Tower[] towers = new Tower[NUM_TOWERS];
+	private MarketSpace[] market = new MarketSpace[NUM_MARKET];
 	private WorkSpace productionSpace;
 	private WorkSpace harvestSpace;
 	private FaithGrid faithGrid;

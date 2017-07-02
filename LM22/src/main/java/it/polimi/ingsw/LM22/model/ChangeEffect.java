@@ -7,7 +7,7 @@ public class ChangeEffect extends ImmediateEffect implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 6394703810465055798L;
-	protected Resource exchangeEffect1[];
+	protected Resource[] exchangeEffect1;
 
 	public Resource[] getExchangeEffect1() {
 		return exchangeEffect1;

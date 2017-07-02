@@ -18,7 +18,7 @@ public class Game implements Serializable {
 	private transient List<BuildingCard> buildingCards;
 	private transient List<VentureCard> ventureCards;
 	private transient List<LeaderCard> leaderCards;
-	private PersonalBonusTile personalBonusTile[];
+	private PersonalBonusTile[] personalBonusTile;
 	private long moveTimer; // caricabile da file (secondi)
 
 	public long getMoveTimer() {

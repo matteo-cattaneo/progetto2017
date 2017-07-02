@@ -27,6 +27,8 @@ import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 public class MainGameController implements Runnable {
 	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private static final HashMap<String, Resource> councilResource = initializeCouncilMap();
+	
+	private static final String DISCONNECTED = " has been disconnected";
 
 	private static final Integer END_DEFINER = 2;
 	private static final Integer LAST_PERIOD = 3;
@@ -86,7 +88,7 @@ public class MainGameController implements Runnable {
 					game.getPersonalBonusTile()[selection] = null;
 				} catch (IOException e) {
 					disconnectPlayer(p);
-					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e);
+					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
 				}
 		}
 	}
@@ -165,7 +167,7 @@ public class MainGameController implements Runnable {
 				try {
 					getIPlayer(p).selectLeaderCard(game);
 				} catch (IOException e) {
-					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e);
+					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
 					disconnectPlayer(p);
 				}
 		}
@@ -222,7 +224,7 @@ public class MainGameController implements Runnable {
 						getIPlayer(p).showMsg("Invalid member move!!!");
 				} catch (IOException e1) {
 					// player mossa errata + client disconnesso
-					LOGGER.log(Level.INFO, p.getNickname() + " has been disconnected", e1);
+					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e1);
 					disconnectPlayer(p);
 				}
 			}

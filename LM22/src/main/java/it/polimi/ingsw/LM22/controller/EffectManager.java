@@ -37,6 +37,8 @@ import it.polimi.ingsw.LM22.model.leader.WorkAction;
 public class EffectManager {
 
 	private static final Logger LOGGER = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
+	private static final String MANAGE = "Manage";
+	private static final String INVALID_DUE_TO_CARD_EFFECT = "User has done an Invalid Move due to Card Effect";
 	private static final Integer FIRST_CHANGE = 1;
 	private static final Integer SECOND_CHANGE = 2;
 	private static final Integer NEEDED = 0;
@@ -59,7 +61,7 @@ public class EffectManager {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
-			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
+			String name = effect.getClass().getSimpleName().toLowerCase() + MANAGE;
 			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), sum.getClass() });
 			if (metodo != null)
 				metodo.invoke(this, new Object[] { effect, sum });
@@ -141,7 +143,7 @@ public class EffectManager {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
-			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
+			String name = effect.getClass().getSimpleName().toLowerCase() + MANAGE;
 			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), resource.getClass() });
 			if (metodo != null)
 				metodo.invoke(this, new Object[] { effect, resource });
@@ -181,7 +183,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
+			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 	}
 
@@ -199,7 +201,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
+			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 
 	}
@@ -247,7 +249,7 @@ public class EffectManager {
 		this.player = player;
 		this.mainGC = mainGC;
 		try {
-			String name = effect.getClass().getSimpleName().toLowerCase() + "Manage";
+			String name = effect.getClass().getSimpleName().toLowerCase() + MANAGE;
 			Method metodo;
 			if (effect instanceof CopyEffect) {
 				metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), ld.getClass() });
@@ -283,7 +285,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, "User has done an Invalid Move due to Card Effect", e);
+			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 
 	}
