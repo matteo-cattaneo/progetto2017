@@ -25,16 +25,16 @@ import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class TurnInizializator {
 
-	private final Integer TERRITORY = 0;
-	private final Integer CHARACTER = 1;
-	private final Integer BUILDING = 2;
-	private final Integer VENTURE = 3;
-	private final Integer DICE_NUMBER = 3;
-	private final Integer DICE_MAX = 6;
-	private final Integer DICE_MIN = 1;
-	protected final String[] colors = { "Orange", "Black", "White" };
-	private final Integer WORKSPACES = 2;
-	private final String[] workType = { "PRODUCTION", "HARVEST" };
+	private static final Integer TERRITORY = 0;
+	private static final Integer CHARACTER = 1;
+	private static final Integer BUILDING = 2;
+	private static final Integer VENTURE = 3;
+	private static final Integer DICE_NUMBER = 3;
+	private static final Integer DICE_MAX = 6;
+	private static final Integer DICE_MIN = 1;
+	private static final String[] colors = { "Orange", "Black", "White" };
+	private static final Integer WORKSPACES = 2;
+	private static final String[] workType = { "PRODUCTION", "HARVEST" };
 
 	private MainGameController mainGC;
 	private EffectManager effectManager;
@@ -120,7 +120,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[TERRITORY].getFloor()) {
 			int i = 0;
 			TerritoryCard c = game.getTerritoryCards().get(i);
-			for (; !c.getPeriod().equals(game.getPeriod());) {
+			while (!c.getPeriod().equals(game.getPeriod())) {
 				i++;
 				c = game.getTerritoryCards().get(i);
 			}
@@ -133,7 +133,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[CHARACTER].getFloor()) {
 			int i = 0;
 			CharacterCard c = game.getCharacterCards().get(i);
-			for (; !c.getPeriod().equals(game.getPeriod());) {
+			while (!c.getPeriod().equals(game.getPeriod())) {
 				i++;
 				c = game.getCharacterCards().get(i);
 			}
@@ -146,7 +146,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[BUILDING].getFloor()) {
 			int i = 0;
 			BuildingCard c = game.getBuildingCards().get(i);
-			for (; !c.getPeriod().equals(game.getPeriod());) {
+			while (!c.getPeriod().equals(game.getPeriod())) {
 				i++;
 				c = game.getBuildingCards().get(i);
 			}
@@ -159,7 +159,7 @@ public class TurnInizializator {
 		for (Floor f : game.getBoardgame().getTowers()[VENTURE].getFloor()) {
 			int i = 0;
 			VentureCard c = game.getVentureCards().get(i);
-			for (; !c.getPeriod().equals(game.getPeriod());) {
+			while (!c.getPeriod().equals(game.getPeriod())) {
 				i++;
 				c = game.getVentureCards().get(i);
 			}

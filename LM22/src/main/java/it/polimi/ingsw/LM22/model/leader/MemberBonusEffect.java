@@ -18,8 +18,7 @@ public class MemberBonusEffect extends MemberValueEffect implements Serializable
 
 	@Override
 	public String getInfo() {
-		String info = "You will get a bonus of " + valueOfBonus + " for " + typeOfMember + " member%n";
-		return info;
+		return "You will get a bonus of " + valueOfBonus + " for " + typeOfMember + " member%n";
 	}
 
 }

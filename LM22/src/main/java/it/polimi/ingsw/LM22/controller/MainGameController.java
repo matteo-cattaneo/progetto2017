@@ -25,23 +25,23 @@ import it.polimi.ingsw.LM22.network.server.IPlayer;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class MainGameController implements Runnable {
-	private Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
-	private final HashMap<String, Resource> councilResource = initializeCouncilMap();
+	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
+	private static final HashMap<String, Resource> councilResource = initializeCouncilMap();
 
-	private final Integer END_DEFINER = 2;
-	private final Integer LAST_PERIOD = 3;
+	private static final Integer END_DEFINER = 2;
+	private static final Integer LAST_PERIOD = 3;
 
-	private final Integer TERRITORY = 0;
-	private final Resource[] territoryReward = { NOTHING, NOTHING, NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
+	private static final Integer TERRITORY = 0;
+	private static final Resource[] territoryReward = { NOTHING, NOTHING, NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
 			new Resource(0, 0, 0, 0, 0, 0, 4), new Resource(0, 0, 0, 0, 0, 0, 10), new Resource(0, 0, 0, 0, 0, 0, 20) };
-	private final Integer CHARACTER = 1;
-	private final Resource[] characterReward = { NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
+	private static final Integer CHARACTER = 1;
+	private static final Resource[] characterReward = { NOTHING, new Resource(0, 0, 0, 0, 0, 0, 1),
 			new Resource(0, 0, 0, 0, 0, 0, 3), new Resource(0, 0, 0, 0, 0, 0, 6), new Resource(0, 0, 0, 0, 0, 0, 10),
 			new Resource(0, 0, 0, 0, 0, 0, 15), new Resource(0, 0, 0, 0, 0, 0, 21) };
-	private final Integer BUILDING = 2;
-	private final Integer VENTURE = 3;
-	private final Resource FIVE_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 5);
-	private final Resource TWO_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 2);
+	private static final Integer BUILDING = 2;
+	private static final Integer VENTURE = 3;
+	private static final Resource FIVE_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 5);
+	private static final Resource TWO_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 2);
 
 	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
@@ -483,7 +483,7 @@ public class MainGameController implements Runnable {
 		}
 	}
 
-	private HashMap<String, Resource> initializeCouncilMap() {
+	private static HashMap<String, Resource> initializeCouncilMap() {
 		HashMap<String, Resource> map = new HashMap<String, Resource>();
 		map.put("wood&stone", new Resource(1, 1, 0, 0, 0, 0, 0));
 		map.put("servants", new Resource(0, 0, 2, 0, 0, 0, 0));

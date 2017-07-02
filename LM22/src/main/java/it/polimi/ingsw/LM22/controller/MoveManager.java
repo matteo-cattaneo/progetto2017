@@ -38,16 +38,16 @@ import it.polimi.ingsw.LM22.model.WorkBonusEffect;
 
 public class MoveManager {
 	private static final Logger LOGGER = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
-	private final String UNCOLORED = "Uncolored";
-	private final String ACTION = "Action";
-	private final Integer SINGLE_PRIVILEGE = 1;
-	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
-	private final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
-	private final String PRODUCTION = "PRODUCTION";
-	private final Integer WORK_MALUS = 3;
-	private final Integer[] TERRITORY_REQUEST = { 0, 0, 3, 7, 12, 18 };
-	private final Integer MAX_NUM_CARDS = 6;
-	private final Integer REQUIRED = 0;
+	private static final String UNCOLORED = "Uncolored";
+	private static final String ACTION = "Action";
+	private static final Integer SINGLE_PRIVILEGE = 1;
+	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
+	private static final Resource THREE_COINS = new Resource(0, 0, 0, 3, 0, 0, 0);
+	private static final String PRODUCTION = "PRODUCTION";
+	private static final Integer WORK_MALUS = 3;
+	private static final Integer[] TERRITORY_REQUEST = { 0, 0, 3, 7, 12, 18 };
+	private static final Integer MAX_NUM_CARDS = 6;
+	private static final Integer REQUIRED = 0;
 	private Integer doubleCostChoice;
 	private Game game;
 	private MainGameController mainGame;
@@ -363,24 +363,24 @@ public class MoveManager {
 		DevelopmentCard card;
 		switch (cardMove.getTowerSelected()) {
 		case 0:
-			card = (TerritoryCard) (t.getFloor()[level].getCard());
+			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add((TerritoryCard) card);
 			t.getFloor()[level].setCard(new TerritoryCard());
 			break;
 		case 1:
-			card = (CharacterCard) (t.getFloor()[level].getCard());
+			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add((CharacterCard) card);
 			t.getFloor()[level].setCard(new CharacterCard());
 			if (((CharacterCard) card).getPermanentEffect().getClass() != NoPermanentEffect.class)
 				cardMove.getPlayer().getEffects().add(((CharacterCard) card).getPermanentEffect());
 			break;
 		case 2:
-			card = (BuildingCard) (t.getFloor()[level].getCard());
+			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add((BuildingCard) card);
 			t.getFloor()[level].setCard(new BuildingCard());
 			break;
 		case 3:
-			card = (VentureCard) (t.getFloor()[level].getCard());
+			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getVenturesCards().add((VentureCard) card);
 			t.getFloor()[level].setCard(new VentureCard());
 			break;
@@ -652,13 +652,11 @@ public class MoveManager {
 		LeaderCardRequest req = move.getLeaderCard().getRequest();
 		if ("Lucrezia Borgia".equals(move.getLeaderCard().getName())) {
 			CardRequest r = (CardRequest) move.getLeaderCard().getRequest();
-			if (r.getTerritoryCards() <= move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
+			return r.getTerritoryCards() <= move.getPlayer().getPersonalBoard().getTerritoriesCards().size()
 					|| r.getCharacterCards() <= move.getPlayer().getPersonalBoard().getCharactersCards().size()
 					|| r.getBuildingCards() <= move.getPlayer().getPersonalBoard().getBuildingsCards().size()
-					|| r.getVentureCards() <= move.getPlayer().getPersonalBoard().getVenturesCards().size()) {
-				return true;
-			} else
-				return false;
+					|| r.getVentureCards() <= move.getPlayer().getPersonalBoard().getVenturesCards().size();
+
 		}
 		if (req instanceof CardRequest) {
 			CardRequest r = (CardRequest) move.getLeaderCard().getRequest();

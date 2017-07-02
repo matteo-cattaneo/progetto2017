@@ -16,8 +16,8 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class SocketClient implements IConnection {
-	private final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
-	private final int SOCKET_PORT = 1337;
+	private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
+	private static final int SOCKET_PORT = 1337;
 	private Socket socket;
 	private AbstractUI UI;
 	private String name;

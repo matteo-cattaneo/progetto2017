@@ -16,20 +16,20 @@ import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class InitialConfigurator extends TurnInizializator {
-	private final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
 	private FileParser fileParser = new FileParser();
 	private List<PlayerInfo> playerRoom;
-	private final Integer BASE_WOOD_STONE = 2;
-	private final Integer BASE_SERVANTS = 3;
-	private final Integer BASE_COINS = 5;
-	private final Integer NO_RESOURCE = 0;
-	private final Integer UNCOLORED_VALUE = 0;
-	private final Integer INIT = 1;
+	private static final Integer BASE_WOOD_STONE = 2;
+	private static final Integer BASE_SERVANTS = 3;
+	private static final Integer BASE_COINS = 5;
+	private static final Integer NO_RESOURCE = 0;
+	private static final Integer UNCOLORED_VALUE = 0;
+	private static final Integer INIT = 1;
 
 	// Colori giocatori
-	private final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
+	private static final String[] PLAYER_COLOR = { "Blue", "Green", "Red", "Yellow" };
 	// Colori familiari
-	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
+	private static final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
 	/**
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono

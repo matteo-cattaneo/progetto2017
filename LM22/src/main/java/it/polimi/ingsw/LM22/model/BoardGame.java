@@ -7,9 +7,9 @@ import java.util.Map;
 public class BoardGame implements Serializable {
 
 	private static final long serialVersionUID = 3178699533089217722L;
-	private final String PRODUCTION = "PRODUCTION";
-	private final Integer NUM_TOWERS = 4;
-	private final Integer NUM_MARKET = 4;
+	private static final String PRODUCTION = "PRODUCTION";
+	private static final Integer NUM_TOWERS = 4;
+	private static final Integer NUM_MARKET = 4;
 	private Tower towers[] = new Tower[NUM_TOWERS];
 	private MarketSpace market[] = new MarketSpace[NUM_MARKET];
 	private WorkSpace productionSpace;

@@ -37,14 +37,14 @@ import it.polimi.ingsw.LM22.model.leader.WorkAction;
 public class EffectManager {
 
 	private static final Logger LOGGER = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
-	private final Integer FIRST_CHANGE = 1;
-	private final Integer SECOND_CHANGE = 2;
-	private final Integer NEEDED = 0;
-	private final Integer TOWER = 0;
-	private final Integer FLOOR = 1;
-	private final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
-	private final String UNCOLORED = "Uncolored";
-	private final String ACTION = "Action";
+	private static final Integer FIRST_CHANGE = 1;
+	private static final Integer SECOND_CHANGE = 2;
+	private static final Integer NEEDED = 0;
+	private static final Integer TOWER = 0;
+	private static final Integer FLOOR = 1;
+	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
+	private static final String UNCOLORED = "Uncolored";
+	private static final String ACTION = "Action";
 	private Player player;
 	private MainGameController mainGC;
 	private MoveManager moveManager;
@@ -330,15 +330,11 @@ public class EffectManager {
 	 */
 	public void memberbonuseffectManage(MemberBonusEffect e) {
 		String color = e.getTypeOfMember();
-		switch (color) {
-		case "ALL":// lucrezia
+		if ("ALL".equals(color)) {// lucrezia
 			for (FamilyMember f : player.getMembers()) {
 				if (!f.getColor().equals(UNCOLORED))
 					f.setValue(f.getValue() + e.getValueOfBonus());
 			}
-			break;
-		default:
-			return;
 		}
 		if (!player.getEffects().contains(e))
 			player.getEffects().add(e);

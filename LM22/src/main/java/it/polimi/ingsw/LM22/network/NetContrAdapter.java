@@ -78,7 +78,6 @@ public class NetContrAdapter {
 	private Resource getServantsAdded(String param) {
 		Integer serv = Integer.parseInt(param);
 		// create a new Resource with the specified servants quantity
-		Resource resource = new Resource(0, 0, serv, 0, 0, 0, 0);
-		return resource;
+		return new Resource(0, 0, serv, 0, 0, 0, 0);
 	}
 }

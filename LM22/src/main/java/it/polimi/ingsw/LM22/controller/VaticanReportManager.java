@@ -9,13 +9,13 @@ import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 
 public class VaticanReportManager {
-	private final Integer MAX_FAITH_GRID = 15;
+	private static final Integer MAX_FAITH_GRID = 15;
 	/**
 	 * risorse richieste sono da caricare da file oppure no?
 	 */
-	private final Resource[] goal = { new Resource(0, 0, 0, 0, 3, 0, 0), new Resource(0, 0, 0, 0, 4, 0, 0),
+	private static final Resource[] goal = { new Resource(0, 0, 0, 0, 3, 0, 0), new Resource(0, 0, 0, 0, 4, 0, 0),
 			new Resource(0, 0, 0, 0, 5, 0, 0) };
-	private final ResourceHandler resourceHandler = new ResourceHandler();
+	private static final ResourceHandler resourceHandler = new ResourceHandler();
 	private Game game;
 
 	/**

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class CardActionEffect extends ImmediateEffect implements Serializable {
 
 	private static final long serialVersionUID = 8311517314130702912L;
-	private final Integer ALL = -1;
+	private static final Integer ALL = -1;
 	private Integer cardType;
 	private Integer diceValue;
 	private Resource cardDiscount;

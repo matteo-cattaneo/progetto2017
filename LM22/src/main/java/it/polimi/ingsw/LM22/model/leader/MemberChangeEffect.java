@@ -18,8 +18,7 @@ public class MemberChangeEffect extends MemberValueEffect implements Serializabl
 
 	@Override
 	public String getInfo() {
-		String info = "You will get a " + newValueOfMember + " for " + typeOfMember + " member%n";
-		return info;
+		return "You will get a " + newValueOfMember + " for " + typeOfMember + " member%n";
 	}
 
 }

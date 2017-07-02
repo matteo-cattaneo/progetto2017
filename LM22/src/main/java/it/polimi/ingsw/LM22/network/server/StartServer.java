@@ -24,8 +24,8 @@ public class StartServer {
 	private final static int SOCKET_PORT = 1337;
 	private final static int RMI_PORT = 1099;
 	private Integer TIMER;
-	private final int THIRDPLAYER = 2;
-	private final int FOURTHPLAYER = 3;
+	private final static int THIRDPLAYER = 2;
+	private final static int FOURTHPLAYER = 3;
 	private static ServerSocket serverSocket;
 	private RMIPlayer serverRMI;
 	private ArrayList<ArrayList<PlayerInfo>> serverInfo = new ArrayList<ArrayList<PlayerInfo>>();

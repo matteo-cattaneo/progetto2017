@@ -35,24 +35,24 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
  * interfacciarsi con la CLI
  */
 public class CLIinterface extends AbstractUI {
-	private final Logger LOGGER = Logger.getLogger(CLIinterface.class.getClass().getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(CLIinterface.class.getClass().getSimpleName());
 
-	private final String DEFAULT_IP = "localhost";
+	private static final String DEFAULT_IP = "localhost";
 	// Colori familiari
-	private final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
+	private static final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
-	private final String CARDMOVE = "Card";
-	private final String MARKETMOVE = "Market";
-	private final String WORKMOVE = "Work";
-	private final String COUNCILMOVE = "Council";
+	private static final String CARDMOVE = "Card";
+	private static final String MARKETMOVE = "Market";
+	private static final String WORKMOVE = "Work";
+	private static final String COUNCILMOVE = "Council";
 
-	private final String TERRITORY = "TERRITORY";
-	private final String CHARACTER = "CHARACTER";
-	private final String BUILDING = "BUILDING";
-	private final String VENTURE = "VENTURE";
+	private static final String TERRITORY = "TERRITORY";
+	private static final String CHARACTER = "CHARACTER";
+	private static final String BUILDING = "BUILDING";
+	private static final String VENTURE = "VENTURE";
 
-	private final String PRODUCTION = "PRODUCTION";
-	private final String HARVEST = "HARVEST";
+	private static final String PRODUCTION = "PRODUCTION";
+	private static final String HARVEST = "HARVEST";
 
 	private Scanner in = new Scanner(System.in);
 	private String move = new String();
@@ -543,6 +543,10 @@ public class CLIinterface extends AbstractUI {
 		System.out.printf(msg);
 	}
 
+	private void print(String msg) {
+		System.out.print(msg);
+	}
+
 	@Override
 	public void connectionOK() {
 		showMsg("Connessione stabilita!");
@@ -740,15 +744,14 @@ public class CLIinterface extends AbstractUI {
 		showMsg("|_____________________________|");
 		showMsg("        _________________________________________________________________________________________________");
 		for (int j = 3; j >= 0; j--) {
-			System.out.print("Dice " + game.getBoardgame().getTowers()[0].getFloor()[j].getSpace().getSpaceRequirement()
-					+ ": | ");
+			print("Dice " + game.getBoardgame().getTowers()[0].getFloor()[j].getSpace().getSpaceRequirement() + ": | ");
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
 					msgFormat("%-22s| ", t.getFloor()[j].getCard().getName());
 				else
 					msgFormat("%-22s| ", "#Name: " + t.getFloor()[j].getSpace().getMember().getPlayer().getNickname());
 			showMsg("");
-			System.out.print("Reward: | ");
+			print("Reward: | ");
 			for (Tower t : game.getBoardgame().getTowers())
 				if (t.getFloor()[j].getCard().getName() != null)
 					msgFormat("%-22s| ", t.getFloor()[j].getSpace().getReward().getInfo().replaceAll("%n", " "));
@@ -768,11 +771,11 @@ public class CLIinterface extends AbstractUI {
 		msgFormat("%-30s|%n", "| Excommunication tile:");
 		showMsg("|_____________________________|");
 		for (ExCommunication ex : game.getBoardgame().getFaithGrid().getExCommunicationTiles()) {
-			System.out.print(" - " + ex.getEffect().getInfo());
+			print(" - " + ex.getEffect().getInfo());
 			for (Player p : game.getPlayersOrder())
 				for (Effect e : p.getEffects())
 					if (e.getClass().equals(ex.getEffect().getClass()))
-						System.out.print(" ( " + p.getNickname() + " )");
+						print(" ( " + p.getNickname() + " )");
 			showMsg("");
 		}
 		// palazzo del consiglio
@@ -812,7 +815,7 @@ public class CLIinterface extends AbstractUI {
 				List<FamilyMember> harvest = game.getBoardgame().getHarvestSpace().getMembers();
 				if (game.getBoardgame().getProductionSpace().getMembers().size() > i) {
 					String prodColor;
-					if (!production.get(i).getColor().equals("Uncolored"))
+					if (!"Uncolored".equals(production.get(i).getColor()))
 						prodColor = production.get(i).getPlayer().getColor();
 					else
 						prodColor = "Uncolored";
@@ -821,7 +824,7 @@ public class CLIinterface extends AbstractUI {
 					msgFormat("%-40s|", "|");
 				if (game.getBoardgame().getHarvestSpace().getMembers().size() > i) {
 					String harvColor;
-					if (!harvest.get(i).getColor().equals("Uncolored"))
+					if (!"Uncolored".equals(harvest.get(i).getColor()))
 						harvColor = harvest.get(i).getPlayer().getColor();
 					else
 						harvColor = "Uncolored";
@@ -840,12 +843,12 @@ public class CLIinterface extends AbstractUI {
 	private void showMarketSpaces() {
 		showMsg("______________________________");
 		msgFormat("%-30s|%n", "| Market spaces: ");
-		System.out.print("|_____________________________|____________");
+		print("|_____________________________|____________");
 		if (game.getPlayers().length == 4)
 			showMsg("__________________________________________");
 		else
 			showMsg("");
-		System.out.print("| ");
+		print("| ");
 		int nMark = 0;
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
@@ -857,7 +860,7 @@ public class CLIinterface extends AbstractUI {
 			}
 		showMsg("");
 		nMark = 0;
-		System.out.print("| ");
+		print("| ");
 		// visualizzo la prima risorsa
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
@@ -871,7 +874,7 @@ public class CLIinterface extends AbstractUI {
 
 		showMsg("");
 		nMark = 0;
-		System.out.print("| ");
+		print("| ");
 		// visualizzo l'eventuale seconda risorsa
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
@@ -885,7 +888,7 @@ public class CLIinterface extends AbstractUI {
 
 		showMsg("");
 		nMark = 0;
-		System.out.print("| ");
+		print("| ");
 		// visualizzo il privilegio del consiglio solo se non è 0
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
@@ -898,7 +901,7 @@ public class CLIinterface extends AbstractUI {
 
 		showMsg("");
 		nMark = 0;
-		System.out.print("| ");
+		print("| ");
 		// visualizzo il dice requirement solo se non è occupato
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
@@ -911,7 +914,7 @@ public class CLIinterface extends AbstractUI {
 
 		showMsg("");
 
-		System.out.print("|____________________|____________________|");
+		print("|____________________|____________________|");
 		if (game.getPlayers().length == 4)
 			showMsg("____________________|____________________|");
 		else
@@ -1092,7 +1095,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("Timeout: " + timeout);
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
-				System.out.print("______________________");
+				print("______________________");
 		msgFormat("%n| ");
 		// intestazione generale
 		for (i = 0; i < pbt.length; i++) {
@@ -1102,7 +1105,7 @@ public class CLIinterface extends AbstractUI {
 		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
-				System.out.print("_____________________|");
+				print("_____________________|");
 		msgFormat("%n| ");
 		// intestazione Harvest
 		for (i = 0; i < pbt.length; i++) {
@@ -1157,7 +1160,7 @@ public class CLIinterface extends AbstractUI {
 		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
-				System.out.print("_____________________|");
+				print("_____________________|");
 		msgFormat("%n| ");
 		// intestazione Production
 		for (i = 0; i < pbt.length; i++) {
@@ -1212,7 +1215,7 @@ public class CLIinterface extends AbstractUI {
 		msgFormat("%n|");
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
-				System.out.print("_____________________|");
+				print("_____________________|");
 		msgFormat("%nChoose a personal bonus tile:%n");
 		int option = input();
 		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null) {
