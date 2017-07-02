@@ -28,12 +28,11 @@ public class TestInitialConfigurator extends TestCase {
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
-		ResourceHandler r = new ResourceHandler();
 		MainGameController mainGC = new MainGameController(pinfolist);
 		game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
-		prova = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
+		prova = new InitialConfigurator(pinfolist, effectManager, mainGC);
 	}
 
 	@Test
@@ -61,7 +60,7 @@ public class TestInitialConfigurator extends TestCase {
 		 * giveInitialResources test
 		 */
 		int i = 0;
-		for (Player p: game.getPlayersOrder()){				
+		for (Player p : game.getPlayersOrder()) {
 			assertTrue(p.getPersonalBoard().getResources().getWood().intValue() == 2);
 			assertTrue(p.getPersonalBoard().getResources().getStone().intValue() == 2);
 			assertTrue(p.getPersonalBoard().getResources().getServants().intValue() == 3);
@@ -75,14 +74,16 @@ public class TestInitialConfigurator extends TestCase {
 		 * distributions tests
 		 */
 		for (int j = 0; j < 4; j++)
-			for (int k = 0; k < 4; k++){
+			for (int k = 0; k < 4; k++) {
 				assertTrue(game.getBoardgame().getTowers()[j].getFloor()[k].getSpace() != null
 						&& game.getBoardgame().getTowers()[j].getFloor()[k].getCard() != null
 						&& game.getBoardgame().getTowers()[j].getFloor()[k].getCard().getPeriod() == 1);
 			}
-		/*for (Player p: game.getPlayersOrder())
-			assertTrue(p.getActivatedLeaderCards().isEmpty() && p.getHandLeaderCards().size() == 4 && p.getLeaderCards().isEmpty());
-			*/
+		/*
+		 * for (Player p: game.getPlayersOrder())
+		 * assertTrue(p.getActivatedLeaderCards().isEmpty() &&
+		 * p.getHandLeaderCards().size() == 4 && p.getLeaderCards().isEmpty());
+		 */
 	}
-	
+
 }

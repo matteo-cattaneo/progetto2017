@@ -1,11 +1,13 @@
 package it.polimi.ingsw.LM22.controller;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import org.junit.Test;
 
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 import junit.framework.TestCase;
@@ -151,7 +153,7 @@ public class TestResourceHandler extends TestCase {
 		Game game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
-		InitialConfigurator init = new InitialConfigurator(pinfolist, rh, effectManager, mainGC);
+		InitialConfigurator init = new InitialConfigurator(pinfolist, effectManager, mainGC);
 		init.initializeTurn(game);
 		Resource additionalCost = new Resource(0, 0, 0, 3, 0, 0, 0);
 		CardMove move = new CardMove(game.getPlayersOrder().get(0), game.getPlayersOrder().get(0).getMembers().get(0),
@@ -211,5 +213,29 @@ public class TestResourceHandler extends TestCase {
 		assertEquals(false, rh.equalResources(victory, nothing));
 
 		assertEquals(true, rh.equalResources(nothing, nothing));
+	}
+
+	@Test
+	public void testCalculateResource() throws IOException {
+		FileParser fp = new FileParser();
+		Game game = new Game();
+		fp.getLeaderCards(game);
+		assertEquals(0, firstResource.getWood().intValue());
+		assertEquals(2, firstResource.getStone().intValue());
+		assertEquals(0, firstResource.getServants().intValue());
+		assertEquals(5, firstResource.getCoins().intValue());
+		assertEquals(9, firstResource.getFaith().intValue());
+		assertEquals(2, firstResource.getMilitary().intValue());
+		assertEquals(3, firstResource.getVictory().intValue());
+		Player p = new Player("Name", "Blue");
+		p.getEffects().add(game.getLeaderCards().get(16).getEffect());
+		result = rh.calculateResource(firstResource, p, true);
+		assertEquals(0, result.getWood().intValue());
+		assertEquals(4, result.getStone().intValue());
+		assertEquals(0, result.getServants().intValue());
+		assertEquals(10, result.getCoins().intValue());
+		assertEquals(9, result.getFaith().intValue());
+		assertEquals(2, result.getMilitary().intValue());
+		assertEquals(3, result.getVictory().intValue());
 	}
 }

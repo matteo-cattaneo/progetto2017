@@ -21,7 +21,6 @@ public class TestDevEffectManager extends TestCase {
 	MoveManager moveManager;
 	MainGameController mainGC;
 	FileParser f;
-	ResourceHandler r;
 	final String[] colors = { "Orange", "Black", "White" };
 
 	public void setUp() throws IOException {
@@ -38,13 +37,12 @@ public class TestDevEffectManager extends TestCase {
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
-		r = new ResourceHandler();
 		mainGC = new MainGameController(pinfolist);
 		game = mainGC.getGame();
 		moveManager = new MoveManager(game, mainGC);
 		effectManager = new EffectManager(moveManager);
-		init = new InitialConfigurator(pinfolist, r, effectManager, mainGC);
-		turnInizializator = new TurnInizializator(effectManager, r, mainGC);
+		init = new InitialConfigurator(pinfolist, effectManager, mainGC);
+		turnInizializator = new TurnInizializator(effectManager, mainGC);
 		f = new FileParser();
 		f.getDevCards(game);
 	}
@@ -94,7 +92,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 10);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 5);
 	}
-	
+
 	@Test
 	public void testChangeEffect() {
 		BuildingCard cappella = game.getBuildingCards().get(0);
@@ -117,7 +115,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 0);
 	}
-	
+
 	@Test
 	public void testDoubleChangeEffect() {
 		BuildingCard falegnameria = game.getBuildingCards().get(1);
@@ -141,7 +139,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 0);
 	}
-	
+
 	@Test
 	public void testCardToResourceCharEffect() {
 		BuildingCard teatro = game.getBuildingCards().get(2);
@@ -163,7 +161,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 0);
 	}
-	
+
 	@Test
 	public void testCardToResourceVentEffect() {
 		BuildingCard arcoDiTrionfo = game.getBuildingCards().get(3);
@@ -185,7 +183,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 0);
 	}
-	
+
 	@Test
 	public void testCardToResourceBuilEffect() {
 		BuildingCard zecca = game.getBuildingCards().get(4);
@@ -207,7 +205,7 @@ public class TestDevEffectManager extends TestCase {
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getMilitary() == 0);
 		assertTrue(game.getPlayersOrder().get(0).getPersonalBoard().getResources().getVictory() == 0);
 	}
-	
+
 	@Test
 	public void testCardToResourceTerrEffect() {
 		BuildingCard esattoria = game.getBuildingCards().get(5);

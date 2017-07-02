@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import it.polimi.ingsw.LM22.model.Game;
+import it.polimi.ingsw.LM22.model.Player;
 import it.polimi.ingsw.LM22.model.leader.ChurchSubstainEffect;
 import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
 import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
@@ -126,12 +127,14 @@ public class TestLeaderManageEffect extends TestCase {
 				game.getLeaderCards().get(2), mainGC);
 		assertTrue(moveManager.containsClass(game.getPlayersOrder().get(0).getEffects(), NoOccupiedTowerEffect.class));
 	}
-	
+
 	@Test
 	public void testCopyEffect() throws IOException {
-		assertFalse(moveManager.containsClass(game.getPlayersOrder().get(0).getEffects(), NoOccupiedTowerEffect.class));
-		effectManager.leaderEffectManage(game.getLeaderCards().get(2).getEffect(), game.getPlayersOrder().get(0),
-				game.getLeaderCards().get(2), mainGC);
-		assertTrue(moveManager.containsClass(game.getPlayersOrder().get(0).getEffects(), NoOccupiedTowerEffect.class));
+		for (Player p : game.getPlayersOrder()) {
+			p.getHandLeaderCards().addAll(p.getLeaderCards());
+			p.setLeaderCards(new ArrayList<LeaderCard>());
+		}
+		effectManager.leaderEffectManage(game.getLeaderCards().get(13).getEffect(), game.getPlayersOrder().get(0),
+				game.getLeaderCards().get(13), mainGC);
 	}
 }

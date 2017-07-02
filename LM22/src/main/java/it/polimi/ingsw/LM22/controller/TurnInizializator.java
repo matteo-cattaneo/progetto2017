@@ -13,7 +13,6 @@ import it.polimi.ingsw.LM22.model.Floor;
 import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.MarketSpace;
 import it.polimi.ingsw.LM22.model.Player;
-import it.polimi.ingsw.LM22.model.Resource;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
@@ -30,22 +29,18 @@ public class TurnInizializator {
 	private final Integer CHARACTER = 1;
 	private final Integer BUILDING = 2;
 	private final Integer VENTURE = 3;
-	private final Integer FIVE_PLAYERS = 5;
 	private final Integer DICE_NUMBER = 3;
 	private final Integer DICE_MAX = 6;
 	private final Integer DICE_MIN = 1;
 	protected final String[] colors = { "Orange", "Black", "White" };
 	private final Integer WORKSPACES = 2;
 	private final String[] workType = { "PRODUCTION", "HARVEST" };
-	private final Integer NOTHING = 0;
 
 	private MainGameController mainGC;
 	private EffectManager effectManager;
-	private ResourceHandler r;
 
-	public TurnInizializator(EffectManager effectManager, ResourceHandler resourceHandler, MainGameController mainGC) {
+	public TurnInizializator(EffectManager effectManager, MainGameController mainGC) {
 		this.effectManager = effectManager;
-		this.r = resourceHandler;
 		this.mainGC = mainGC;
 	}
 
@@ -64,8 +59,6 @@ public class TurnInizializator {
 		throwDices(game);
 		setFamilyMembersValue(game);
 		distributeDevelopmentCards(game);
-		if (game.getPlayersOrder().size() == FIVE_PLAYERS)
-			distributeNewResources(game);
 	}
 
 	private void setGameTurn(Game game) {
@@ -262,21 +255,6 @@ public class TurnInizializator {
 				}
 			}
 			p.getActivatedLeaderCards().removeAll(removeLD);
-		}
-	}
-
-	/**
-	 * metodo ipotizzato per la modalità con il quinto giocatore --> IDEA sarebe
-	 * quella di distribuire delle risorse in modo prefissato e decrescente in
-	 * base all'ordine inverso di turno di quello che è stato appena calcolato
-	 * per il nuovo turno che deve iniziare (il quinto giocatore prende molte
-	 * risorse, il quarto meno e così via fino al primo)
-	 */
-	private void distributeNewResources(Game game) {
-		int i = 1;
-		for (Player p : game.getPlayersOrder()) {
-			r.addResource(p.getPersonalBoard().getResources(), new Resource(i, i, i, i, NOTHING, NOTHING, NOTHING));
-			i++;
 		}
 	}
 }

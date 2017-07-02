@@ -35,9 +35,8 @@ public class InitialConfigurator extends TurnInizializator {
 	 * costruttore che chiamerà uno dopo l'altro tutti i metodi privati che sono
 	 * dichiarati successivamente all'interno di questa classe
 	 */
-	public InitialConfigurator(List<PlayerInfo> playerRoom, ResourceHandler r, EffectManager m,
-			MainGameController mainGC) {
-		super(m, r, mainGC);
+	public InitialConfigurator(List<PlayerInfo> playerRoom, EffectManager m, MainGameController mainGC) {
+		super(m, mainGC);
 		this.playerRoom = playerRoom;
 	}
 

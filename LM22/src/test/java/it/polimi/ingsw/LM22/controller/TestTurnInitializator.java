@@ -31,12 +31,11 @@ public class TestTurnInitializator extends TestCase {
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
 		pinfolist.add(pi4);
-		ResourceHandler r = new ResourceHandler();
 		MainGameController mainGC = new MainGameController(pinfolist);
 		game = mainGC.getGame();
 		MoveManager moveManager = new MoveManager(game, mainGC);
 		EffectManager effectManager = new EffectManager(moveManager);
-		turnInizializator = new TurnInizializator(effectManager, r, mainGC);
+		turnInizializator = new TurnInizializator(effectManager, mainGC);
 	}
 
 	@Test

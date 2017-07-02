@@ -51,12 +51,12 @@ public class MainGameController implements Runnable {
 	private MoveManager moveManager = new MoveManager(game, this);
 	private EffectManager effectManager = new EffectManager(moveManager);
 	private InitialConfigurator initConf;
-	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, resourceHandler, this);
+	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
 	public MainGameController(List<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
-		initConf = new InitialConfigurator(playerRoom, resourceHandler, effectManager, this);
+		initConf = new InitialConfigurator(playerRoom, effectManager, this);
 		initConf.initializeTurn(game);
 	}
 
