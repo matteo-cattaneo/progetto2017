@@ -255,16 +255,6 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * restituisco il giocatore corrispondente al client newtwork fornito
-	 */
-	private Player getPlayer(IPlayer ip) throws RemoteException {
-		for (Player p : game.getPlayers())
-			if (p.getNickname().equals(ip.getName()))
-				return p;
-		return null;
-	}
-
-	/**
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
 	public IPlayer getIPlayer(Player p) throws RemoteException {
@@ -280,8 +270,7 @@ public class MainGameController implements Runnable {
 	private void sendAll() {
 		try {
 			for (int j = 0; j < playerRoom.size(); j++) {
-				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer()))
-						&& game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
+				if (playerRoom.get(j).getConnected())
 					playerRoom.get(j).getIplayer().showBoard(game);
 			}
 		} catch (IOException e) {
@@ -537,7 +526,7 @@ public class MainGameController implements Runnable {
 	private void showMsgAll(String msg) {
 		for (int j = 0; j < playerRoom.size(); j++)
 			try {
-				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer())))
+				if (playerRoom.get(j).getConnected())
 					playerRoom.get(j).getIplayer().showMsg(msg);
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);

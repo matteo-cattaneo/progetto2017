@@ -731,6 +731,8 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void showBoard(Game game) throws RemoteException {
 		this.game = game;
+		if (timeout == 0)
+			timeout = game.getMoveTimer();
 		/**
 		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
 		 * mostro le informazioni del player che ha preso la carta
