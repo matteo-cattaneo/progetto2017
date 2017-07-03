@@ -7,12 +7,6 @@ import it.polimi.ingsw.LM22.model.excommunication.ResourceMalusEx;
 import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
 
 public class ResourceHandler {
-	/**
-	 * in questa classe bisognerà tenere conto: degli effetti che danno sia
-	 * risorse maggiori --> (vedi santa Rita) oppure delle scomuniche che
-	 * tolgono risorse...
-	 * 
-	 */
 
 	/**
 	 * metodo che controlla se qualsiasi bonus il player sta prendendo debba
@@ -49,10 +43,6 @@ public class ResourceHandler {
 	/**
 	 * metodo che controlla se il Player ha sufficienti risorse per comprare una
 	 * carta invocato da MoveManager per controllare l'acquistabilità
-	 * 
-	 * --> sarebbe ottimo avere questo metodo in overload per le varie tipologie
-	 * di carte
-	 * 
 	 */
 	public boolean enoughResources(CardMove cardMove, Resource additionalCost) {
 		if (!enoughResources(
@@ -137,6 +127,10 @@ public class ResourceHandler {
 		s1.setVictory(s1.getVictory() - s2.getVictory());
 	}
 
+	/**
+	 * toglie la risorsa ricevuta come secondo parametro alla risorsa ricevuta
+	 * come primo parametro, ma restituendo il risultato come output
+	 */
 	public Resource diffResource(Resource s1, Resource s2) {
 		Integer stone = s1.getStone() - s2.getStone();
 		Integer wood = s1.getWood() - s2.getWood();
@@ -148,6 +142,9 @@ public class ResourceHandler {
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 
+	/**
+	 * somma le risorse ricevute come parametri e restituisce il risultato
+	 */
 	public Resource sumResource(Resource s1, Resource s2) {
 		Integer wood = s1.getWood() + s2.getWood();
 		Integer stone = s1.getStone() + s2.getStone();
@@ -159,6 +156,10 @@ public class ResourceHandler {
 		return new Resource(wood, stone, servants, coins, faith, military, victory);
 	}
 
+	/**
+	 * moltiplica la risorsa ricevuta come parametro per l'intero e restituisce
+	 * il risultato
+	 */
 	public Resource resourceMultiplication(Resource r, Integer m) {
 		Resource bonus = new Resource(0, 0, 0, 0, 0, 0, 0);
 		Integer wood = r.getWood() * m;
@@ -173,12 +174,14 @@ public class ResourceHandler {
 		bonus.setFaith(faith);
 		Integer military = r.getMilitary() * m;
 		bonus.setMilitary(military);
-		;
 		Integer victory = r.getVictory() * m;
 		bonus.setVictory(victory);
 		return bonus;
 	}
 
+	/**
+	 * verifica se gli attributi delle due risorse hanno gli stessi valori
+	 */
 	public boolean equalResources(Resource s1, Resource s2) {
 		if (s1.getWood() != s2.getWood())
 			return false;

@@ -46,10 +46,7 @@ public class TurnInizializator {
 
 	/**
 	 * metodo generale che gestisce tutta la parte iniziale di preparazione di
-	 * un nuovo turno --> invocherà tutti i metodi minori in grado di svolgere
-	 * le varie funzionalità richieste per la preparazione di un turno e la
-	 * pulizia della Board : - distribuzione carte (di 4 tipi) - lancio dei dadi
-	 * - calcolo nuovo ordine di turno -
+	 * un nuovo turno
 	 */
 	public void initializeTurn(Game game) throws IOException {
 		setGameTurn(game);
@@ -61,6 +58,9 @@ public class TurnInizializator {
 		distributeDevelopmentCards(game);
 	}
 
+	/**
+	 * passa alla fase di gioco corretta
+	 */
 	private void setGameTurn(Game game) {
 		if (game.getRound().equals(1))
 			game.setRound(2);
@@ -199,8 +199,7 @@ public class TurnInizializator {
 
 	/**
 	 * metodo che gestisce gli effetti di carte leader che modificano il valore
-	 * dei familiari del giocatore che l'ha attivata NON GESTISCE FEDERICO DI
-	 * MONTEFELTRO
+	 * dei familiari del giocatore che l'ha attivata
 	 */
 	private void updateFamilyMembersValue(Game game) throws IOException {
 		for (Player p : game.getPlayersOrder())
@@ -238,9 +237,7 @@ public class TurnInizializator {
 
 	/**
 	 * metodo che consente di redistribuire le carte leader attivate tra
-	 * activated e leaderCard in base al tipo di effetto che la carta ha NB
-	 * stare attento anche alle carte leader che aggiungono un effetto alla
-	 * lista Effect di player
+	 * activated e leaderCard in base al tipo di effetto che la carta ha
 	 */
 	private void manageLeaderCards(Game game) {
 		for (Player p : game.getPlayersOrder()) {

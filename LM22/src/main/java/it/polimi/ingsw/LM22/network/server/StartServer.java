@@ -46,6 +46,9 @@ public class StartServer {
 		}
 	}
 
+	/**
+	 * eseguito solo all'avvio: esegue i server RMI e socket
+	 */
 	public void initilizeServers() throws IOException {
 		// carico timeout da file
 		TIMER = FileParser.getLoginTimeouts();
@@ -61,7 +64,6 @@ public class StartServer {
 	 * metodo che attende la connessione del client su entrambe le connessioni e
 	 * al raggiungimento dei requisiti crea una partita
 	 */
-
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
 		Integer t = TIMER;

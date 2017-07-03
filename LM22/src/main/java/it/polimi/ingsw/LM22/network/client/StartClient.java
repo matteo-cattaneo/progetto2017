@@ -73,7 +73,7 @@ public class StartClient {
 		case 1:
 			System.err.println("GUI - WIP");
 			UI = new GUIinterface();
-			System.out.println("CLI interface automatically selected!");
+			System.err.println("CLI interface automatically selected!");
 			UI = new CLIinterface();
 			break;
 		case 2:

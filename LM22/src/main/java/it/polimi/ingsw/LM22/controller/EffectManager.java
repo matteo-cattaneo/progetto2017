@@ -57,6 +57,9 @@ public class EffectManager {
 		this.moveManager = moveManager;
 	}
 
+	/**
+	 * invoca il metodo corretto per gestire ogni tipo di effetto
+	 */
 	public void manageEffect(Effect effect, Player player, Resource sum, MainGameController mainGC) {
 		this.player = player;
 		this.mainGC = mainGC;
@@ -207,10 +210,10 @@ public class EffectManager {
 	}
 
 	/**
-	 * metodo che gestisce tale effetto PROBLEMA - se è un effetto immediato
-	 * allora posso subito aggiungere il reward alle risorse del player - se
-	 * invece è un effetto permanente devo poterlo sommare alla risorsa
-	 * sommatrice della produzione
+	 * metodo che gestisce tale effetto - se è un effetto immediato allora posso
+	 * subito aggiungere il reward alle risorse del player - se invece è un
+	 * effetto permanente devo poterlo sommare alla risorsa sommatrice della
+	 * produzione
 	 */
 	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource sum) {
 		Resource bonus = NOTHING.copy();
@@ -242,9 +245,8 @@ public class EffectManager {
 	}
 
 	/**
-	 * LEADER CARDS' EFFECTS
+	 * gestore degli effetti delle carte leader
 	 */
-
 	public void leaderEffectManage(Effect effect, Player player, LeaderCard ld, MainGameController mainGC) {
 		this.player = player;
 		this.mainGC = mainGC;
@@ -262,6 +264,10 @@ public class EffectManager {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
+
+	/**
+	 * LEADER CARDS' EFFECTS
+	 */
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),

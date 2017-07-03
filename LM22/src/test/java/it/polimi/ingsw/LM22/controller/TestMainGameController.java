@@ -14,10 +14,6 @@ public class TestMainGameController extends TestCase {
 
 	public void setUp() throws RemoteException {
 		ArrayList<PlayerInfo> room = new ArrayList<PlayerInfo>();
-		PlayerInfo p1 = new PlayerInfo();
-		PlayerInfo p2 = new PlayerInfo();
-		p1.setName("Player1");
-		p2.setName("Player2");
 		mainGC = new MainGameController(room);
 	}
 

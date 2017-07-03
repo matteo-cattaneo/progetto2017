@@ -27,7 +27,7 @@ import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 public class MainGameController implements Runnable {
 	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private static final HashMap<String, Resource> councilResource = initializeCouncilMap();
-	
+
 	private static final String DISCONNECTED = " has been disconnected";
 
 	private static final Integer END_DEFINER = 2;
@@ -56,6 +56,10 @@ public class MainGameController implements Runnable {
 	private TurnInizializator turnInizializator = new TurnInizializator(effectManager, this);
 	private NetContrAdapter netContrAdapter = new NetContrAdapter();
 
+	/**
+	 * salvo la lista di player passata come parametro e inizializzo la partita
+	 * tramite l'initialConfigurator
+	 */
 	public MainGameController(List<PlayerInfo> playerRoom) throws RemoteException {
 		this.playerRoom = playerRoom;
 		initConf = new InitialConfigurator(playerRoom, effectManager, this);
@@ -69,7 +73,7 @@ public class MainGameController implements Runnable {
 		// distribuzione carte leader
 		leaderSelection();
 		// inizio della partita
-		showMsgAll("Game started!");
+		showMsgAll("GAME STARTED!!!");
 		startGame();
 	}
 
@@ -173,6 +177,10 @@ public class MainGameController implements Runnable {
 		}
 	}
 
+	/**
+	 * vero inizio della partita, viene visualizzata la board e permette di
+	 * giocare al primo giocatore
+	 */
 	private void startGame() {
 		// invio a tutti il nuovo model
 		sendAll();
@@ -196,6 +204,10 @@ public class MainGameController implements Runnable {
 		}
 	}
 
+	/**
+	 * turno di un giocatore: può fare tutte la mosse che vuole finche non
+	 * seleziona la mossa End
+	 */
 	private void playTurn(Player p) {
 		AbstractMove aMove;
 		for (String sMove = ""; !sMove.startsWith("End@");) {
@@ -268,7 +280,6 @@ public class MainGameController implements Runnable {
 	private void sendAll() {
 		try {
 			for (int j = 0; j < playerRoom.size(); j++) {
-
 				if (checkPlayer(getPlayer(playerRoom.get(j).getIplayer()))
 						&& game.getPlayersOrder().contains(getPlayer(playerRoom.get(j).getIplayer())))
 					playerRoom.get(j).getIplayer().showBoard(game);
@@ -276,6 +287,10 @@ public class MainGameController implements Runnable {
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Connection Problems due to IOException", e);
 		}
+	}
+
+	public Game getGame() {
+		return game;
 	}
 
 	/**
@@ -292,6 +307,9 @@ public class MainGameController implements Runnable {
 			}
 	}
 
+	/**
+	 * avvia l'inizializzazione del contesto di gioco per il prossimo turno
+	 */
 	private void turnInit() {
 		try {
 			turnInizializator.initializeTurn(game);
@@ -378,7 +396,7 @@ public class MainGameController implements Runnable {
 			if (e instanceof NoFinalCardPointsEx && ((NoFinalCardPointsEx) e).getCardType().equals(VENTURE))
 				return;
 		}
-		Resource total = NOTHING;
+		Resource total = NOTHING.copy();
 		for (VentureCard card : p.getPersonalBoard().getVenturesCards()) {
 			resourceHandler.addResource(total,
 					resourceHandler.calculateResource(card.getPermanentEffect().copy(), p, false));
@@ -485,6 +503,9 @@ public class MainGameController implements Runnable {
 		}
 	}
 
+	/**
+	 * inizializzo HashMap con i valori predefiniti del Privilegio del consiglio
+	 */
 	private static HashMap<String, Resource> initializeCouncilMap() {
 		HashMap<String, Resource> map = new HashMap<String, Resource>();
 		map.put("wood&stone", new Resource(1, 1, 0, 0, 0, 0, 0));
@@ -510,7 +531,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * visualizzo un messaggio sul display di tutti i client
+	 * visualizzo un messaggio sul display di tutti i client (e sul server per
+	 * tracciabilità)
 	 */
 	private void showMsgAll(String msg) {
 		for (int j = 0; j < playerRoom.size(); j++)
@@ -520,7 +542,7 @@ public class MainGameController implements Runnable {
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);
 			}
-		System.out.println(msg);
+		LOGGER.log(Level.INFO, msg);
 	}
 
 	/**
@@ -599,10 +621,6 @@ public class MainGameController implements Runnable {
 	 */
 	public Integer askForDoubleChange(Player player, DoubleChangeEffect effect) throws IOException {
 		return getIPlayer(player).doubleChangeRequest(effect);
-	}
-
-	public Game getGame() {
-		return game;
 	}
 
 	/**

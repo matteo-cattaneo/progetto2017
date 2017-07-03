@@ -148,9 +148,11 @@ public class InitialConfigurator extends TurnInizializator {
 		Collections.shuffle(game.getLeaderCards());
 		for (Player p : game.getPlayers()) {
 			for (int i = 0; i < 4; i++) {
-				// salvo le carte leader nella lista LeaderCards temporanemante,
-				// poi le carte selezionate del player verranno inserite man
-				// mano nella lista HandLeaderCards per l'inizio della partita
+				/**
+				 * salvo le carte leader nella lista LeaderCards temporanemante,
+				 * poi le carte selezionate del player verranno inserite man
+				 * mano nella lista HandLeaderCards per l'inizio della partita
+				 */
 				p.getLeaderCards().add(game.getLeaderCards().remove(0));
 			}
 		}

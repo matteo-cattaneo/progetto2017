@@ -42,6 +42,7 @@ public class CLIinterface extends AbstractUI {
 	private static final String RESTART = "Restart@";
 	private static final String RESTART_CHOICE = "0: Restart";
 	private static final String TIMEOUT = "Timeout: ";
+	private static final String SECONDS = " seconds";
 	// Colori familiari
 	private static final String[] MEMBER_COLOR = { "Orange", "Black", "White", "Uncolored" };
 
@@ -99,7 +100,7 @@ public class CLIinterface extends AbstractUI {
 		// mostro il menu se l'utente ha richiesto di rieffettuare la mossa
 		while (RESTART.equals(move)) {
 			move = "";
-			showMsg(TIMEOUT + timeout);
+			showMsg(TIMEOUT + timeout + SECONDS);
 			showMsg("Choose your Move:");
 			if (!memberMove)
 				showMsg("1: Move a Member");
@@ -157,7 +158,7 @@ public class CLIinterface extends AbstractUI {
 	 * inserendo anche solo una parte del nome della carta
 	 */
 	private void showCard() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Insert the card name: (no case sensitive)");
 		String cardName = in.nextLine();
 		DevelopmentCard card = null;
@@ -201,7 +202,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMemberMoveMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		memberMove = true;
 		showMsg("Choose your move:");
 		showMsg("1: Card");
@@ -249,7 +250,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printFamilyMemberMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose your Family Member you want to move:");
 		int i = 0;
 		for (FamilyMember fm : getPlayer(name, game).getMembers()) {
@@ -284,7 +285,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printServantsAddictionMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Insert how many servants you want to use");
 		Integer servants = input();
 		if (servants >= 0 && servants <= getPlayer(name, game).getPersonalBoard().getResources().getServants()) {
@@ -297,7 +298,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printTowersMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the Tower:");
 		showMsg("1: " + TERRITORY);
 		showMsg("2: " + CHARACTER);
@@ -319,7 +320,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printLevelsMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Insert the level of the tower (1 - 2 - 3 - 4):");
 
 		int option = input();
@@ -347,7 +348,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printMarketSelectionMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the Market space:");
 		showMsg("1: " + game.getBoardgame().getMarket()[0].getReward().getInfo().replaceAll("%n", " "));
 		showMsg("2: " + game.getBoardgame().getMarket()[1].getReward().getInfo().replaceAll("%n", " "));
@@ -396,7 +397,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printWorkSelectionMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the Work type:");
 		showMsg("1: Production");
 		showMsg("2: Harvest");
@@ -423,7 +424,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
 		if (!RESTART.equals(move))
@@ -432,7 +433,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printSellLeaderCardMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		setMove("LeaderSell");
 		showMsg("Choose the Leader card to sell:");
 		int i;
@@ -454,7 +455,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
 		if (!getPlayer(name, game).getLeaderCards().isEmpty())
 			ld.addAll(getPlayer(name, game).getLeaderCards());
@@ -566,16 +567,7 @@ public class CLIinterface extends AbstractUI {
 		showMsg("______________________________");
 		msgFormat("%-30s|%n", "| Period: " + game.getPeriod());
 		msgFormat("%-30s|%n", "| Round: " + game.getRound());
-		msgFormat("%-30s|%n", "| ");
-		// visualizzo tutti i dadi sulla stessa riga
-		msgFormat("%-30s|%n| ", "| Dices:");
-		for (int i = 0; i < 3; i++)
-			msgFormat("%-8s| ", MEMBER_COLOR[i]);
-		msgFormat("%n| ");
-		for (int i = 0; i < 3; i++)
-			msgFormat("%-8s| ", game.getBoardgame().getDice(MEMBER_COLOR[i]).toString());
-
-		msgFormat("%n|_____________________________|%n");
+		msgFormat("|_____________________________|%n");
 		msgFormat("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
 		msgFormat("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
 		msgFormat("%-30s|%n", "| ");
@@ -783,14 +775,16 @@ public class CLIinterface extends AbstractUI {
 			showMsg("");
 		}
 		// palazzo del consiglio
-		showMsg("______________________________");
-		msgFormat("%-30s|%n", "| Council Palace members: ");
-		int i = 1;
-		for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
-			msgFormat("%-30s|%n", "| " + i + ": " + fm.getPlayer().getNickname());
-			i++;
+		if (!game.getBoardgame().getCouncilPalace().getMembers().isEmpty()) {
+			showMsg("______________________________");
+			msgFormat("%-30s|%n", "| Council Palace members: ");
+			int i = 1;
+			for (FamilyMember fm : game.getBoardgame().getCouncilPalace().getMembers()) {
+				msgFormat("%-30s|%n", "| " + i + ": " + fm.getPlayer().getNickname());
+				i++;
+			}
+			showMsg("|_____________________________|");
 		}
-		showMsg("|_____________________________|");
 		showMarketSpaces();
 		showBoardTracks();
 		showWorkSpaces();
@@ -931,7 +925,7 @@ public class CLIinterface extends AbstractUI {
 	 */
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		ArrayList<String> list = new ArrayList<String>();
 		String result = new String();
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
@@ -982,7 +976,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String printColorMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the family member that you want improve: ");
 		for (int i = 0; i < 3; i++) {
 			showMsg((i + 1) + ": " + MEMBER_COLOR[i]);
@@ -1002,7 +996,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printVentureCostMenu(VentureCard vc) throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Which cost do you want pay?: ");
 		showMsg("1: Resource cost");
 		msgFormat(vc.getCardCost1().getInfo());
@@ -1023,7 +1017,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public boolean printChangeMenu(Resource[] exchange) throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Do you want change");
 		msgFormat(exchange[0].getInfo());
 		showMsg("with");
@@ -1045,7 +1039,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public Integer printDoubleChangeMenu(DoubleChangeEffect effect) throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the effect that you want activate: ");
 		showMsg("1: Change");
 		msgFormat(effect.getExchangeEffect1()[0].getInfo());
@@ -1071,7 +1065,7 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Choose the card from which you want to copy the effect:");
 		int i;
 		for (i = 0; i < lcards.size(); i++) {
@@ -1096,7 +1090,7 @@ public class CLIinterface extends AbstractUI {
 		timeout = game.getMoveTimer();
 		int i;
 		PersonalBonusTile pbt[] = game.getPersonalBonusTile();
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)
 				print("______________________");
@@ -1224,6 +1218,7 @@ public class CLIinterface extends AbstractUI {
 		int option = input();
 		if (option <= i && option > 0 && game.getPersonalBonusTile()[option - 1] != null) {
 			showMsg("Wait other player...");
+			showMsg("");
 			return option - 1;
 		} else {
 			printInvalidInput();
@@ -1279,27 +1274,28 @@ public class CLIinterface extends AbstractUI {
 		leaderSelected = "";
 		this.game = game;
 		timeout = game.getMoveTimer();
-		showMsg(TIMEOUT + timeout);
+		showMsg(TIMEOUT + timeout + SECONDS);
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()) {
-			showMsg("______________________________");
-			msgFormat("%-30s|%n", "| Selected leader cards:");
+			showMsg("_______________________________");
+			msgFormat("%-31s|%n", "| Selected leader cards:");
 			for (LeaderCard ld : getPlayer(name, game).getHandLeaderCards())
-				msgFormat("%-30s|%n", "| " + ld.getName());
-			showMsg("|_____________________________|");
+				msgFormat("%-31s|%n", "| " + ld.getName());
+			showMsg("|______________________________|");
 		}
 		int i = 0;
-		showMsg("______________________________");
-		msgFormat("%-30s|%n", "| LeaderCard to be selected");
+		showMsg("_______________________________");
+		msgFormat("%-31s|%n", "| LeaderCard to be selected");
 		for (LeaderCard ld : getPlayer(name, game).getLeaderCards()) {
-			msgFormat("%-30s|%n", "| " + (i + 1) + ": " + ld.getName());
+			msgFormat("%-31s|%n", "| " + (i + 1) + ": " + ld.getName());
 			i++;
 		}
-		msgFormat("%-30s|%n", "| 0: Show card info");
-		showMsg("|_____________________________|");
+		msgFormat("%-31s|%n", "| 0: Show card info");
+		showMsg("|______________________________|");
 		showMsg("Choose a Leader card:");
 		int option = input();
 		if (option <= i && option > 0) {
 			showMsg("Wait other player...");
+			showMsg("");
 			leaderSelected = getPlayer(name, game).getLeaderCards().get(option - 1).getName();
 		} else if (option == 0) {
 			showMsg("Insert the card name: (no case sensitive)");

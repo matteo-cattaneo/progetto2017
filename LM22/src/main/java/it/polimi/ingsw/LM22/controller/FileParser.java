@@ -74,6 +74,9 @@ public class FileParser {
 	private static final String JSONpath = ".//JSON//";
 	private static final Integer nExTile = 7;
 
+	/**
+	 * carica da file le carte sviluppo
+	 */
 	public void getDevCards(Game game) throws IOException {
 		FileParser f = new FileParser();
 		// definisco i sotto tipi per gli effetti immediati e parmanenti
@@ -126,6 +129,9 @@ public class FileParser {
 		return cards;
 	}
 
+	/**
+	 * carica da file le carte leader
+	 */
 	public void getLeaderCards(Game game) throws IOException {
 		RuntimeTypeAdapterFactory<LeaderCardRequest> req = RuntimeTypeAdapterFactory.of(LeaderCardRequest.class, "type")
 				.registerSubtype(CardRequest.class).registerSubtype(ResourceRequest.class)
@@ -147,6 +153,9 @@ public class FileParser {
 		game.setLeaderCards(lCards);
 	}
 
+	/**
+	 * carica da file i bonus del palazzo del consiglio
+	 */
 	public void getCouncilSpace(Game game) throws IOException {
 		Type type = new TypeToken<CouncilSpace>() {
 		}.getType();
@@ -158,6 +167,9 @@ public class FileParser {
 		game.getBoardgame().setCouncilPalace(councilPalace);
 	}
 
+	/**
+	 * carica da file i bonus del mercato
+	 */
 	public void getMarketSpace(Game game) throws IOException {
 		Type type = new TypeToken<MarketSpace[]>() {
 		}.getType();
@@ -169,6 +181,9 @@ public class FileParser {
 		game.getBoardgame().setMarket(marketSpace);
 	}
 
+	/**
+	 * carica da file i bonus del tracciato dei punti fede
+	 */
 	public void getFaithGrid(Game game) throws IOException {
 		Type type = new TypeToken<Resource[]>() {
 		}.getType();
@@ -183,6 +198,9 @@ public class FileParser {
 		game.getBoardgame().setFaithGrid(faithGrid);
 	}
 
+	/**
+	 * carica da file le tessere bonus personale (solo avanzate)
+	 */
 	public void getPersonalBonusTile(Game game) throws IOException {
 		Type type = new TypeToken<PersonalBonusTile[]>() {
 		}.getType();
@@ -195,6 +213,9 @@ public class FileParser {
 		game.setPersonalBonusTile(personalBonusTile);
 	}
 
+	/**
+	 * carica da file i bonus degli spazi azione delle torri
+	 */
 	public void getCardSpace(Game game) throws IOException {
 		Type type = new TypeToken<Tower[]>() {
 		}.getType();
@@ -206,6 +227,9 @@ public class FileParser {
 		game.getBoardgame().setTowers(towers);
 	}
 
+	/**
+	 * carica da file le tessere scomunica e ne sceglie 3 casualmente
+	 */
 	public void getExCommunicationsTile(Game game) throws IOException {
 		Type type = new TypeToken<ExCommunication[]>() {
 		}.getType();
@@ -227,6 +251,9 @@ public class FileParser {
 		}
 	}
 
+	/**
+	 * carica da file il timeout di una mossa di ogni giocatore
+	 */
 	public void getMoveTimeouts(Game game) throws IOException {
 		// ottengo il contenuto del file
 		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);
@@ -235,6 +262,9 @@ public class FileParser {
 		game.setMoveTimer(Integer.parseInt(jobj.get("move").toString()));
 	}
 
+	/**
+	 * carica da file il timeout della creazione di una room
+	 */
 	public static Integer getLoginTimeouts() throws IOException {
 		// ottengo il contenuto del file
 		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);

@@ -16,12 +16,17 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 public class NetContrAdapter {
 	Player player;
 
+	/**
+	 * riceve una mossa in formato stringa (inviata dal client) e la trasforma
+	 * nel giusto oggetto
+	 */
 	public AbstractMove moveParser(Player p, String sMove) {
 		AbstractMove objMove = null;
 		player = p;
-		// divide sMove string into multiple parameters
+		// divide la stringa ricevuta in più parametri
 		String[] param = sMove.split("@");
-		// select the right move type and initialize with the right dynamic type
+		// seleziona il giusto tipo di mossa e assegna all' oggetto mossa il
+		// corretto tipo dinamico
 		switch (param[0]) {
 		case "LeaderAct":
 			objMove = new LeaderCardActivation(p, getLeaderCard(param[1]));
@@ -55,8 +60,10 @@ public class NetContrAdapter {
 		return objMove;
 	}
 
+	/**
+	 * ottiene una carta leader cercandola per nome
+	 */
 	private LeaderCard getLeaderCard(String param) {
-		// get from the player list the proper LeaderCard
 		for (LeaderCard ld : player.getHandLeaderCards())
 			if (ld.getName().equals(param))
 				return ld;
@@ -66,6 +73,9 @@ public class NetContrAdapter {
 		return null;
 	}
 
+	/**
+	 * ottiene ottiene un familiare cercandolo per colore
+	 */
 	private FamilyMember getFamilyMember(String param) {
 		for (FamilyMember fm : player.getMembers()) {
 			if (fm.getColor().equals(param)) {
@@ -75,9 +85,11 @@ public class NetContrAdapter {
 		return null;
 	}
 
+	/**
+	 * genera un oggetto risorsa servitori con il valore passato come parametro
+	 */
 	private Resource getServantsAdded(String param) {
 		Integer serv = Integer.parseInt(param);
-		// create a new Resource with the specified servants quantity
 		return new Resource(0, 0, serv, 0, 0, 0, 0);
 	}
 }

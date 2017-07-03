@@ -620,9 +620,6 @@ public class MoveManager {
 	 * stata attivata (per adesso non può venderla se è già stata attivata nel
 	 * turno mentre se l'aveva attivata in passato ma non risulta "attiva in
 	 * questo momento" il controllo da un esit positivo lo stesso
-	 * 
-	 * IMPORTANTE --> necessaria altra lista per tenere in memoria tutte le
-	 * carte effettivamente attivate durante tutto il corso della partita?
 	 */
 	public boolean leadercardsellingAllowed(LeaderCardSelling move) {
 		if (!move.getPlayer().getHandLeaderCards().contains(move.getLeaderCard()))
