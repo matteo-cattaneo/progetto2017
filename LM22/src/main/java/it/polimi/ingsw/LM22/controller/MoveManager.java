@@ -13,7 +13,6 @@ import it.polimi.ingsw.LM22.model.excommunication.NoMarketEx;
 import it.polimi.ingsw.LM22.model.excommunication.WorkMalusEx;
 import it.polimi.ingsw.LM22.model.leader.CardRequest;
 import it.polimi.ingsw.LM22.model.leader.CoinsDiscountEffect;
-import it.polimi.ingsw.LM22.model.leader.DoubleResourceEffect;
 import it.polimi.ingsw.LM22.model.leader.InOccupiedSpaceEffect;
 import it.polimi.ingsw.LM22.model.leader.LeaderCardRequest;
 import it.polimi.ingsw.LM22.model.leader.NoMilitaryRequestEffect;
@@ -30,7 +29,6 @@ import it.polimi.ingsw.LM22.model.Game;
 import it.polimi.ingsw.LM22.model.NoCardSpaceBonusEffect;
 import it.polimi.ingsw.LM22.model.NoPermanentEffect;
 import it.polimi.ingsw.LM22.model.Resource;
-import it.polimi.ingsw.LM22.model.ResourcePrivilegeEffect;
 import it.polimi.ingsw.LM22.model.TerritoryCard;
 import it.polimi.ingsw.LM22.model.Tower;
 import it.polimi.ingsw.LM22.model.VentureCard;
@@ -391,16 +389,9 @@ public class MoveManager {
 		// metodo chiamante l'effectManager per l'effetto immediato
 		effectManager.manageEffect(card.getImmediateEffect(), cardMove.getPlayer(),
 				cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
-		if (card.getImmediateEffect() instanceof ResourcePrivilegeEffect
-				&& containsClass(cardMove.getPlayer().getEffects(), DoubleResourceEffect.class)) {
-			Resource effect = ((ResourcePrivilegeEffect) card.getImmediateEffect()).getResource();
-			effect.setFaith(0);
-			effect.setMilitary(0);
-			effect.setVictory(0);
-			resourceHandler.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), effect);
-		}
+		effectManager.manageSantaRita(card, cardMove);
 	}
-
+	
 	/**
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
@@ -579,10 +570,10 @@ public class MoveManager {
 		Resource total = NOTHING.copy();
 		for (TerritoryCard card : move.getPlayer().getPersonalBoard().getTerritoriesCards()) {
 			if (valueOfAction >= card.getRequirement())
-				effectManager.harvestHandle(card.getPermanentEffect(), total, move.getPlayer(), mainGame);
+				effectManager.manageEffect(card.getPermanentEffect(), move.getPlayer(), total, mainGame);
 		}
-		effectManager.harvestHandle(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(), total,
-				move.getPlayer(), mainGame);
+		effectManager.manageEffect(move.getPlayer().getPersonalBoard().getBonusBoard().getHarvestEffect(),
+				move.getPlayer(), total, mainGame);
 		resourceHandler.addResource(move.getPlayer().getPersonalBoard().getResources(), total);
 	}
 

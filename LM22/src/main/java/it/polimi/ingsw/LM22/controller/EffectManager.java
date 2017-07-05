@@ -12,6 +12,7 @@ import it.polimi.ingsw.LM22.model.CardActionEffect;
 import it.polimi.ingsw.LM22.model.CardToResourceEffect;
 import it.polimi.ingsw.LM22.model.ChangeEffect;
 import it.polimi.ingsw.LM22.model.ChangeToPrivilegeEffect;
+import it.polimi.ingsw.LM22.model.DevelopmentCard;
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Effect;
 import it.polimi.ingsw.LM22.model.FamilyMember;
@@ -138,24 +139,6 @@ public class EffectManager {
 	}
 
 	/**
-	 * metodo che gestisce il raccolto per ogni singola carta e che in base
-	 * all'effetto che si vuole attivare invoca il metodo giusto
-	 */
-	public void harvestHandle(Effect effect, Resource resource, Player player, MainGameController mainGC)
-			throws IOException {
-		this.player = player;
-		this.mainGC = mainGC;
-		try {
-			String name = effect.getClass().getSimpleName().toLowerCase() + MANAGE;
-			Method metodo = this.getClass().getMethod(name, new Class[] { effect.getClass(), resource.getClass() });
-			if (metodo != null)
-				metodo.invoke(this, new Object[] { effect, resource });
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-		}
-	}
-
-	/**
 	 * gestisce l'effetto del Generale (carta Character)
 	 */
 	public void resourcetoresourceeffectManage(ResourceToResourceEffect effect, Resource sum) {
@@ -183,6 +166,7 @@ public class EffectManager {
 		CardMove move = new CardMove(player, other, servants, tower, floor);
 
 		try {
+			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
@@ -199,8 +183,8 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-
 		try {
+			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
@@ -239,11 +223,27 @@ public class EffectManager {
 		}
 		r.addResource(sum, r.calculateResource(bonus.copy(), player, false));
 	}
+	
+	public void manageSantaRita(DevelopmentCard card, CardMove cardMove){
+		if (card.getImmediateEffect() instanceof ResourcePrivilegeEffect
+				&& moveManager.containsClass(cardMove.getPlayer().getEffects(), DoubleResourceEffect.class)) {
+			Resource effect = ((ResourcePrivilegeEffect) card.getImmediateEffect()).getResource();
+			effect.setFaith(0);
+			effect.setMilitary(0);
+			effect.setVictory(0);
+			r.addResource(cardMove.getPlayer().getPersonalBoard().getResources(), effect);
+		}
+	}
 
 	public void noeffectManage(NoEffect effect, Resource sum) {
 		return;
 	}
 
+
+	/**
+	 * LEADER CARDS' EFFECTS
+	 */
+	
 	/**
 	 * gestore degli effetti delle carte leader
 	 */
@@ -265,9 +265,6 @@ public class EffectManager {
 		}
 	}
 
-	/**
-	 * LEADER CARDS' EFFECTS
-	 */
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
@@ -286,8 +283,8 @@ public class EffectManager {
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
-
 		try {
+			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
