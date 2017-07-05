@@ -23,6 +23,11 @@ public class TestDevEffects extends TestCase {
 		assertEquals(0, effect.getCouncilPrivilege().intValue());
 		assertNotNull(effect.getResource());
 		assertEquals("You earn%nvictory: 3%n", effect.getInfo());
+		// Council privilege test
+		effect = (ResourcePrivilegeEffect) game.getTerritoryCards().get(23).getImmediateEffect();
+		assertEquals(1, effect.getCouncilPrivilege().intValue());
+		assertNotNull(effect.getResource());
+		assertEquals("You earn%nstone: 1%nand also 1 councilPrivilege(s)%n", effect.getInfo());
 	}
 
 	@Test
@@ -33,9 +38,20 @@ public class TestDevEffects extends TestCase {
 		assertEquals(0, effect.getCouncilPrivilege().intValue());
 		assertEquals(4, effect.getDiceValue().intValue());
 		assertNotNull(effect.getResource());
+		assertEquals("You can get a card on the tower you choose%nThe action has a value of 4%n"
+				+ "You get a card discount: No resource%nYou get a reward: faith: 1%n", effect.getInfo());
+
+		effect = (CardActionEffect) game.getCharacterCards().get(15).getImmediateEffect();
+		assertNotNull(effect.getCardDiscount());
+		assertEquals(3, effect.getCardType().intValue());
+		assertEquals(1, effect.getCouncilPrivilege().intValue());
+		assertEquals(6, effect.getDiceValue().intValue());
+		assertNotNull(effect.getResource());
 		assertEquals(
-				"You can get a card on the tower you choose%nThe action has a value of 4%nYou get a card discount: No resource%nYou get a reward: faith: 1%n",
+				"You can get a card on the 4tower%nThe action has a value of 6%nYou get a card discount: No resource%n"
+						+ "You get a reward: No resource%nYou get 1council privilege(s)%n",
 				effect.getInfo());
+
 	}
 
 	@Test

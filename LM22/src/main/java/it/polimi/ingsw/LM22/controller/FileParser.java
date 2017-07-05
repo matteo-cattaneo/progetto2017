@@ -125,8 +125,7 @@ public class FileParser {
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).registerTypeAdapterFactory(AdapterPerm)
 				.create();
 		// ritorno le carte con il tipo generico T (specificato alla chiamata)
-		T cards = gson.fromJson(text, type);
-		return cards;
+		return gson.fromJson(text, type);
 	}
 
 	/**

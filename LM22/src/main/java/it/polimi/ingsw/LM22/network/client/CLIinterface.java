@@ -164,9 +164,7 @@ public class CLIinterface extends AbstractUI {
 		// gestione timeout
 		time = System.currentTimeMillis() / 1000;
 		ExecutorService exe = Executors.newFixedThreadPool(1);
-		Future<String> future = exe.submit(() -> {
-			return in.nextLine();
-		});
+		Future<String> future = exe.submit(() -> in.nextLine());
 		try {
 			cardName = future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -474,7 +472,7 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void printActivateLeaderCardMenu() throws RemoteException {
 		showMsg(TIMEOUT + timeout + SECONDS);
-		ArrayList<LeaderCard> ld = new ArrayList<LeaderCard>();
+		ArrayList<LeaderCard> ld = new ArrayList<>();
 		if (!getPlayer(name, game).getLeaderCards().isEmpty())
 			ld.addAll(getPlayer(name, game).getLeaderCards());
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty())
@@ -698,9 +696,9 @@ public class CLIinterface extends AbstractUI {
 	 * visualizzo le classifiche in colonna ordinate
 	 */
 	private void showBoardTracks() throws RemoteException {
-		ArrayList<String> faith = new ArrayList<String>();
-		ArrayList<String> military = new ArrayList<String>();
-		ArrayList<String> victory = new ArrayList<String>();
+		ArrayList<String> faith = new ArrayList<>();
+		ArrayList<String> military = new ArrayList<>();
+		ArrayList<String> victory = new ArrayList<>();
 		// trovo il massimo faith
 		int maxF = 0;
 		for (Player p : game.getPlayers())
@@ -882,7 +880,7 @@ public class CLIinterface extends AbstractUI {
 		// visualizzo la prima risorsa
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
-				String res[] = ms.getReward().getInfo().split("%n");
+				String[] res = ms.getReward().getInfo().split("%n");
 				if (ms.getMember() == null)
 					msgFormat("%-19s| ", "-" + res[0]);
 				else
@@ -896,7 +894,7 @@ public class CLIinterface extends AbstractUI {
 		// visualizzo l'eventuale seconda risorsa
 		for (MarketSpace ms : game.getBoardgame().getMarket())
 			if (game.getPlayers().length == 4 || nMark < 2) {
-				String res[] = ms.getReward().getInfo().split("%n");
+				String[] res = ms.getReward().getInfo().split("%n");
 				if (ms.getMember() == null && res.length == 2)
 					msgFormat("%-19s| ", "-" + res[1]);
 				else
@@ -946,7 +944,7 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
 		showMsg(TIMEOUT + timeout + SECONDS);
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		String result = new String();
 		String[] council = { "wood&stone", "servants", "coins", "military", "faith" };
 		for (int k = 0; k < number;) {
@@ -1109,7 +1107,7 @@ public class CLIinterface extends AbstractUI {
 		this.game = game;
 		timeout = game.getMoveTimer();
 		int i;
-		PersonalBonusTile pbt[] = game.getPersonalBonusTile();
+		PersonalBonusTile[] pbt = game.getPersonalBonusTile();
 		showMsg(TIMEOUT + timeout + SECONDS);
 		for (i = 0; i < pbt.length; i++)
 			if (pbt[i] != null)

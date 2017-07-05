@@ -21,14 +21,14 @@ import it.polimi.ingsw.LM22.controller.MainGameController;
  */
 public class StartServer {
 	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
-	private final static int SOCKET_PORT = 1337;
-	private final static int RMI_PORT = 1099;
+	private static final int SOCKET_PORT = 1337;
+	private static final int RMI_PORT = 1099;
 	private Integer TIMER;
-	private final static int THIRDPLAYER = 2;
-	private final static int FOURTHPLAYER = 3;
+	private static final int THIRDPLAYER = 2;
+	private static final int FOURTHPLAYER = 3;
 	private static ServerSocket serverSocket;
 	private RMIPlayer serverRMI;
-	private ArrayList<ArrayList<PlayerInfo>> serverInfo = new ArrayList<ArrayList<PlayerInfo>>();
+	private ArrayList<ArrayList<PlayerInfo>> serverInfo = new ArrayList<>();
 	private ExecutorService executor = Executors.newCachedThreadPool();
 	private SocketConnection conn;
 
@@ -68,7 +68,7 @@ public class StartServer {
 		int i = 0;
 		Integer t = TIMER;
 		// creo lista giocatori della nuova room
-		ArrayList<PlayerInfo> playerRoom = new ArrayList<PlayerInfo>();
+		ArrayList<PlayerInfo> playerRoom = new ArrayList<>();
 		// salvo nel server la nuova lista
 		serverInfo.add(playerRoom);
 		System.out.println("Attesa client...");

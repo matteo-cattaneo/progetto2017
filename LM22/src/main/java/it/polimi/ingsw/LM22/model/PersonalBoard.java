@@ -9,10 +9,10 @@ public class PersonalBoard implements Serializable {
 	private static final long serialVersionUID = -7460184029407285498L;
 	private PersonalBonusTile bonusBoard;
 	private Resource resources;
-	private List<TerritoryCard> territoriesCards = new ArrayList<TerritoryCard>();
-	private List<CharacterCard> charactersCards = new ArrayList<CharacterCard>();
-	private List<BuildingCard> buildingsCards = new ArrayList<BuildingCard>();
-	private List<VentureCard> venturesCards = new ArrayList<VentureCard>();
+	private List<TerritoryCard> territoriesCards = new ArrayList<>();
+	private List<CharacterCard> charactersCards = new ArrayList<>();
+	private List<BuildingCard> buildingsCards = new ArrayList<>();
+	private List<VentureCard> venturesCards = new ArrayList<>();
 
 	public Resource getResources() {
 		return resources;

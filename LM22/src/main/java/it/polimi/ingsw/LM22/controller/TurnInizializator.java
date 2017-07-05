@@ -219,7 +219,7 @@ public class TurnInizializator {
 	 */
 	protected void setNewPlayersOrder(Game game) {
 		List<FamilyMember> members = game.getBoardgame().getCouncilPalace().getMembers();
-		List<Player> newOrder = new ArrayList<Player>();
+		List<Player> newOrder = new ArrayList<>();
 		for (FamilyMember m : members) {
 			if (!newOrder.contains(m.getPlayer()))
 				newOrder.add(m.getPlayer());
@@ -241,7 +241,7 @@ public class TurnInizializator {
 	 */
 	private void manageLeaderCards(Game game) {
 		for (Player p : game.getPlayersOrder()) {
-			ArrayList<LeaderCard> removeLD = new ArrayList<LeaderCard>();
+			ArrayList<LeaderCard> removeLD = new ArrayList<>();
 			for (LeaderCard card : p.getActivatedLeaderCards()) {
 				if (card.getEffect() instanceof LeaderResourceEffect
 						|| (card.getEffect() instanceof MemberChangeEffect

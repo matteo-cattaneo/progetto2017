@@ -9,8 +9,8 @@ import it.polimi.ingsw.LM22.model.excommunication.ExCommunication;
 public class FaithGrid implements Serializable {
 
 	private static final long serialVersionUID = -1137579846689196478L;
-	private final static Integer GRIDLENGTH = 16;
-	private ArrayList<ExCommunication> exCommunicationTiles = new ArrayList<ExCommunication>();
+	private static final Integer GRIDLENGTH = 16;
+	private ArrayList<ExCommunication> exCommunicationTiles = new ArrayList<>();
 	private Resource[] rewards;
 
 	public List<ExCommunication> getExCommunicationTiles() {

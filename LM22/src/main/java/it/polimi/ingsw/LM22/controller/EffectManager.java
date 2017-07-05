@@ -45,7 +45,6 @@ public class EffectManager {
 	private static final Integer NEEDED = 0;
 	private static final Integer TOWER = 0;
 	private static final Integer FLOOR = 1;
-	private static final Resource NOTHING = new Resource(0, 0, 0, 0, 0, 0, 0);
 	private static final String UNCOLORED = "Uncolored";
 	private static final String ACTION = "Action";
 	private Player player;
@@ -200,7 +199,7 @@ public class EffectManager {
 	 * produzione
 	 */
 	public void cardtoresourceeffectManage(CardToResourceEffect effect, Resource sum) {
-		Resource bonus = NOTHING.copy();
+		Resource bonus;
 		switch (effect.getCardRequired()) {
 		case "TERRITORY":
 			bonus = r.resourceMultiplication(effect.getReward().copy(),
@@ -223,8 +222,8 @@ public class EffectManager {
 		}
 		r.addResource(sum, r.calculateResource(bonus.copy(), player, false));
 	}
-	
-	public void manageSantaRita(DevelopmentCard card, CardMove cardMove){
+
+	public void manageSantaRita(DevelopmentCard card, CardMove cardMove) {
 		if (card.getImmediateEffect() instanceof ResourcePrivilegeEffect
 				&& moveManager.containsClass(cardMove.getPlayer().getEffects(), DoubleResourceEffect.class)) {
 			Resource effect = ((ResourcePrivilegeEffect) card.getImmediateEffect()).getResource();
@@ -239,11 +238,10 @@ public class EffectManager {
 		return;
 	}
 
-
 	/**
 	 * LEADER CARDS' EFFECTS
 	 */
-	
+
 	/**
 	 * gestore degli effetti delle carte leader
 	 */
@@ -264,7 +262,6 @@ public class EffectManager {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
-
 
 	public void leaderresourceeffectManage(LeaderResourceEffect effect) throws IOException {
 		r.addResource(player.getPersonalBoard().getResources(),
@@ -376,7 +373,7 @@ public class EffectManager {
 	 * copiare
 	 */
 	public void copyeffectManage(CopyEffect effect, LeaderCard ld) throws IOException {
-		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
+		List<LeaderCard> lcards = new ArrayList<>();
 		for (Player p : mainGC.getGame().getPlayersOrder()) {
 			if (p != player) {
 				for (LeaderCard card : p.getActivatedLeaderCards()) {

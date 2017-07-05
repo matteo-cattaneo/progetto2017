@@ -17,6 +17,10 @@ import java.util.logging.Logger;
 public class StartClient {
 	private static final Logger LOGGER = Logger.getLogger(StartClient.class.getClass().getSimpleName());
 
+	private StartClient() {
+		// costruttore vuoto privato
+	}
+
 	public static void main(String[] args) {
 		// avvio il setup del client
 		setup();
@@ -52,9 +56,11 @@ public class StartClient {
 	 */
 
 	private static AbstractUI printUISelection() {
-		AbstractUI UI = null;
+		AbstractUI UI;
 		Scanner stdin = new Scanner(new FilterInputStream(System.in) {
+			@Override
 			public void close() {
+				// chiudo lo stream ma non System.in
 			}
 		});
 		// richiedo di selezionare la UI
@@ -72,7 +78,6 @@ public class StartClient {
 		switch (option) {
 		case 1:
 			System.err.println("GUI - WIP");
-			UI = new GUIinterface();
 			System.err.println("CLI interface automatically selected!");
 			UI = new CLIinterface();
 			break;

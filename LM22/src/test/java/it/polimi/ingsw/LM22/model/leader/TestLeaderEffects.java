@@ -63,6 +63,11 @@ public class TestLeaderEffects extends TestCase {
 		assertEquals(0, effect.getCouncilPrivilege().intValue());
 		assertNotNull(effect.getResource());
 		assertEquals("You will get faith: 1%n", effect.getInfo());
+		// Council privilege test
+		effect = (LeaderResourceEffect) game.getLeaderCards().get(8).getEffect();
+		assertEquals(1, effect.getCouncilPrivilege().intValue());
+		assertNotNull(effect.getResource());
+		assertEquals("You will get No resource%n and 1 councilPrivilege(s)%n", effect.getInfo());
 	}
 
 	@Test

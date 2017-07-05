@@ -9,7 +9,7 @@ public class CouncilSpace extends AbstractSpace implements Serializable {
 	private static final long serialVersionUID = 923010337475400979L;
 	private Integer councilPrivilege;
 	private Resource reward;
-	private List<FamilyMember> members = new ArrayList<FamilyMember>();
+	private List<FamilyMember> members = new ArrayList<>();
 
 	public List<FamilyMember> getMembers() {
 		return members;

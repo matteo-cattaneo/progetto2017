@@ -81,7 +81,7 @@ public class InitialConfigurator extends TurnInizializator {
 		game.setPlayers(players);
 		for (int i = 0; i < game.getPlayers().length; i++) {
 			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);
-			List<FamilyMember> members = new ArrayList<FamilyMember>();
+			List<FamilyMember> members = new ArrayList<>();
 			int j;
 			// assegno i 3 familiari colorari ad ogni player
 			for (j = 0; j < 3; j++) {
@@ -106,7 +106,7 @@ public class InitialConfigurator extends TurnInizializator {
 	@Override
 	protected void setNewPlayersOrder(Game game) {
 		Random random = new Random();
-		List<Player> p = new ArrayList<Player>();
+		List<Player> p = new ArrayList<>();
 		for (Player player : game.getPlayers()) {
 			p.add(random.nextInt(p.size() + 1), player);
 		}

@@ -108,7 +108,7 @@ public class MainGameController implements Runnable {
 			playersLeaderCard();
 			// per ogni player
 			int counter = 0;
-			String leaderSelected[] = new String[4];
+			String[] leaderSelected = new String[4];
 			for (int j = 0; j < game.getPlayersOrder().size(); j++) {
 				Player p = game.getPlayersOrder().get(j);
 				// se il giocatore è connesso e non ha ancora scelto
@@ -502,7 +502,7 @@ public class MainGameController implements Runnable {
 	 * inizializzo HashMap con i valori predefiniti del Privilegio del consiglio
 	 */
 	private static HashMap<String, Resource> initializeCouncilMap() {
-		HashMap<String, Resource> map = new HashMap<String, Resource>();
+		HashMap<String, Resource> map = new HashMap<>();
 		map.put("wood&stone", new Resource(1, 1, 0, 0, 0, 0, 0));
 		map.put("servants", new Resource(0, 0, 2, 0, 0, 0, 0));
 		map.put("coins", new Resource(0, 0, 0, 2, 0, 0, 0));

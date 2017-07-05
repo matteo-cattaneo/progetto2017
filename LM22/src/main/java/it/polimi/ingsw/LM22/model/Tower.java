@@ -10,7 +10,7 @@ public class Tower implements Serializable {
 	private static final Integer LEVELS = 4;
 	private final Floor[] floor = new Floor[LEVELS];
 	private boolean occupied = false;
-	private List<String> coloredMembersOnIt = new ArrayList<String>();
+	private List<String> coloredMembersOnIt = new ArrayList<>();
 
 	public Floor[] getFloor() {
 		return floor;

@@ -74,6 +74,7 @@ public class TestDevelopmentCards extends TestCase {
 
 	@Test
 	public void testVentureCards() {
+		// resource cost Venture card
 		assertEquals(24, game.getVentureCards().size());
 		VentureCard venture = game.getVentureCards().get(23);
 		assertEquals("Migliorare le Strade", venture.getName());
@@ -89,5 +90,16 @@ public class TestDevelopmentCards extends TestCase {
 		assertEquals("Name: Migliorare le Strade%nPeriod: 3%nCard cost:%nservants: 3%ncoins: 4%n"
 				+ "Immediate effect:%nYou earn No resource%nYou can do a PRODUCTION Action with a value of 3%n"
 				+ "Permament effect:%nvictory: 5%nCard type: Venture%n", venture.getInfo());
+		// military cost Venture card
+		venture = game.getVentureCards().get(1);
+		assertEquals("Combattere le Eresie", venture.getName());
+		assertEquals(1, venture.getPeriod().intValue());
+		assertNotNull(venture.getCardCost1());
+		assertNotNull(venture.getCardCost2());
+		assertNotNull(venture.getImmediateEffect());
+		assertNotNull(venture.getPermanentEffect());
+		assertEquals("Name: Combattere le Eresie%nPeriod: 1%nCard cost:%nRequire:%nmilitary: 5%n"
+				+ "Cost:%nmilitary: 3%nImmediate effect:%nYou earn%nfaith: 2%nPermament effect:%nvictory: 5%n"
+				+ "Card type: Venture%n", venture.getInfo());
 	}
 }

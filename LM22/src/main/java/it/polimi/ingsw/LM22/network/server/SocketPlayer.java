@@ -62,7 +62,7 @@ public class SocketPlayer implements IPlayer {
 
 	@Override
 	public void login(IClient client) throws RemoteException {
-
+		// login eseguito alla connessione
 	}
 
 	@Override

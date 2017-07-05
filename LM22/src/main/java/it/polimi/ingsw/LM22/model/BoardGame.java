@@ -16,7 +16,7 @@ public class BoardGame implements Serializable {
 	private WorkSpace harvestSpace;
 	private FaithGrid faithGrid;
 	private CouncilSpace councilPalace;
-	private Map<String, Integer> dices = new HashMap<String, Integer>();
+	private Map<String, Integer> dices = new HashMap<>();
 
 	/*
 	 * i vari bonus arbitrari degli spazi saranno da caricare da file -->

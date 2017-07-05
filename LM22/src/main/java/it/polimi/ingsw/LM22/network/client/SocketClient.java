@@ -25,12 +25,15 @@ public class SocketClient implements IConnection {
 	ObjectOutputStream socketOut;
 	ObjectInputStream socketIn;
 
-	public String getName() {
-		return name;
-	}
-
 	public SocketClient(AbstractUI UI) {
 		this.UI = UI;
+	}
+
+	/**
+	 * restituisce il nome del player
+	 */
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -152,7 +155,7 @@ public class SocketClient implements IConnection {
 	}
 
 	private void copyEffect() throws IOException, ClassNotFoundException {
-		List<LeaderCard> lcards = new ArrayList<LeaderCard>();
+		List<LeaderCard> lcards = new ArrayList<>();
 		// ottengo lunghezza lista
 		int N = socketIn.readInt();
 

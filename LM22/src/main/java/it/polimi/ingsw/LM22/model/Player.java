@@ -13,10 +13,10 @@ public class Player implements Serializable {
 	private final String color;
 	private List<FamilyMember> members;
 	private final PersonalBoard personalBoard = new PersonalBoard();
-	private List<LeaderCard> leaderCards = new ArrayList<LeaderCard>();
-	private List<LeaderCard> handLeaderCards = new ArrayList<LeaderCard>();
-	private List<LeaderCard> activatedLeaderCards = new ArrayList<LeaderCard>();
-	private List<Effect> effects = new ArrayList<Effect>();
+	private List<LeaderCard> leaderCards = new ArrayList<>();
+	private List<LeaderCard> handLeaderCards = new ArrayList<>();
+	private List<LeaderCard> activatedLeaderCards = new ArrayList<>();
+	private List<Effect> effects = new ArrayList<>();
 
 	public Player(String nickname, String color) {
 		this.nickname = nickname;
