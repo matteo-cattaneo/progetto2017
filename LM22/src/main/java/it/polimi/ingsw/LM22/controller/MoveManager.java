@@ -358,27 +358,23 @@ public class MoveManager {
 	 */
 	private void cardGetter(CardMove cardMove, Tower t) throws InvalidMoveException {
 		Integer level = cardMove.getLevelSelected();
-		DevelopmentCard card;
+		DevelopmentCard card = t.getFloor()[level].getCard();
 		switch (cardMove.getTowerSelected()) {
 		case 0:
-			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getTerritoriesCards().add((TerritoryCard) card);
 			t.getFloor()[level].setCard(new TerritoryCard());
 			break;
 		case 1:
-			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getCharactersCards().add((CharacterCard) card);
 			t.getFloor()[level].setCard(new CharacterCard());
 			if (((CharacterCard) card).getPermanentEffect().getClass() != NoPermanentEffect.class)
 				cardMove.getPlayer().getEffects().add(((CharacterCard) card).getPermanentEffect());
 			break;
 		case 2:
-			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getBuildingsCards().add((BuildingCard) card);
 			t.getFloor()[level].setCard(new BuildingCard());
 			break;
 		case 3:
-			card = t.getFloor()[level].getCard();
 			cardMove.getPlayer().getPersonalBoard().getVenturesCards().add((VentureCard) card);
 			t.getFloor()[level].setCard(new VentureCard());
 			break;
@@ -391,7 +387,7 @@ public class MoveManager {
 				cardMove.getPlayer().getPersonalBoard().getResources(), mainGame);
 		effectManager.manageSantaRita(card, cardMove);
 	}
-	
+
 	/**
 	 * controlla se una mossa del tipo MarketMove è ammessa o no
 	 */
@@ -410,7 +406,8 @@ public class MoveManager {
 	}
 
 	/**
-	 * gestisce una mossa del tipo MarketMove
+	 * gestisce una mossa del tipo MarketMove - prende le risorse contenuto
+	 * nello spazio azione - gestisce tutte le variabili appartenenti alla mossa
 	 */
 	public void marketmoveHandle(MarketMove marketMove) throws IOException {
 		int opt = marketMove.getMarketSpaceSelected();
@@ -418,9 +415,6 @@ public class MoveManager {
 		resourceHandler.subResource(marketMove.getPlayer().getPersonalBoard().getResources(),
 				marketMove.getServantsAdded());
 		marketMove.getMemberUsed().setUsed(true);
-		/**
-		 * prendo le varie risorse (i vari premi contenuti nei MarketSpace)
-		 */
 		Resource bonus = resourceHandler.calculateResource(game.getBoardgame().getMarket()[opt].getReward().copy(),
 				marketMove.getPlayer(), false);
 		resourceHandler.addResource(marketMove.getPlayer().getPersonalBoard().getResources(), bonus);
@@ -433,62 +427,78 @@ public class MoveManager {
 
 	/**
 	 * controlla se una mossa del tipo WorkMove è ammessa o no
-	 */
-	public boolean workmoveAllowed(WorkMove workMove) {
-		return checkWorkSpace(workMove);
-	}
-
-	/**
-	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
+	 * --> controlla se il valore del familiare utilizzato + servitori soddisfa il
 	 * requisito relativo allo spazio azione selezionato per la mossa + se il
 	 * primo spazio è già occupato effettua una diminuzione del valore
 	 * dell'azione in base al Malus specificato nelle regole
 	 */
-	private boolean checkWorkSpace(WorkMove workMove) {
+	public boolean workmoveAllowed(WorkMove workMove) {
 		Integer power = findWorkEffects(workMove);
 		Integer servants = calculateEffectiveServants(workMove);
+		if (PRODUCTION.equals(workMove.getWorkType()))
+			return checkProductionAllowed(workMove, power, servants);
+		else 
+			return checkHarvestAllowed(workMove, power, servants);
+	}
+
+	/**
+	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
+	 * requisito per una produzione + se il primo spazio è già occupato effettua 
+	 * una diminuzione del valore dell'azione in base al Malus specificato nelle regole
+	 */
+	private boolean checkProductionAllowed(WorkMove workMove, Integer power, Integer servants) {
 		switch (game.getPlayersOrder().size()) {
 		case 2:
-			if (PRODUCTION.equals(workMove.getWorkType())) {
-				if (!(game.getBoardgame().getProductionSpace().getMembers().isEmpty()
-						|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
-						|| workMove.getMemberUsed().getColor().equals(ACTION)))
-					return false;
-				if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
-						+ workMove.getMemberUsed().getValue() + servants)
-					return false;
-				break;
-			} else {
-				if (!(game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
-						|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
-						|| workMove.getMemberUsed().getColor().equals(ACTION)))
-					return false;
-				if (game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
-						+ workMove.getMemberUsed().getValue() + servants)
-					return false;
-				break;
-			}
+			if (!(game.getBoardgame().getProductionSpace().getMembers().isEmpty()
+					|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
+					|| workMove.getMemberUsed().getColor().equals(ACTION)))
+				return false;
+			if (game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
+					+ workMove.getMemberUsed().getValue() + servants)
+				return false;
+			break;
+		case 3:
+		case 4: {
+			if (game.getBoardgame().getProductionSpace().getColoredMemberOnIt()
+					.contains(workMove.getPlayer().getColor()))
+				return false;
+			if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
+					&& game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
+							+ workMove.getMemberUsed().getValue() + servants - WORK_MALUS)
+				return false;
+			break;
+		}
+		default:
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
+	 * requisito per il raccolto + se il
+	 * primo spazio è già occupato effettua una diminuzione del valore
+	 * dell'azione in base al Malus specificato nelle regole
+	 */
+	private boolean checkHarvestAllowed(WorkMove workMove, Integer power, Integer servants) {
+		switch (game.getPlayersOrder().size()) {
+		case 2:
+			if (!(game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
+					|| containsClass(workMove.getPlayer().getEffects(), InOccupiedSpaceEffect.class)
+					|| workMove.getMemberUsed().getColor().equals(ACTION)))
+				return false;
+			if (game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
+					+ workMove.getMemberUsed().getValue() + servants)
+				return false;
+			break;
 		case 3:
 		case 4:
-			if (PRODUCTION.equals(workMove.getWorkType())) {
-				if (game.getBoardgame().getProductionSpace().getColoredMemberOnIt()
-						.contains(workMove.getPlayer().getColor()))
-					return false;
-				if (!game.getBoardgame().getProductionSpace().getMembers().isEmpty()
-						&& game.getBoardgame().getProductionSpace().getSpaceRequirement() > power
-								+ workMove.getMemberUsed().getValue() + servants - WORK_MALUS)
-					return false;
-				break;
-			} else {
-				if (game.getBoardgame().getHarvestSpace().getColoredMemberOnIt()
-						.contains(workMove.getPlayer().getColor()))
-					return false;
-				if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty()
-						&& game.getBoardgame().getHarvestSpace().getSpaceRequirement() > power
-								+ workMove.getMemberUsed().getValue() + servants - WORK_MALUS)
-					return false;
-				break;
-			}
+			if (game.getBoardgame().getHarvestSpace().getColoredMemberOnIt().contains(workMove.getPlayer().getColor()))
+				return false;
+			if (!game.getBoardgame().getHarvestSpace().getMembers().isEmpty() && game.getBoardgame().getHarvestSpace()
+					.getSpaceRequirement() > power + workMove.getMemberUsed().getValue() + servants - WORK_MALUS)
+				return false;
+			break;
 		default:
 			return false;
 		}
