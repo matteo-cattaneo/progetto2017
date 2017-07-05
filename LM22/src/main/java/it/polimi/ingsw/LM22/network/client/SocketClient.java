@@ -146,9 +146,9 @@ public class SocketClient implements IConnection {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			LOGGER.log(Level.SEVERE, "Socket connection Problems!!", e);
-			UI.showMsg("Socket communication error!");
+			LOGGER.log(Level.SEVERE, "Socket connection error!!", e);
 		}
+		StartClient.setup();
 	}
 
 	private void copyEffect() throws IOException, ClassNotFoundException {

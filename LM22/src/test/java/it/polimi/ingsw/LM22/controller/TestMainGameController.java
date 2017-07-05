@@ -24,8 +24,13 @@ public class TestMainGameController extends TestCase {
 		ArrayList<PlayerInfo> room = new ArrayList<PlayerInfo>();
 		PlayerInfo p1 = new PlayerInfo();
 		p1.setName("Player1");
-		p1.setIplayer((IPlayer) new NetworkTest());
+		p1.setIplayer((IPlayer) new NetworkTest(false));
 		room.add(p1);
+		// provo la disconnessione del secondo player
+		PlayerInfo p2 = new PlayerInfo();
+		p2.setName("Player2");
+		p2.setIplayer((IPlayer) new NetworkTest(true));
+		room.add(p2);
 		mainGC = new MainGameController(room);
 		Game game = mainGC.getGame();
 		System.out.println(game.getPlayersOrder().get(0));
@@ -38,12 +43,19 @@ public class TestMainGameController extends TestCase {
 }
 
 class NetworkTest implements IPlayer {
-
 	Game game;
+	boolean secondPlayer;
+
+	public NetworkTest(boolean secondPlayer) {
+		this.secondPlayer = secondPlayer;
+	}
 
 	@Override
 	public String yourTurn() throws IOException {
-		return "End@";
+		if (secondPlayer)
+			return "End@Disconnect@";
+		else
+			return "End@";
 	}
 
 	@Override
@@ -127,6 +139,10 @@ class NetworkTest implements IPlayer {
 	@Override
 	public String getLeaderCard() throws IOException {
 		return game.getPlayersOrder().get(0).getLeaderCards().get(0).getName();
+	}
+
+	@Override
+	public void close() throws IOException {
 	}
 
 }

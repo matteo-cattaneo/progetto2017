@@ -129,4 +129,9 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public String getLeaderCard() throws IOException {
 		return client.getLeaderCard();
 	}
+
+	@Override
+	public void close() throws IOException {
+		client.close();
+	}
 }

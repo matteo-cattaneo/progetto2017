@@ -11,7 +11,8 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 /**
- * Interfaccia estesa da RMIClient necessaria per la gestione della logica di gioco
+ * Interfaccia estesa da RMIClient necessaria per la gestione della logica di
+ * gioco
  */
 public interface IClient extends Remote {
 
@@ -50,4 +51,6 @@ public interface IClient extends Remote {
 	public void selectLeaderCard(Game game) throws RemoteException;
 
 	public String getLeaderCard() throws RemoteException;
+
+	public void close();
 }

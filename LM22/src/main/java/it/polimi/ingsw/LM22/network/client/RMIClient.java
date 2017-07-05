@@ -141,4 +141,9 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	public String getLeaderCard() throws RemoteException {
 		return UI.getLeaderCard();
 	}
+
+	@Override
+	public void close() {
+		StartClient.setup();
+	}
 }

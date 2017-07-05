@@ -158,9 +158,26 @@ public class CLIinterface extends AbstractUI {
 	 * inserendo anche solo una parte del nome della carta
 	 */
 	private void showCard() throws RemoteException {
+		String cardName;
 		showMsg(TIMEOUT + timeout + SECONDS);
 		showMsg("Insert the card name: (no case sensitive)");
-		String cardName = in.nextLine();
+		// gestione timeout
+		time = System.currentTimeMillis() / 1000;
+		ExecutorService exe = Executors.newFixedThreadPool(1);
+		Future<String> future = exe.submit(() -> {
+			return in.nextLine();
+		});
+		try {
+			cardName = future.get(timeout, TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			cardName = "";
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			move = "End@Disconnect@";
+			System.err.println("Move time expired, now you have been disconnected!");
+			System.err.println("Please login again...");
+			StartClient.setup();
+		}
+		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
 		DevelopmentCard card = null;
 		boolean leader = false;
 		showMsg("");
@@ -171,6 +188,7 @@ public class CLIinterface extends AbstractUI {
 					if (t.getFloor()[j].getCard().getName() != null
 							&& t.getFloor()[j].getCard().getName().toLowerCase().startsWith(cardName.toLowerCase()))
 						card = t.getFloor()[j].getCard();
+			// verifico se una carta leader
 			leader = showLeader(cardName);
 		}
 		if (card != null)
@@ -1260,8 +1278,8 @@ public class CLIinterface extends AbstractUI {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
-			System.err.println("You can close this window");
-			System.exit(0);
+			System.err.println("Please login again...");
+			StartClient.setup();
 		}
 		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
 		return result;

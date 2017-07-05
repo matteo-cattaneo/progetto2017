@@ -118,7 +118,8 @@ public class MainGameController implements Runnable {
 						leaderSelected[j] = getIPlayer(p).getLeaderCard();
 						counter++;
 					} catch (IOException e) {
-						LOGGER.log(Level.INFO, p.getNickname() + " has not chosen yet", e);
+						LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
+						disconnectPlayer(p);
 					}
 			}
 			// se tutti i player hanno selezionato la carta
@@ -324,6 +325,11 @@ public class MainGameController implements Runnable {
 	 */
 	private void disconnectRoomPlayers() {
 		for (int i = 0; i < playerRoom.size();) {
+			try {
+				playerRoom.get(i).getIplayer().close();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Player already disconnected!", e);
+			}
 			playerRoom.remove(i);
 		}
 
@@ -511,11 +517,18 @@ public class MainGameController implements Runnable {
 	 * tempo utile
 	 */
 	public void disconnectPlayer(Player player) {
-		// imposto a false l attibuto connected, cosi da segnalare che i player
-		// è disconnesso
+		// chiudo le connessioni e imposto a false l'attibuto connected
+		// cosi da segnalare che i player è disconnesso
 		for (int j = 0; j < playerRoom.size(); j++)
-			if (player.getNickname().equals(playerRoom.get(j).getName()))
+			if (player.getNickname().equals(playerRoom.get(j).getName())) {
+				try {
+					playerRoom.get(j).getIplayer().close();
+				} catch (IOException e) {
+					LOGGER.log(Level.SEVERE, "Player already disconnected!", e);
+				}
 				playerRoom.get(j).setConnected(false);
+			}
+
 		showMsgAll(player.getNickname() + " disconnected!");
 	}
 

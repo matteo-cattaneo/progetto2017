@@ -15,12 +15,14 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.client.IClient;
 
 public class SocketPlayer implements IPlayer {
+	Socket socket;
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String name;
 
 	// inizializzo gli stream di comunicazione
 	public SocketPlayer(Socket socket) throws IOException {
+		this.socket = socket;
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 		// leggo il nome del client
@@ -52,7 +54,7 @@ public class SocketPlayer implements IPlayer {
 		out.flush();
 
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -197,8 +199,13 @@ public class SocketPlayer implements IPlayer {
 	public String getLeaderCard() throws IOException {
 		out.writeUTF("getLeader");
 		out.flush();
-		
+
 		return in.readUTF();
+	}
+
+	@Override
+	public void close() throws IOException {
+		socket.close();
 	}
 
 }

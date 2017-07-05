@@ -10,19 +10,19 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * classe principale del client, chiede all'utente le informazioni necessarie alla connessione e all'inizio della partita
+/**
+ * classe principale del client, chiede all'utente le informazioni necessarie
+ * alla connessione e all'inizio della partita
  */
 public class StartClient {
 	private static final Logger LOGGER = Logger.getLogger(StartClient.class.getClass().getSimpleName());
 
 	public static void main(String[] args) {
-		StartClient start = new StartClient();
 		// avvio il setup del client
-		start.setup();
+		setup();
 	}
 
-	public void setup() {
+	public static void setup() {
 		// visualizzo splash screen caricandola da file
 		try {
 			System.out.println(
@@ -51,7 +51,7 @@ public class StartClient {
 	 * inizializza con il giusto tipo dinamico
 	 */
 
-	private AbstractUI printUISelection() {
+	private static AbstractUI printUISelection() {
 		AbstractUI UI = null;
 		Scanner stdin = new Scanner(new FilterInputStream(System.in) {
 			public void close() {
@@ -88,7 +88,7 @@ public class StartClient {
 		return UI;
 	}
 
-	private IConnection selectConnectionType(AbstractUI UI) {
+	private static IConnection selectConnectionType(AbstractUI UI) {
 		IConnection client = null;
 		/**
 		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione

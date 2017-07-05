@@ -133,7 +133,8 @@ public class StartServer {
 						// se player rieffettua l'accesso con una sessione
 						// valida attiva viene disconnesso
 						player.getIplayer().showMsg("You are already connected to another session");
-						player.getIplayer().showMsg("Disconnected!");
+						player.getIplayer().showMsg("Please login again...");
+						player.getIplayer().close();
 					} else {
 						// altrimenti viene reinserito nella room
 						pi.setIplayer(player.getIplayer());
