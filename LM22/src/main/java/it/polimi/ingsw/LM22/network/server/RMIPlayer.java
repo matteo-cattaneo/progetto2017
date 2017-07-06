@@ -123,7 +123,6 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void selectLeaderCard(Game game) throws IOException {
 		client.selectLeaderCard(game);
-
 	}
 
 	@Override

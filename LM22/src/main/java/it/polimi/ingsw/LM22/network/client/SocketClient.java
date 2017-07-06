@@ -48,7 +48,7 @@ public class SocketClient implements IConnection {
 			UI.connectionOK();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Socket connection error!", e);
-			return;
+			StartClient.setup();
 		}
 		// inizializzo gli stream di input e output
 		try {
@@ -58,8 +58,8 @@ public class SocketClient implements IConnection {
 			socketOut.writeUTF(getName());
 			socketOut.flush();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Socket connection Problems!!", e);
-			UI.showMsg("Socket connection error!");
+			LOGGER.log(Level.SEVERE, "Socket connection error!!", e);
+			StartClient.setup();
 		}
 		play();
 	}

@@ -173,7 +173,7 @@ public class CLIinterface extends AbstractUI {
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			System.err.println("Please login again...");
-			StartClient.setup();
+			System.exit(0);
 		}
 		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
 		DevelopmentCard card = null;
@@ -571,7 +571,7 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public void connectionOK() {
 		showMsg("Connection established!");
-		showMsg("Wait for your turn...");
+		showMsg("Wait for the login of other players...");
 	}
 
 	/**
@@ -1277,7 +1277,7 @@ public class CLIinterface extends AbstractUI {
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			System.err.println("Please login again...");
-			StartClient.setup();
+			System.exit(0);
 		}
 		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
 		return result;

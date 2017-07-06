@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -128,17 +129,14 @@ public class StartServer {
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {
-					if (pi.getConnected()) {
-						// se player rieffettua l'accesso con una sessione
-						// valida attiva viene disconnesso
-						player.getIplayer().showMsg("You are already connected to another session");
-						player.getIplayer().showMsg("Please login again...");
-						player.getIplayer().close();
-					} else {
-						// altrimenti viene reinserito nella room
-						pi.setIplayer(player.getIplayer());
-						pi.setConnected(true);
-					}
+
+					pi.getIplayer().showMsg("You are now connected to a new session, Disconnected!");
+					pi.getIplayer().close();
+
+					pi.setIplayer(player.getIplayer());
+					pi.getIplayer().showMsg("This is your new session");
+					pi.setConnected(true);
+
 					return true;
 				}
 		return false;
@@ -159,7 +157,7 @@ public class StartServer {
 	/**
 	 * verifica la connessione di un client con timeout
 	 */
-	public Integer attesaLogin(Integer t, SocketConnection conn, ArrayList<PlayerInfo> room)
+	public Integer attesaLogin(Integer t, SocketConnection conn, List<PlayerInfo> room)
 			throws InterruptedException, IOException {
 		for (; t > 0; t--) {
 			printAll("The game starts in " + t + " seconds", room);
@@ -175,7 +173,7 @@ public class StartServer {
 	/**
 	 * invia un messaggio a tutti i player di una room
 	 */
-	public void printAll(String s, ArrayList<PlayerInfo> room) throws IOException {
+	public void printAll(String s, List<PlayerInfo> room) throws IOException {
 		for (PlayerInfo p : room)
 			p.getIplayer().showMsg(s);
 	}

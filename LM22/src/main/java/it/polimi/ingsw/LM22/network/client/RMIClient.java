@@ -49,6 +49,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 			UI.connectionOK();
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			LOGGER.log(Level.SEVERE, "RMI connection error!", e);
+			StartClient.setup();
 		}
 	}
 
@@ -144,6 +145,11 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 
 	@Override
 	public void close() throws RemoteException {
-		StartClient.setup();
+		new Thread() {
+			@Override
+			public void run() {
+				StartClient.setup();
+			}
+		}.start();
 	}
 }

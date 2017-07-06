@@ -68,6 +68,7 @@ public class MainGameController implements Runnable {
 
 	@Override
 	public void run() {
+		showMsgAll("Wait other players turn...");
 		// distribuzione personal tile
 		personalTileSelection();
 		// distribuzione carte leader
@@ -114,7 +115,7 @@ public class MainGameController implements Runnable {
 				// se il giocatore è connesso e non ha ancora scelto
 				if (checkPlayer(p))
 					try {
-						// ottengo il valore della carta >la carta selezionata
+						// ottengo il valore della carta la carta selezionata
 						leaderSelected[j] = getIPlayer(p).getLeaderCard();
 						counter++;
 					} catch (IOException e) {
@@ -221,6 +222,7 @@ public class MainGameController implements Runnable {
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
+			System.out.println(p.getNickname() + ": " + sMove);
 			// ottengo informazioni dalla mossa ricevuta
 			aMove = netContrAdapter.moveParser(p, sMove);
 			// provo ad eseguire la mossa richiesta
@@ -256,6 +258,16 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
+	 * restituisco il giocatore corrispondente al client newtwork fornito
+	 */
+	private Player getPlayer(IPlayer ip) throws RemoteException {
+		for (Player p : game.getPlayers())
+			if (p.getNickname().equals(ip.getName()))
+				return p;
+		return null;
+	}
+
+	/**
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
 	public IPlayer getIPlayer(Player p) throws RemoteException {
@@ -269,13 +281,18 @@ public class MainGameController implements Runnable {
 	 * invio il model a tutti i clients connessi
 	 */
 	private void sendAll() {
-		try {
-			for (int j = 0; j < playerRoom.size(); j++) {
+		for (int j = 0; j < playerRoom.size(); j++) {
+			try {
 				if (playerRoom.get(j).getConnected())
 					playerRoom.get(j).getIplayer().showBoard(game);
+			} catch (IOException e) {
+				LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e);
+				try {
+					disconnectPlayer(getPlayer(playerRoom.get(j).getIplayer()));
+				} catch (RemoteException e1) {
+					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e);
+				}
 			}
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Connection Problems due to IOException", e);
 		}
 	}
 
@@ -332,7 +349,6 @@ public class MainGameController implements Runnable {
 			}
 			playerRoom.remove(i);
 		}
-
 	}
 
 	/**
@@ -528,7 +544,6 @@ public class MainGameController implements Runnable {
 				}
 				playerRoom.get(j).setConnected(false);
 			}
-
 		showMsgAll(player.getNickname() + " disconnected!");
 	}
 
@@ -543,6 +558,11 @@ public class MainGameController implements Runnable {
 					playerRoom.get(j).getIplayer().showMsg(msg);
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);
+				try {
+					disconnectPlayer(getPlayer(playerRoom.get(j).getIplayer()));
+				} catch (RemoteException e1) {
+					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
+				}
 			}
 		LOGGER.log(Level.INFO, msg);
 	}
