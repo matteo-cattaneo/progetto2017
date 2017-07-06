@@ -43,6 +43,7 @@ public class StartServer {
 			startServer.start();
 		} catch (IOException | InterruptedException e) {
 			LOGGER.log(Level.SEVERE, "Server terminato!", e);
+			main(args);
 		}
 	}
 
@@ -129,10 +130,10 @@ public class StartServer {
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
 				if (pi.getName().equals(player.getName())) {
-
-					pi.getIplayer().showMsg("You are now connected to a new session, Disconnected!");
-					pi.getIplayer().close();
-
+					if (pi.getConnected()) {
+						pi.getIplayer().showMsg("You are now connected to a new session, Disconnected!");
+						pi.getIplayer().close();
+					}
 					pi.setIplayer(player.getIplayer());
 					pi.getIplayer().showMsg("This is your new session");
 					pi.setConnected(true);

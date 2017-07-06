@@ -426,25 +426,26 @@ public class MoveManager {
 	}
 
 	/**
-	 * controlla se una mossa del tipo WorkMove è ammessa o no
-	 * --> controlla se il valore del familiare utilizzato + servitori soddisfa il
-	 * requisito relativo allo spazio azione selezionato per la mossa + se il
-	 * primo spazio è già occupato effettua una diminuzione del valore
-	 * dell'azione in base al Malus specificato nelle regole
+	 * controlla se una mossa del tipo WorkMove è ammessa o no --> controlla se
+	 * il valore del familiare utilizzato + servitori soddisfa il requisito
+	 * relativo allo spazio azione selezionato per la mossa + se il primo spazio
+	 * è già occupato effettua una diminuzione del valore dell'azione in base al
+	 * Malus specificato nelle regole
 	 */
 	public boolean workmoveAllowed(WorkMove workMove) {
 		Integer power = findWorkEffects(workMove);
 		Integer servants = calculateEffectiveServants(workMove);
 		if (PRODUCTION.equals(workMove.getWorkType()))
 			return checkProductionAllowed(workMove, power, servants);
-		else 
+		else
 			return checkHarvestAllowed(workMove, power, servants);
 	}
 
 	/**
 	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
-	 * requisito per una produzione + se il primo spazio è già occupato effettua 
-	 * una diminuzione del valore dell'azione in base al Malus specificato nelle regole
+	 * requisito per una produzione + se il primo spazio è già occupato effettua
+	 * una diminuzione del valore dell'azione in base al Malus specificato nelle
+	 * regole
 	 */
 	private boolean checkProductionAllowed(WorkMove workMove, Integer power, Integer servants) {
 		switch (game.getPlayersOrder().size()) {
@@ -476,9 +477,9 @@ public class MoveManager {
 
 	/**
 	 * controlla se il valore del familiare utilizzato + servitori soddisfa il
-	 * requisito per il raccolto + se il
-	 * primo spazio è già occupato effettua una diminuzione del valore
-	 * dell'azione in base al Malus specificato nelle regole
+	 * requisito per il raccolto + se il primo spazio è già occupato effettua
+	 * una diminuzione del valore dell'azione in base al Malus specificato nelle
+	 * regole
 	 */
 	private boolean checkHarvestAllowed(WorkMove workMove, Integer power, Integer servants) {
 		switch (game.getPlayersOrder().size()) {
@@ -511,6 +512,8 @@ public class MoveManager {
 	 */
 	private Integer findWorkEffects(WorkMove move) {
 		Integer total = 0;
+		if (move.getMemberUsed().getColor().equals(ACTION))
+			return total;
 		String type = move.getWorkType();
 		for (Effect e : move.getPlayer().getEffects()) {
 			if (e instanceof WorkMalusEx && type.equals(((WorkMalusEx) e).getTypeOfWork()))
@@ -735,5 +738,12 @@ public class MoveManager {
 	public void endmoveHandle(EndMove move) {
 		if (!"noError".equals(move.getError()))
 			mainGame.disconnectPlayer(move.getPlayer());
+		else
+			try {
+				mainGame.getIPlayer(move.getPlayer()).showMsg(
+						"You must wait at most " + (game.getPlayersOrder().size() * game.getMoveTimer()) + " seconds");
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Player " + move.getPlayer().getNickname() + " disconnected!", e);
+			}
 	}
 }

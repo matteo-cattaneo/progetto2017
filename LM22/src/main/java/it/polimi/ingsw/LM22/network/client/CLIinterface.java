@@ -371,7 +371,7 @@ public class CLIinterface extends AbstractUI {
 		if (game.getPlayers().length == 4) {
 			showMsg("3: " + game.getBoardgame().getMarket()[2].getReward().getInfo().replaceAll("%n", " "));
 			showMsg("4: " + game.getBoardgame().getMarket()[3].getCouncilPrivilege()
-					+ "different council Privilege(s)");
+					+ " different council Privilege(s)");
 		}
 		showMsg(RESTART_CHOICE);
 
@@ -440,7 +440,6 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void printCouncilMoveMenu() throws RemoteException {
-		showMsg(TIMEOUT + timeout + SECONDS);
 		setMove(COUNCILMOVE);
 		printFamilyMemberMenu();
 		if (!RESTART.equals(move))
@@ -609,7 +608,7 @@ public class CLIinterface extends AbstractUI {
 		msgFormat("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getWood());
 		msgFormat("%-12s", "| " + getPlayer(name, game).getPersonalBoard().getResources().getStone());
 		msgFormat("%-12s|%n", "| " + getPlayer(name, game).getPersonalBoard().getResources().getServants());
-		showMsg("|___________|___________|___________|___________|_____________________________________________");
+		print("|___________|___________|___________|___________|");
 
 	}
 
@@ -621,6 +620,7 @@ public class CLIinterface extends AbstractUI {
 		if (!getPlayer(name, game).getHandLeaderCards().isEmpty()
 				|| !getPlayer(name, game).getActivatedLeaderCards().isEmpty()
 				|| !getPlayer(name, game).getLeaderCards().isEmpty()) {
+			showMsg("_____________________________________________");
 			msgFormat("|%-30s|", " Hand leader cards:");
 			msgFormat("%-30s|", " Table leader cards:");
 			msgFormat("%-30s|%n|", " Activated leader cards:");
@@ -646,49 +646,46 @@ public class CLIinterface extends AbstractUI {
 				msgFormat("%n|%s", "");
 			}
 			showMsg("______________________________|______________________________|______________________________|");
-		}
+		} else
+			showMsg("");
 		// player dev cards
 		if (!getPlayer(name, game).getPersonalBoard().getTerritoriesCards().isEmpty()) {
-			msgFormat("%-30s|____________________________________________________________________________________",
-					"| Territory cards:");
+			msgFormat("%-30s|______________________", "| Territory cards:");
 			for (TerritoryCard c : getPlayer(name, game).getPersonalBoard().getTerritoriesCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
-				msgFormat("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 				msgFormat("%-20s| ", "Requirement: " + c.getRequirement());
+				msgFormat("%-60s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
+			showMsg("|_____________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			msgFormat("%-30s|____________________________________________________________________________________",
-					"| Character cards:");
+			msgFormat("%-30s|________________________", "| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
-				msgFormat("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%-82s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|___________________________________________________________________________________|");
+			showMsg("|_____________________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getBuildingsCards().isEmpty()) {
-			msgFormat("%-30s|____________________________________________________________________________________",
-					"| Building cards:");
+			msgFormat("%-30s|______________________", "| Building cards:");
 			for (BuildingCard c : getPlayer(name, game).getPersonalBoard().getBuildingsCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
-				msgFormat("%-60s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 				msgFormat("%-20s| ", "Requirement: " + c.getRequirement());
+				msgFormat("%-60s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|_____________________________________________________________|_____________________|");
+			showMsg("|_____________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			msgFormat("%-30s|____________________________________________________________________________________",
-					"| Ventures cards:");
+			msgFormat("%-30s|________________________", "| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
-				msgFormat("%-82s| ", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
+				msgFormat("%-82s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
 			}
 			showMsg("");
-			showMsg("|_____________________________|___________________________________________________________________________________|");
+			showMsg("|_____________________________|");
 		}
 	}
 
@@ -729,16 +726,18 @@ public class CLIinterface extends AbstractUI {
 			for (Player p : game.getPlayers())
 				if (p.getPersonalBoard().getResources().getVictory() == j)
 					victory.add(j + " " + p.getNickname());
-		showMsg("________________________________________________________________________");
+		showMsg("________________________________________________________________________________________________");
 		msgFormat("%-24s", "| Faith track:");
 		msgFormat("%-24s", "| Military track:");
-		msgFormat("%-24s|%n", "| Victory track:");
+		msgFormat("%-24s", "| Victory track:");
+		msgFormat("%-24s|%n", "| Players order:");
 		for (int i = 0; i < game.getPlayersOrder().size(); i++) {
 			msgFormat("| %-22s| ", faith.get(i));
 			msgFormat("%-22s| ", military.get(i));
-			msgFormat("%-22s|%n", victory.get(i));
+			msgFormat("%-22s| ", victory.get(i));
+			msgFormat("%-22s|%n", (i + 1) + " " + game.getPlayersOrder().get(i).getNickname());
 		}
-		showMsg("|_______________________|_______________________|_______________________|");
+		showMsg("|_______________________|_______________________|_______________________|_______________________|");
 	}
 
 	/**

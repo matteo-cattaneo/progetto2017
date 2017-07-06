@@ -155,6 +155,7 @@ public class EffectManager {
 				r.calculateResource(effect.getResource().copy(), player, true));
 		r.addResource(player.getPersonalBoard().getResources(), r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player, false));
+		mainGC.getIPlayer(player).showMsg(effect.getInfo().replace("%n", " "));
 		Resource servants = mainGC.askForServants(player);
 		Integer[] info = mainGC.askForCardSpace(player, effect);
 		Integer tower = info[TOWER];
@@ -165,7 +166,6 @@ public class EffectManager {
 		CardMove move = new CardMove(player, other, servants, tower, floor);
 
 		try {
-			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
@@ -177,13 +177,13 @@ public class EffectManager {
 		r.addResource(sum, r.calculateResource(effect.getResource().copy(), player, true));
 		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player, false));
+		mainGC.getIPlayer(player).showMsg(effect.getInfo().replace("%n", " "));
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, ACTION);
 		other.setUsed(false);
 		other.setValue(effect.getWorkActionValue());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
 		try {
-			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
@@ -275,13 +275,13 @@ public class EffectManager {
 	 * dall'attivazione di una carta leader
 	 */
 	public void workactionManage(WorkAction effect) throws IOException {
+		mainGC.getIPlayer(player).showMsg(effect.getInfo().replace("%n", " "));
 		Resource servants = mainGC.askForServants(player);
 		FamilyMember other = new FamilyMember(player, ACTION);
 		other.setUsed(false);
 		other.setValue(effect.getValueOfWork());
 		WorkMove move = new WorkMove(player, other, servants, effect.getTypeOfWork());
 		try {
-			mainGC.getIPlayer(player).showMsg(effect.getInfo());
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");

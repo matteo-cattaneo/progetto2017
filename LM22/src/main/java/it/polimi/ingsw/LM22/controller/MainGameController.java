@@ -270,7 +270,7 @@ public class MainGameController implements Runnable {
 	/**
 	 * restituisco il client newtwork corrispondente al giocatore fornito
 	 */
-	public IPlayer getIPlayer(Player p) throws RemoteException {
+	public IPlayer getIPlayer(Player p) {
 		for (int j = 0; j < playerRoom.size(); j++)
 			if (p.getNickname().equals(playerRoom.get(j).getName()))
 				return playerRoom.get(j).getIplayer();
@@ -290,7 +290,7 @@ public class MainGameController implements Runnable {
 				try {
 					disconnectPlayer(getPlayer(playerRoom.get(j).getIplayer()));
 				} catch (RemoteException e1) {
-					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e);
+					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
 				}
 			}
 		}
@@ -329,8 +329,8 @@ public class MainGameController implements Runnable {
 	 * permette di gestire tutta la fase di conteggio dei Punti Finali
 	 */
 	private void manageEndGame(Game game) {
-		manageMilitaryStandingPoints(game);
 		manageVictoryPointDueToCards(game);
+		manageMilitaryStandingPoints(game);
 		electWinner(game);
 		LOGGER.log(Level.INFO, "Game ended");
 		disconnectRoomPlayers();
@@ -420,7 +420,7 @@ public class MainGameController implements Runnable {
 			if (e instanceof FinalCardCostMalusEx && ((FinalCardCostMalusEx) e).getCardType().equals(BUILDING)) {
 				Integer total = 0;
 				for (BuildingCard card : p.getPersonalBoard().getBuildingsCards()) {
-					total = total + card.getCost().getStone() + card.getCost().getStone();
+					total = total + card.getCost().getStone() + card.getCost().getWood();
 				}
 				resourceHandler.subResource(p.getPersonalBoard().getResources(), new Resource(0, 0, 0, 0, 0, 0, total));
 			}
