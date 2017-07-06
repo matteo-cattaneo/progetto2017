@@ -53,4 +53,6 @@ public interface IClient extends Remote {
 	public String getLeaderCard() throws RemoteException;
 
 	public void close() throws RemoteException;
+
+	public String getPassword() throws RemoteException;
 }

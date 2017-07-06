@@ -21,6 +21,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	private static final long serialVersionUID = -2036349694420489903L;
 	private transient IClient client;
 	private String name;
+	private String password;
 
 	public RMIPlayer() throws RemoteException {
 		// costruttore vuoto
@@ -47,6 +48,7 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void login(IClient client) throws RemoteException {
 		this.name = client.getName();
+		this.password = client.getPassword();
 		this.client = client;
 	}
 
@@ -133,5 +135,10 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void close() throws IOException {
 		client.close();
+	}
+
+	@Override
+	public String getPassword() throws IOException {
+		return password;
 	}
 }

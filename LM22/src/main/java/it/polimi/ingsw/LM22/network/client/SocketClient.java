@@ -20,7 +20,6 @@ public class SocketClient implements IConnection {
 	private static final int SOCKET_PORT = 1337;
 	private Socket socket;
 	private AbstractUI UI;
-	private String name;
 	String[] socketLine;
 	ObjectOutputStream socketOut;
 	ObjectInputStream socketIn;
@@ -30,18 +29,10 @@ public class SocketClient implements IConnection {
 	}
 
 	/**
-	 * restituisce il nome del player
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
 	 * metodo che effectuala connessione con il server Socket
 	 */
 	@Override
-	public void connect(String name, String ip) {
-		this.name = name;
+	public void connect(String name, String password, String ip) {
 		try {
 			// stabilisco connessione con socoket server
 			socket = new Socket(ip, SOCKET_PORT);
@@ -54,8 +45,10 @@ public class SocketClient implements IConnection {
 		try {
 			socketOut = new ObjectOutputStream(socket.getOutputStream());
 			socketIn = new ObjectInputStream(socket.getInputStream());
-			// comunico il mio nome al server
-			socketOut.writeUTF(getName());
+			// comunico il mio nome e la password al server
+			socketOut.writeUTF(name);
+			socketOut.flush();
+			socketOut.writeUTF(password);
 			socketOut.flush();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Socket connection error!!", e);
@@ -82,7 +75,7 @@ public class SocketClient implements IConnection {
 					// visualizzo sulla UI un messaggio
 					if (socketLine[1].contains("member"))
 						UI.setMemberMove(false);
-					UI.showMsg(socketLine[1]);
+					UI.alert(socketLine[1]);
 					break;
 				case "board":
 					// ricevo e visualizzo la board

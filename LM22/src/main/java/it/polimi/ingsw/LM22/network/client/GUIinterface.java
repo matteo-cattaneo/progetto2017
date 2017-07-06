@@ -213,4 +213,16 @@ public class GUIinterface extends AbstractUI {
 		return null;
 	}
 
+	@Override
+	public void alert(String msg) throws RemoteException {
+		// Auto-generated method stub
+
+	}
+
+	@Override
+	public String getPassword() throws RemoteException {
+		// Auto-generated method stub
+		return null;
+	}
+
 }

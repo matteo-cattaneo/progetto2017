@@ -88,4 +88,8 @@ public abstract class AbstractUI {
 	public abstract void selectLeaderCard(Game game) throws RemoteException;
 
 	public abstract String getLeaderCard() throws RemoteException;
+
+	public abstract void alert(String msg) throws RemoteException;
+
+	public abstract String getPassword() throws RemoteException;
 }

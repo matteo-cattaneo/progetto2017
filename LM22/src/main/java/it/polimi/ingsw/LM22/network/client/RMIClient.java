@@ -19,6 +19,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
 	private String name;
+	private String password;
 	private transient AbstractUI UI;
 
 	public RMIClient(AbstractUI UI) throws RemoteException {
@@ -31,6 +32,11 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	}
 
 	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
 	public String getMove() throws RemoteException {
 		return move;
 	}
@@ -39,10 +45,11 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	 * metodo che permettee la connessione con il server RMI
 	 */
 	@Override
-	public void connect(String name, String ip) throws RemoteException {
+	public void connect(String name, String password, String ip) throws RemoteException {
 		try {
 			this.name = name;
-			// ottendo l'oggetto renoto del server
+			this.password = password;
+			// ottendo l'oggetto remoto del server
 			IPlayer server = (IPlayer) Naming.lookup("rmi://" + ip + "/MSG");
 			// mando il mio oggetto al server
 			server.login(this);
@@ -95,7 +102,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	public void showMsg(String msg) throws RemoteException {
 		if (msg.contains("member"))
 			UI.setMemberMove(false);
-		UI.showMsg(msg);
+		UI.alert(msg);
 	}
 
 	@Override

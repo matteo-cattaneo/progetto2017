@@ -740,8 +740,8 @@ public class MoveManager {
 			mainGame.disconnectPlayer(move.getPlayer());
 		else
 			try {
-				mainGame.getIPlayer(move.getPlayer()).showMsg(
-						"You must wait at most " + (game.getPlayersOrder().size() * game.getMoveTimer()) + " seconds");
+				mainGame.getIPlayer(move.getPlayer()).showMsg("You must wait at most "
+						+ ((game.getPlayersOrder().size() - 1) * game.getMoveTimer()) + " seconds");
 			} catch (IOException e) {
 				LOGGER.log(Level.SEVERE, "Player " + move.getPlayer().getNickname() + " disconnected!", e);
 			}

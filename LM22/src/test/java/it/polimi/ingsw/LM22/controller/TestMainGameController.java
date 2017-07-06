@@ -145,4 +145,9 @@ class NetworkTest implements IPlayer {
 	public void close() throws IOException {
 	}
 
+	@Override
+	public String getPassword() throws IOException {
+		return null;
+	}
+
 }

@@ -44,7 +44,7 @@ public class StartClient {
 		 */
 
 		try {
-			client.connect(UI.getName(), UI.getIP());
+			client.connect(UI.getName(), UI.getPassword(), UI.getIP());
 		} catch (RemoteException e) {
 			LOGGER.log(Level.SEVERE, "Connection server error!", e);
 		}

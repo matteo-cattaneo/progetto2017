@@ -185,7 +185,7 @@ public class MainGameController implements Runnable {
 	 */
 	private void startGame() {
 		// invio a tutti il nuovo model
-		sendAll();
+		// sendAll();
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
 			// inizio turno
 			for (Player p : game.getPlayersOrder()) {
@@ -215,6 +215,7 @@ public class MainGameController implements Runnable {
 		for (String sMove = ""; !sMove.startsWith("End@");) {
 			// inizio di una mossa
 			try {
+				sendAll();
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
 			} catch (IOException e) {
@@ -222,13 +223,11 @@ public class MainGameController implements Runnable {
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
-			System.out.println(p.getNickname() + ": " + sMove);
 			// ottengo informazioni dalla mossa ricevuta
 			aMove = netContrAdapter.moveParser(p, sMove);
 			// provo ad eseguire la mossa richiesta
 			try {
 				moveManager.manageMove(aMove);
-				sendAll();
 			} catch (InvalidMoveException e) {
 				LOGGER.log(Level.INFO, p.getNickname() + " has done an invalid move", e);
 				// il player ha fatto una mossa non valida

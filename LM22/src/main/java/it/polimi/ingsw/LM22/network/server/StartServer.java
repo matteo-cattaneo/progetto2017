@@ -107,12 +107,11 @@ public class StartServer {
 			}
 			// ottengo il nome del player
 			player.setName(player.getIplayer().getName());
+			player.setPassword(player.getIplayer().getPassword());
 			System.out.println("Connected client: " + player.getName());
 			// agiungo il player alla lista della room adatta
-			if (!playerExist(player)) {
-				playerRoom.add(player);
+			if (!playerExist(player, playerRoom))
 				i++;
-			}
 		}
 		/**
 		 * avvio thread della partita (controller) passandogli la lista dei
@@ -126,20 +125,29 @@ public class StartServer {
 	/**
 	 * verifico se un player è già stato inserito in una partita in corso
 	 */
-	private boolean playerExist(PlayerInfo player) throws IOException {
+	private boolean playerExist(PlayerInfo player, List<PlayerInfo> thisRoom) throws IOException {
 		for (ArrayList<PlayerInfo> room : serverInfo)
 			for (PlayerInfo pi : room)
-				if (pi.getName().equals(player.getName())) {
+				if (pi.getName().equals(player.getName()) && pi.getPassword().equals(player.getPassword())) {
+					// se il player si è già connesso e la password è giusta
 					if (pi.getConnected()) {
+						// se è attualmente connesso lo disconnetto
 						pi.getIplayer().showMsg("You are now connected to a new session, Disconnected!");
 						pi.getIplayer().close();
 					}
 					pi.setIplayer(player.getIplayer());
 					pi.getIplayer().showMsg("This is your new session");
 					pi.setConnected(true);
-
+					return true;
+				} else if (pi.getName().equals(player.getName()) && !pi.getPassword().equals(player.getPassword())) {
+					// se il player si è già connesso e la password non è giusta
+					player.getIplayer().showMsg("The password is wrong, try again!");
+					player.getIplayer().close();
 					return true;
 				}
+		// se non trovo il player lo aggiungo alla room libera
+		thisRoom.add(player);
+		player.setPassword(player.getIplayer().getPassword());
 		return false;
 	}
 

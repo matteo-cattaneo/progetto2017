@@ -1,6 +1,9 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.math.BigInteger;
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -535,6 +538,29 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	/**
+	 * richiede la password del giocatore e lo restituisce al chiamante
+	 */
+	@Override
+	public String getPassword() {
+		String password;
+		showMsg("Password: ");
+		password = in.nextLine();
+		// ottengo l'hash della password
+		String hashtext = new String();
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(password.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1, digest);
+			hashtext = bigInt.toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return hashtext;
+	}
+
+	/**
 	 * richiede l'IP del server a cui connettersi e lo restituisce al chiamante
 	 */
 	@Override
@@ -568,6 +594,11 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
+	public void alert(String msg) throws RemoteException {
+		System.err.println(msg);
+	}
+
+	@Override
 	public void connectionOK() {
 		showMsg("Connection established!");
 		showMsg("Wait for the login of other players...");
@@ -579,27 +610,21 @@ public class CLIinterface extends AbstractUI {
 	 * 
 	 */
 	private void showPersonalBoard() throws RemoteException {
-		showMsg("______________________________");
-		msgFormat("%-30s|%n", "| Period: " + game.getPeriod());
-		msgFormat("%-30s|%n", "| Round: " + game.getRound());
-		msgFormat("|_____________________________|%n");
-		msgFormat("%-30s|%n", "| Name: " + getPlayer(name, game).getNickname());
-		msgFormat("%-30s|%n", "| Color: " + getPlayer(name, game).getColor());
-		msgFormat("%-30s|%n", "| ");
+		showMsg("_____________________________________________________________");
+		msgFormat("%-30s|", "| Period: " + game.getPeriod());
+		msgFormat("%-29s|%n", " Name: " + getPlayer(name, game).getNickname());
+		msgFormat("%-30s|", "| Round: " + game.getRound());
+		msgFormat("%-29s|%n", " Color: " + getPlayer(name, game).getColor());
+		msgFormat("|_____________________________|_____________________________|%n");
+
 		// visualizzo i familiari su due righe se non ancora utilizzati
-		msgFormat("%-30s|%n| ", "| Family members:");
-		for (int i = 0; i < 2; i++)
+		msgFormat("%-60s|%n| ", "| Family members:");
+		for (int i = 0; i < 4; i++)
 			if (!getPlayer(name, game).getMembers().get(i).isUsed())
 				msgFormat("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
 			else
 				msgFormat("%-13s| ", "");
-		msgFormat("%n| ");
-		for (int i = 2; i < 4; i++)
-			if (!getPlayer(name, game).getMembers().get(i).isUsed())
-				msgFormat("%-13s| ", MEMBER_COLOR[i] + ": " + getPlayer(name, game).getMembers().get(i).getValue());
-			else
-				msgFormat("%-13s| ", "");
-		msgFormat("%n|_____________________________|__________________%n");
+		msgFormat("%n|___________________________________________________________|%n");
 		msgFormat("%-12s", "| Coins");
 		msgFormat("%-12s", "| Wood");
 		msgFormat("%-12s", "| Stone");
@@ -741,17 +766,10 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	/**
-	 * metodo di riferimento per mostrare la board
+	 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato mostro
+	 * le informazioni del player che ha preso la carta
 	 */
-	@Override
-	public void showBoard(Game game) throws RemoteException {
-		this.game = game;
-		if (timeout == 0)
-			timeout = game.getMoveTimer();
-		/**
-		 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato
-		 * mostro le informazioni del player che ha preso la carta
-		 */
+	private void showTowers() {
 		showMsg("______________________________");
 		msgFormat("%-30s|%n", "| Towers: ");
 		showMsg("|_____________________________|");
@@ -779,7 +797,12 @@ public class CLIinterface extends AbstractUI {
 			showMsg("        |_______________________|_______________________|_______________________|_______________________|");
 
 		}
-		// scomuniche
+	}
+
+	/**
+	 * visualizzo le 3 scomuniche con i player che le hanno ricevute
+	 */
+	private void showExcommunication() {
 		showMsg("______________________________");
 		msgFormat("%-30s|%n", "| Excommunication tile:");
 		showMsg("|_____________________________|");
@@ -791,7 +814,12 @@ public class CLIinterface extends AbstractUI {
 						print(" ( " + p.getNickname() + " )");
 			showMsg("");
 		}
-		// palazzo del consiglio
+	}
+
+	/**
+	 * visualizzo i membri del palazzo del consiglio
+	 */
+	private void showCounsilPalace() {
 		if (!game.getBoardgame().getCouncilPalace().getMembers().isEmpty()) {
 			showMsg("______________________________");
 			msgFormat("%-30s|%n", "| Council Palace members: ");
@@ -802,6 +830,19 @@ public class CLIinterface extends AbstractUI {
 			}
 			showMsg("|_____________________________|");
 		}
+	}
+
+	/**
+	 * metodo di riferimento per mostrare la board
+	 */
+	@Override
+	public void showBoard(Game game) throws RemoteException {
+		this.game = game;
+		if (timeout == 0)
+			timeout = game.getMoveTimer();
+		showTowers();
+		showExcommunication();
+		showCounsilPalace();
 		showMarketSpaces();
 		showBoardTracks();
 		showWorkSpaces();

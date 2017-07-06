@@ -56,4 +56,6 @@ public interface IPlayer extends Remote {
 	public String getLeaderCard() throws IOException;
 
 	public void close() throws IOException;
+
+	public String getPassword() throws IOException;
 }
