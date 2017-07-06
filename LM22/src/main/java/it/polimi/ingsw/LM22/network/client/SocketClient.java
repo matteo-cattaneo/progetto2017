@@ -45,11 +45,11 @@ public class SocketClient implements IConnection {
 		try {
 			// stabilisco connessione con socoket server
 			socket = new Socket(ip, SOCKET_PORT);
+			UI.connectionOK();
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Socket connection error!", e);
 			return;
 		}
-		UI.connectionOK();
 		// inizializzo gli stream di input e output
 		try {
 			socketOut = new ObjectOutputStream(socket.getOutputStream());

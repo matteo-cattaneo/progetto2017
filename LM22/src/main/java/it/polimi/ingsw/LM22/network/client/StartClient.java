@@ -94,7 +94,7 @@ public class StartClient {
 	}
 
 	private static IConnection selectConnectionType(AbstractUI UI) {
-		IConnection client = null;
+		IConnection client;
 		/**
 		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
 		 * e inizializzo con il giusto tipo dinamico
@@ -105,6 +105,8 @@ public class StartClient {
 				client = new RMIClient(UI);
 			} catch (RemoteException e) {
 				LOGGER.log(Level.SEVERE, "Error RMI!", e);
+				UI.printInvalidInput();
+				client = selectConnectionType(UI);
 			}
 			break;
 		case 2:

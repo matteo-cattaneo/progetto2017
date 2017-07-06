@@ -541,7 +541,7 @@ public class CLIinterface extends AbstractUI {
 	@Override
 	public String getIP() {
 		String ip;
-		showMsg("Indirizzo ip server(" + DEFAULT_IP + "): ");
+		showMsg("Server IP Address(" + DEFAULT_IP + "): ");
 		ip = in.nextLine();
 		if ("".equals(ip))
 			ip = DEFAULT_IP;
@@ -570,8 +570,8 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public void connectionOK() {
-		showMsg("Connessione stabilita!");
-		showMsg("Attendi il tuo turno...");
+		showMsg("Connection established!");
+		showMsg("Wait for your turn...");
 	}
 
 	/**

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,11 +70,11 @@ public class StartServer {
 		ArrayList<PlayerInfo> playerRoom = new ArrayList<>();
 		// salvo nel server la nuova lista
 		serverInfo.add(playerRoom);
-		System.out.println("Attesa client...");
+		System.out.println("Waiting for clients...");
 		while (i < 4) {
 			if (i == THIRDPLAYER || i == FOURTHPLAYER) {
 				// avvio il timer di connessione
-				t = attesaLogin(t, conn);
+				t = attesaLogin(t, conn, playerRoom);
 				if (t == 0)
 					break;
 			} else {
@@ -160,9 +159,10 @@ public class StartServer {
 	/**
 	 * verifica la connessione di un client con timeout
 	 */
-	public Integer attesaLogin(Integer t, SocketConnection conn) throws RemoteException, InterruptedException {
+	public Integer attesaLogin(Integer t, SocketConnection conn, ArrayList<PlayerInfo> room)
+			throws InterruptedException, IOException {
 		for (; t > 0; t--) {
-			System.out.println("Mancano " + t + " secondi");
+			printAll("The game starts in " + t + " seconds", room);
 			TimeUnit.SECONDS.sleep(1);
 			if (serverRMI.getClient() != null || conn.getSocket().isConnected()) {
 				t--;
@@ -170,6 +170,14 @@ public class StartServer {
 			}
 		}
 		return t;
+	}
+
+	/**
+	 * invia un messaggio a tutti i player di una room
+	 */
+	public void printAll(String s, ArrayList<PlayerInfo> room) throws IOException {
+		for (PlayerInfo p : room)
+			p.getIplayer().showMsg(s);
 	}
 }
 

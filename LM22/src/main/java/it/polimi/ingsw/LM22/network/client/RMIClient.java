@@ -46,10 +46,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 			IPlayer server = (IPlayer) Naming.lookup("rmi://" + ip + "/MSG");
 			// mando il mio oggetto al server
 			server.login(this);
+			UI.connectionOK();
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			LOGGER.log(Level.SEVERE, "RMI connection error!", e);
 		}
-		UI.connectionOK();
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	}
 
 	@Override
-	public void close() {
+	public void close() throws RemoteException {
 		StartClient.setup();
 	}
 }
