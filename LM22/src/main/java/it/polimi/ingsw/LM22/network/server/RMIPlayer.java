@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -17,7 +19,7 @@ import it.polimi.ingsw.LM22.network.client.IClient;
  */
 
 public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
-
+	private static final Logger logger = Logger.getLogger(RMIPlayer.class.getClass().getSimpleName());
 	private static final long serialVersionUID = -2036349694420489903L;
 	private transient IClient client;
 	private String name;
@@ -124,7 +126,15 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 
 	@Override
 	public void selectLeaderCard(Game game) throws IOException {
-		client.selectLeaderCard(game);
+		new Thread() {
+			public void run() {
+				try {
+					client.selectLeaderCard(game);
+				} catch (RemoteException e) {
+					logger.log(Level.INFO, "Player disconnected!", e);
+				}
+			}
+		}.start();
 	}
 
 	@Override

@@ -46,9 +46,13 @@ public class TestMoveManager extends TestCase {
 		pi3 = new PlayerInfo();
 		pi4 = new PlayerInfo();
 		pi1.setName("Nicola");
-		pi1.setName("Matteo");
-		pi1.setName("Esempio");
-		pi1.setName("Esempio1");
+		pi2.setName("Matteo");
+		pi3.setName("Esempio");
+		pi4.setName("Esempio1");
+		pi1.setIplayer(new NetworkTest(false));
+		pi2.setIplayer(new NetworkTest(false));
+		pi3.setIplayer(new NetworkTest(false));
+		pi4.setIplayer(new NetworkTest(false));
 		pinfolist.add(pi1);
 		pinfolist.add(pi2);
 		pinfolist.add(pi3);
@@ -406,8 +410,8 @@ public class TestMoveManager extends TestCase {
 	}
 
 	/**
-	 * Test if a move fails due to occupation of the tower that increase the
-	 * cost and the player is not able to pay for
+	 * Test if a move fails due to occupation of the tower that increase the cost
+	 * and the player is not able to pay for
 	 * 
 	 * @throws IOException
 	 */
@@ -436,8 +440,8 @@ public class TestMoveManager extends TestCase {
 	}
 
 	/**
-	 * Test if a move fails due to occupation of the tower of another family
-	 * member of the same player (both not Uncolored)
+	 * Test if a move fails due to occupation of the tower of another family member
+	 * of the same player (both not Uncolored)
 	 * 
 	 * @throws IOException
 	 */
@@ -465,9 +469,9 @@ public class TestMoveManager extends TestCase {
 	}
 
 	/**
-	 * Test if a move for a territory card doesn't fail due to Military Points
-	 * leak of the player beacuse he has the Cesare Borgia activated (Leader
-	 * Card that adds NoMilitaryRequestEffect)
+	 * Test if a move for a territory card doesn't fail due to Military Points leak
+	 * of the player beacuse he has the Cesare Borgia activated (Leader Card that
+	 * adds NoMilitaryRequestEffect)
 	 * 
 	 * @throws IOException
 	 */
@@ -500,8 +504,8 @@ public class TestMoveManager extends TestCase {
 	}
 
 	/**
-	 * Test if a move for a territory card fails due to Military Points leak of
-	 * the player
+	 * Test if a move for a territory card fails due to Military Points leak of the
+	 * player
 	 * 
 	 * @throws IOException
 	 */
@@ -531,9 +535,9 @@ public class TestMoveManager extends TestCase {
 	}
 
 	/**
-	 * Test if a move for a card with ResourcePrivilegeEffect as Immediate
-	 * EFfect gives to the player, who has Santa Rita activated, double
-	 * Resources only for (wood, stone, coins, servants)
+	 * Test if a move for a card with ResourcePrivilegeEffect as Immediate EFfect
+	 * gives to the player, who has Santa Rita activated, double Resources only for
+	 * (wood, stone, coins, servants)
 	 * 
 	 * @throws IOException
 	 */

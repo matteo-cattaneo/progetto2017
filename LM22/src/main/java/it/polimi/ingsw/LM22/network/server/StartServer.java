@@ -43,7 +43,6 @@ public class StartServer {
 			startServer.start();
 		} catch (IOException | InterruptedException e) {
 			logger.log(Level.SEVERE, "Server terminato!", e);
-			main(args);
 		}
 	}
 
@@ -62,8 +61,8 @@ public class StartServer {
 	}
 
 	/**
-	 * metodo che attende la connessione del client su entrambe le connessioni e
-	 * al raggiungimento dei requisiti crea una partita
+	 * metodo che attende la connessione del client su entrambe le connessioni e al
+	 * raggiungimento dei requisiti crea una partita
 	 */
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
@@ -81,17 +80,15 @@ public class StartServer {
 					break;
 			} else {
 				/**
-				 * verifico se si è connesso un client su una delle
-				 * dueconnessioni
+				 * verifico se si è connesso un client su una delle dueconnessioni
 				 */
 				while (serverRMI.getClient() == null && !conn.getSocket().isConnected()) {
 					Thread.sleep(1);
 				}
 			}
 			/**
-			 * a secondo del tipo di client connesso effettuo la giusta
-			 * inizializzazione del player e la reinizializzazione dell' oggetto
-			 * di connessione
+			 * a secondo del tipo di client connesso effettuo la giusta inizializzazione del
+			 * player e la reinizializzazione dell' oggetto di connessione
 			 */
 			PlayerInfo player = new PlayerInfo();
 			if (conn.getSocket().isConnected()) {
@@ -114,8 +111,7 @@ public class StartServer {
 				i++;
 		}
 		/**
-		 * avvio thread della partita (controller) passandogli la lista dei
-		 * giocatori
+		 * avvio thread della partita (controller) passandogli la lista dei giocatori
 		 */
 		executor.submit(new MainGameController(playerRoom));
 		cleanServer();

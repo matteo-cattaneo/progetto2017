@@ -79,8 +79,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * permetto al giocatore di scegliere una personal bonus tile in ordine di
-	 * gioco inverso
+	 * permetto al giocatore di scegliere una personal bonus tile in ordine di gioco
+	 * inverso
 	 */
 	private void personalTileSelection() {
 		for (int i = game.getPlayersOrder().size() - 1; i >= 0; i--) {
@@ -115,8 +115,11 @@ public class MainGameController implements Runnable {
 				// se il giocatore è connesso e non ha ancora scelto
 				if (checkPlayer(p))
 					try {
+						leaderSelected[j] = "";
 						// ottengo il valore della carta la carta selezionata
-						leaderSelected[j] = getIPlayer(p).getLeaderCard();
+						while (leaderSelected[j].equals("")) {
+							leaderSelected[j] = getIPlayer(p).getLeaderCard();
+						}
 						counter++;
 					} catch (IOException e) {
 						logger.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
@@ -180,8 +183,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * vero inizio della partita, viene visualizzata la board e permette di
-	 * giocare al primo giocatore
+	 * vero inizio della partita, viene visualizzata la board e permette di giocare
+	 * al primo giocatore
 	 */
 	private void startGame() {
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
@@ -205,8 +208,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * turno di un giocatore: può fare tutte la mosse che vuole finche non
-	 * seleziona la mossa End
+	 * turno di un giocatore: può fare tutte la mosse che vuole finche non seleziona
+	 * la mossa End
 	 */
 	private void playTurn(Player p) {
 		AbstractMove aMove;
@@ -335,8 +338,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * gestisce la fase di rimozione dei player dalla lista della room che
-	 * conteneva la partita terminata
+	 * gestisce la fase di rimozione dei player dalla lista della room che conteneva
+	 * la partita terminata
 	 */
 	private void disconnectRoomPlayers() {
 		for (int i = 0; i < playerRoom.size();) {
@@ -384,11 +387,10 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * metodo che gestisce l'attribuzione dei punti vittoria in base al numero
-	 * di carte territorio o personaggio che ogni player ha ottenuto +
-	 * attribuzione dei punti vittoria dati dalle VentureCards --> in questo
-	 * caso devo fare il controllo su alcuni tipi di scomuniche del terzo
-	 * periodo
+	 * metodo che gestisce l'attribuzione dei punti vittoria in base al numero di
+	 * carte territorio o personaggio che ogni player ha ottenuto + attribuzione dei
+	 * punti vittoria dati dalle VentureCards --> in questo caso devo fare il
+	 * controllo su alcuni tipi di scomuniche del terzo periodo
 	 */
 	private void manageVictoryPointDueToCards(Game game) {
 		for (Player p : game.getPlayersOrder()) {
@@ -446,8 +448,8 @@ public class MainGameController implements Runnable {
 	 * metodo che gestisce l'attribuzione di punti vittoria in base al numero di
 	 * risorse possedute da ogni player (1 punto vittoria per ogni 5 risorse
 	 * wood-stone-coins-servants del player contate tutte insieme ) --> qui
-	 * controllo la presenza di scomuniche del terzo periodo che non fanno
-	 * prendere certi punti
+	 * controllo la presenza di scomuniche del terzo periodo che non fanno prendere
+	 * certi punti
 	 */
 	private void manageVictoryPointsDueToResource(Player p) {
 		for (Effect e : p.getEffects()) {
@@ -474,10 +476,10 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente
-	 * x councilPrivilege e permette di scegliere x councilPrivilege diversi, si
-	 * avrà un ciclo che permette di scegliere tra le varie possibilità e al
-	 * ciclo dopo si toglie il tipo di risorsa già scelto
+	 * metodo che viene invocato ogni volta che ottengo un effetto comprendente x
+	 * councilPrivilege e permette di scegliere x councilPrivilege diversi, si avrà
+	 * un ciclo che permette di scegliere tra le varie possibilità e al ciclo dopo
+	 * si toglie il tipo di risorsa già scelto
 	 */
 	public Resource selectCouncilPrivilege(Integer councilNumber, Player player) throws IOException {
 		Resource resource = new Resource(0, 0, 0, 0, 0, 0, 0);
@@ -566,8 +568,8 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * metodo che gestisce la richiesta del numero di servitori che il player
-	 * vuole aggiungere ad un effetto (sia di cardAction che di WorkAction)
+	 * metodo che gestisce la richiesta del numero di servitori che il player vuole
+	 * aggiungere ad un effetto (sia di cardAction che di WorkAction)
 	 */
 	public Resource askForServants(Player player) throws IOException {
 		Resource servants = NOTHING.copy();
@@ -603,18 +605,18 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore
-	 * se desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo
-	 * il metodo che toglie i punti fede del giocatore e gli dà i corrispettivi
-	 * punti vittoria + deve controllare se ha Sisto VI attivato
+	 * metodo invocato se giveSupport() restituisce true e chiede al giocatore se
+	 * desidera dare o no il sostegno alla Chiesa --> se si allora invochiamo il
+	 * metodo che toglie i punti fede del giocatore e gli dà i corrispettivi punti
+	 * vittoria + deve controllare se ha Sisto VI attivato
 	 */
 	public boolean askSupport(Player player) throws IOException {
 		return getIPlayer(player).supportRequest();
 	}
 
 	/**
-	 * metodo che richiede al player il colore su cui vuole attivare un
-	 * determinato effetto
+	 * metodo che richiede al player il colore su cui vuole attivare un determinato
+	 * effetto
 	 */
 	public String askForColor(Player player) throws IOException {
 		return getIPlayer(player).colorRequest();
@@ -644,8 +646,7 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * chiedo al player da quale card vuole copiare l'effetto e restituisco il
-	 * nome
+	 * chiedo al player da quale card vuole copiare l'effetto e restituisco il nome
 	 */
 	public String askToPlayerForEffectToCopy(Player player, List<LeaderCard> lcards) throws IOException {
 		return getIPlayer(player).askToPlayerForEffectToCopy(lcards);

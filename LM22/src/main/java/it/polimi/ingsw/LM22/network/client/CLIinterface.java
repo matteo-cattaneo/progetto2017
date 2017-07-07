@@ -66,7 +66,7 @@ public class CLIinterface extends AbstractUI {
 	private boolean memberMove = false;
 	private long timeout = 0;
 	private long time;
-	private String leaderSelected;
+	private String leaderSelected = "";
 
 	/**
 	 * permette di indicare se è possibile muovere un familiare
@@ -171,8 +171,8 @@ public class CLIinterface extends AbstractUI {
 			cardName = "";
 			StartClient.logger.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
-			System.err.println("Move time expired, now you have been disconnected!");
-			System.err.println("Please login again...");
+			alert("Move time expired, now you have been disconnected!");
+			alert("Please login again...");
 			System.exit(0);
 		}
 		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
@@ -591,7 +591,7 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	@Override
-	public void alert(String msg) throws RemoteException {
+	public void alert(String msg) {
 		System.err.println(msg);
 	}
 
@@ -763,8 +763,8 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	/**
-	 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato mostro
-	 * le informazioni del player che ha preso la carta
+	 * visualizzo le torri su 4 colonne. Se uno spazio azione è occupato mostro le
+	 * informazioni del player che ha preso la carta
 	 */
 	private void showTowers() {
 		showMsg("______________________________");
@@ -975,8 +975,8 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	/**
-	 * metodo che permette alla utente di selezionare il bonus che vuole in
-	 * cambio del privilegio del consiglio (PdC)
+	 * metodo che permette alla utente di selezionare il bonus che vuole in cambio
+	 * del privilegio del consiglio (PdC)
 	 */
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
@@ -1282,8 +1282,8 @@ public class CLIinterface extends AbstractUI {
 	}
 
 	/**
-	 * permette all utente di inserire in input solo numeri gestendo le
-	 * eccezioni di convesione da stringa e il timeout della mossa
+	 * permette all utente di inserire in input solo numeri gestendo le eccezioni di
+	 * convesione da stringa e il timeout della mossa
 	 */
 	private Integer input() {
 		Integer result = -1;
@@ -1312,8 +1312,8 @@ public class CLIinterface extends AbstractUI {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			StartClient.logger.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
-			System.err.println("Move time expired, now you have been disconnected!");
-			System.err.println("Please login again...");
+			alert("Move time expired, now you have been disconnected!");
+			alert("Please login again...");
 			System.exit(0);
 		}
 		timeout = timeout - (System.currentTimeMillis() / 1000 - time);
@@ -1366,6 +1366,9 @@ public class CLIinterface extends AbstractUI {
 
 	@Override
 	public String getLeaderCard() throws RemoteException {
-		return leaderSelected;
+		String cardName;
+		cardName = new String(leaderSelected);
+		leaderSelected = "";
+		return cardName;
 	}
 }

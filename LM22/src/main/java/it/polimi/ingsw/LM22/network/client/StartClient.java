@@ -46,20 +46,21 @@ public class StartClient {
 					new String(Files.readAllBytes(Paths.get(".//JSON//SplashScreen.txt")), StandardCharsets.UTF_8));
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Splash screen not found!", e);
+			System.out.println("Splash screen not found!");
 		}
 		// stampo la selezione dell'intefaccia
 		AbstractUI ui = printUISelection();
 		// richiedo tipo connessione
 		IConnection client = selectConnectionType(ui);
 		/**
-		 * con i metodi relativi alla prpria connessione e UI, effettuo la
-		 * connessione
+		 * con i metodi relativi alla prpria connessione e UI, effettuo la connessione
 		 */
 
 		try {
 			client.connect(ui.getName(), ui.getPassword(), ui.getIP());
 		} catch (RemoteException e) {
 			logger.log(Level.SEVERE, "Connection server error!", e);
+			System.out.println("Connection server error!");
 		}
 	}
 
@@ -85,6 +86,7 @@ public class StartClient {
 			try {
 				option = Integer.parseInt(stdin.nextLine());
 			} catch (NumberFormatException e) {
+				logger.log(Level.SEVERE, "Invalid input", e);
 				System.out.println("Invalid input");
 				option = -1;
 			}
@@ -109,8 +111,8 @@ public class StartClient {
 	private static IConnection selectConnectionType(AbstractUI ui) {
 		IConnection client;
 		/**
-		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
-		 * e inizializzo con il giusto tipo dinamico
+		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione e
+		 * inizializzo con il giusto tipo dinamico
 		 */
 		switch (ui.showConnectionSelection()) {
 		case 1:

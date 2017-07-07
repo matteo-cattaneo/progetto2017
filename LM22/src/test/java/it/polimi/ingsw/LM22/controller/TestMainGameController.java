@@ -32,8 +32,6 @@ public class TestMainGameController extends TestCase {
 		p2.setIplayer((IPlayer) new NetworkTest(true));
 		room.add(p2);
 		mainGC = new MainGameController(room);
-		Game game = mainGC.getGame();
-		System.out.println(game.getPlayersOrder().get(0));
 	}
 
 	@Test
