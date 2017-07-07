@@ -35,7 +35,7 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.WorkBonusEffect;
 
 public class MoveManager {
-	private static final Logger LOGGER = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
+	private static final Logger logger = Logger.getLogger(MoveManager.class.getClass().getSimpleName());
 	private static final String UNCOLORED = "Uncolored";
 	private static final String ACTION = "Action";
 	private static final Integer SINGLE_PRIVILEGE = 1;
@@ -74,7 +74,7 @@ public class MoveManager {
 			method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 			checkResult = (boolean) method.invoke(this, new Object[] { move });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		if (checkResult) {
 			try {
@@ -82,7 +82,7 @@ public class MoveManager {
 				method = this.getClass().getMethod(name, new Class[] { move.getClass() });
 				method.invoke(this, new Object[] { move });
 			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		} else
 			throw new InvalidMoveException();
@@ -743,7 +743,7 @@ public class MoveManager {
 				mainGame.getIPlayer(move.getPlayer()).showMsg("You must wait at most "
 						+ ((game.getPlayersOrder().size() - 1) * game.getMoveTimer()) + " seconds");
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Player " + move.getPlayer().getNickname() + " disconnected!", e);
+				logger.log(Level.SEVERE, "Player " + move.getPlayer().getNickname() + " disconnected!", e);
 			}
 	}
 }

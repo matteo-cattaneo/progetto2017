@@ -45,7 +45,7 @@ public class MainGameController implements Runnable {
 	private static final Resource FIVE_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 5);
 	private static final Resource TWO_VICTORY = new Resource(0, 0, 0, 0, 0, 0, 2);
 
-	private static final Logger LOGGER = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
+	private static final Logger logger = Logger.getLogger(MainGameController.class.getClass().getSimpleName());
 	private Game game = new Game();
 	private List<PlayerInfo> playerRoom;
 	private VaticanReportManager vaticanReportManager = new VaticanReportManager();
@@ -93,7 +93,7 @@ public class MainGameController implements Runnable {
 					game.getPersonalBonusTile()[selection] = null;
 				} catch (IOException e) {
 					disconnectPlayer(p);
-					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
+					logger.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
 				}
 		}
 	}
@@ -119,7 +119,7 @@ public class MainGameController implements Runnable {
 						leaderSelected[j] = getIPlayer(p).getLeaderCard();
 						counter++;
 					} catch (IOException e) {
-						LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
+						logger.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
 						disconnectPlayer(p);
 					}
 			}
@@ -173,7 +173,7 @@ public class MainGameController implements Runnable {
 				try {
 					getIPlayer(p).selectLeaderCard(game);
 				} catch (IOException e) {
-					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
+					logger.log(Level.INFO, p.getNickname() + DISCONNECTED, e);
 					disconnectPlayer(p);
 				}
 		}
@@ -184,8 +184,6 @@ public class MainGameController implements Runnable {
 	 * giocare al primo giocatore
 	 */
 	private void startGame() {
-		// invio a tutti il nuovo model
-		// sendAll();
 		for (int countTurn = 0; countTurn < 4; countTurn++) {
 			// inizio turno
 			for (Player p : game.getPlayersOrder()) {
@@ -215,11 +213,12 @@ public class MainGameController implements Runnable {
 		for (String sMove = ""; !sMove.startsWith("End@");) {
 			// inizio di una mossa
 			try {
+				// invio a tutti il nuovo model
 				sendAll();
 				// richiedo mossa a player
 				sMove = getIPlayer(p).yourTurn();
 			} catch (IOException e) {
-				LOGGER.log(Level.INFO, "Lost connection with " + p.getNickname(), e);
+				logger.log(Level.INFO, "Lost connection with " + p.getNickname(), e);
 				// ho perso la connessione con il client
 				sMove = "End@Disconnect@";
 			}
@@ -229,7 +228,7 @@ public class MainGameController implements Runnable {
 			try {
 				moveManager.manageMove(aMove);
 			} catch (InvalidMoveException e) {
-				LOGGER.log(Level.INFO, p.getNickname() + " has done an invalid move", e);
+				logger.log(Level.INFO, p.getNickname() + " has done an invalid move", e);
 				// il player ha fatto una mossa non valida
 				try {
 					if (sMove.startsWith("Leader"))
@@ -238,7 +237,7 @@ public class MainGameController implements Runnable {
 						getIPlayer(p).showMsg("Invalid member move!!!");
 				} catch (IOException e1) {
 					// player mossa errata + client disconnesso
-					LOGGER.log(Level.INFO, p.getNickname() + DISCONNECTED, e1);
+					logger.log(Level.INFO, p.getNickname() + DISCONNECTED, e1);
 					disconnectPlayer(p);
 				}
 			}
@@ -285,11 +284,11 @@ public class MainGameController implements Runnable {
 				if (playerRoom.get(j).getConnected())
 					playerRoom.get(j).getIplayer().showBoard(game);
 			} catch (IOException e) {
-				LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e);
+				logger.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e);
 				try {
 					disconnectPlayer(getPlayer(playerRoom.get(j).getIplayer()));
 				} catch (RemoteException e1) {
-					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
+					logger.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
 				}
 			}
 		}
@@ -309,7 +308,7 @@ public class MainGameController implements Runnable {
 				showMsgAll("Vatican Report!");
 				vaticanReportManager.manageVaticanReport(game, this);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Vatican Report error!", e);
+				logger.log(Level.SEVERE, "Vatican Report error!", e);
 			}
 	}
 
@@ -320,7 +319,7 @@ public class MainGameController implements Runnable {
 		try {
 			turnInizializator.initializeTurn(game);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Turn initializing error!", e);
+			logger.log(Level.SEVERE, "Turn initializing error!", e);
 		}
 	}
 
@@ -331,7 +330,7 @@ public class MainGameController implements Runnable {
 		manageVictoryPointDueToCards(game);
 		manageMilitaryStandingPoints(game);
 		electWinner(game);
-		LOGGER.log(Level.INFO, "Game ended");
+		logger.log(Level.INFO, "Game ended");
 		disconnectRoomPlayers();
 	}
 
@@ -344,7 +343,7 @@ public class MainGameController implements Runnable {
 			try {
 				playerRoom.get(i).getIplayer().close();
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Player already disconnected!", e);
+				logger.log(Level.SEVERE, "Player already disconnected!", e);
 			}
 			playerRoom.remove(i);
 		}
@@ -539,7 +538,7 @@ public class MainGameController implements Runnable {
 				try {
 					playerRoom.get(j).getIplayer().close();
 				} catch (IOException e) {
-					LOGGER.log(Level.SEVERE, "Player already disconnected!", e);
+					logger.log(Level.SEVERE, "Player already disconnected!", e);
 				}
 				playerRoom.get(j).setConnected(false);
 			}
@@ -556,14 +555,14 @@ public class MainGameController implements Runnable {
 				if (playerRoom.get(j).getConnected())
 					playerRoom.get(j).getIplayer().showMsg(msg);
 			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);
+				logger.log(Level.SEVERE, "Error sending '" + msg + "' to all!", e);
 				try {
 					disconnectPlayer(getPlayer(playerRoom.get(j).getIplayer()));
 				} catch (RemoteException e1) {
-					LOGGER.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
+					logger.log(Level.INFO, playerRoom.get(j).getName() + DISCONNECTED, e1);
 				}
 			}
-		LOGGER.log(Level.INFO, msg);
+		logger.log(Level.INFO, msg);
 	}
 
 	/**
@@ -590,7 +589,7 @@ public class MainGameController implements Runnable {
 				param[0] = effect.getCardType();
 			param[1] = Integer.parseInt(getIPlayer(player).floorRequest());
 		} catch (NumberFormatException e) {
-			LOGGER.log(Level.SEVERE, "Error Number Format Exception!", e);
+			logger.log(Level.SEVERE, "Error Number Format Exception!", e);
 		}
 		return param;
 	}

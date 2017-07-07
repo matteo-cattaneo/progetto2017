@@ -14,7 +14,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.BuildingCard;
 import it.polimi.ingsw.LM22.model.CharacterCard;
@@ -38,8 +37,6 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
  * interfacciarsi con la CLI
  */
 public class CLIinterface extends AbstractUI {
-	private static final Logger LOGGER = Logger.getLogger(CLIinterface.class.getClass().getSimpleName());
-
 	private static final String DEFAULT_IP = "localhost";
 	private static final String UNCOLORED = "Uncolored";
 	private static final String RESTART = "Restart@";
@@ -172,7 +169,7 @@ public class CLIinterface extends AbstractUI {
 			cardName = future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			cardName = "";
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			StartClient.logger.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			System.err.println("Please login again...");
@@ -555,7 +552,7 @@ public class CLIinterface extends AbstractUI {
 			BigInteger bigInt = new BigInteger(1, digest);
 			hashtext = bigInt.toString(16);
 		} catch (NoSuchAlgorithmException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			StartClient.logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return hashtext;
 	}
@@ -1313,7 +1310,7 @@ public class CLIinterface extends AbstractUI {
 			// client
 			result = future.get(timeout, TimeUnit.SECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			StartClient.logger.log(Level.SEVERE, e.getMessage(), e);
 			move = "End@Disconnect@";
 			System.err.println("Move time expired, now you have been disconnected!");
 			System.err.println("Please login again...");

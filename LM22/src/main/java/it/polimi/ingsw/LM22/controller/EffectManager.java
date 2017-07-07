@@ -37,7 +37,7 @@ import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class EffectManager {
 
-	private static final Logger LOGGER = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
+	private static final Logger logger = Logger.getLogger(EffectManager.class.getClass().getSimpleName());
 	private static final String MANAGE = "Manage";
 	private static final String INVALID_DUE_TO_CARD_EFFECT = "User has done an Invalid Move due to Card Effect";
 	private static final Integer FIRST_CHANGE = 1;
@@ -69,7 +69,7 @@ public class EffectManager {
 			if (metodo != null)
 				metodo.invoke(this, new Object[] { effect, sum });
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -169,7 +169,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Effect lost!");
-			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
+			logger.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 	}
 
@@ -187,7 +187,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
+			logger.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 
 	}
@@ -259,7 +259,7 @@ public class EffectManager {
 				metodo.invoke(this, new Object[] { effect });
 			}
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -285,7 +285,7 @@ public class EffectManager {
 			moveManager.manageMove(move);
 		} catch (InvalidMoveException e) {
 			mainGC.getIPlayer(player).showMsg("Work lost!");
-			LOGGER.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
+			logger.log(Level.INFO, INVALID_DUE_TO_CARD_EFFECT, e);
 		}
 
 	}

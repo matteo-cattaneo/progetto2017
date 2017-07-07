@@ -71,8 +71,8 @@ import it.polimi.ingsw.LM22.model.leader.ResourceRequest;
 import it.polimi.ingsw.LM22.model.leader.WorkAction;
 
 public class FileParser {
-	private static final String JSONpath = ".//JSON//";
-	private static final Integer nExTile = 7;
+	private static final String JSONPATH = ".//JSON//";
+	private static final Integer NUM_EXTILE = 7;
 
 	/**
 	 * carica da file le carte sviluppo
@@ -80,13 +80,13 @@ public class FileParser {
 	public void getDevCards(Game game) throws IOException {
 		FileParser f = new FileParser();
 		// definisco i sotto tipi per gli effetti immediati e parmanenti
-		RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm = RuntimeTypeAdapterFactory
+		RuntimeTypeAdapterFactory<ImmediateEffect> adapterImm = RuntimeTypeAdapterFactory
 				.of(ImmediateEffect.class, "type").registerSubtype(ResourcePrivilegeEffect.class)
 				.registerSubtype(WorkActionEffect.class).registerSubtype(ResourceToResourceEffect.class)
 				.registerSubtype(CardToResourceEffect.class).registerSubtype(NoEffect.class)
 				.registerSubtype(ChangeEffect.class).registerSubtype(CardActionEffect.class)
 				.registerSubtype(DoubleChangeEffect.class).registerSubtype(ChangeToPrivilegeEffect.class);
-		RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm = RuntimeTypeAdapterFactory
+		RuntimeTypeAdapterFactory<PermanentEffect> adapterPerm = RuntimeTypeAdapterFactory
 				.of(PermanentEffect.class, "type").registerSubtype(NoPermanentEffect.class)
 				.registerSubtype(WorkBonusEffect.class).registerSubtype(ColorCardBonusEffect.class)
 				.registerSubtype(NoCardSpaceBonusEffect.class);
@@ -102,13 +102,13 @@ public class FileParser {
 		}.getType();
 
 		// chiamo la funzione loadCards che restituisce
-		ArrayList<BuildingCard> bCards = f.<ArrayList<BuildingCard>>loadDevCards("BuildingCard", AdapterImm,
-				AdapterPerm, bType);
-		ArrayList<CharacterCard> cCards = f.<ArrayList<CharacterCard>>loadDevCards("CharacterCard", AdapterImm,
-				AdapterPerm, cType);
-		ArrayList<TerritoryCard> tCards = f.<ArrayList<TerritoryCard>>loadDevCards("TerritoryCard", AdapterImm,
-				AdapterPerm, tType);
-		ArrayList<VentureCard> vCards = f.<ArrayList<VentureCard>>loadDevCards("VentureCard", AdapterImm, AdapterPerm,
+		ArrayList<BuildingCard> bCards = f.<ArrayList<BuildingCard>>loadDevCards("BuildingCard", adapterImm,
+				adapterPerm, bType);
+		ArrayList<CharacterCard> cCards = f.<ArrayList<CharacterCard>>loadDevCards("CharacterCard", adapterImm,
+				adapterPerm, cType);
+		ArrayList<TerritoryCard> tCards = f.<ArrayList<TerritoryCard>>loadDevCards("TerritoryCard", adapterImm,
+				adapterPerm, tType);
+		ArrayList<VentureCard> vCards = f.<ArrayList<VentureCard>>loadDevCards("VentureCard", adapterImm, adapterPerm,
 				vType);
 		// importo le carte nell'oggetto game
 		game.setBuildingCards(bCards);
@@ -117,12 +117,12 @@ public class FileParser {
 		game.setVentureCards(vCards);
 	}
 
-	private <T> T loadDevCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> AdapterImm,
-			RuntimeTypeAdapterFactory<PermanentEffect> AdapterPerm, Type type) throws IOException {
+	private <T> T loadDevCards(String fileName, RuntimeTypeAdapterFactory<ImmediateEffect> adapterImm,
+			RuntimeTypeAdapterFactory<PermanentEffect> adapterPerm, Type type) throws IOException {
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + fileName + ".json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + fileName + ".json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
-		Gson gson = new GsonBuilder().registerTypeAdapterFactory(AdapterImm).registerTypeAdapterFactory(AdapterPerm)
+		Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapterImm).registerTypeAdapterFactory(adapterPerm)
 				.create();
 		// ritorno le carte con il tipo generico T (specificato alla chiamata)
 		return gson.fromJson(text, type);
@@ -145,7 +145,7 @@ public class FileParser {
 		Type lType = new TypeToken<ArrayList<LeaderCard>>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "LeaderCard.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "LeaderCard.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(req).registerTypeAdapterFactory(effect).create();
 		ArrayList<LeaderCard> lCards = gson.fromJson(text, lType);
@@ -159,7 +159,7 @@ public class FileParser {
 		Type type = new TypeToken<CouncilSpace>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "CouncilSpace.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "CouncilSpace.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().create();
 		CouncilSpace councilPalace = gson.fromJson(text, type);
@@ -173,7 +173,7 @@ public class FileParser {
 		Type type = new TypeToken<MarketSpace[]>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "MarketSpace.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "MarketSpace.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().create();
 		MarketSpace[] marketSpace = gson.fromJson(text, type);
@@ -187,7 +187,7 @@ public class FileParser {
 		Type type = new TypeToken<Resource[]>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "FaithGridReward.json")),
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "FaithGridReward.json")),
 				StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().create();
@@ -204,7 +204,7 @@ public class FileParser {
 		Type type = new TypeToken<PersonalBonusTile[]>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "PersonalBonusTile.json")),
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "PersonalBonusTile.json")),
 				StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().create();
@@ -219,7 +219,7 @@ public class FileParser {
 		Type type = new TypeToken<Tower[]>() {
 		}.getType();
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "CardSpace.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "CardSpace.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().create();
 		Tower[] towers = gson.fromJson(text, type);
@@ -239,14 +239,15 @@ public class FileParser {
 				.registerSubtype(NoFirstTurnEx.class).registerSubtype(NoMarketEx.class)
 				.registerSubtype(ResourceMalusEx.class).registerSubtype(WorkMalusEx.class);
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "ExCommunication.json")),
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "ExCommunication.json")),
 				StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		Gson gson = new GsonBuilder().registerTypeAdapterFactory(effect).create();
-		ExCommunication[] ExComm = gson.fromJson(text, type);
+		ExCommunication[] exComm = gson.fromJson(text, type);
 		for (int i = 0; i < 3; i++) {
 			Random r = new Random();
-			game.getBoardgame().getFaithGrid().getExCommunicationTiles().add(ExComm[r.nextInt(nExTile) + i * nExTile]);
+			game.getBoardgame().getFaithGrid().getExCommunicationTiles()
+					.add(exComm[r.nextInt(NUM_EXTILE) + i * NUM_EXTILE]);
 		}
 	}
 
@@ -255,7 +256,7 @@ public class FileParser {
 	 */
 	public void getMoveTimeouts(Game game) throws IOException {
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "Timeouts.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		JsonObject jobj = new Gson().fromJson(text, JsonObject.class);
 		game.setMoveTimer(Integer.parseInt(jobj.get("move").toString()));
@@ -266,7 +267,7 @@ public class FileParser {
 	 */
 	public static Integer getLoginTimeouts() throws IOException {
 		// ottengo il contenuto del file
-		String text = new String(Files.readAllBytes(Paths.get(JSONpath + "Timeouts.json")), StandardCharsets.UTF_8);
+		String text = new String(Files.readAllBytes(Paths.get(JSONPATH + "Timeouts.json")), StandardCharsets.UTF_8);
 		// genero l'oggetto deserializzatore GSON
 		JsonObject jobj = new Gson().fromJson(text, JsonObject.class);
 		return Integer.parseInt(jobj.get("login").toString());

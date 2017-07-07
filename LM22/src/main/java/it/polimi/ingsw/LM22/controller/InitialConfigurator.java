@@ -16,7 +16,7 @@ import it.polimi.ingsw.LM22.model.WorkSpace;
 import it.polimi.ingsw.LM22.network.server.PlayerInfo;
 
 public class InitialConfigurator extends TurnInizializator {
-	private static final Logger LOGGER = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
+	private static final Logger logger = Logger.getLogger(InitialConfigurator.class.getClass().getSimpleName());
 	private FileParser fileParser = new FileParser();
 	private List<PlayerInfo> playerRoom;
 	private static final Integer BASE_WOOD_STONE = 2;
@@ -65,7 +65,7 @@ public class InitialConfigurator extends TurnInizializator {
 		try {
 			loadConfiguration(game);
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Errore nel caricamento dei file JSON", e);
+			logger.log(Level.SEVERE, "Errore nel caricamento dei file JSON", e);
 		}
 		giveInitialResources(game);
 		mixCards(game);
@@ -77,7 +77,7 @@ public class InitialConfigurator extends TurnInizializator {
 	 * inizializzo i giocatori con i dati forniti dal network
 	 */
 	private void setupPlayers(Game game, List<PlayerInfo> playerRoom) {
-		Player players[] = new Player[playerRoom.size()];
+		Player[] players = new Player[playerRoom.size()];
 		game.setPlayers(players);
 		for (int i = 0; i < game.getPlayers().length; i++) {
 			players[i] = new Player(playerRoom.get(i).getName(), PLAYER_COLOR[i]);

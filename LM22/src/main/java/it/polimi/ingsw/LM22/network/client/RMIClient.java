@@ -5,7 +5,6 @@ import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -15,15 +14,14 @@ import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 import it.polimi.ingsw.LM22.network.server.IPlayer;
 
 public class RMIClient extends UnicastRemoteObject implements IClient, IConnection {
-	private final transient Logger LOGGER = Logger.getLogger(RMIClient.class.getClass().getSimpleName());
 	private static final long serialVersionUID = 5918010069011921777L;
 	private String move;
 	private String name;
 	private String password;
-	private transient AbstractUI UI;
+	private transient AbstractUI ui;
 
-	public RMIClient(AbstractUI UI) throws RemoteException {
-		this.UI = UI;
+	public RMIClient(AbstractUI ui) throws RemoteException {
+		this.ui = ui;
 	}
 
 	@Override
@@ -53,9 +51,10 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 			IPlayer server = (IPlayer) Naming.lookup("rmi://" + ip + "/MSG");
 			// mando il mio oggetto al server
 			server.login(this);
-			UI.connectionOK();
+			ui.connectionOK();
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			LOGGER.log(Level.SEVERE, "RMI connection error!", e);
+			StartClient.logger.log(Level.SEVERE, "RMI connection close!", e);
+			ui.showMsg("RMI connection close!");
 			StartClient.setup();
 		}
 	}
@@ -65,8 +64,8 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	 */
 	@Override
 	public void play() throws RemoteException {
-		UI.printMoveMenu();
-		move = UI.getMove();
+		ui.printMoveMenu();
+		move = ui.getMove();
 	}
 
 	/**
@@ -75,79 +74,79 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 
 	@Override
 	public void showBoard(Game game) throws RemoteException {
-		UI.showBoard(game);
+		ui.showBoard(game);
 	}
 
 	@Override
 	public String councilRequest(Integer number) throws RemoteException {
-		return UI.councilRequest(number);
+		return ui.councilRequest(number);
 	}
 
 	@Override
 	public String servantsRequest() throws RemoteException {
-		return UI.printServantsAddictionMenu();
+		return ui.printServantsAddictionMenu();
 	}
 
 	@Override
 	public String towerRequest() throws RemoteException {
-		return UI.printTowersMenu();
+		return ui.printTowersMenu();
 	}
 
 	@Override
 	public String floorRequest() throws RemoteException {
-		return UI.printLevelsMenu();
+		return ui.printLevelsMenu();
 	}
 
 	@Override
 	public void showMsg(String msg) throws RemoteException {
 		if (msg.contains("member"))
-			UI.setMemberMove(false);
-		UI.alert(msg);
+			ui.setMemberMove(false);
+		ui.alert(msg);
 	}
 
 	@Override
 	public boolean supportRequest() throws RemoteException {
-		return UI.printSupportMenu();
+		return ui.printSupportMenu();
 	}
 
 	@Override
 	public String colorRequest() throws RemoteException {
-		return UI.printColorMenu();
+		return ui.printColorMenu();
 	}
 
 	@Override
 	public Integer ventureCostRequest(VentureCard vc) throws RemoteException {
-		return UI.printVentureCostMenu(vc);
+		return ui.printVentureCostMenu(vc);
 	}
 
 	@Override
 	public boolean changeRequest(Resource[] exchange) throws RemoteException {
-		return UI.printChangeMenu(exchange);
+		return ui.printChangeMenu(exchange);
 	}
 
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {
-		return UI.printDoubleChangeMenu(effect);
+		return ui.printDoubleChangeMenu(effect);
 	}
 
 	@Override
 	public String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException {
-		return UI.askToPlayerForEffectToCopy(lcards);
+		return ui.askToPlayerForEffectToCopy(lcards);
 	}
 
 	@Override
 	public Integer selectPersonalTile(Game game) throws RemoteException {
-		return UI.selectPersonalTile(game);
+		return ui.selectPersonalTile(game);
 	}
 
 	@Override
 	public void selectLeaderCard(Game game) throws RemoteException {
-		UI.selectLeaderCard(game);
+		ui.selectLeaderCard(game);
 	}
 
 	@Override
 	public String getLeaderCard() throws RemoteException {
-		return UI.getLeaderCard();
+		return ui.getLeaderCard();
 	}
 
 	@Override

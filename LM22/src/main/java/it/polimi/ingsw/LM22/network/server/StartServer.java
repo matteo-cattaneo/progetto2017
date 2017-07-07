@@ -20,10 +20,10 @@ import it.polimi.ingsw.LM22.controller.MainGameController;
  * room di gioco
  */
 public class StartServer {
-	private static final Logger LOGGER = Logger.getLogger(StartServer.class.getClass().getSimpleName());
+	private static final Logger logger = Logger.getLogger(StartServer.class.getClass().getSimpleName());
 	private static final int SOCKET_PORT = 1337;
 	private static final int RMI_PORT = 1099;
-	private Integer TIMER;
+	private Integer timer;
 	private static final int THIRDPLAYER = 2;
 	private static final int FOURTHPLAYER = 3;
 	private static ServerSocket serverSocket;
@@ -42,7 +42,7 @@ public class StartServer {
 			startServer.initilizeServers();
 			startServer.start();
 		} catch (IOException | InterruptedException e) {
-			LOGGER.log(Level.SEVERE, "Server terminato!", e);
+			logger.log(Level.SEVERE, "Server terminato!", e);
 			main(args);
 		}
 	}
@@ -52,7 +52,7 @@ public class StartServer {
 	 */
 	public void initilizeServers() throws IOException {
 		// carico timeout da file
-		TIMER = FileParser.getLoginTimeouts();
+		timer = FileParser.getLoginTimeouts();
 		// avvio in thread che gestisce le connesioni socket
 		conn = new SocketConnection(serverSocket);
 		executor.submit(conn);
@@ -67,7 +67,7 @@ public class StartServer {
 	 */
 	public void start() throws InterruptedException, IOException {
 		int i = 0;
-		Integer t = TIMER;
+		Integer t = timer;
 		// creo lista giocatori della nuova room
 		ArrayList<PlayerInfo> playerRoom = new ArrayList<>();
 		// salvo nel server la nuova lista
@@ -194,7 +194,7 @@ public class StartServer {
 class SocketConnection implements Runnable {
 	private Socket socket = new Socket();
 	private ServerSocket serverSocket;
-	private final Logger LOGGER = Logger.getLogger(SocketConnection.class.getClass().getSimpleName());
+	private final Logger logger = Logger.getLogger(SocketConnection.class.getClass().getSimpleName());
 
 	public SocketConnection(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
@@ -206,7 +206,7 @@ class SocketConnection implements Runnable {
 			// resto in attesa di un client connesso
 			socket = serverSocket.accept();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Socket IOException", e);
+			logger.log(Level.SEVERE, "Socket IOException", e);
 		}
 	}
 

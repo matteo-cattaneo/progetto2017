@@ -7,21 +7,34 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * classe principale del client, chiede all'utente le informazioni necessarie
  * alla connessione e all'inizio della partita
  */
 public class StartClient {
-	private static final Logger LOGGER = Logger.getLogger(StartClient.class.getClass().getSimpleName());
+	public static final Logger logger = Logger.getLogger("Client");
 
 	private StartClient() {
 		// costruttore vuoto privato
 	}
 
 	public static void main(String[] args) {
+		// configuro il logger per stampare su file e non sulla console
+		try {
+			Handler fh = new FileHandler("./LIMclient.log", true);
+			fh.setFormatter(new SimpleFormatter());
+			logger.addHandler(fh);
+			logger.setUseParentHandlers(false);
+		} catch (SecurityException | IOException e) {
+			logger.log(Level.SEVERE, "Logger initialization failed!", e);
+		}
+
 		// avvio il setup del client
 		setup();
 	}
@@ -32,21 +45,21 @@ public class StartClient {
 			System.out.println(
 					new String(Files.readAllBytes(Paths.get(".//JSON//SplashScreen.txt")), StandardCharsets.UTF_8));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Splash screen not found!", e);
+			logger.log(Level.SEVERE, "Splash screen not found!", e);
 		}
 		// stampo la selezione dell'intefaccia
-		AbstractUI UI = printUISelection();
+		AbstractUI ui = printUISelection();
 		// richiedo tipo connessione
-		IConnection client = selectConnectionType(UI);
+		IConnection client = selectConnectionType(ui);
 		/**
 		 * con i metodi relativi alla prpria connessione e UI, effettuo la
 		 * connessione
 		 */
 
 		try {
-			client.connect(UI.getName(), UI.getPassword(), UI.getIP());
+			client.connect(ui.getName(), ui.getPassword(), ui.getIP());
 		} catch (RemoteException e) {
-			LOGGER.log(Level.SEVERE, "Connection server error!", e);
+			logger.log(Level.SEVERE, "Connection server error!", e);
 		}
 	}
 
@@ -56,7 +69,7 @@ public class StartClient {
 	 */
 
 	private static AbstractUI printUISelection() {
-		AbstractUI UI;
+		AbstractUI ui;
 		Scanner stdin = new Scanner(new FilterInputStream(System.in) {
 			@Override
 			public void close() {
@@ -79,42 +92,42 @@ public class StartClient {
 		case 1:
 			System.err.println("GUI - WIP");
 			System.err.println("CLI interface automatically selected!");
-			UI = new CLIinterface();
+			ui = new CLIinterface();
 			break;
 		case 2:
-			UI = new CLIinterface();
+			ui = new CLIinterface();
 			break;
 		default:
 			System.out.println("Invalid input");
-			UI = printUISelection();
+			ui = printUISelection();
 			break;
 		}
 		stdin.close();
-		return UI;
+		return ui;
 	}
 
-	private static IConnection selectConnectionType(AbstractUI UI) {
+	private static IConnection selectConnectionType(AbstractUI ui) {
 		IConnection client;
 		/**
 		 * secondo il risulltato ottenuto prima richiedo il tipo di connessione
 		 * e inizializzo con il giusto tipo dinamico
 		 */
-		switch (UI.showConnectionSelection()) {
+		switch (ui.showConnectionSelection()) {
 		case 1:
 			try {
-				client = new RMIClient(UI);
+				client = new RMIClient(ui);
 			} catch (RemoteException e) {
-				LOGGER.log(Level.SEVERE, "Error RMI!", e);
-				UI.printInvalidInput();
-				client = selectConnectionType(UI);
+				logger.log(Level.SEVERE, "Error RMI!", e);
+				ui.printInvalidInput();
+				client = selectConnectionType(ui);
 			}
 			break;
 		case 2:
-			client = new SocketClient(UI);
+			client = new SocketClient(ui);
 			break;
 		default:
-			UI.printInvalidInput();
-			client = selectConnectionType(UI);
+			ui.printInvalidInput();
+			client = selectConnectionType(ui);
 		}
 		return client;
 	}

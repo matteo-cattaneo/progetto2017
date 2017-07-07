@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.polimi.ingsw.LM22.model.DoubleChangeEffect;
 import it.polimi.ingsw.LM22.model.Game;
@@ -16,16 +15,15 @@ import it.polimi.ingsw.LM22.model.VentureCard;
 import it.polimi.ingsw.LM22.model.leader.LeaderCard;
 
 public class SocketClient implements IConnection {
-	private static final Logger LOGGER = Logger.getLogger(SocketClient.class.getClass().getSimpleName());
 	private static final int SOCKET_PORT = 1337;
 	private Socket socket;
-	private AbstractUI UI;
+	private AbstractUI ui;
 	String[] socketLine;
 	ObjectOutputStream socketOut;
 	ObjectInputStream socketIn;
 
-	public SocketClient(AbstractUI UI) {
-		this.UI = UI;
+	public SocketClient(AbstractUI ui) {
+		this.ui = ui;
 	}
 
 	/**
@@ -36,9 +34,10 @@ public class SocketClient implements IConnection {
 		try {
 			// stabilisco connessione con socoket server
 			socket = new Socket(ip, SOCKET_PORT);
-			UI.connectionOK();
+			ui.connectionOK();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Socket connection error!", e);
+			StartClient.logger.log(Level.SEVERE, "Socket connection close!", e);
+			ui.showMsg("Socket connection close!");
 			StartClient.setup();
 		}
 		// inizializzo gli stream di input e output
@@ -51,7 +50,8 @@ public class SocketClient implements IConnection {
 			socketOut.writeUTF(password);
 			socketOut.flush();
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Socket connection error!!", e);
+			StartClient.logger.log(Level.SEVERE, "Socket connection close!", e);
+			ui.showMsg("Socket connection close!");
 			StartClient.setup();
 		}
 		play();
@@ -72,69 +72,69 @@ public class SocketClient implements IConnection {
 
 				switch (socketLine[0]) {
 				case "msg":
-					// visualizzo sulla UI un messaggio
+					// visualizzo sulla ui un messaggio
 					if (socketLine[1].contains("member"))
-						UI.setMemberMove(false);
-					UI.alert(socketLine[1]);
+						ui.setMemberMove(false);
+					ui.alert(socketLine[1]);
 					break;
 				case "board":
 					// ricevo e visualizzo la board
-					UI.showBoard((Game) socketIn.readObject());
+					ui.showBoard((Game) socketIn.readObject());
 					break;
 				case "start":
 					// se è start inizio il mio turno
-					UI.printMoveMenu();
-					socketOut.writeUTF(UI.getMove());
+					ui.printMoveMenu();
+					socketOut.writeUTF(ui.getMove());
 					socketOut.flush();
 					break;
 				case "council":
-					socketOut.writeUTF(UI.councilRequest(Integer.parseInt(socketLine[1])));
+					socketOut.writeUTF(ui.councilRequest(Integer.parseInt(socketLine[1])));
 					socketOut.flush();
 					break;
 				case "servants":
-					socketOut.writeUTF(UI.printServantsAddictionMenu());
+					socketOut.writeUTF(ui.printServantsAddictionMenu());
 					socketOut.flush();
 					break;
 				case "tower":
-					socketOut.writeUTF(UI.printTowersMenu());
+					socketOut.writeUTF(ui.printTowersMenu());
 					socketOut.flush();
 					break;
 				case "floor":
-					socketOut.writeUTF(UI.printLevelsMenu());
+					socketOut.writeUTF(ui.printLevelsMenu());
 					socketOut.flush();
 					break;
 				case "support":
-					socketOut.writeBoolean(UI.printSupportMenu());
+					socketOut.writeBoolean(ui.printSupportMenu());
 					socketOut.flush();
 					break;
 				case "color":
-					socketOut.writeUTF(UI.printColorMenu());
+					socketOut.writeUTF(ui.printColorMenu());
 					socketOut.flush();
 					break;
 				case "ventureCost":
-					socketOut.writeInt(UI.printVentureCostMenu((VentureCard) socketIn.readObject()));
+					socketOut.writeInt(ui.printVentureCostMenu((VentureCard) socketIn.readObject()));
 					socketOut.flush();
 					break;
 				case "change":
-					socketOut.writeBoolean(UI.printChangeMenu((Resource[]) socketIn.readObject()));
+					socketOut.writeBoolean(ui.printChangeMenu((Resource[]) socketIn.readObject()));
 					socketOut.flush();
 					break;
 				case "doubleChange":
-					socketOut.writeInt(UI.printDoubleChangeMenu((DoubleChangeEffect) socketIn.readObject()));
+					socketOut.writeInt(ui.printDoubleChangeMenu((DoubleChangeEffect) socketIn.readObject()));
 					socketOut.flush();
 					break;
 				case "askCopy":
 					copyEffect();
 					break;
 				case "personalTile":
-					socketOut.writeInt(UI.selectPersonalTile((Game) socketIn.readObject()));
+					socketOut.writeInt(ui.selectPersonalTile((Game) socketIn.readObject()));
 					socketOut.flush();
 					break;
 				case "leader":
-					UI.selectLeaderCard((Game) socketIn.readObject());
+					ui.selectLeaderCard((Game) socketIn.readObject());
 					break;
 				case "getLeader":
-					socketOut.writeUTF(UI.getLeaderCard());
+					socketOut.writeUTF(ui.getLeaderCard());
 					socketOut.flush();
 					break;
 				default:
@@ -142,7 +142,8 @@ public class SocketClient implements IConnection {
 				}
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			LOGGER.log(Level.SEVERE, "Socket connection error!!", e);
+			StartClient.logger.log(Level.SEVERE, "Socket connection close!", e);
+			ui.showMsg("Socket connection close!");
 		}
 		StartClient.setup();
 	}
@@ -150,13 +151,13 @@ public class SocketClient implements IConnection {
 	private void copyEffect() throws IOException, ClassNotFoundException {
 		List<LeaderCard> lcards = new ArrayList<>();
 		// ottengo lunghezza lista
-		int N = socketIn.readInt();
+		int n = socketIn.readInt();
 
 		// ottengo i singoli elementi della lista
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < n; i++)
 			lcards.add((LeaderCard) socketIn.readObject());
 
-		socketOut.writeUTF(UI.askToPlayerForEffectToCopy(lcards));
+		socketOut.writeUTF(ui.askToPlayerForEffectToCopy(lcards));
 		socketOut.flush();
 	}
 }
