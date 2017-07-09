@@ -32,7 +32,6 @@
 		</dependency>
 	</dependencies>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -78,9 +77,67 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>CLI_Media</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/CLI_Media</outputDirectory>
+							<resources>
+								<resource>
+									<directory>CLI_Media</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Server_JAR</id>
+						<configuration>
+							<finalName>Server</finalName>
+							<archive>
+								<manifest>
+									<mainClass>it.polimi.ingsw.LM22.network.server.StartServer</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								jar-with-dependencies
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>Client_JAR</id>
+						<configuration>
+							<finalName>Client</finalName>
+							<archive>
+								<manifest>
+									<mainClass>it.polimi.ingsw.LM22.network.client.StartClient</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								jar-with-dependencies
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+						<phase>package</phase>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
