@@ -88,9 +88,12 @@ public class EffectManager {
 	}
 
 	public void changetoprivilegeeffectManage(ChangeToPrivilegeEffect effect, Resource sum) throws IOException {
+		if (r.enoughResources(player.getPersonalBoard().getResources(), effect.getExchangedResource())
+				&& mainGC.askChangeToPlayer(player, effect.getExchangedResource(), effect.getCouncilPrivilege())) {
 		r.subResource(player.getPersonalBoard().getResources(), effect.getExchangedResource());
 		r.addResource(sum, r.calculateResource(
 				mainGC.selectCouncilPrivilege(effect.getCouncilPrivilege(), player).copy(), player, false));
+		}
 	}
 
 	/**

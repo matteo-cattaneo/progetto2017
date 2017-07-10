@@ -133,6 +133,21 @@ public class SocketPlayer implements IPlayer {
 		return in.readInt();
 	}
 
+	@Override 
+	public boolean changeRequest(Resource exchange, Integer privileges) throws IOException {
+		out.writeUTF("changePriv");
+		out.flush();
+
+		out.reset();
+
+		out.writeObject(exchange);
+		out.flush();
+		out.writeInt(privileges);
+		out.flush();
+
+		return in.readBoolean();
+	}
+	
 	@Override
 	public boolean changeRequest(Resource[] exchange) throws IOException {
 		out.writeUTF("change");

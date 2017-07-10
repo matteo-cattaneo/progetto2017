@@ -225,4 +225,10 @@ public class GUIinterface extends AbstractUI {
 		return null;
 	}
 
+	@Override
+	public boolean printChangeMenu(Resource exchange, Integer privileges) throws RemoteException {
+		// Auto-generated method stub
+		return false;
+	}
+
 }

@@ -682,7 +682,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getCharactersCards().isEmpty()) {
-			msgFormat("%-30s|________________________", "| Character cards:");
+			msgFormat("%-30s|", "| Character cards:");
 			for (CharacterCard c : getPlayer(name, game).getPersonalBoard().getCharactersCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
 				msgFormat("%-82s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
@@ -701,7 +701,7 @@ public class CLIinterface extends AbstractUI {
 			showMsg("|_____________________________|_____________________|");
 		}
 		if (!getPlayer(name, game).getPersonalBoard().getVenturesCards().isEmpty()) {
-			msgFormat("%-30s|________________________", "| Ventures cards:");
+			msgFormat("%-30s|", "| Ventures cards:");
 			for (VentureCard c : getPlayer(name, game).getPersonalBoard().getVenturesCards()) {
 				msgFormat("%n%-30s| ", "| " + c.getName());
 				msgFormat("%-82s", c.getPermanentEffect().getInfo().replaceAll("%n", " "));
@@ -1089,6 +1089,28 @@ public class CLIinterface extends AbstractUI {
 		default:
 			printInvalidInput();
 			return printChangeMenu(exchange);
+		}
+	}
+	
+	@Override
+	public boolean printChangeMenu(Resource exchange, Integer privileges) throws RemoteException {
+		showMsg(TIMEOUT + timeout + SECONDS);
+		showMsg("Do you want change");
+		msgFormat(exchange.getInfo());
+		showMsg("with");
+		msgFormat(privileges + " council Privilege(s)");
+		showMsg("1: Yes");
+		showMsg("2: No");
+
+		int option = input();
+		switch (option) {
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			printInvalidInput();
+			return printChangeMenu(exchange, privileges);
 		}
 	}
 

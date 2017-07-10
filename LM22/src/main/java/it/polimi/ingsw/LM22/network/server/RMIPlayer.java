@@ -108,6 +108,11 @@ public class RMIPlayer extends UnicastRemoteObject implements IPlayer {
 	public boolean changeRequest(Resource[] exchange) throws IOException {
 		return client.changeRequest(exchange);
 	}
+	
+	@Override 
+	public boolean changeRequest(Resource exchange, Integer privileges) throws IOException {
+		return client.changeRequest(exchange, privileges);
+	}
 
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException {

@@ -148,4 +148,9 @@ class NetworkTest implements IPlayer {
 		return null;
 	}
 
+	@Override
+	public boolean changeRequest(Resource exchange, Integer privileges) throws IOException {
+		return false;
+	}
+
 }

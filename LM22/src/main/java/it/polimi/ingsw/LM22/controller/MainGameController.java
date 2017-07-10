@@ -99,7 +99,9 @@ public class MainGameController implements Runnable {
 	}
 
 	/**
-	 * consente ad ogni giocatore di scegliere le proprire carte leader
+	 * consente ad ogni giocatore di scegliere contemporaneamente
+	 * una carta leader alla volta e quando tutti l'hanno scelta
+	 * si passano le altre carte al rispettivo giocatore successivo
 	 */
 	private void leaderSelection() {
 		// per tutte le 4 carte leader
@@ -602,6 +604,14 @@ public class MainGameController implements Runnable {
 	 */
 	public boolean askChangeToPlayer(Player p, Resource[] exchange) throws IOException {
 		return getIPlayer(p).changeRequest(exchange);
+	}
+	
+	/**
+	 * metodo che chiama il player giocante e chiede se vuole effettuare questo
+	 * scambio (nel caso abbia effettivamente le risorse disponibili)
+	 */
+	public boolean askChangeToPlayer(Player p, Resource exchange, Integer privileges) throws IOException {
+		return getIPlayer(p).changeRequest(exchange, privileges);
 	}
 
 	/**

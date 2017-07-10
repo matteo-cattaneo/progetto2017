@@ -123,6 +123,11 @@ public class RMIClient extends UnicastRemoteObject implements IClient, IConnecti
 	public boolean changeRequest(Resource[] exchange) throws RemoteException {
 		return ui.printChangeMenu(exchange);
 	}
+	
+	@Override
+	public boolean changeRequest(Resource exchange, Integer privileges) throws RemoteException {
+		return ui.printChangeMenu(exchange, privileges);
+	}
 
 	@Override
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException {

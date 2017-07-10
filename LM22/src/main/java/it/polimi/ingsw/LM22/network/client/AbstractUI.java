@@ -75,6 +75,8 @@ public abstract class AbstractUI {
 
 	public abstract boolean printChangeMenu(Resource[] exchange) throws RemoteException;
 
+	public abstract boolean printChangeMenu(Resource exchange, Integer privileges) throws RemoteException;
+
 	public abstract Integer printDoubleChangeMenu(DoubleChangeEffect effect) throws RemoteException;
 
 	public abstract String askToPlayerForEffectToCopy(List<LeaderCard> lcards) throws RemoteException;

@@ -42,6 +42,8 @@ public interface IPlayer extends Remote {
 	public Integer ventureCostRequest(VentureCard vc) throws IOException;
 
 	public boolean changeRequest(Resource[] exchange) throws IOException;
+	
+	public boolean changeRequest(Resource exchange, Integer privileges) throws IOException;
 
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws IOException;
 

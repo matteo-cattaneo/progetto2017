@@ -1,5 +1,6 @@
 package it.polimi.ingsw.LM22.network.client;
 
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -39,6 +40,8 @@ public interface IClient extends Remote {
 	public Integer ventureCostRequest(VentureCard vc) throws RemoteException;
 
 	public boolean changeRequest(Resource[] exchange) throws RemoteException;
+
+	public boolean changeRequest(Resource exchange, Integer privileges) throws RemoteException;
 
 	public Integer doubleChangeRequest(DoubleChangeEffect effect) throws RemoteException;
 
