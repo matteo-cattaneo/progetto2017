@@ -122,6 +122,7 @@ public class SocketClient implements IConnection {
 				case "changePriv":
 					socketOut.writeBoolean(ui.printChangeMenu((Resource) socketIn.readObject(), socketIn.readInt()));
 					socketOut.flush();
+					break;
 				case "doubleChange":
 					socketOut.writeInt(ui.printDoubleChangeMenu((DoubleChangeEffect) socketIn.readObject()));
 					socketOut.flush();

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.LM22.network.client;
 
-import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
