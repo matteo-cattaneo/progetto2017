@@ -50,11 +50,15 @@ We load this data using Google's **gson** external library -> Maven Dependency
 
 **GAME DEPLOYMENT**
 
+-> Eclipse: you must run the StartServer and the StartClient (in this order)
+
+-> Jar files: are generated into the target folder (by maven) and you must run
+
+    java -jar Client.jar and java -jar Server.jar from the target folder
+	
 -> Default values are localhost as Server IP and "Player" as username
 
 -> Server must have the JSON folder in the same folder where Server is executed.
 
 -> Client must have CLI_Media folder in the same folder where Client is executed.
-
-
 
